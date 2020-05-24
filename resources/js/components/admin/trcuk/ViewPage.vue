@@ -22,7 +22,7 @@ export default {
   data() {
     return {
         avatar: null,
-        trcuk: '',
+        truck: [],
     };
   },
    mounted: function() {
@@ -31,7 +31,7 @@ export default {
               if(response.status) {
                   this.truck = response.data;
               } else {
-                  router.push("/admin/services"); 
+                  router.push("/admin/trucks"); 
                   this.$toast.open({
                     message: response.message,
                     type: 'error',

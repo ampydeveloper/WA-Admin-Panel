@@ -31,6 +31,12 @@ Route::get('/send/email', 'AuthController@_welcomeEmail');
 
 // Route::get('/home', 'HomeController@index')->name('home');
 
+Route::get('/', function () {
+    return view('welcome');
+})->name('/');
+
+Route::get('confirm-email/{decode_code}', 'AuthController@confirmEmail');
+
 
 Route::get('/{any}', function () {
     return view('welcome');

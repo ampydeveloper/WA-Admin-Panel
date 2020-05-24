@@ -45,6 +45,7 @@ import { router } from "../../_helpers/router";
 import { authenticationService } from "../../_services/authentication.service";
 
 export default {
+name: "login",
   data() {
     return {
       valid: true,
@@ -81,7 +82,9 @@ export default {
 
         this.loading = true;
         authenticationService.login(this.email, this.password).then(
-          user => router.push(user),
+          response => {
+              router.push(response);
+          },
           error => {
             // Can accept an Object of options
             this.$toast.open({

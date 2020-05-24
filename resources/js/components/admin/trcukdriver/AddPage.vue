@@ -50,6 +50,7 @@
                 </v-col>
 
                 <v-col cols="12" md="12">
+
                   <v-menu
                     v-model="menu2"
                     :close-on-content-click="false"
@@ -61,13 +62,13 @@
                     <template v-slot:activator="{ on }">
                       <v-text-field
                         v-model="date"
-                        label="Picker without buttons"
+                        label="Licence Expiry Date"
                         prepend-icon="event"
                         readonly
                         v-on="on"
                       ></v-text-field>
                     </template>
-                    <v-date-picker v-model="date" @input="menu2 = false"></v-date-picker>
+                    <v-date-picker v-model="date" @input="menu2 = false" :min="setDate"></v-date-picker>
                   </v-menu>
                 </v-col>
                 <v-col cols="12" md="12">
@@ -135,9 +136,10 @@
                 <v-col cols="12" md="12">
                   <v-text-field
                     v-model="addForm.driver_phone"
-                    :rules="[v => !!v || 'Phone is required']"
+                     :rules="phoneRules"
                     label="Mobile Number"
                     required
+
                   ></v-text-field>
                 </v-col>
 
@@ -184,6 +186,7 @@ export default {
       avatar: null,
       date: "",
       user_image: "",
+      setDate:new Date().toISOString().substr(0, 10),
       addForm: {
         driver_name: "",
         email: "",
@@ -205,10 +208,16 @@ export default {
         v => !!v || "E-mail is required",
         v => /.+@.+/.test(v) || "E-mail must be valid"
       ],
+      phoneRules: [
+        v => !!v || "Phone number is required",
+        v => /^\d*$/.test(v) || "Enter valid number",
+	v => v.length >= 10 || "Enter valid number length"
+      ],
       myFiles: []
     };
   },
   computed: {
+
     serverOptions() {
       const currentUser = JSON.parse(localStorage.getItem("currentUser"));
       return {

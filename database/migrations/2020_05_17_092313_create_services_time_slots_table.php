@@ -35,6 +35,8 @@ class CreateServicesTimeSlotsTable extends Migration
      */
     public function down()
     {
+       Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('services_time_slots');
+      
     }
 }

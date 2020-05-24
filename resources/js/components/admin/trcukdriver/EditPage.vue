@@ -67,22 +67,22 @@
                     <template v-slot:activator="{ on }">
                       <v-text-field
                         v-model="date"
-                        label="Picker without buttons"
+                        label="Licence Expiry Date"
                         prepend-icon="event"
                         readonly
                         v-on="on"
                       ></v-text-field>
                     </template>
-                    <v-date-picker v-model="date" @input="menu2 = false"></v-date-picker>
+                    <v-date-picker v-model="date" @input="menu2 = false" :min="setDate"></v-date-picker>
                   </v-menu>
                 </v-col>
                 <v-col cols="12" md="12">
                   <v-radio-group
                     v-model="addForm.salary_type"
-                    :rules="[v => !!v || 'Field is required']"
+                   :rules="[v => !!v || 'Driver salary type is required']"
                   >
-                    <v-radio label="Per Hour" value="0" v-bind:checked="active === 0"></v-radio>
-                    <v-radio label="Per Load" value="1" v-bind:checked="active === 1"></v-radio>
+                    <v-radio label="Per Hour" value="per_hour"></v-radio>
+                    <v-radio label="Per Load" value="per_load"></v-radio>
                   </v-radio-group>
                 </v-col>
                 <v-col cols="12" md="12">
@@ -141,9 +141,9 @@
                 <v-col cols="12" md="12">
                   <v-text-field
                     v-model="addForm.driver_phone"
-                    :rules="[v => !!v || 'Phone is required']"
                     label="Mobile Number"
                     required
+		     :rules="phoneRules"
                   ></v-text-field>
                 </v-col>
 
@@ -191,6 +191,7 @@ export default {
       date: "",
       user_image: "",
       active: 0,
+      setDate:new Date().toISOString().substr(0, 10),
       addForm: {
         driver_name: "",
         email: "",
@@ -211,6 +212,11 @@ export default {
       emailRules: [
         v => !!v || "E-mail is required",
         v => /.+@.+/.test(v) || "E-mail must be valid"
+      ],
+      phoneRules: [
+        v => !!v || "Phone number is required",
+        v => /^\d*$/.test(v) || "Enter valid number",
+	v => v.length >= 10 || "Enter valid number length"
       ],
       myFiles: []
     };
@@ -261,8 +267,13 @@ export default {
         this.addForm.driver_zipcode = response.data.user.zip_code;
         this.active = response.data.salary_type;
         this.addForm.driver_licence = response.data.driver_licence;
-        this.date = response.data.expiry_date;
-        this.addForm.salary_type = response.data.salary_type;
+        this.date = new Date(response.data.expiry_date).toISOString().substr(0, 10);
+	if(response.data.salary_type == 0){
+ 	this.addForm.salary_type = "per_hour";
+	}else{
+	this.addForm.salary_type = "per_load";
+	}
+       
         this.addForm.document = response.data.document;
         this.addForm.driver_salary = response.data.driver_salary;
       } else {
@@ -284,6 +295,11 @@ export default {
     },
     save() {
       this.addForm.expiry_date = this.date;
+      if( this.addForm.salary_type == 'per_hour'){
+ 	this.addForm.salary_type = 0;
+      }else{
+	this.addForm.salary_type = 1;
+      }
       if (this.$refs.form.validate()) {
         driverService
           .edit(this.addForm, this.$route.params.id)

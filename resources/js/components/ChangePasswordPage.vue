@@ -48,7 +48,8 @@
 
 <script>
 import { required } from "vuelidate/lib/validators";
-import { authenticationService } from "../../../_services/authentication.service";
+import { router } from "../_helpers/router";
+import { authenticationService } from "../_services/authentication.service";
   export default {
     data: () => ({
            show1: false,
@@ -68,6 +69,7 @@ import { authenticationService } from "../../../_services/authentication.service
     },
     methods: {
         validate () {
+	const currentUser = authenticationService.currentUserValue;
           if( this.$refs.form.validate() ){
             authenticationService.changePassword({password: this.password, password_confirmation:this.confirm_password}).then(response => {
               //handle response
@@ -78,6 +80,7 @@ import { authenticationService } from "../../../_services/authentication.service
                     position: 'top-right'
                   });
                //redirect to login
+		router.push("/login");
               } else {
                   this.$toast.open({
                     message: response.message,

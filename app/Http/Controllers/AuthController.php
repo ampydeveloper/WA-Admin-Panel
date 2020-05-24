@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\URL;
 use Carbon\Carbon;
 use Socialite;
 use Mail;
@@ -76,6 +77,7 @@ class AuthController extends Controller
                 'is_active' => 1,
                 'phone' => $request->phone,
                 'user_image' => $file,
+		'password_changed_at' => Carbon::now(),
                 'password' => bcrypt($request->password)
             ]);
 
@@ -113,6 +115,7 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
+
         $validator = Validator::make($request->all(), [
             'email' => 'required|string|email',
             'password' => 'required|string',
@@ -280,7 +283,7 @@ class AuthController extends Controller
         $getUser = User::whereEmail($email)->first();
         //check if email exist
         if ($getUser != null) {
-            $getUser->is_confirmed;
+            $getUser->is_confirmed = 1;
             $getUser->save();
             $message = "Your account has been successfully confirmed. Please login to proceed further.";
             $status = true;
@@ -291,11 +294,17 @@ class AuthController extends Controller
             $errCode = 400;
         }
 
-        return response()->json([
-            'status' => $status,
-            'message' => $message,
-            'data' => []
-        ], $errCode);
+        // return response()->json([
+        //     'status' => $status,
+        //     'message' => $message,
+        //     'data' => []
+        // ], $errCode);
+
+        // return redirect()->route('test.index');
+
+        return redirect()->route('/');
+
+        // return Redirect::back();
     }
 
     /**

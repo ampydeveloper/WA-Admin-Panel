@@ -36,13 +36,13 @@
                   <td>{{ item.user.email }}</td>
                   <td>
                     <v-chip
-                      v-if="!item.is_active"
+                      v-if="!item.user.is_active"
                       class="ma-2"
                       color="red"
                       text-color="white"
                     >Deactivate</v-chip>
                     <v-chip
-                      v-if="item.is_active"
+                      v-if="item.user.is_active"
                       class="ma-2"
                       color="green"
                       text-color="white"

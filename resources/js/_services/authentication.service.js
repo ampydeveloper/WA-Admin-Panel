@@ -59,14 +59,20 @@ function login(email, password) {
   )
     .then(handleResponse)
     .then(user => {
-      // store user details and passport token in local storage to keep user logged in between page refreshes
-      localStorage.setItem("currentUser", JSON.stringify(user));
-      currentUserSubject.next(user);
-      if(user.data.user.role_id == 1){
-          this.currentUrl = "/admin/dashboard";
+	// store user details and passport token in local storage to keep user logged in between page refreshes
+        localStorage.setItem("currentUser", JSON.stringify(user));
+        currentUserSubject.next(user);
+      if(user.data.user.role_id === 1 ){
+        this.currentUrl = "/admin/dashboard";
       }
-      if(user.data.user.role_id == 4){
-          this.currentUrl = "/";
+      if(user.data.user.role_id === 2 ){
+        this.currentUrl = "/manager/dashboard";
+      }
+      if(user.data.user.role_id === 3 ){
+        this.currentUrl = "/driver/dashboard";
+      }
+      if(user.data.user.role_id === 4){
+        this.currentUrl = "/"; 
       }
       return this.currentUrl;
     });

@@ -5,7 +5,7 @@
           <v-col
           cols="12"
           md="12"
-          ><h2>Admin Profile</h2></v-col>
+          ><h2>Add manager</h2></v-col>
              <v-col
           cols="12"
           md="12"
@@ -95,6 +95,7 @@ export default {
         email: '',
          user_image: null,
          phone: '',
+         role_id: 2,
         },
        FnameRules: [
         v => !!v || 'First name is required',

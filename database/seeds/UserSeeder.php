@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use App\User;
-
+use Carbon\Carbon;
 class UserSeeder extends Seeder
 {
     /**
@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
         $addDetails->is_confirmed = 1;
         $addDetails->is_active = 1;
         $addDetails->password = bcrypt('admin@123');
-
+	$addDetails->password_changed_at = Carbon::now();
         $addDetails->save();
     }
 }

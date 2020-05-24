@@ -71,6 +71,7 @@ class ManagerController extends Controller
                 'phone' => $request->phone,
                 'user_image' => $file,
                 'is_confirmed' => 1,
+		'is_active' => 1,
                 'password' => bcrypt($newPassword)
             ]);
             if($user->save()) {

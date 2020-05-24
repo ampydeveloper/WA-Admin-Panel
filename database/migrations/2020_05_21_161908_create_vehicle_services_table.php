@@ -44,6 +44,9 @@ class CreateVehicleServicesTable extends Migration
      */
     public function down()
     {
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('vehicle_services');
+        
+   
     }
 }

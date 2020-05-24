@@ -63,7 +63,7 @@
                         v-on="on"
                       ></v-text-field>
                     </template>
-                    <v-date-picker v-model="date" @input="menu2 = false"></v-date-picker>
+                    <v-date-picker v-model="date" @input="menu2 = false" :min="setDate"></v-date-picker>
                   </v-menu>
                 </v-col>
                 <v-col cols="12" md="12">
@@ -84,7 +84,7 @@
                         v-on="on"
                       ></v-text-field>
                     </template>
-                    <v-date-picker v-model="date1" @input="menu1 = false"></v-date-picker>
+                    <v-date-picker v-model="date1" @input="menu1 = false" :min="setDate"></v-date-picker>
                   </v-menu>
                 </v-col>
 
@@ -146,6 +146,7 @@ export default {
       avatar: null,
       date: "",
       date1: "",
+      setDate:new Date().toISOString().substr(0, 10),
       user_image: "",
       addForm: {
         vehicle_type: 1,
@@ -195,8 +196,8 @@ export default {
         this.addForm.chaase_number = response.data.chaase_number;
         this.addForm.insurance_number = response.data.vehicle_insurance.insurance_number;
         this.addForm.total_killometer = response.data.killometer;
-        this.date = response.data.vehicle_insurance.insurance_date;
-        this.date1 = response.data.vehicle_insurance.insurance_expiry;
+        this.date = new Date(response.data.vehicle_insurance.insurance_date).toISOString().substr(0, 10);
+        this.date1 = new Date(response.data.vehicle_insurance.insurance_expiry).toISOString().substr(0, 10);
         if (response.data.document) {
           this.avatar = "../../../" + response.data.document;
         }

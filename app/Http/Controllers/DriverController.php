@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Validator;
 use App\User;
 use App\Driver;
-
+use Mail;
 class DriverController extends Controller
 {
     /**
@@ -35,6 +35,7 @@ class DriverController extends Controller
         }
 
         try {
+
             //use of db transactions
             DB::beginTransaction();
             //random string for new password
@@ -71,7 +72,7 @@ class DriverController extends Controller
 
                 $driverDetails->save();
                 //send email for new email and password
-                // $this->_confirmPassword($user, $newPassword);
+                 $this->_confirmPassword($user, $newPassword);
             }
             //commit all transactions now
             DB::commit();
@@ -220,6 +221,23 @@ class DriverController extends Controller
                 'data' => []
             ], 500);
         }    
+    }
+
+  /**
+     * email for new registration and password
+     */
+    public function _confirmPassword($user, $newPassword)
+    {
+        $name = $user->first_name . ' ' . $user->last_name;
+        $data = array(
+            'user' => $user,
+            'password' => $newPassword
+        );
+
+        Mail::send('email_templates.welcome_email_manager', $data, function ($message) use ($user, $name) {
+            $message->to($user->email, $name)->subject('Login Details');
+            $message->from(env('MAIL_USERNAME'), env('MAIL_USERNAME'));
+        });
     }
 
 }

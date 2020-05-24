@@ -16,15 +16,7 @@
             <template v-slot:activator>
               <v-list-item-title>Users</v-list-item-title>
             </template>
-            <v-list-group no-action sub-group value="true">
-              <template v-slot:activator>
-                <v-list-item-content>
-                  <v-list-item-title>
-                    <router-link to="/admin/admin" class="nav-item nav-link">Admin</router-link>
-                  </v-list-item-title>
-                </v-list-item-content>
-              </template>
-            </v-list-group>
+          
             <v-list-group no-action sub-group value="true">
               <template v-slot:activator>
                 <v-list-item-content>
@@ -104,6 +96,9 @@
                   </v-list-item-title>
                      <v-list-item-title>
                   <router-link to="/admin/changepassword" class="nav-item nav-link">Change Password</router-link>
+                  </v-list-item-title>
+                     <v-list-item-title>
+                  <router-link to="/admin/admin/add" class="nav-item nav-link">Add Admin</router-link>
                   </v-list-item-title>
                   <v-list-item-title>
                     <button type="button" @click="logout" class="nav-item nav-link">Logout</button>
