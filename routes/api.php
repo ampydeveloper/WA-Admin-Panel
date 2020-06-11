@@ -41,6 +41,9 @@ Route::group(['prefix' => 'auth'], function () {
             Route::get('delete-manager/{manager_id}', 'ManagerController@deleteManager');
             Route::get('get-manager/{manager_id}', 'ManagerController@getManager');
             Route::get('list-manager', 'ManagerController@listManager');
+            //admin
+            Route::get('list-admin', 'ManagerController@listAdmin');
+            Route::get('get-admin/{admin_id}', 'ManagerController@getAdmin');
 
             //services
             Route::post('create-service', 'ServicesController@createService');
@@ -49,6 +52,7 @@ Route::group(['prefix' => 'auth'], function () {
             Route::get('list-services', 'ServicesController@listServices');
             Route::get('get-service/{service_id}', 'ServicesController@getService');
             Route::delete('delete-service/{service_id}', 'ServicesController@deleteService');
+            Route::get('get-timeslots/{slot_type}', 'ServicesController@getTimeSlots');
 
             //driver
             Route::post('create-driver', 'DriverController@createDriver');
@@ -64,6 +68,23 @@ Route::group(['prefix' => 'auth'], function () {
             Route::get('list-skidsteer', 'VehicleController@listSkidsteer');
             Route::get('get-vehicle/{vehicle_id}', 'VehicleController@getVehicle');
             Route::delete('delete-vehicle/{vehicle_id}', 'VehicleController@deleteVehicle');
+            Route::get('get-vehicleservice/{vehicle_id}', 'VehicleController@getVehicleService');
+            Route::post('create-vehicleservice', 'VehicleController@createVehicleService');
+            Route::post('create-vehicleinsurance', 'VehicleController@createVehicleInsurance');
+            Route::get('get-vehicleinsurance/{vehicle_id}', 'VehicleController@getVehicleInsurance');
+            Route::get('get-service-details/{service_id}', 'VehicleController@getServiceDetails');
+            Route::get('get-insurance-details/{insurance_id}', 'VehicleController@getInsuranceDetails');
+            Route::post('save-service-details/{service_id}', 'VehicleController@saveServiceDetails');
+            Route::post('save-insurance-details/{insurance_id}', 'VehicleController@saveInsuranceDetails');
+            Route::delete('delete-service-details/{service_id}', 'VehicleController@deleteServiceDetails');
+            Route::delete('delete-insurance-details/{insurance_id}', 'VehicleController@deleteInsuranceDetails');
+
+            //driver
+            Route::post('create-customer', 'CustomerController@createCustomer');
+            //Route::post('edit-driver/{driver_id}', 'CustomerController@editDriver');
+            Route::get('list-customer', 'CustomerController@listCustomer');
+            //Route::get('get-driver/{driver_id}', 'CustomerController@getDriver');
+            //Route::delete('delete-driver/{driver_id}', 'CustomerController@deleteDriver');
         });
 
         //upload image

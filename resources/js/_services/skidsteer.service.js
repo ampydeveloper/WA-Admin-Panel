@@ -15,6 +15,8 @@ export const skidsteerService = {
   Delete,
   getSkidsteer,
   listSkidsteers,
+  addService,
+getTruckService,
   apiUrl: environment.apiUrl,
   currentUrl: '',
   currentUser: currentUserSubject.asObservable(),
@@ -87,4 +89,31 @@ function listSkidsteers() {
       return user;
     });
 }
+function addService(data) {
+
+  return fetch(
+    this.apiUrl+`admin/create-vehicleservice`,
+    requestOptions.post(data)
+  )
+    .then(handleResponse)
+    .then(user => {
+      // store user details and passport token in local storage to keep user logged in between page refreshes
+
+      return user;
+    });
+}
+
+function getTruckService(data) {
+  return fetch(
+    this.apiUrl+`admin/get-vehicleservice/`+data,
+    requestOptions.get()
+  )
+    .then(handleResponse)
+    .then(user => {
+      // store user details and passport token in local storage to keep user logged in between page refreshes
+
+      return user;
+    });
+}
+
 

@@ -77,7 +77,7 @@ class AuthController extends Controller
                 'is_active' => 1,
                 'phone' => $request->phone,
                 'user_image' => $file,
-		'password_changed_at' => Carbon::now(),
+		        'password_changed_at' => Carbon::now(),
                 'password' => bcrypt($request->password)
             ]);
 
@@ -241,11 +241,11 @@ class AuthController extends Controller
 
             Log::info($loggedInUser);
             //return success response
-            return response()->json([
+             return response()->json([
                 'status' => true,
-                'message' => 'Information Updated Successfully!',
-                'data' => []
-            ], 200);
+                'message' => 'User Profile edit successfully.',
+                'data' => $loggedInUser
+            ]);
         } catch (\Exception $e) {
             //make log of errors
             Log::error(json_encode($e->getMessage()));
@@ -329,7 +329,8 @@ class AuthController extends Controller
                     'is_confirmed' => 1,
                     'user_image' => $user->avatar,
                     'provider' => $provider,
-                    'token' => $user->token
+                    'token' => $user->token,
+                    'password_changed_at' => Carbon::now()
                 ]);
 
                 $user->save();
@@ -338,18 +339,33 @@ class AuthController extends Controller
                     //save provider and token if not saved earier or if any existing account now login with social account
                     $checkIfExist->provider == $provider;
                     $checkIfExist->token == $user->token;
-
-                    $checkIfExist->save();
                 }
+
+                if($checkIfExist->password_changed_at == null || $checkIfExist->password_changed_at == '') {
+                    $checkIfExist->password_changed_at = Carbon::now();     
+                }
+
+                $checkIfExist->save();
+                
                 $user = $checkIfExist;
             }
+            //process token
+            $tokenResult = $user->createToken('Personal Access Token');
+            $token = $tokenResult->token;
 
-            //return success response
+            $token->save();
             return response()->json([
                 'status' => true,
-                'message' => 'Logged In Successfully.',
-                'data' => $user
-            ], 200);
+                'message' => 'Login Successful',
+                'data' => array(
+                    'access_token' => $tokenResult->accessToken,
+                    'token_type' => 'Bearer',
+                    'expires_at' => Carbon::parse(
+                        $tokenResult->token->expires_at
+                    )->toDateTimeString(),
+                    'user' => $user
+                )
+            ]);
         } catch (\Exception $e) {
             //make log of errors
             Log::error(json_encode($e->getMessage()));

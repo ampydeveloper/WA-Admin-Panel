@@ -10,7 +10,9 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import VueToast from 'vue-toast-notification';
 import VueFeatherIcon from 'vue-feather-icon'
+import * as VueGoogleMaps from "vue2-google-maps";
 import { router } from "./_helpers/router";
+import store from './store';
 import App from "./app/App";
 
 // Import Vue FilePond
@@ -25,12 +27,15 @@ import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import FilePondPluginImageCrop from 'filepond-plugin-image-crop';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css';
 import FilePondPluginFileEncode from 'filepond-plugin-file-encode';
+import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
+
 // Create component
 const FilePond = vueFilePond(
   FilePondPluginImageExifOrientation,
   FilePondPluginImagePreview,
   FilePondPluginImageCrop,
-  FilePondPluginFileEncode
+  FilePondPluginFileEncode,
+FilePondPluginFileValidateType
 );
 
 // setup fake backend
@@ -42,7 +47,7 @@ Vue.use(VueSocialauth, {
   providers: {
     google: {
       clientId: '1016499886624-ukbs4u4khrer8mv1fi20foo348rkb3kr.apps.googleusercontent.com',
-      redirectUri: 'http://klk.leagueofclicks.com/auth/google/callback' // Your client app URL
+      redirectUri: 'http://wellington.leagueofclicks.com/auth/google/callback' // Your client app URL
     },
     facebook: {
       clientId: '802496520156159',
@@ -50,6 +55,13 @@ Vue.use(VueSocialauth, {
     }
   }
 });
+Vue.use(VueGoogleMaps, {
+  load: {
+    apiKey: 'AIzaSyAQEbFYBxoq9qSepomK_1KEM7TxU3vSOyw',
+    libraries: "places" // necessary for places input
+  }
+})
+
 Vue.use(Vuelidate);
 Vue.use(Vuetify);
 Vue.use(VueToast);
@@ -66,5 +78,6 @@ new Vue({
     }),
   el: "#app",
   router,
+  store,
   render: h => h(App)
 });

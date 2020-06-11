@@ -7,7 +7,8 @@ return [
         'Driver' => 3,
         'Customer' => 4,
         'Customer_Manager' => 5,
-        'Company' => 6
+        'Company' => 6,
+        'Company_Manager' => 7
     ],
     'vehicle_type' => [
         'truck' => 1,

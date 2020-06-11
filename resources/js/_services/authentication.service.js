@@ -15,6 +15,7 @@ export const authenticationService = {
   register,
   updateProfile,
   changePassword,
+  Delete,
   apiUrl: environment.apiUrl,
   currentUrl: '',
   currentUser: currentUserSubject.asObservable(),
@@ -72,7 +73,7 @@ function login(email, password) {
         this.currentUrl = "/driver/dashboard";
       }
       if(user.data.user.role_id === 4){
-        this.currentUrl = "/"; 
+        this.currentUrl = "Home"; 
       }
       return this.currentUrl;
     });
@@ -95,4 +96,16 @@ function logout() {
   // remove user from local storage to log user out
   localStorage.removeItem("currentUser");
   currentUserSubject.next(null);
+}
+function Delete(data) {
+  return fetch(
+    this.apiUrl+`admin/delete-manager/`+data,
+    requestOptions.get()
+  )
+    .then(handleResponse)
+    .then(user => {
+      // store user details and passport token in local storage to keep user logged in between page refreshes
+
+      return user;
+    });
 }

@@ -19,7 +19,7 @@ class CreateVehicleServicesTable extends Migration
             $table->dropColumn("insurance_date");
             $table->dropColumn("insurance_expiry");
 
-            $table->float("killometer")->after("chaase_number")->nullable();
+            $table->string("killometer", 100)->after("chaase_number")->nullable();
             $table->float("capacity")->after("killometer")->nullable();
         });
 

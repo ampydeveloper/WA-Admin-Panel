@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use App\Service;
+use App\TimeSlots;
 use Illuminate\Support\Str;
 use App\ServicesTimeSlot;
 
@@ -22,13 +23,9 @@ class ServicesController extends Controller
         $validator = Validator::make($request->all(), [
             'service_name' => 'required|string',
             'price' => 'required',
-            'description' => 'required'
-            
-            // 'time_slots' => 'required',
-            // 'time_slots' => [
-            //     'required',
-            //     Rule::in(['slot_type', 'slot_start', 'slot_end']),
-            // ],
+            'description' => 'required',
+            'slot_type' => 'required',
+            'slot_time' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -40,6 +37,7 @@ class ServicesController extends Controller
         }
 
         try {
+
             //use of db transactions
             // DB::beginTransaction();
 
@@ -49,25 +47,13 @@ class ServicesController extends Controller
                 'price' => $request->price,
                 'description' => $request->description,
                 'service_image' => $request->service_image,
+                'service_rate' => $request->service_rate,
+                'slot_type' => $request->slot_type,
+                'slot_time' => json_encode($request->slot_time),
             ]);
-           
             //save service
             $service->save();
-            // if ($service->save()) {
-            //     foreach ($request->time_slots as $slots) {
-            //         $serviceSlots = new ServicesTimeSlot([
-            //             'services_id' => $service->id,
-            //             'slot_type' => $slots['slot_type'],
-            //             'slot_start' => $slots['slot_start'],
-            //             'slot_end' => $slots['slot_end']
-            //         ]);
-
-            //         //save service slots
-            //         $serviceSlots->save();
-            //     }
-            // }
-
-            //commit all transactions now
+         
             // DB::commit();
 
             //return success response
@@ -111,12 +97,15 @@ class ServicesController extends Controller
         }
 
         try {
-            //create new user
+            //update service
             Service::whereId($request->service_id)->update([
                 'service_name' => $request->service_name,
                 'price' => $request->price,
                 'description' => $request->description,
-                 'service_image' => $request->service_image
+		'service_rate' => $request->service_rate,
+                'slot_type' => $request->slot_type,
+                'slot_time' => json_encode($request->slot_time),
+                'service_image' => $request->service_image
             ]);
 
             //return success response
@@ -187,10 +176,19 @@ class ServicesController extends Controller
      * list services
      */
     public function listServices() {
+        $getAllServices = Service::get();
+
+        foreach($getAllServices as $key => $service) {
+            //get timeSlots
+            $timeSlots = TimeSlots::whereIn('id', json_decode($service->slot_time))->get();
+            //set timeSlots
+            $getAllServices[$key]["timeSlots"] = $timeSlots;
+        }
+        
         return response()->json([
             'status' => true,
             'message' => 'Service Listing.',
-            'data' => Service::get()
+            'data' => $getAllServices
         ], 200);
     }
 
@@ -218,7 +216,7 @@ class ServicesController extends Controller
     }
 
     /**
-     * get service
+     * delete service
      */
     public function deleteService(Request $request) {
         //check if exist
@@ -238,4 +236,29 @@ class ServicesController extends Controller
             'data' => []
         ], $statusCode);
     }
+
+    /**
+     * get time slots
+     * @param time slots type(morning, afternoon)
+     * return array()
+     */
+    public function getTimeSlots(Request $request){
+
+	     $getTime = TimeSlots::where('slot_type', $request->slot_type)->get();
+	     if($getTime->count()){
+            return response()->json([
+                'status' => true,
+                'message' => 'success',
+                'data' => $getTime
+            ], 200);  
+	     }else {
+            return response()->json([
+                'status' => false,
+                'message' => 'no time slots found',
+                'data' => $getTime
+            ], 200);
+	     }
+	     
+    }
+  
 }

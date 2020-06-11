@@ -50,7 +50,9 @@ class VehicleController extends Controller
                 'chaase_number' => $request->chaase_number,
                 'killometer' => $request->total_killometer,
                 // 'capacity' => $request->insurance_date,
-                'document' => $request->document
+                'document' => $request->document,
+                'insurance_document' => $request->insurance_document,
+		'status' => $request->is_active
             ]);
             //save vehicle
             if($vechicle->save()) {
@@ -117,14 +119,12 @@ class VehicleController extends Controller
                 'company_name' => $request->company_name,
                 'truck_number' => $request->truck_number,
                 'chaase_number' => $request->chaase_number,
-                'killometer' => $request->total_killometer
+                'killometer' => $request->total_killometer,
+                'document' => $request->document,
+	        'insurance_document' => $request->insurance_document,
+		'status' => $request->is_active
             ]);
-            //check if document is also uploaded    
-            if($request->document != '' && $request->document != null) {
-                $updateVehicle->document = $request->document;
-                $updateVehicle->save();
-            }
-
+           
             //save insurance details
             VehicleInsurance::whereVehicleId($request->vehicle_id)->update([
                 'insurance_number' => $request->insurance_number,
@@ -197,6 +197,265 @@ class VehicleController extends Controller
             return response()->json([
                 'status' => true,
                 'message' => 'Vehicle deleted Successfully',
+                'data' => []
+            ], 200);
+        } catch (\Exception $e) {
+            //make log of errors
+            Log::error(json_encode($e->getMessage()));
+            //return with error
+            return response()->json([
+                'status' => false,
+                'message' => 'Internal server error!',
+                'data' => []
+            ], 500);
+        }    
+    }
+
+    /**
+    * get vehivle service details
+    * param @vehicle_id
+    * return array
+    */
+    public function getVehicleService(Request $request)
+    {
+         return response()->json([
+            'status' => true,
+            'message' => 'Vehicle Details',
+            'data' => VehicleService::where('vehicle_id', $request->vehicle_id)->get()
+        ], 200);
+    } 
+    /**
+     * create vehicle service
+     */
+    public function createVehicleService(Request $request)
+    {
+        //validate request
+        $validator = Validator::make($request->all(), [
+            'total_killometer' => 'required',
+            'service_date' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'The given data was invalid.',
+                'data' => $validator->errors()
+            ], 422);
+        }
+
+        try {
+            //use of db transactions
+            DB::beginTransaction();
+
+            //create new vehicle serive
+            $vechicle = new VehicleService([
+                'vehicle_id' => $request->vehicle_id,
+                'service_date' => $request->service_date,
+                'service_killometer' => $request->total_killometer,
+            ]);
+	    $vechicle->Save();
+            //commit all transactions now
+            DB::commit();
+            //return success response
+            return response()->json([
+                'status' => true,
+                'message' => 'Successfully created Vehicle service!',
+                'data' => []
+            ], 200);
+        } catch (\Exception $e) {
+            //rollback transactions
+            DB::rollBack();
+            //make log of errors
+            Log::error(json_encode($e->getMessage()));
+            //return with error
+            return response()->json([
+                'status' => false,
+                'message' => 'Internal server error!',
+                'data' => []
+            ], 500);
+        }
+    }
+    
+    /**
+    * get vehivle service details
+    * param @vehicle_id
+    * return array
+    */
+    public function getVehicleInsurance(Request $request)
+    {
+         return response()->json([
+            'status' => true,
+            'message' => 'Vehicle Details',
+            'data' => VehicleInsurance::where('vehicle_id', $request->vehicle_id)->get()
+        ], 200);
+    } 
+
+    /**
+     * create vehicle insurance
+     */
+    public function createVehicleInsurance(Request $request)
+    {
+        //validate request
+        $validator = Validator::make($request->all(), [
+            'insurance_number' => 'required',
+            'insurance_date' => 'required',
+            'insurance_expiry' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'The given data was invalid.',
+                'data' => $validator->errors()
+            ], 422);
+        }
+
+        try {
+            //use of db transactions
+            DB::beginTransaction();
+
+            //create new vehicle insurance
+            $vechicle = new VehicleInsurance([
+                'vehicle_id' => $request->vehicle_id,
+                'insurance_date' => $request->insurance_date,
+                'insurance_expiry' => $request->insurance_expiry,
+                'insurance_number' => $request->insurance_number,
+            ]);
+
+	    $vechicle->Save();
+            //commit all transactions now
+            DB::commit();
+            //return success response
+            return response()->json([
+                'status' => true,
+                'message' => 'Successfully created Vehicle insurance!',
+                'data' => []
+            ], 200);
+        } catch (\Exception $e) {
+            //rollback transactions
+            DB::rollBack();
+            //make log of errors
+            Log::error(json_encode($e->getMessage()));
+            //return with error
+            return response()->json([
+                'status' => false,
+                'message' => 'Internal server error!',
+                'data' => []
+            ], 500);
+        }
+    }
+
+    /**
+     * get service details
+     */
+    public function getServiceDetails(Request $request) {
+        return response()->json([
+            'status' => true,
+            'message' => 'Service Details',
+            'data' => VehicleService::whereId($request->service_id)->first()
+        ], 200);    
+    }
+
+    /**
+     * get insurance details
+     */
+    public function getInsuranceDetails(Request $request) {
+        return response()->json([
+            'status' => true,
+            'message' => 'Insurance Details',
+            'data' => VehicleInsurance::whereId($request->insurance_id)->first()
+        ], 200);    
+    }
+
+    /**
+     * save service details
+     */
+    public function saveServiceDetails(Request $request) {
+        try {
+            VehicleService::whereId($request->service_id)->update([
+                'service_killometer' => $request->service_killometer,
+                'service_date' => $request->service_date
+            ]);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Vehicle Service Updated Successfully',
+                'data' => []
+            ], 200);
+        } catch (\Exception $e) {
+            //make log of errors
+            Log::error(json_encode($e->getMessage()));
+            //return with error
+            return response()->json([
+                'status' => false,
+                'message' => 'Internal server error!',
+                'data' => []
+            ], 500);
+        }    
+    }
+
+    /**
+     * save insurance details
+     */
+    public function saveInsuranceDetails(Request $request) {
+        try {
+            VehicleInsurance::whereId($request->insurance_id)->update([
+                'insurance_number' => $request->insurance_number,
+                'insurance_date' => $request->insurance_date,
+                'insurance_expiry' => $request->insurance_expiry
+            ]);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Vehicle Insurance Updated Successfully',
+                'data' => []
+            ], 200);
+        } catch (\Exception $e) {
+            //make log of errors
+            Log::error(json_encode($e->getMessage()));
+            //return with error
+            return response()->json([
+                'status' => false,
+                'message' => 'Internal server error!',
+                'data' => []
+            ], 500);
+        }    
+    }
+
+    /**
+     * delete vehicle service details
+     */
+    public function deleteServiceDetails(Request $request) {
+        try {
+            VehicleService::whereId($request->service_id)->delete();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Vehicle service deleted successfully',
+                'data' => []
+            ], 200);
+        } catch (\Exception $e) {
+            //make log of errors
+            Log::error(json_encode($e->getMessage()));
+            //return with error
+            return response()->json([
+                'status' => false,
+                'message' => 'Internal server error!',
+                'data' => []
+            ], 500);
+        }    
+    }
+
+    /**
+     * delete vehicle insurance details
+     */
+    public function deleteInsuranceDetails(Request $request) {
+        try {
+            VehicleInsurance::whereId($request->insurance_id)->delete();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Vehicle insurance deleted Successfully',
                 'data' => []
             ], 200);
         } catch (\Exception $e) {

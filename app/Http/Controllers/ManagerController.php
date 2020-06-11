@@ -7,9 +7,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Mail;
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Validator;
 use App\User;
+use App\ManagerDetail;
 
 class ManagerController extends Controller
 {
@@ -21,7 +23,6 @@ class ManagerController extends Controller
         //validate request
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|string',
-            'last_name' => 'required|string',
             'email' => 'required|string|email|unique:users',
             'password' => 'confirmed'
         ]);
@@ -35,25 +36,8 @@ class ManagerController extends Controller
         }
 
         try {
+            DB::beginTransaction();
             if($request->user_image != '' && $request->user_image != null) {
-//                //upload path
-//                $folderPath = "images/";
-//                //get base64 image
-//                $img = $request->user_image;
-//                //decode base64
-//                $image_parts = explode(";base64,", $img);
-//                $image_type_aux = explode("image/", $image_parts[0]);
-//                $image_type = $image_type_aux[1];
-//                $image_base64 = base64_decode($image_parts[1]);
-//                $file = $folderPath . uniqid() . '. '.$image_type;
-//                
-//                //check if directory exist if not create one
-//                $path = public_path().'/images';
-//                if (!file_exists($path)) {
-//                    mkdir($path, 0777, true);
-//                }
-//                //upload image
-//                file_put_contents($file, $image_base64);
                 $file= $request->user_image;
             } else {
                 $file = '';
@@ -67,17 +51,35 @@ class ManagerController extends Controller
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
                 'email' => $request->email,
-                'role_id' => config('constant.roles.Admin_Manager'),
+                'role_id' => $request->role_id,
                 'phone' => $request->phone,
                 'user_image' => $file,
+                'phone' => $request->manager_phone,
+                'address' => $request->address,
+                'city' => $request->city,
+                'state' => $request->state,
+                'country' => $request->country,
+                'zip_code' => $request->manager_zipcode,
+                'user_image' => $file,
                 'is_confirmed' => 1,
-		'is_active' => 1,
+		        'is_active' => 1,
                 'password' => bcrypt($newPassword)
             ]);
-            if($user->save()) {
-                //send email for new email and password
-                $this->_confirmPassword($user, $newPassword);
+            if($user->save() && $request->role_id != config('constant.roles.Admin')) {
+                $managerDetails = new ManagerDetail([
+                    'user_id' => $user->id,
+                    'salary' => $request->salary,
+                    'identification_number' => $request->identification_number,
+                    'joining_date' => $request->joining_date,
+                    'releaving_date' => $request->releaving_date,
+                    'document' => $request->document
+                ]);
+
+                $managerDetails->save();
             }
+            //send email for new email and password
+            $this->_confirmPassword($user, $newPassword);
+            DB::commit();
             //return success response
             return response()->json([
                 'status' => true,
@@ -85,6 +87,7 @@ class ManagerController extends Controller
                 'data' => []
             ], 200);
         } catch (\Exception $e) {
+            DB::rollBack();
             //make log of errors
             Log::error(json_encode($e->getMessage()));
             //return with error
@@ -104,7 +107,6 @@ class ManagerController extends Controller
         //validate request
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|string',
-            'last_name' => 'required|string',
             'email' => 'required|string|email|unique:users,email,'.$request->manager_id,
             'password' => 'confirmed'
         ]);
@@ -118,32 +120,9 @@ class ManagerController extends Controller
         }
 
         try {
+            DB::beginTransaction();
             //gert manager details
             $managerDetails = User::whereId($request->manager_id)->first();
-            
-            //if admin changes profile image
-            if($request->user_image != null && $request->user_image != '') {
-                //upload path
-//                $folderPath = "images/";
-//                //get base64 image
-//                $img = $request->user_image;
-//                //decode base64
-//                $image_parts = explode(";base64,", $img);
-//                $image_type_aux = explode("image/", $image_parts[0]);
-//                $image_type = $image_type_aux[1];
-//                $image_base64 = base64_decode($image_parts[1]);
-//                $file = $folderPath . uniqid() . '. '.$image_type;
-//                
-//                //check if directory exist if not create one
-//                $path = public_path().'/images';
-//                if (!file_exists($path)) {
-//                    mkdir($path, 0777, true);
-//                }
-//                //upload image
-//                file_put_contents($file, $image_base64);
-
-                $managerDetails->user_image = $request->user_image;
-            }
             //if password request submitted
             if($request->password != '' && $request->password != null) {
                 $managerDetails->password = bcrypt($request->password);
@@ -153,9 +132,26 @@ class ManagerController extends Controller
             $managerDetails->first_name = $request->first_name;
             $managerDetails->last_name = $request->last_name;
             $managerDetails->email = $request->email;
-            $managerDetails->phone = $request->phone;
+            $managerDetails->phone = $request->manager_phone;
+            $managerDetails->address = $request->address;
+            $managerDetails->city = $request->city;
+            $managerDetails->state = $request->state;
+            $managerDetails->country = $request->country;
+            $managerDetails->zip_code = $request->manager_zipcode;
+            $managerDetails->user_image = $request->user_image;
             
             $managerDetails->save();
+            //check if not admin
+            if($managerDetails->role_id != config('constant.roles.Admin')) {
+                ManagerDetail::whereUserId($request->manager_id)->update([
+                    'salary' => $request->salary,
+                        'identification_number' => $request->identification_number,
+                        'joining_date' => $request->joining_date,
+                        'releaving_date' => $request->releaving_date,
+                        'document' => $request->document
+                ]);
+            }
+            DB::commit();
             //return success response
             return response()->json([
                 'status' => true,
@@ -163,6 +159,7 @@ class ManagerController extends Controller
                 'data' => []
             ], 200);
         } catch (\Exception $e) {
+            DB::rollBack();
             //make log of errors
             Log::error(json_encode($e->getMessage()));
             //return with error
@@ -182,7 +179,20 @@ class ManagerController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Manager Details',
-            'data' => User::whereId($request->manager_id)->first()
+            'data' => ManagerDetail::whereUserId($request->manager_id)->with('user')->first()
+        ], 200);
+
+    }
+
+    /**
+     * get admin details
+     */
+    public function getAdmin(Request $request)
+    {
+        return response()->json([
+            'status' => true,
+            'message' => 'Admin Details',
+            'data' => User::whereId($request->admin_id)->first()
         ], 200);
 
     }
@@ -197,7 +207,7 @@ class ManagerController extends Controller
 
             return response()->json([
                 'status' => true,
-                'message' => 'Manager deleted Successfully',
+                'message' => 'User deleted Successfully',
                 'data' => []
             ], 200);
         } catch (\Exception $e) {
@@ -221,7 +231,20 @@ class ManagerController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Manager List',
-            'data' => User::whereRoleId(config('constant.roles.Admin_Manager'))->get()
+            'data' => User::whereRoleId(config('constant.roles.Admin_Manager'))->with('manager')->orderBy("created_at", 'DESC')->get()
+        ], 200);
+
+    }
+
+    /**
+     * list admin
+     */
+    public function listAdmin()
+    {
+        return response()->json([
+            'status' => true,
+            'message' => 'Admin List',
+            'data' => User::whereRoleId(config('constant.roles.Admin'))->orderBy("created_at", 'DESC')->get()
         ], 200);
 
     }

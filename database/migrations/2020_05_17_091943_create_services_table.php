@@ -17,6 +17,7 @@ class CreateServicesTable extends Migration
             $table->id();
             
             $table->string("service_name")->nullable();
+            $table->tinyInteger("service_rate")->comment("1: Per Load, 2: Round")->nullable();
             $table->float("price")->nullable();
             $table->string("description")->nullable();
 

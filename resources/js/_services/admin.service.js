@@ -64,7 +64,7 @@ function Delete(data) {
 
 function listAdmin(){
       return fetch(
-    this.apiUrl+`admin/list-manager`,
+    this.apiUrl+`admin/list-admin`,
     requestOptions.get()
   )
     .then(handleResponse)
@@ -76,7 +76,7 @@ function listAdmin(){
 }
 function getAdmin(data) {
   return fetch(
-    this.apiUrl+`admin/get-manager/`+data,
+    this.apiUrl+`admin/get-admin/`+data,
     requestOptions.get()
   )
     .then(handleResponse)

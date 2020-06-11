@@ -18,7 +18,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'first_name', 'last_name', 'email', 'phone', 'user_image', 'role_id', 'is_confirmed', 'is_active', 'provider', 'token', 'password',
-        'address', 'city', 'state', 'country', 'zip_code'
+        'address', 'city', 'state', 'country', 'zip_code', 'password_changed_at', 'created_by', 'prefix'
     ];
 
     /**
@@ -38,4 +38,20 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function manager()
+    {
+        return $this->hasOne('App\ManagerDetail');
+    }
+
+    //self relationship
+    public function customerManager()
+    {
+        return $this->hasMany('App\User', 'created_by');
+    }
+
+    public function farms()
+    {
+        return $this->hasOne('App\CustomerFarm', 'manager_id');
+    }
 }

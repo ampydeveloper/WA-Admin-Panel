@@ -2,8 +2,7 @@
       <v-app>
              <v-container>
       <v-row>
-     
-        
+    <h2>View Skidsteer</h2>
       <v-subheader>skidsteer</v-subheader>     
         <v-list-item>
             <v-list-item-content>
@@ -18,7 +17,11 @@
 
 <script>
  import { skidsteerService } from "../../../_services/skidsteer.service";
+import { PlusCircleIcon } from 'vue-feather-icons'
 export default {
+components: {
+      PlusCircleIcon
+      },
   data() {
     return {
         avatar: null,

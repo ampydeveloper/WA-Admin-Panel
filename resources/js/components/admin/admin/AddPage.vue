@@ -2,10 +2,7 @@
       <v-app>
              <v-container>
       <v-row>
-          <v-col
-          cols="12"
-          md="12"
-          ><h2>Admin Profile</h2></v-col>
+   <h2>Add New Admin Password</h2>
              <v-col
           cols="12"
           md="12"

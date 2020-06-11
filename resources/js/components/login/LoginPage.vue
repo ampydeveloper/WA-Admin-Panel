@@ -30,7 +30,11 @@
 
             <button type="button" @click="AuthProvider('google')">Google</button>
 
-            <button type="button" @click="AuthProvider('facebook')">Facebook</button>
+            <v-col cols="12" sm="12">
+              Don’t have an account?<router-link to="/register">Sign Up</router-link>
+            </v-col>
+
+            <!-- <button type="button" @click="AuthProvider('facebook')">Facebook</button> -->
           </v-form>
         </v-col>
       </v-row>
@@ -83,7 +87,11 @@ name: "login",
         this.loading = true;
         authenticationService.login(this.email, this.password).then(
           response => {
-              router.push(response);
+		  if(response == 'Home'){
+		      this.$router.push({name: response}).catch(error => { })
+		   }else{
+		      router.push(response);
+		  }
           },
           error => {
             // Can accept an Object of options
@@ -125,7 +133,10 @@ name: "login",
               // all other options may go here
             });
 
-            router.push("/admin/dashboard");
+            //store into local storage
+            localStorage.setItem("currentUser", JSON.stringify(response.data));
+            //redirect now
+            this.$router.go('/home');
           }
         })
         .catch(err => {

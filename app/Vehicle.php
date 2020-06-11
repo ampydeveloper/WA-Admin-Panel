@@ -12,8 +12,8 @@ class Vehicle extends Model
      * @var array
      */
     protected $fillable = [
-        'created_by', 'vehicle_type', 'company_name', 'truck_number', 'chaase_number', 'killometer', 'capacity',
-        'document'
+        'created_by', 'vehicle_type', 'company_name', 'truck_number', 'chaase_number', 'killometer', 'capacity',  'status',
+        'document', 'insurance_document'
     ];
 
     public function user()

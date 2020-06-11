@@ -15,6 +15,16 @@ export const truckService = {
   Delete,
   getTruck,
   listTrucks,
+  addService,
+  getTruckService,
+  updateTruckService,
+  getTruckSingleService,
+getTruckSingleInsurance,
+updateInsurance,
+DeleteService,
+DeleteInsurance,
+  addInsurance, 
+  getTruckInsurance,
   apiUrl: environment.apiUrl,
   currentUrl: '',
   currentUser: currentUserSubject.asObservable(),
@@ -88,3 +98,134 @@ function listTrucks() {
     });
 }
 
+function addService(data) {
+
+  return fetch(
+    this.apiUrl+`admin/create-vehicleservice`,
+    requestOptions.post(data)
+  )
+    .then(handleResponse)
+    .then(user => {
+      // store user details and passport token in local storage to keep user logged in between page refreshes
+
+      return user;
+    });
+}
+function addInsurance(data) {
+
+  return fetch(
+    this.apiUrl+`admin/create-vehicleinsurance`,
+    requestOptions.post(data)
+  )
+    .then(handleResponse)
+    .then(user => {
+      // store user details and passport token in local storage to keep user logged in between page refreshes
+
+      return user;
+    });
+}
+
+function getTruckService(data) {
+  return fetch(
+    this.apiUrl+`admin/get-vehicleservice/`+data,
+    requestOptions.get()
+  )
+    .then(handleResponse)
+    .then(user => {
+      // store user details and passport token in local storage to keep user logged in between page refreshes
+
+      return user;
+    });
+}
+
+function getTruckInsurance(data) {
+  return fetch(
+    this.apiUrl+`admin/get-vehicleinsurance/`+data,
+    requestOptions.get()
+  )
+    .then(handleResponse)
+    .then(user => {
+      // store user details and passport token in local storage to keep user logged in between page refreshes
+
+      return user;
+    });
+}
+
+function getTruckSingleService(data) {
+  return fetch(
+    this.apiUrl+`admin/get-service-details/`+data,
+    requestOptions.get()
+  )
+    .then(handleResponse)
+    .then(user => {
+      // store user details and passport token in local storage to keep user logged in between page refreshes
+
+      return user;
+    });
+}
+
+function getTruckSingleInsurance(data){
+  return fetch(
+    this.apiUrl+`admin/get-insurance-details/`+data,
+    requestOptions.get()
+  )
+    .then(handleResponse)
+    .then(user => {
+      // store user details and passport token in local storage to keep user logged in between page refreshes
+
+      return user;
+    });
+}
+
+function updateTruckService(data) {
+  return fetch(
+    this.apiUrl+`admin/save-service-details/`+data.id,
+    requestOptions.post(data)
+  )
+    .then(handleResponse)
+    .then(user => {
+      // store user details and passport token in local storage to keep user logged in between page refreshes
+
+      return user;
+    });
+}
+
+
+function updateInsurance(data) {
+  return fetch(
+    this.apiUrl+`admin/save-insurance-details/`+data.id,
+    requestOptions.post(data)
+  )
+    .then(handleResponse)
+    .then(user => {
+      // store user details and passport token in local storage to keep user logged in between page refreshes
+
+      return user;
+    });
+}
+
+function DeleteService(data) {
+  return fetch(
+    this.apiUrl+`admin/delete-service-details/`+data,
+    requestOptions.delete()
+  )
+    .then(handleResponse)
+    .then(user => {
+      // store user details and passport token in local storage to keep user logged in between page refreshes
+
+      return user;
+    });
+}
+
+function DeleteInsurance(data) {
+  return fetch(
+    this.apiUrl+`admin/delete-insurance-details/`+data,
+    requestOptions.delete()
+  )
+    .then(handleResponse)
+    .then(user => {
+      // store user details and passport token in local storage to keep user logged in between page refreshes
+
+      return user;
+    });
+}

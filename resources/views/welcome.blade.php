@@ -9,9 +9,12 @@
         <meta name="csrf-token" value="{{ csrf_token() }}" />
     </head>
     <body>
-        <div id="app">
+        <div id="app" class="my-app">
           <example-component></example-component>
         </div>
+        <div id="snackbar">
+        </div>
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAQEbFYBxoq9qSepomK_1KEM7TxU3vSOyw&libraries=geometry,places"></script>
         <script src="{{ mix('js/app.js') }}" type="text/javascript"></script>
     </body>
 </html>

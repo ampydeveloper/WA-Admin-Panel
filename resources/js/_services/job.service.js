@@ -15,6 +15,7 @@ export const jobService = {
   Delete,
   getService,
   listService,
+  getTimeSlots,
   apiUrl: environment.apiUrl,
   currentUrl: '',
   currentUser: currentUserSubject.asObservable(),
@@ -78,6 +79,19 @@ function getService(data) {
 function listService() {
   return fetch(
     this.apiUrl+`admin/list-services`,
+    requestOptions.get()
+  )
+    .then(handleResponse)
+    .then(user => {
+      // store user details and passport token in local storage to keep user logged in between page refreshes
+
+      return user;
+    });
+}
+
+function getTimeSlots(data) {
+  return fetch(
+    this.apiUrl+`admin/get-timeslots/`+data,
     requestOptions.get()
   )
     .then(handleResponse)

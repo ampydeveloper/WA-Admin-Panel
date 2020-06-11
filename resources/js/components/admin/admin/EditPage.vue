@@ -2,9 +2,7 @@
   <v-app>
     <v-container>
       <v-row>
-        <v-col cols="12" md="12">
-          <h2>Edit Manager Profile</h2>
-        </v-col>
+     <h2>Edit Admin</h2>
         <v-col cols="12" md="12">
           <v-form ref="form" v-model="valid" lazy-validation>
             <v-col cols="12" md="12">
@@ -12,7 +10,7 @@
                 class="v-avatar v-list-item__avatar"
                 style="height: 40px; min-width: 40px; width: 40px;"
               >
-                <img :src="avatar" alt="John" />
+                <img :src="'../../../'+addForm.user_image" />
               </div>
 
               <file-pond
@@ -136,7 +134,6 @@ export default {
         this.addForm.first_name = response.data.first_name;
         this.addForm.last_name = response.data.last_name;
         this.addForm.email = response.data.email;
-        this.addForm.phone = response.data.phone;
         this.addForm.user_image = response.data.user_image;
       } else {
         router.push("/admin/manager");

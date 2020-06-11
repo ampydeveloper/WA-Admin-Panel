@@ -27,6 +27,8 @@ class CreateVehiclesTable extends Migration
             $table->dateTime("insurance_date")->nullable();
             $table->dateTime("insurance_expiry")->nullable();
             $table->string("document")->nullable();
+	     $table->string("insurance_document")->nullable();
+            $table->tinyInteger("status")->comment("true: Available, false: Unavailable")->nullable();
 
             $table->timestamps();
         });
