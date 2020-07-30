@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\URL;
 use Carbon\Carbon;
 use Socialite;
 use Mail;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Client;
 use App\User;
 
 class AuthController extends Controller
@@ -45,6 +47,8 @@ class AuthController extends Controller
         }
 
         try {
+            //make array for hubspot
+
             if ($request->user_image != '' && $request->user_image != null) {
                 //upload path
                 $folderPath = "images/";
@@ -77,12 +81,13 @@ class AuthController extends Controller
                 'is_active' => 1,
                 'phone' => $request->phone,
                 'user_image' => $file,
-		        'password_changed_at' => Carbon::now(),
+                'password_changed_at' => Carbon::now(),
                 'password' => bcrypt($request->password)
             ]);
 
             if ($user->save()) {
                 $this->_welcomeEmail($user);
+                $this->_saveUserToHubSpot($user);
             }
 
             //return success response
@@ -101,6 +106,40 @@ class AuthController extends Controller
                 'data' => []
             ], 500);
         }
+    }
+
+    /**
+     * save user to hubspot
+     */
+    public function _saveUserToHubSpot($request)
+    {
+        $arr = [
+            'properties' => [
+                [
+                    'property' => 'firstname',
+                    'value' => $request->first_name
+                ],
+                [
+                    'property' => 'lastname',
+                    'value' => $request->last_name
+                ],
+                [
+                    'property' => 'email',
+                    'value' => $request->email
+                ],
+            ]
+        ];
+        $post_json = json_encode($arr);
+        $endpoint = config('constant.hubspot.api_url') . env('HUBSPOT_API_KEY');
+        $client = new Client();
+        $res = $client->request('POST', $endpoint, [
+            'headers' => [
+                'Content-Type' => 'application/json'
+            ],
+            'body' => $post_json
+        ]);
+
+        return true;
     }
 
     /**
@@ -230,20 +269,26 @@ class AuthController extends Controller
             $loggedInUser = $request->user();
 
             Log::info($request->user_image);
-
             $loggedInUser->first_name = $request->first_name;
             $loggedInUser->last_name = $request->last_name;
-            $loggedInUser->email = $request->email;
+            // $loggedInUser->email = $request->email;
             $loggedInUser->phone = $request->phone;
             $loggedInUser->user_image = $request->user_image;
 
             $loggedInUser->save();
+            $checkemail =  User::where('email', $request->email)->first();
+            if (empty($checkemail)) {
+                $this->_updateEmail($loggedInUser, $request->email);
+                $msg = "User Profile edit successfully. We have sent you an e-mail to confirm your email address.'";
+            } else {
+                $msg = "User Profile edit successfully.";
+            }
 
             Log::info($loggedInUser);
             //return success response
-             return response()->json([
+            return response()->json([
                 'status' => true,
-                'message' => 'User Profile edit successfully.',
+                'message' => $msg,
                 'data' => $loggedInUser
             ]);
         } catch (\Exception $e) {
@@ -259,7 +304,7 @@ class AuthController extends Controller
     }
 
     /**
-     * email for email confirmation
+     * email for new account email confirmation
      */
     public function _welcomeEmail($user)
     {
@@ -275,6 +320,25 @@ class AuthController extends Controller
             $message->from(env('MAIL_USERNAME'), env('MAIL_USERNAME'));
         });
     }
+
+    /**
+     * email for email address confirmation
+     */
+    public function _updateEmail($user, $email)
+    {
+        $name = $user->first_name . ' ' . $user->last_name;
+        $data = array(
+            'name' => $name,
+            'email' => $email,
+            'verificationLink' => env('APP_URL') . 'confirm-update-email/' . base64_encode($email) . '/' . base64_encode($user->id)
+        );
+
+        Mail::send('email_templates.welcome_email', $data, function ($message) use ($name, $email) {
+            $message->to($email, $name)->subject('Email Address Confirmation');
+            $message->from(env('MAIL_USERNAME'), env('MAIL_USERNAME'));
+        });
+    }
+
 
     public function confirmEmail(Request $request)
     {
@@ -318,35 +382,49 @@ class AuthController extends Controller
 
             $checkIfExist = User::whereEmail($user->user['email'])->first();
 
-            if($checkIfExist == null) {
-                //create new user
-                $user = new User([
-                    'first_name' => $user->user['given_name'],
-                    'last_name' => $user->user['family_name'],
-                    'email' => $user->user['email'],
-                    'role_id' => 4,
-                    'is_active' => 1,
-                    'is_confirmed' => 1,
-                    'user_image' => $user->avatar,
-                    'provider' => $provider,
-                    'token' => $user->token,
-                    'password_changed_at' => Carbon::now()
-                ]);
+            if ($checkIfExist == null) {
+
+                if ($provider == config('constant.login_providers.google')) {
+                    //create new user
+                    $user = new User([
+                        'first_name' => $user->user['given_name'],
+                        'last_name' => $user->user['family_name'],
+                        'email' => $user->user['email'],
+                        'role_id' => 4,
+                        'is_active' => 1,
+                        'is_confirmed' => 1,
+                        'provider' => $provider,
+                        'token' => $user->token,
+                        'password_changed_at' => Carbon::now()
+                    ]);
+                } else if ($provider == config('constant.login_providers.facebook')) {
+                    //create new user
+                    $user = new User([
+                        'first_name' => $user['name'],
+                        'email' => $user['email'],
+                        'role_id' => 4,
+                        'is_active' => 1,
+                        'is_confirmed' => 1,
+                        'provider' => $provider,
+                        'token' => $user->token,
+                        'password_changed_at' => Carbon::now()
+                    ]);
+                }
 
                 $user->save();
             } else {
-                if($checkIfExist->provider == null) {
+                if ($checkIfExist->provider == null) {
                     //save provider and token if not saved earier or if any existing account now login with social account
                     $checkIfExist->provider == $provider;
                     $checkIfExist->token == $user->token;
                 }
 
-                if($checkIfExist->password_changed_at == null || $checkIfExist->password_changed_at == '') {
-                    $checkIfExist->password_changed_at = Carbon::now();     
+                if ($checkIfExist->password_changed_at == null || $checkIfExist->password_changed_at == '') {
+                    $checkIfExist->password_changed_at = Carbon::now();
                 }
 
                 $checkIfExist->save();
-                
+
                 $user = $checkIfExist;
             }
             //process token
@@ -381,7 +459,8 @@ class AuthController extends Controller
     /**
      * social login
      */
-    public function changePassword(Request $request) {
+    public function changePassword(Request $request)
+    {
         //validate request
         $validator = Validator::make($request->all(), [
             'password' => 'required|confirmed'
@@ -415,5 +494,124 @@ class AuthController extends Controller
             'message' => $message,
             'data' => []
         ], $errCode);
+    }
+
+    public function confirmUpdateEmail(Request $request)
+    {
+
+        $id = base64_decode($request->id);
+        $email = base64_decode($request->email);
+
+        $getUser = User::whereId($id)->first();
+        //check if email exist
+        if ($getUser != null) {
+            $getUser->email = $email;
+            $getUser->save();
+            $message = "Your email address has been successfully confirmed. Please login to proceed further.";
+            $status = true;
+            $errCode = 200;
+        } else {
+            $status = false;
+            $message = "Your confirmation link has been expired.";
+            $errCode = 400;
+        }
+
+        // return response()->json([
+        //     'status' => $status,
+        //     'message' => $message,
+        //     'data' => []
+        // ], $errCode);
+
+        // return redirect()->route('test.index');
+
+        return redirect()->route('/');
+
+        // return Redirect::back();
+    }
+
+    /**
+     * forgot password
+     */
+    public function forgotPassword(Request $request)
+    {
+
+        try {
+            $user = User::whereEmail($request->email)->first();
+            //return with error if email not found
+            if (!$user) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Email not found!',
+                    'data' => []
+                ], 404);
+            }
+
+            $name = $user->first_name . ' ' . $user->last_name;
+            $data = array(
+                'name' => $name,
+                'email' => $user->email,
+                'verificationLink' => env('APP_URL') . 'change-password/' . base64_encode($user->email)
+            );
+
+            $sendForGotEmail = Mail::send('email_templates.forgot_password', $data, function ($message) use ($user, $name) {
+                $message->to($user->email, $name)->subject('Email Confirmation');
+                $message->from(env('MAIL_USERNAME'), env('MAIL_USERNAME'));
+            });
+
+            return response()->json([
+                'status' => true,
+                'message' => 'We have sent you a email for change password link. Please check and proceed further.',
+                'data' => []
+            ]);
+        } catch (\Exception $e) {
+            //make log of errors
+            Log::error(json_encode($e->getMessage()));
+            //return with error
+            return response()->json([
+                'status' => false,
+                'message' => 'Internal server error!',
+                'data' => []
+            ], 500);
+        }
+    }
+
+    /**
+     * recover password
+     */
+    public function recoverPassword(Request $request)
+    {
+        //validate request
+        $validator = Validator::make($request->all(), [
+            'password' => 'required|confirmed'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'The given data was invalid.',
+                'data' => $validator->errors()
+            ], 422);
+        }
+
+        $user = User::whereEmail(base64_decode($request->hash_code))->first();
+        //return with error if email not found
+        if (!$user) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Link Expired!',
+                'data' => []
+            ], 422);
+        } else {
+            $user->password = bcrypt($request->password);
+            $user->password_changed_at = Carbon::now();
+
+            $user->save();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Password changed successfully',
+                'data' => []
+            ], 200);
+        }
     }
 }

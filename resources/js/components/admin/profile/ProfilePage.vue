@@ -1,60 +1,79 @@
 <template>
   <v-app>
-    <v-container>
+    <v-container fluid>
       <v-row>
-      <h2>Edit Profile</h2>
+      <h4 class="main-title text-left">Edit Profile</h4>
         <v-col cols="12" md="12">
           
-          <v-form ref="form" v-model="valid" enctype="multipart/form-data" lazy-validation>
+          <v-form ref="form" v-model="valid" enctype="multipart/form-data" lazy-validation @submit="update">
             <v-col cols="12" md="12">
               <div
                 class="v-avatar v-list-item__avatar"
-                style="height: 40px; min-width: 40px; width: 40px;"
+                style="height: 80px; min-width: 80px; width: 80px; position:relative;"
               >
+              <button type="button" class="close AClass" style="margin-right: 13px; margin-top: -25px; font-size: 30px;" v-if="cross" @click="Remove()">
+               <span>&times;</span>
+             </button>
                 <img :src="avatar" />
               </div>
               <file-pond
                 name="uploadImage"
                 ref="pond"
                 label-idle="Drop files here..."
-                allow-multiple="false"
+                v-bind:allow-multiple="false"
                 v-bind:server="serverOptions"
                 v-bind:files="myFiles"
+               v-on:addfilestart="setUploadIndex"
                 allow-file-type-validation="true"
                 accepted-file-types="image/jpeg, image/png"
                 v-on:processfile="handleProcessFile"
+                v-on:processfilerevert="handleRemoveFile"
               />
             </v-col>
-            <v-col cols="12" md="12">
+            <v-col cols="12" md="12" class="pt-0">
+              <v-col sm="2" class="label-align pt-0">
+                <label>First name</label>
+              </v-col>
+              <v-col sm="4" class="pt-0">
               <v-text-field
                 v-model="updateForm.first_name"
                 :rules="FnameRules"
-                label="First name"
                 required
               ></v-text-field>
+              </v-col>
             </v-col>
 
-            <v-col cols="12" md="12">
+            <v-col cols="12" md="12" class="pt-0">
+              <v-col sm="2" class="label-align pt-0">
+                <label>Last name</label>
+              </v-col>
+              <v-col sm="4" class="pt-0">
               <v-text-field
                 v-model="updateForm.last_name"
                 :rules="LnameRules"
-                label="Last name"
                 required
               ></v-text-field>
+              </v-col>
             </v-col>
 
-            <v-col cols="12" md="12">
+            <v-col cols="12" md="12" class="pt-0">
+              <v-col sm="2" class="label-align pt-0">
+                <label>E-mail</label>
+              </v-col>
+              <v-col sm="4" class="pt-0">
               <v-text-field
                 v-model="updateForm.email"
                 :rules="emailRules"
                 name="email"
-                label="E-mail"
                 required
               ></v-text-field>
+              </v-col>
             </v-col>
-            <v-btn color="success" class="mr-4" @click="update">Submit</v-btn>
+            <!-- <v-btn color="success" class="mr-4" @click="update">Submit</v-btn> -->
 
-            <v-btn color="success" class="mr-4" @click="Delete(updateForm.user_id)">Delete Account</v-btn>
+            <v-btn color="success" type="submit" :loading="loading" :disabled="isvalid"  class="mr-4 custom-save-btn ml-4" @click="update">Submit</v-btn>
+
+            <v-btn color="success" v-if="updateForm.user_id != 1" class="mr-4" @click="Delete(updateForm.user_id)">Delete Account</v-btn>
           </v-form>
         </v-col>
       </v-row>
@@ -75,10 +94,14 @@ export default {
     return {
       myFiles: "",
       valid: true,
+      isvalid:false,
+      loading: false,
       apiUrl: environment.apiUrl,
       baseUrl: environment.baseUrl,
       avatar: null,
       test: "",
+      cross: false,
+      uploadInProgress: false,
       updateForm: {
         user_id: null,
         first_name: "",
@@ -112,6 +135,12 @@ export default {
           headers: {
             Authorization: "Bearer " + currentUser.data.access_token
           }
+        },
+        revert:{
+          url: "deleteImage",
+          headers: {
+            Authorization: "Bearer " + currentUser.data.access_token
+          }
         }
       };
     },
@@ -129,6 +158,7 @@ export default {
     this.updateForm.user_id = currentUser.data.user.id;
     this.updateForm.user_image = currentUser.data.user.user_image;
     if(currentUser.data.user.user_image) { 
+      this.cross=true;
       this.avatar = "../../"+currentUser.data.user.user_image;
     } else {
       this.avatar = "/images/avatar.png";
@@ -138,17 +168,47 @@ export default {
     this.updateForm.email = currentUser.data.user.email;
   },
   methods: {
+    setUploadIndex() {
+      this.uploadInProgress = true;
+    },
     handleProcessFile: function(error, file) {
       this.updateForm.user_image = file.serverId;
       this.avatar = "../../"+file.serverId;
-      //change header image
-      document.getElementById("userImage").src =  "../../"+file.serverId;
+      this.uploadInProgress = false;
+      this.cross=false;
     },
-    update() {
+    handleRemoveFile: function(file){
+      this.updateForm.user_image = '';
+      this.avatar = "/images/avatar.png";
+      this.cross=false;
+    },
+    update: function(e) {
+      //stop page to reload
+      e.preventDefault();
+
+      if(this.uploadInProgress) {
+        this.$toast.open({
+              message: "Profile image uploading is in progress!",
+              type: "error",
+              position: "top-right"
+            });
+            return false;
+      }
       if (this.$refs.form.validate()) {
+        if(this.loading) {
+          return false;
+        }
+
+        //start loading
+        this.loading = true;
+
         authenticationService.updateProfile(this.updateForm).then(response => {
+          //stop loading
+          this.loading = false;
           //handle response
           if (response.status) {
+            //change header image
+            document.getElementById("userImage").src =  "../../"+this.updateForm.user_image;
             //load from local storage
             var getStorage = JSON.parse(localStorage.getItem("currentUser"));
             getStorage.data.user.user_image = this.updateForm.user_image;
@@ -158,7 +218,12 @@ export default {
             //add again to local storage
             localStorage.setItem("currentUser", JSON.stringify(getStorage));
             //change header image
-            document.getElementById("userImage").src = "../../"+this.updateForm.user_image;
+            if(this.updateForm.user_image){
+            	document.getElementById("userImage").src = "../../"+this.updateForm.user_image;
+            }else{
+              document.getElementById("userImage").src = "/images/avatar.png";
+	    }
+		
 
             this.$toast.open({
               message: response.message,
@@ -177,6 +242,11 @@ export default {
         });
       }
     },
+  Remove(){
+    this.avatar = "/images/avatar.png";
+    this.cross=false;
+    this.updateForm.user_image = '';
+  },
   Delete(e) {
       if (e) {
         authenticationService.Delete(e).then(response => {
@@ -209,3 +279,10 @@ export default {
   }
 };
 </script>
+<style>
+.AClass{
+    right:0px;
+    position: absolute;
+}
+
+</style>

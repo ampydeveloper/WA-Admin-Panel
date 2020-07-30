@@ -1,10 +1,16 @@
-<template>
-  <v-app>
+<template class="bg_login_img">
+  <v-app id="login_bg">
+    <div class="login_form">
     <v-container>
       <v-row>
-        <v-col cols="6" md="6"></v-col>
+        <v-col cols="6" md="6" class="img_bg_outside">
+            <div class="img_bg">
+              <img src="images/login_img.png" />
+            </div>
+          </v-col>
         <v-col cols="6" md="6">
-          <v-form ref="form" v-model="valid" lazy-validation>
+<div class="login_box">
+          <v-form ref="form" v-model="valid" lazy-validation class="slide-right">
             <v-col cols="12" md="12">
               <v-text-field v-model="firstname" :rules="FnameRules" label="First name" required></v-text-field>
             </v-col>
@@ -46,6 +52,12 @@
                 @click:append="show2 = !show2"
               ></v-text-field>
             </v-col>
+
+	    <v-radio-group v-model="registerForm.role_id" :mandatory="false">
+	      <v-radio label="As Customer" value="4"></v-radio>
+	      <v-radio label="As Haulers" value="6"></v-radio>
+	    </v-radio-group>
+
             <v-btn color="success" class="mr-4" @click="validate">Submit</v-btn>
 
             <v-col cols="12" sm="12">
@@ -53,9 +65,11 @@
             </v-col>
 
           </v-form>
+</div>
         </v-col>
       </v-row>
     </v-container>
+</div>
   </v-app>
 </template>
 
@@ -65,11 +79,12 @@ import { router } from "../../_helpers/router";
 import { authenticationService } from "../../_services/authentication.service";
 export default {
   data: () => ({
+    loading: false,
     registerForm: {
       first_name: "",
       last_name: "",
       email: "",
-      role_id: 4,
+      role_id: "",
       password: ""
     },
     valid: true,
@@ -100,17 +115,15 @@ export default {
   methods: {
     validate() {
       if (this.$refs.form.validate()) {
-        // this.submitted = true;
-        // this.loading = true;
-
+        this.loading = true;
         this.registerForm.first_name = this.firstname;
         this.registerForm.last_name = this.lastname;
         this.registerForm.email = this.email;
         this.registerForm.password = this.password;
         this.registerForm.password_confirmation = this.confirm_password;
-        this.registerForm.user_image = "";
         authenticationService.register(this.registerForm).then(response => {
           //handle response
+          this.loading = false;
           if (response.status) {
             this.$toast.open({
               message: response.message,
@@ -132,3 +145,129 @@ export default {
   }
 };
 </script>
+<style>
+@keyframes slideInFromLeft {
+  0% {
+    transform: translateX(-10%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.slide-right {
+	animation: 1s ease-out 0s 1 slideInFromLeft;
+}
+/* #login_bg > img {
+  max-width: 100%;
+} */
+#login_bg {
+  background-image: url("/images/login-bg4.jpg");
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.login_form {
+  max-width: 1000px;
+  width: 100%;
+  margin: auto;
+  padding: 20px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(50% - 265px);
+}
+.login_txt {
+  padding-bottom: 26px;
+}
+.login_form .row {
+  background: #fff;
+  box-shadow: 0 4px 25px 0 rgba(0, 0, 0, 0.1);
+}
+.login_form .img_bg img {
+  max-width: 100%;
+}
+.login_txt h2 {
+  color: #2c2c2c;
+  font-size: 22px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+.login_txt p {
+  color: #2c2c2c;
+  font-size: 16px;
+  font-weight: 400;
+  margin-bottom: 10px;
+}
+.sign_up {
+  color: #2c2c2c;
+  font-size: 18px;
+  font-weight: 500;
+  text-align: center;
+}
+.btn_grp {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0px;
+  flex-direction: row-reverse;
+}
+#login_bg .login_form .btn_grp button.login_btn {
+  background: #5c8546;
+  color: #fff;
+  font-size: 13px;
+  text-transform: capitalize;
+  font-weight: 400;
+  padding: 10px 30px;
+  border-radius: 7px;
+  outline: none;
+}
+.social_btn button {
+  margin-right: 20px;
+}
+.img_bg_outside {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #eff2f7;
+}
+.login_box {
+  padding: 1rem;
+}
+.v-text-field {
+  padding-top: 0px;
+  margin-top: 0px;
+}
+.v-input input {
+ 
+}
+.v-application .error--text {
+  border: none;
+}
+.v-text-field.v-input--has-state > .v-input__control > .v-input__slot:before {
+  border: none;
+}
+.v-text-field > .v-input__control > .v-input__slot:after,
+.v-text-field > .v-input__control > .v-input__slot:before {
+  content: none;
+}
+.forget {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.forget .custom_checkbox {
+  margin: 0;
+}
+.forget .custom_checkbox label {
+  top: 4px;
+}
+.v-application .primary--text {
+  color: #5c8545 !important;
+}
+@media only screen and (max-width: 992px) {
+  .img_bg_outside {
+    display: none;
+  }
+}
+</style>

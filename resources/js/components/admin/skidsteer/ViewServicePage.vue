@@ -1,12 +1,12 @@
 <template>
   <v-app>
-    <v-container>
+    <v-container fluid>
       <v-row>
-        <v-tabs class="custom-tabs" v-model="tab" background-color="transparent" color="basil" grow>
+        <v-tabs v-model="tab" background-color="transparent" color="basil" grow>
           <v-tab v-for="item in items" :key="item">{{ item }}</v-tab>
         </v-tabs>
 
-        <v-tabs-items v-model="tab" class="custom-tab-content">
+        <v-tabs-items v-model="tab" >
           <v-tab-item v-for="item in items" :key="item">
             <v-card class="service-tab-content" color="basil" flat v-if="item == 'Service'">
               <v-card-text>
@@ -17,15 +17,21 @@
                   multi-sort
                   class="elevation-1"
                 >
+                <template v-slot:item.document="{ item }"><img style="height: 60px; min-width: 60px; width: 60px;" :src="'/'+item.document" alt="John" /></template>
+		<template v-slot:item.receipt="{ item }"><img style="height: 60px; min-width: 60px; width: 60px;" :src="'/'+item.receipt"></template>
                   <template v-slot:item.id="{ item }">
-                     <span class="custom-action-btn"> <router-link :to="'/admin/truck/editservice/' +item.id">
-               Edit
-              </router-link></span>
+                     <span class="custom-action-btn">
+ <router-link v-if="isAdmin" :to="'/admin/skidsteer/editservice/' +item.id">Edit</router-link>
+ <router-link v-if="!isAdmin" :to="'/manager/skidsteer/editservice/' +item.id">Edit</router-link>
+</span>
                     <span class="custom-action-btn" @click="DeleteService(item.id)">Delete</span>
                   </template>
                 </v-data-table>
               </v-card-text>
-              <router-link :to="'/admin/truck/addservice/' +vehicle_id" class="nav-item nav-link">
+              <router-link  v-if="isAdmin" :to="'/admin/skidsteer/addservice/' +vehicle_id" class="nav-item nav-link">
+                <v-btn color="success" class="mr-4 custom-save-btn ml-4 mt-4">Add Service</v-btn>
+              </router-link>
+              <router-link  v-if="!isAdmin" :to="'/manager/skidsteer/addservice/' +vehicle_id" class="nav-item nav-link">
                 <v-btn color="success" class="mr-4 custom-save-btn ml-4 mt-4">Add Service</v-btn>
               </router-link>
             </v-card>
@@ -38,15 +44,25 @@
                   multi-sort
                   class="elevation-1"
                 >
+ <template v-slot:item.insurance_date="{ item }">
+{{item.insurance_date | formatDateLic}}
+</template>
+ <template v-slot:item.insurance_expiry="{ item }">
+{{item.insurance_expiry | formatDateLic}}
+</template>
                   <template v-slot:item.id="{ item }">
-                    <span class="custom-action-btn"> <router-link :to="'/admin/truck/editinsurance/' +item.id">
-               Edit
-              </router-link></span>
+                    <span class="custom-action-btn">
+		 <router-link v-if="isAdmin" :to="'/admin/skidsteer/editinsurance/' +item.id">Edit </router-link>
+		 <router-link v-if="!isAdmin" :to="'/manager/skidsteer/editinsurance/' +item.id">Edit </router-link>
+		</span>
                     <span class="custom-action-btn" @click="Delete(item.id)">Delete</span>
                   </template>
                 </v-data-table>
               </v-card-text>
-              <router-link :to="'/admin/truck/addinsurance/' +vehicle_id" class="nav-item nav-link">
+              <router-link v-if="isAdmin" :to="'/admin/skidsteer/addinsurance/' +vehicle_id" class="nav-item nav-link">
+                <v-btn color="success" class="mr-4 custom-save-btn ml-4 mt-4">Add Insurance</v-btn>
+              </router-link>
+              <router-link v-if="!isAdmin" :to="'/manager/skidsteer/addinsurance/' +vehicle_id" class="nav-item nav-link">
                 <v-btn color="success" class="mr-4 custom-save-btn ml-4 mt-4">Add Insurance</v-btn>
               </router-link>
             </v-card>
@@ -60,6 +76,7 @@
 <script>
 import { truckService } from "../../../_services/truck.service";
 import { PlusCircleIcon } from "vue-feather-icons";
+import { authenticationService } from "../../../_services/authentication.service";
 export default {
   components: {
     PlusCircleIcon
@@ -76,6 +93,9 @@ export default {
           sortable: false,
           value: "service_date"
         },
+	{ text: "Note", value: "note" },
+	{ text: "Doc", value: "document" },
+	{ text: "Receipt", value: "receipt" },
         { text: "Action", value: "id" }
       ],
       headers1: [
@@ -92,11 +112,18 @@ export default {
       avatar: null,
       truck: [],
       insurance: [],
-      vehicle_id: ""
+      vehicle_id: "",
+      isAdmin: true,
     };
   },
  
   mounted() {
+    const currentUser = authenticationService.currentUserValue;
+    if(currentUser.data.user.role_id == 1){
+    this.isAdmin = true;
+    }else{
+    this.isAdmin = false;
+    }
   this.getResults();
   },
   methods: {
@@ -107,7 +134,12 @@ export default {
       if (response.status) {
         this.truck = response.data;
       } else {
-        router.push("/admin/trucks");
+	    const currentUser = authenticationService.currentUserValue;
+	    if(currentUser.data.user.role_id == 1){
+          	router.push("/admin/trucks");
+	    }else{
+          	router.push("/manager/trucks");
+	    }
         this.$toast.open({
           message: response.message,
           type: "error",
@@ -121,7 +153,13 @@ export default {
       if (response.status) {
         this.insurance = response.data;
       } else {
-        router.push("/admin/trucks");
+	    const currentUser = authenticationService.currentUserValue;
+	    if(currentUser.data.user.role_id == 1){
+          	router.push("/admin/skidsteers");
+	    }else{
+          	router.push("/manager/skidsteers");
+	    }
+
         this.$toast.open({
           message: response.message,
           type: "error",

@@ -1,10 +1,10 @@
 <template>
   <v-app>
-    <v-container>
+    <v-container fluid>
       <v-row>
 <h2>Edit Truck</h2>
         <v-col cols="12" md="12">
-          <v-form ref="form" v-model="valid" lazy-validation>
+          <v-form ref="form" v-model="valid" lazy-validation @submit="save">
             <v-row>
               <v-col cols="8" md="8">
                 <v-col cols="12" md="12">
@@ -92,9 +92,18 @@
                 <v-col cols="12" md="12">
                   <v-text-field
                     v-model="addForm.total_killometer"
-                    label="Total Kilometer"
+                    label="Total Miles"
                     required
                    :rules="killometerRules"
+                  ></v-text-field>
+                </v-col>
+<v-col cols="12" md="12">
+                  <v-text-field
+                   type="number"
+                    v-model="addForm.capacity"
+                    label="Truck Capacity"
+                    required
+                    :rules="[v => !!v || 'Truck capacity is required']"
                   ></v-text-field>
                 </v-col>
 <v-col cols="12" md="12">
@@ -102,10 +111,11 @@
                     name="uploadImage"
                     ref="pond"
                     label-idle="Upload RC"
-                    allow-multiple="false"
+                    v-bind:allow-multiple="false"
                     v-bind:server="serverOptions"
                     v-bind:files="myFiles"
                     v-on:processfile="handleProcessFile1"
+                    v-on:processfilerevert="handleRemoveFile1"
 		    allow-file-type-validation="true"
 		    accepted-file-types="image/jpeg, image/png"
                   />
@@ -113,7 +123,7 @@
 		<div class="v-messages__wrapper"><div class="v-messages__message">RC document upload is required</div></div>
 		</div>
                   <div v-if="rc" style="height:200px; width:200px">
-                    <img :src="rc" alt="John" style="height:200px;" />
+                    <img :src="rc" alt="Rc" style="height:200px;" />
                   </div>
                 </v-col>
                 <v-col cols="12" md="12">
@@ -121,10 +131,11 @@
                     name="uploadImage"
                     ref="pond"
                     label-idle="Upload Insurance"
-                    allow-multiple="false"
+                   v-bind:allow-multiple="false"
                     v-bind:server="serverOptions"
                     v-bind:files="myFiles"
                     v-on:processfile="handleProcessFile2"
+                    v-on:processfilerevert="handleRemoveFile2"
 		    allow-file-type-validation="true"
 		    accepted-file-types="image/jpeg, image/png"
                   />
@@ -132,7 +143,7 @@
 		<div class="v-messages__wrapper"><div class="v-messages__message">Insurance document upload is required</div></div>
 		</div>
 <div v-if="insurancedocument" style="height:200px; width:200px">
-                    <img :src="insurancedocument" alt="John" style="height:200px;" />
+                    <img :src="insurancedocument" alt="insurancedocument" style="height:200px;" />
                   </div>
                 </v-col>
  <v-col cols="12" md="12">
@@ -144,7 +155,9 @@
               </v-col>
 
               <v-col cols="12" md="12">
-                <v-btn color="success" class="mr-4" @click="save">Submit</v-btn>
+                <v-btn type="submit"
+                  :loading="loading"
+                  :disabled="loading" color="success" class="mr-4 custom-save-btn" @click="save">Submit</v-btn>
               </v-col>
             </v-row>
           </v-form>
@@ -159,6 +172,7 @@ import { required } from "vuelidate/lib/validators";
 import { truckService } from "../../../_services/truck.service";
 import { router } from "../../../_helpers/router";
 import { environment } from "../../../config/test.env";
+import { authenticationService } from "../../../_services/authentication.service";
 export default {
   components: {
     //      'image-component': imageVUE,
@@ -166,12 +180,14 @@ export default {
 
   data() {
     return {
+      loading: null,
       docError: false,
       insdocError: false,
       menu2: false,
       menu1: false,
       valid: true,
       apiUrl: environment.apiUrl,
+      imgUrl: environment.imgUrl,
       rc: null,
       insurancedocument: null,
       date: "",
@@ -188,11 +204,12 @@ export default {
         document: "",
 	insurance_document: "",
         total_killometer: "",
+        capacity:'',
         insurance_expiry: "",
 	is_active: ''
       },
           killometerRules: [
-        v => !!v || "Truck kilometer is required",
+        v => !!v || "Truck miles is required",
         v => /^\d*$/.test(v) || "Enter valid number",
       ],
       myFiles: []
@@ -206,6 +223,12 @@ export default {
         withCredentials: false,
         process: {
           url: "uploadImage",
+          headers: {
+            Authorization: "Bearer " + currentUser.data.access_token
+          }
+        },
+        revert:{
+          url: "deleteImage",
           headers: {
             Authorization: "Bearer " + currentUser.data.access_token
           }
@@ -231,16 +254,17 @@ export default {
         this.addForm.chaase_number = response.data.chaase_number;
         this.addForm.insurance_number = response.data.vehicle_insurance.insurance_number;
         this.addForm.total_killometer = response.data.killometer;
+        this.addForm.capacity = response.data.capacity;
         this.addForm.document = response.data.document;
         this.addForm.insurance_document = response.data.insurance_document;
         this.addForm.is_active = response.data.status;
         this.date = new Date(response.data.vehicle_insurance.insurance_date).toISOString().substr(0, 10);
         this.date1 = new Date(response.data.vehicle_insurance.insurance_expiry).toISOString().substr(0, 10);
         if (response.data.document) {
-          this.rc = "../../../" + response.data.document;
+          this.rc = this.imgUrl + response.data.document;
         }
         if (response.data.insurance_document) {
-          this.insurancedocument = "../../../" + response.data.insurance_document;
+          this.insurancedocument = this.imgUrl + response.data.insurance_document;
         }
       } else {
         router.push("/admin/trucks");
@@ -255,13 +279,28 @@ export default {
   methods: {
     handleProcessFile1: function(error, file) {
       this.addForm.document = file.serverId;
+      this.rc = this.imgUrl + file.serverId;
       this.docError = false;
+    },
+    handleRemoveFile1: function(file){
+      this.addForm.document = '';
+      this.rc = '';
+      this.docError = true;
     },
     handleProcessFile2: function(error, file) {
       this.addForm.insurance_document = file.serverId;
+      this.insurancedocument = this.imgUrl+file.serverId;
       this.insdocError = false;
     },
-    save() {
+    handleRemoveFile2: function(file){
+      this.addForm.insurance_document = '';
+      this.insurancedocument = '';
+      this.insdocError = true;
+    },
+    save: function(e) {
+      //stop page to reload
+      e.preventDefault();
+
    	if(this.addForm.document == ''){
 		this.docError = true;
 	}
@@ -271,7 +310,16 @@ export default {
       this.addForm.insurance_date = this.date;
       this.addForm.insurance_expiry = this.date1;
       if (this.$refs.form.validate() && (!this.insdocError) && (!this.docError)) {
+        if(this.loading) {
+          return false;
+        }
+        //start loader
+        this.loading = true;
+
         truckService.edit(this.addForm).then(response => {
+          //stop loader
+          this.loading = false;
+          
           //handle response
           if (response.status) {
             this.$toast.open({
@@ -280,7 +328,12 @@ export default {
               position: "top-right"
             });
             //redirect to login
-            router.push("/admin/trucks");
+	    const currentUser = authenticationService.currentUserValue;
+	    if(currentUser.data.user.role_id == 1){
+          	router.push("/admin/trucks");
+	    }else{
+          	router.push("/manager/trucks");
+	    }
           } else {
             this.$toast.open({
               message: response.message,

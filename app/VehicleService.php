@@ -12,7 +12,7 @@ class VehicleService extends Model
      * @var array
      */
     protected $fillable = [
-        'vehicle_id', 'service_date', 'service_expiry', 'service_killometer'
+        'vehicle_id', 'service_date', 'service_expiry', 'service_killometer', 'receipt', 'document', 'note'
     ];
 
     public function vehicle()

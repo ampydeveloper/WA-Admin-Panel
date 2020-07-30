@@ -28,9 +28,42 @@
     >
       <div />
 
-     <v-list>
+     <v-list v-if="isAdmin">
           <v-list-group
-            v-for="item in items"
+            v-for="(item, mainIndex) in items"
+            :key="item.title"
+            v-model="item.active"
+            :prepend-icon="item.action"
+            no-action
+          >
+            <template v-slot:activator>
+              <v-list-item>
+                <v-list-item-content>
+                  <v-list-item-title>{{ item.title }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </template>
+
+            <v-list-item
+              v-for="(subItem, subIindex) in item.items"
+              :key="subItem.title"
+              v-bind:class="{ 'overlay': isActive == subIindex+''+mainIndex }"
+            >
+              <v-list-item-action>
+                <v-icon v-text="subItem.icon"></v-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title v-on:click="showAdvanced(subIindex, mainIndex)">
+                  <router-link :to="subItem.url" class="nav-item nav-link">{{ subItem.title }}</router-link>
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-group>
+        </v-list>
+
+     <v-list v-if="isManager">
+          <v-list-group
+            v-for="item in manageritems"
             :key="item.title"
             v-model="item.active"
             :prepend-icon="item.action"
@@ -62,6 +95,41 @@
           </v-list-group>
         </v-list>
 
+   <v-list v-if="isDriver">
+          <v-list-group
+            v-for="item in driveritems"
+            :key="item.title"
+            v-model="item.active"
+            :prepend-icon="item.action"
+            no-action
+          >
+            <template v-slot:activator>
+              <v-list-item>
+                <v-list-item-content>
+                  <v-list-item-title>{{ item.title }}</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </template>
+
+            <v-list-item
+              v-for="subItem in item.items"
+              :key="subItem.title"
+              @click=""
+            >
+              <v-list-item-content>
+                <v-list-item-title>
+		<router-link :to="subItem.url" class="nav-item nav-link">{{ subItem.title }}</router-link>
+		</v-list-item-title>
+              </v-list-item-content>
+
+              <v-list-item-action>
+                <v-icon>{{ subItem.action }}</v-icon>
+              </v-list-item-action>
+            </v-list-item>
+          </v-list-group>
+        </v-list>
+
+
       <div />
     </v-list>
   </v-navigation-drawer>
@@ -87,47 +155,135 @@
             title: 'Main',
             active: true,
             items: [
-              { title: 'Overview', url: '/admin/dashboard' },
-              { title: 'Jobs', url: '/admin/jobs'  },
-              { title: 'Dispatches', url: '/admin/dispatches'  },
-              { title: 'Services', url: '/admin/services'  }
+              { title: 'Overview', url: '/admin/dashboard', icon: 'mdi-view-dashboard' },
+              { title: 'Jobs', url: '/admin/jobs', icon: 'mdi-wallet-travel' },
+              { title: 'Dispatches', url: '/admin/dispatches', icon: 'mdi-cube-outline' },
+              { title: 'Services', url: '/admin/services', icon: 'mdi-camera-timer' },
+            ]
+          },
+          {
+            action: 'local_activity',
+            title: 'Customer',
+            active: true,
+            items: [
+              { title: 'Customer', url: '/admin/customer', icon: 'mdi-account' },
+              { title: 'Hauler', url: '/admin/hauler', icon: 'mdi-account-plus' }
+            ]
+          },
+          {
+            action: 'local_activity',
+            title: 'Employee',
+            active: true,
+            items: [
+              { title: 'Managers', url: '/admin/manager', icon: 'mdi-account-check' },
+	            { title: 'Drivers', url: '/admin/truckdrivers', icon: 'mdi-account-outline' }
+            ]
+          },
+          {
+            action: 'local_activity',
+            title: 'Fleet',
+            active: true,
+            items: [
+              { title: 'Truck', url: '/admin/trucks', icon: 'mdi-truck' },
+	            { title: 'SkidSteer', url: '/admin/skidsteers',  }
+            ]
+          },
+          {
+            action: 'local_activity',
+            title: 'Accounts',
+            active: true,
+            items: [
+               { title: 'Accountings',url: '/admin/accounting', icon: 'mdi-book-open' },
+              { title: 'Reports', url: '/admin/reports', icon: 'mdi-file-document' }
+            ]
+          }
+        ],
+	 manageritems: [
+          {
+            action: 'local_activity',
+            title: 'Main',
+            active: true,
+            items: [
+              { title: 'Overview', url: '/manager/dashboard' },
+               { title: 'Jobs', url: '/manager/jobs'  },
+               { title: 'Dispatches', url: '/manager/dispatches'  },
+            { title: 'Services', url: '/manager/services'  }
             ]
           },
           {
             action: 'local_activity',
             title: 'Customer',
             items: [
-              { title: 'Customer', url: '/admin/customer'  },
-              { title: 'Customer Compnay', url: '/admin/company'  }
+              { title: 'Customer', url: '/manager/customer'  },
+              { title: 'Hauler', url: '/manager/company'  }
             ]
           },
           {
             action: 'local_activity',
             title: 'Employee',
             items: [
-              { title: 'Managers', url: '/admin/manager' },
-	      { title: 'Drivers', url: '/admin/truckdrivers' }
+             { title: 'Managers', url: '/manager/manager' },
+	      { title: 'Drivers', url: '/manager/truckdrivers' }
             ]
           },
           {
             action: 'local_activity',
             title: 'Fleet',
             items: [
-              { title: 'Truck', url: '/admin/trucks' },
-	      { title: 'SkidSteer', url: '/admin/skidsteers' }
+            { title: 'Truck', url: '/manager/trucks' },
+	     { title: 'SkidSteer', url: '/manager/skidsteers' }
             ]
           },
           {
             action: 'local_activity',
             title: 'Accounts',
             items: [
-               { title: 'Accountings',url: '/admin/accounting' },
-              { title: 'Reports', url: '/admin/reports' }
+              { title: 'Accountings',url: '/manager/accounting' },
+              { title: 'Reports', url: '/manager/reports' }
             ]
           }
-        ]
-    }),
+        ],
+	driveritems: [
+	    {
+            action: 'local_activity',
+            active: true,
+            title: 'Overview', url: '/driver/dashboard'
+          },
+         {
+            action: 'local_activity',
+            title: 'Ongoing Jobs', url: '/driver/dashboard'
+          },
+        {
+            action: 'local_activity',
+             title: 'Pending Jobs', url: '/driver/dashboard'
+          },
+        {
+            action: 'local_activity',
+             title: 'Delivered Jobs', url: '/driver/dashboard'
+          },
+        {
+            action: 'local_activity',
+             title: 'Monthly Earning', url: '/driver/dashboard'
+          },
 
+	],
+	isManager: false,
+	isDriver: false,
+	isAdmin: false,
+  isActive: null,
+    }),
+  created() {
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    if(currentUser.data.user.role_id == 1){
+	this.isAdmin = true;
+    }else if(currentUser.data.user.role_id == 2){
+	 this.isManager = true;
+    }else if(currentUser.data.user.role_id == 3){
+	this.isDriver = true;
+    }else{
+	 this.isAdmin = true;
+    }
+  },
     computed: {
       ...mapState(['barColor', 'barImage']),
       drawer: {
@@ -139,7 +295,16 @@
         },
       },
       computedItems () {
-        return this.items.map(this.mapItem)
+        const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+	if(currentUser.data.user.role_id == 1){
+           return this.items.map(this.mapItem)
+        }else if(currentUser.data.user.role_id == 2){
+	  return this.manageritems.map(this.mapItem)
+        }else if(currentUser.data.user.role_id == 3){
+	return this.driveritems.map(this.mapItem)
+        }else{
+	 return this.items.map(this.mapItem)
+	}
       },
       profile () {
         return {
@@ -156,6 +321,9 @@
           children: item.children ? item.children.map(this.mapItem) : undefined,
           //title: this.$t(item.title),
         }
+      },
+      showAdvanced: function(subIindex, mainIndex) {
+        this.isActive = subIindex+''+mainIndex;
       },
     },
   }

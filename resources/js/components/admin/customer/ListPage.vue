@@ -1,48 +1,72 @@
 <template>
   <v-app>
-    <v-container>
+    <v-container fluid>
       <v-row>
         <div class="add-icon">
-          <router-link to="/admin/customer/add" class="nav-item nav-link">
+          <router-link v-if="isAdmin" to="/admin/customer/add" class="nav-item nav-link">
+            <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon>
+          </router-link>
+          <router-link v-if="!isAdmin" to="/manager/customer/add" class="nav-item nav-link">
             <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon>
           </router-link>
         </div>
         <v-col cols="12" md="12">
-          <v-simple-table class="custom-table">
-            <template v-slot:default>
+      <table id="example" class="table table-striped table-bordered" style="width:100%">
+
               <thead>
                 <tr>
                   <th class="text-left"></th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="customer in customers" :key="customer.name">
-                  <td>
-                   <router-link :to="'/admin/customer/details/' + customer.id" class="nav-item nav-link">{{ customer.prefix }}               	{{ customer.first_name }} {{ customer.last_name }}</router-link> 
-                    <v-data-table
-                      :headers="headers"
-                      :items="customer.customer_manager"
-                      hide-default-footer
-                      class="elevation-1"
-                    >
-                      <!-- <template slot="items" slot-scope="props">
-                        <td class="text-xs-right">{{ props.index }}</td>
-                        <td class="text-xs-right">{{ props.item.first_name }}</td>
-                        <td class="text-xs-right">{{ props.item.phone }}</td>
-                        <td class="text-xs-right">{{ props.item.email }}</td>
-                        <td class="text-xs-right">{{ props.item.farms.farm_address }}</td>
-                        <td class="text-xs-right">{{ props.item.farms.farm_city }}</td>
-                        <td class="text-xs-right">{{ props.item.farms.farm_province }}</td>
-                        <td class="text-xs-right">{{ props.item.farms.farm_zipcode }}</td>
-                        <td class="text-xs-right">0</td>
-                        <td class="text-xs-right">05/07/2020</td>
-                      </template> -->
-                    </v-data-table>
+                <tr class="multi-customers" v-for="customer in customers" :key="customer.name">
+                  <td class="single-customer">
+                  <span>
+                   <router-link v-if="isAdmin" :to="'/admin/customer/details/' + customer.id" class="nav-item nav-link">{{ customer.prefix }}  {{ customer.first_name }} {{ customer.last_name }}</router-link>
+                   <router-link v-if="!isAdmin" :to="'/manager/customer/details/' + customer.id" class="nav-item nav-link">{{ customer.prefix }}  {{ customer.first_name }} {{ customer.last_name }}</router-link>
+                   </span> 
+		<v-simple-table>
+			<thead>
+			<tr>
+			 <th>Sno</th>
+			<th>Manager Name</th>
+			<th>Phone Number</th>
+			<th>Email</th>
+			<th>Fram Address</th>
+			<th>City</th>
+			<th>State/Province</th>
+			<th>Zip/Postal</th>
+			<th>No Of Jobs</th>
+			<th>Last Services</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr v-for="(farm, index) in customer.farmlist">
+			   <td>{{index+1}}</td>
+			    <td>
+				<span v-for="manager in farm.farm_manager">{{manager.first_name}}<br></span>
+			    </td>
+			    <td>
+				<span v-for="manager in farm.farm_manager">{{manager.phone}}<br></span>
+			    </td>
+		            <td>
+				<span v-for="manager in farm.farm_manager">{{manager.email}}<br></span>
+			    </td>
+			   <td>{{farm.farm_address}}</td>
+			   <td>{{farm.farm_city}}</td>
+			   <td>{{farm.farm_province}}</td>
+			   <td>{{farm.farm_zipcode}}</td>
+			   <td>N/A</td>
+   			   <td>N/A</td>
+			</tr>
+			</tbody>
+		  </v-simple-table>
+		
+                 
                   </td>
                 </tr>
               </tbody>
-            </template>
-          </v-simple-table>
+          </table>
         </v-col>
       </v-row>
     </v-container>
@@ -52,6 +76,7 @@
 <script>
 import { required } from "vuelidate/lib/validators";
 import { customerService } from "../../../_services/customer.service";
+import { authenticationService } from "../../../_services/authentication.service";
 import {
   UserIcon,
   EditIcon,
@@ -78,22 +103,29 @@ export default {
           sortable: false,
           value: "index"
         },
-        { text: "Manager", value: "first_name" },
-        { text: "Phone Number", value: "phone" },
-        { text: "Email", value: "email" },
-        { text: "Farm Address", value: "farms.farm_address" },
-        { text: "City", value: "farms.farm_city" },
-        { text: "State/Province", value: "farms.farm_province" },
-        { text: "Zip/Postal", value: "farms.farm_zipcode" },
+        { text: "Manager", value: "farm_manager.first_name" },
+        { text: "Phone Number", value: "farm_manager.phone" },
+        { text: "Email", value: "farm_manager.email" },
+        { text: "Farm Address", value: "farm_address" },
+        { text: "City", value: "farm_city" },
+        { text: "State/Province", value: "farm_province" },
+        { text: "Zip/Postal", value: "farm_zipcode" },
         { text: "No Of Jobs", value: "" },
         { text: "Last Services", value: "" }
       ],
       items: [],
-      customers: []
+      customers: [],
+      isAdmin: true,
     };
   },
   getList() {},
   mounted() {
+    const currentUser = authenticationService.currentUserValue;
+    if(currentUser.data.user.role_id == 1){
+    this.isAdmin = true;
+    }else{
+    this.isAdmin = false;
+    }
     this.getResults();
   },
   methods: {
@@ -104,7 +136,7 @@ export default {
       customerService.listCustomer().then(response => {
         //handle response
         if (response.status) {
-          this.customers = response.data;
+         this.customers = response.data;
         } else {
           this.$toast.open({
             message: response.message,
@@ -143,6 +175,13 @@ export default {
     Close() {
       this.dialog = false;
     }
-  }
+  },
+updated() {
+setTimeout(function() {
+     $(document).ready(function() {
+	    $('#example').DataTable();
+	} );
+  }, 1000);
+    }
 };
 </script>

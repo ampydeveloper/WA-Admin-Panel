@@ -6,6 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class ManagerDetail extends Model
 {
+    use \Staudenmeir\EloquentJsonRelations\HasJsonRelationships;
+
+    protected $casts = [
+        'manager_id' => 'json',
+    ];
+
     /**
      * The attributes that are mass assignable.
      *

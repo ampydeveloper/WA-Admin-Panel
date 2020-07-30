@@ -11,10 +11,14 @@ const currentUserSubject = new BehaviorSubject(
 
 export const customerService = {
   add,
+  addFarm,
   edit,
-  Delete,
-  getManager,
+  getCustomer,
+  getFarmAndManager,
   listCustomer,
+  getCustomerCard,
+  getCustomerRecord,
+  updateFarmManager,
   apiUrl: environment.apiUrl,
   currentUrl: '',
   currentUser: currentUserSubject.asObservable(),
@@ -37,9 +41,10 @@ function add(data) {
     });
 }
 
-function edit(data, managerId) {
+function addFarm(data) {
+
   return fetch(
-    this.apiUrl+`admin/update-manager/`+managerId,
+    this.apiUrl+`admin/create-farm`,
     requestOptions.post(data)
   )
     .then(handleResponse)
@@ -49,10 +54,11 @@ function edit(data, managerId) {
       return user;
     });
 }
-function Delete(data) {
+
+function edit(data) {
   return fetch(
-    this.apiUrl+`admin/delete-manager/`+data,
-    requestOptions.get()
+    this.apiUrl+`admin/update-customer/`+data.id,
+    requestOptions.post(data)
   )
     .then(handleResponse)
     .then(user => {
@@ -61,7 +67,6 @@ function Delete(data) {
       return user;
     });
 }
-
 function listCustomer(){
       return fetch(
     this.apiUrl+`admin/list-customer`,
@@ -74,9 +79,9 @@ function listCustomer(){
       return user;
     });
 }
-function getManager(data) {
+function getCustomer(data) {
   return fetch(
-    this.apiUrl+`admin/get-manager/`+data,
+    this.apiUrl+`admin/get-customer/`+data,
     requestOptions.get()
   )
     .then(handleResponse)
@@ -87,3 +92,54 @@ function getManager(data) {
     });
 }
 
+function getFarmAndManager(data) {
+  return fetch(
+    this.apiUrl+`admin/get-farm-and-manager/`+data,
+    requestOptions.get()
+  )
+    .then(handleResponse)
+    .then(user => {
+      // store user details and passport token in local storage to keep user logged in between page refreshes
+
+      return user;
+    });
+}
+
+function getCustomerCard(data) {
+  return fetch(
+    this.apiUrl+`admin/card-list/`+data,
+    requestOptions.get()
+  )
+    .then(handleResponse)
+    .then(user => {
+      // store user details and passport token in local storage to keep user logged in between page refreshes
+
+      return user;
+    });
+}
+
+function getCustomerRecord(data) {
+  return fetch(
+    this.apiUrl+`admin/record-list/`+data,
+    requestOptions.get()
+  )
+    .then(handleResponse)
+    .then(user => {
+      // store user details and passport token in local storage to keep user logged in between page refreshes
+
+      return user;
+    });
+}
+
+function updateFarmManager(data) {
+
+  return fetch(
+    this.apiUrl+`admin/update-farm-manager`,
+    requestOptions.post(data)
+  )
+    .then(handleResponse)
+    .then(user => {
+      // store user details and passport token in local storage to keep user logged in between page refreshes
+      return user;
+    });
+}

@@ -1,10 +1,10 @@
 <template>
   <v-app>
-    <v-container>
+    <v-container fluid>
       <v-row>
 <h2>Edit Skidsteer</h2>
-       <v-col cols="12" md="12">
-          <v-form ref="form" v-model="valid" lazy-validation>
+        <v-col cols="12" md="12">
+          <v-form ref="form" v-model="valid" lazy-validation @submit="save">
             <v-row>
               <v-col cols="8" md="8">
                 <v-col cols="12" md="12">
@@ -18,8 +18,8 @@
                 <v-col cols="12" md="12">
                   <v-text-field
                     v-model="addForm.truck_number"
-                    :rules="[v => !!v || 'Truck number is required']"
-                    label="Truck Number"
+                    :rules="[v => !!v || 'Skidsteer number is required']"
+                    label="Skidsteer Number"
                     required
                   ></v-text-field>
                 </v-col>
@@ -92,21 +92,30 @@
                 <v-col cols="12" md="12">
                   <v-text-field
                     v-model="addForm.total_killometer"
-                    label="Total Kilometer"
+                    label="Total Miles"
                     required
-                    :rules="killometerRules"
+                   :rules="killometerRules"
                   ></v-text-field>
                 </v-col>
-
-<v-col cols="12" md="12">
+                 <v-col cols="12" md="12">
+                  <v-text-field
+                   type="number"
+                    v-model="addForm.capacity"
+                    label="Skidsteer Capacity"
+                    required
+                  ></v-text-field>
+                </v-col>
+                 <v-col cols="12" md="12">
                   <file-pond
                     name="uploadImage"
                     ref="pond"
                     label-idle="Upload RC"
-                    allow-multiple="false"
+                    v-bind:allow-multiple="false"
                     v-bind:server="serverOptions"
                     v-bind:files="myFiles"
+                    v-on:addfilestart="setUploadIndex"
                     v-on:processfile="handleProcessFile1"
+                    v-on:processfilerevert="handleRemoveFile1"
 		    allow-file-type-validation="true"
 		    accepted-file-types="image/jpeg, image/png"
                   />
@@ -114,7 +123,7 @@
 		<div class="v-messages__wrapper"><div class="v-messages__message">RC document upload is required</div></div>
 		</div>
                   <div v-if="rc" style="height:200px; width:200px">
-                    <img :src="rc" alt="John" style="height:200px;" />
+                    <img :src="rc" alt="Rc" style="height:200px;" />
                   </div>
                 </v-col>
                 <v-col cols="12" md="12">
@@ -122,10 +131,12 @@
                     name="uploadImage"
                     ref="pond"
                     label-idle="Upload Insurance"
-                    allow-multiple="false"
+                   v-bind:allow-multiple="false"
                     v-bind:server="serverOptions"
                     v-bind:files="myFiles"
+                    v-on:addfilestart="setUploadIndex"
                     v-on:processfile="handleProcessFile2"
+                    v-on:processfilerevert="handleRemoveFile2"
 		    allow-file-type-validation="true"
 		    accepted-file-types="image/jpeg, image/png"
                   />
@@ -133,10 +144,10 @@
 		<div class="v-messages__wrapper"><div class="v-messages__message">Insurance document upload is required</div></div>
 		</div>
 <div v-if="insurancedocument" style="height:200px; width:200px">
-                    <img :src="insurancedocument" alt="John" style="height:200px;" />
+                    <img :src="insurancedocument" alt="insurancedocument" style="height:200px;" />
                   </div>
                 </v-col>
-<v-col cols="12" md="12">
+ <v-col cols="12" md="12">
 		 <v-switch
 		      v-model="addForm.is_active"
 		      label="Skidsteer Available"
@@ -145,7 +156,9 @@
               </v-col>
 
               <v-col cols="12" md="12">
-                <v-btn color="success" class="mr-4" @click="save">Submit</v-btn>
+                <v-btn type="submit"
+                  :loading="loading"
+                  :disabled="loading" color="success" class="mr-4 custom-save-btn" @click="save">Submit</v-btn>
               </v-col>
             </v-row>
           </v-form>
@@ -157,9 +170,10 @@
 
 <script>
 import { required } from "vuelidate/lib/validators";
-import { skidsteerService } from "../../../_services/skidsteer.service";
+import { truckService } from "../../../_services/truck.service";
 import { router } from "../../../_helpers/router";
 import { environment } from "../../../config/test.env";
+import { authenticationService } from "../../../_services/authentication.service";
 export default {
   components: {
     //      'image-component': imageVUE,
@@ -167,20 +181,23 @@ export default {
 
   data() {
     return {
+      loading: null,
       docError: false,
       insdocError: false,
       menu2: false,
       menu1: false,
       valid: true,
       apiUrl: environment.apiUrl,
+      imgUrl: environment.imgUrl,
       rc: null,
       insurancedocument: null,
       date: "",
       date1: "",
-      user_image: "",
+     uploadInProgress:false,
       setDate:new Date().toISOString().substr(0, 10),
+      user_image: "",
       addForm: {
-        vehicle_type: 2,
+        vehicle_type: 1,
         company_name: "",
         truck_number: "",
         chaase_number: "",
@@ -189,11 +206,12 @@ export default {
         document: "",
 	insurance_document: "",
         total_killometer: "",
+        capacity:'',
         insurance_expiry: "",
 	is_active: ''
       },
-      killometerRules: [
-        v => !!v || "Skidsteer kilometer is required",
+          killometerRules: [
+        v => !!v || "Truck miles is required",
         v => /^\d*$/.test(v) || "Enter valid number",
       ],
       myFiles: []
@@ -210,6 +228,12 @@ export default {
           headers: {
             Authorization: "Bearer " + currentUser.data.access_token
           }
+        },
+        revert:{
+          url: "deleteImage",
+          headers: {
+            Authorization: "Bearer " + currentUser.data.access_token
+          }
         }
       };
     },
@@ -223,7 +247,7 @@ export default {
     }
   },
   mounted: function() {
-    skidsteerService.getSkidsteer(this.$route.params.id).then(response => {
+    truckService.getTruck(this.$route.params.id).then(response => {
       //handle response
       if (response.status) {
         this.addForm.id = response.data.id;
@@ -232,19 +256,25 @@ export default {
         this.addForm.chaase_number = response.data.chaase_number;
         this.addForm.insurance_number = response.data.vehicle_insurance.insurance_number;
         this.addForm.total_killometer = response.data.killometer;
-	this.addForm.document = response.data.document;
+        this.addForm.capacity = response.data.capacity;
+        this.addForm.document = response.data.document;
         this.addForm.insurance_document = response.data.insurance_document;
         this.addForm.is_active = response.data.status;
         this.date = new Date(response.data.vehicle_insurance.insurance_date).toISOString().substr(0, 10);
         this.date1 = new Date(response.data.vehicle_insurance.insurance_expiry).toISOString().substr(0, 10);
-        if(response.data.document){
-            this.rc = '../../../'+response.data.document;
+        if (response.data.document) {
+          this.rc = this.imgUrl + response.data.document;
         }
         if (response.data.insurance_document) {
-          this.insurancedocument = "../../../" + response.data.insurance_document;
+          this.insurancedocument = this.imgUrl + response.data.insurance_document;
         }
       } else {
-        router.push("/admin/trucks");
+         const currentUser = authenticationService.currentUserValue;
+	    if(currentUser.data.user.role_id == 1){
+          	router.push("/admin/skidsteers");
+	    }else{
+          	router.push("/manager/skidsteers");
+	    }
         this.$toast.open({
           message: response.message,
           type: "error",
@@ -254,44 +284,84 @@ export default {
     });
   },
   methods: {
+    setUploadIndex() {
+      this.uploadInProgress = true;
+    },
     handleProcessFile1: function(error, file) {
-alert("dddd");
       this.addForm.document = file.serverId;
+      this.rc = this.imgUrl + file.serverId;
       this.docError = false;
+      this.uploadInProgress = false;
+    },
+    handleRemoveFile1: function(file){
+      this.addForm.document = '';
+      this.docError = true;
+      this.rc = '';
     },
     handleProcessFile2: function(error, file) {
-alert("jhjkhjjhjh");
       this.addForm.insurance_document = file.serverId;
+      this.insurancedocument = this.imgUrl+file.serverId;
       this.insdocError = false;
+      this.uploadInProgress = false;
     },
-    save() {
-   	if(this.addForm.document == null){
+    handleRemoveFile2: function(file){
+      this.addForm.insurance_document = '';
+      this.insdocError = true;
+      this.insurancedocument = '';
+    },
+    save: function(e) {
+      //stop page to reload
+      e.preventDefault();
+
+      if(this.uploadInProgress) {
+        this.$toast.open({
+              message: "Image uploading is in progress!",
+              type: "error",
+              position: "top-right"
+            });
+            return false;
+      }
+   	if(this.addForm.document == ''){
 		this.docError = true;
 	}
-        if(this.addForm.insurance_document == null){
+        if(this.addForm.insurance_document == ''){
 		this.insdocError = true;
 	}
       this.addForm.insurance_date = this.date;
       this.addForm.insurance_expiry = this.date1;
-      if (this.$refs.form.validate() && (!this.insdocError) && (!this.docError) ) {
-        skidsteerService.edit(this.addForm).then(response => {
-         //handle response
-         if(response.status) {
-             this.$toast.open({
-               message: response.message,
-               type: 'success',
-               position: 'top-right'
-             });
-          //redirect to login
-          router.push("/admin/skidsteers");
-         } else {
-             this.$toast.open({
-               message: response.message,
-               type: 'error',
-               position: 'top-right'
-             })
-         }
-       });
+      if (this.$refs.form.validate() && (!this.insdocError) && (!this.docError)) {
+        if(this.loading) {
+          return false;
+        }
+        //start loader
+        this.loading = true;
+
+        truckService.edit(this.addForm).then(response => {
+          //stop loader
+          this.loading = false;
+          
+          //handle response
+          if (response.status) {
+            this.$toast.open({
+              message: response.message,
+              type: "success",
+              position: "top-right"
+            });
+            //redirect to login
+	    const currentUser = authenticationService.currentUserValue;
+	    if(currentUser.data.user.role_id == 1){
+          	router.push("/admin/skidsteers");
+	    }else{
+          	router.push("/manager/skidsteers");
+	    }
+          } else {
+            this.$toast.open({
+              message: response.message,
+              type: "error",
+              position: "top-right"
+            });
+          }
+        });
       }
     }
   }

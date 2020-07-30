@@ -1,101 +1,142 @@
 <template>
   <v-app>
-    <v-container>
+    <v-container fluid>
       <v-row>
-	<h2>Add New Skidsteer</h2>
+<h4 class="main-title text-left ml-6">Add New Skidsteer</h4>
         <v-col cols="12" md="12">
-          <v-form ref="form" v-model="valid" lazy-validation>
+          <v-form ref="form" v-model="valid" lazy-validation @submit="save">
             <v-row>
-              <v-col cols="8" md="8">
-                <v-col cols="12" md="12">
-                  <v-text-field
-                    v-model="addForm.company_name"
-                    :rules="[v => !!v || 'Company name is required']"
-                    label="Company Name"
-                    required
-                  ></v-text-field>
+              <v-col cols="12" md="12">
+                <v-col cols="12" md="12" class="pt-0">
+                  <v-col sm="2" class="label-align pt-0">
+                    <label>Company Name</label>
+                  </v-col>
+                  <v-col sm="4" class="pt-0">
+                    <v-text-field
+                      v-model="addForm.company_name"
+                      :rules="[v => !!v || 'Company name is required']"
+                      required
+                    ></v-text-field>
+                  </v-col>
                 </v-col>
-                <v-col cols="12" md="12">
-                  <v-text-field
-                    v-model="addForm.truck_number"
-                    :rules="[v => !!v || 'Skidsteer number is required']"
-                    label="Skidsteer Number"
-                    required
-                  ></v-text-field>
-                </v-col>
-
-                <v-col cols="12" md="12">
-                  <v-text-field
-                    v-model="addForm.chaase_number"
-                    :rules="[v => !!v || 'Chassis number is required']"
-                    label="Chassis Number"
-                    required
-                  ></v-text-field>
-                </v-col>
-
-                <v-col cols="12" md="12">
-                  <v-text-field
-                    v-model="addForm.insurance_number"
-                    :rules="[v => !!v || 'Insurance number is required']"
-                    label="Insurance Number"
-                    required
-                  ></v-text-field>
+                <v-col cols="12" md="12" class="pt-0">
+                  <v-col sm="2" class="label-align pt-0">
+                    <label>Skidsteer Number</label>
+                  </v-col>
+                  <v-col sm="4" class="pt-0">
+                    <v-text-field
+                      v-model="addForm.truck_number"
+                      :rules="[v => !!v || 'Skidsteer number is required']"
+                      required
+                    ></v-text-field>
+                  </v-col>
                 </v-col>
 
-                <v-col cols="12" md="12">
-                  <v-menu
-                    v-model="menu2"
-                    :close-on-content-click="false"
-                    :nudge-right="40"
-                    transition="scale-transition"
-                    offset-y
-                    min-width="290px"
-                  >
-                    <template v-slot:activator="{ on }">
-                      <v-text-field
-                        v-model="date"
-                        label="Insurance Date"
-                        prepend-icon="event"
-                        readonly
-                        v-on="on"
-			required
-                      :rules="[v => !!v || 'Insurance date is required']"
-                      ></v-text-field>
-                    </template>
-                    <v-date-picker v-model="date" @input="menu2 = false"></v-date-picker>
-                  </v-menu>
-                </v-col>
-                <v-col cols="12" md="12">
-                  <v-menu
-                    v-model="menu1"
-                    :close-on-content-click="false"
-                    :nudge-right="40"
-                    transition="scale-transition"
-                    offset-y
-                    min-width="290px"
-                  >
-                    <template v-slot:activator="{ on }">
-                      <v-text-field
-                        v-model="date1"
-                        label="Insurance expiry date"
-                        prepend-icon="event"
-                        readonly
-                        v-on="on"
-			required
-                      :rules="[v => !!v || 'Insurance expiry date is required']"
-                      ></v-text-field>
-                    </template>
-                    <v-date-picker v-model="date1" @input="menu1 = false" :min="setDate"></v-date-picker>
-                  </v-menu>
+                <v-col cols="12" md="12" class="pt-0">
+                  <v-col sm="2" class="label-align pt-0">
+                    <label>Chassis Number</label>
+                  </v-col>
+                  <v-col sm="4" class="pt-0">
+                    <v-text-field
+                      v-model="addForm.chaase_number"
+                      :rules="[v => !!v || 'Chassis number is required']"
+                      required
+                    ></v-text-field>
+                  </v-col>
                 </v-col>
 
-                <v-col cols="12" md="12">
-                  <v-text-field
-                    v-model="addForm.total_killometer"
-                    label="Total Kilometer"
-                    required
-                    :rules="killometerRules"
-                  ></v-text-field>
+                <v-col cols="12" md="12" class="pt-0">
+                  <v-col sm="2" class="label-align pt-0">
+                    <label>Insurance Number</label>
+                  </v-col>
+                  <v-col sm="4" class="pt-0">
+                    <v-text-field
+                      v-model="addForm.insurance_number"
+                      :rules="[v => !!v || 'Insurance number is required']"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                </v-col>
+
+                <v-col cols="12" md="12" class="pt-0">
+                  <v-col sm="2" class="label-align pt-0">
+                    <label>Insurance Date</label>
+                  </v-col>
+                  <v-col sm="4" class="pt-0">
+                    <v-menu
+                      v-model="menu2"
+                      :close-on-content-click="false"
+                      :nudge-right="40"
+                      transition="scale-transition"
+                      offset-y
+                      min-width="290px"
+                    >
+                      <template v-slot:activator="{ on }">
+                        <v-text-field
+                          v-model="date"
+                          prepend-icon="event"
+                          readonly
+                          v-on="on"
+                          required
+                        :rules="[v => !!v || 'Insurance date is required']"
+                        ></v-text-field>
+                      </template>
+                      <v-date-picker v-model="date" @input="menu2 = false"></v-date-picker>
+                    </v-menu>
+                  </v-col>
+                </v-col>
+                <v-col cols="12" md="12" class="pt-0">
+                  <v-col sm="2" class="label-align pt-0">
+                    <label>Insurance Expiry Date</label>
+                  </v-col>
+                  <v-col sm="4" class="pt-0">
+                    <v-menu
+                      v-model="menu1"
+                      :close-on-content-click="false"
+                      :nudge-right="40"
+                      transition="scale-transition"
+                      offset-y
+                      min-width="290px"
+                    >
+                      <template v-slot:activator="{ on }">
+                        <v-text-field
+                          v-model="date1"
+                          prepend-icon="event"
+                          readonly
+                          v-on="on"
+                          required
+                        :rules="[v => !!v || 'Insurance expiry date is required']"
+                        ></v-text-field>
+                      </template>
+                      <v-date-picker v-model="date1" @input="menu1 = false" :min="setDate"></v-date-picker>
+                    </v-menu>
+                  </v-col>
+                </v-col>
+
+                <v-col cols="12" md="12" class="pt-0">
+                  <v-col sm="2" class="label-align pt-0">
+                    <label>Total Miles</label>
+                  </v-col>
+                  <v-col sm="4" class="pt-0">
+                    <v-text-field
+                      v-model="addForm.total_killometer"
+                      required
+                      :rules="killometerRules"
+                    ></v-text-field>
+                  </v-col>
+                </v-col>
+
+                <v-col cols="12" md="12" class="pt-0">
+                  <v-col sm="2" class="label-align pt-0">
+                    <label>Skidsteer Capacity</label>
+                  </v-col>
+                  <v-col sm="4" class="pt-0">
+                    <v-text-field
+                    type="number"
+                      v-model="addForm.capacity"
+                      required
+                    ></v-text-field>
+                  </v-col>
                 </v-col>
 
                 <v-col cols="12" md="12">
@@ -103,10 +144,12 @@
                     name="uploadImage"
                     ref="pond"
                     label-idle="Upload RC"
-                    allow-multiple="false"
+                    v-bind:allow-multiple="false"
                     v-bind:server="serverOptions"
                     v-bind:files="myFiles"
+                    v-on:addfilestart="setUploadIndex"
                     v-on:processfile="handleProcessFile1"
+                    v-on:processfilerevert="handleRemoveFile1"
 		    allow-file-type-validation="true"
 		    accepted-file-types="image/jpeg, image/png"
                   />
@@ -119,10 +162,12 @@
                     name="uploadImage"
                     ref="pond"
                     label-idle="Upload Insurance"
-                    allow-multiple="false"
+                   v-bind:allow-multiple="false"
                     v-bind:server="serverOptions"
                     v-bind:files="myFiles"
+                    v-on:addfilestart="setUploadIndex"
                     v-on:processfile="handleProcessFile2"
+                    v-on:processfilerevert="handleRemoveFile2"
 		    allow-file-type-validation="true"
 		    accepted-file-types="image/jpeg, image/png"
                   />
@@ -139,7 +184,9 @@
               </v-col>
 
               <v-col cols="12" md="12">
-                <v-btn color="success" class="mr-4" @click="save">Submit</v-btn>
+                <v-btn type="submit"
+                  :loading="loading"
+                  :disabled="loading" color="success" class="mr-4 custom-save-btn" @click="save">Submit</v-btn>
               </v-col>
             </v-row>
           </v-form>
@@ -154,6 +201,7 @@ import { required } from "vuelidate/lib/validators";
 import { skidsteerService } from "../../../_services/skidsteer.service";
 import { router } from "../../../_helpers/router";
 import { environment } from "../../../config/test.env";
+import { authenticationService } from "../../../_services/authentication.service";
 export default {
   components: {
     //      'image-component': imageVUE,
@@ -161,6 +209,7 @@ export default {
 
   data() {
     return {
+      loading: null,
       docError: false,
       insdocError: false,
       menu2: false,
@@ -170,6 +219,7 @@ export default {
       avatar: null,
       date: "",
       date1: "",
+     uploadInProgress:false,
       setDate:new Date().toISOString().substr(0, 10),
       user_image: "",
       addForm: {
@@ -182,11 +232,12 @@ export default {
         document: "",
 	insurance_document: "",
         total_killometer: "",
+        capacity:'',
         insurance_expiry: "",
 	is_active: true
       },
       killometerRules: [
-        v => !!v || "Skidsteer kilometer is required",
+        v => !!v || "Skidsteer miles is required",
         v => /^\d*$/.test(v) || "Enter valid number",
       ],
       myFiles: []
@@ -200,6 +251,12 @@ export default {
         withCredentials: false,
         process: {
           url: "uploadImage",
+          headers: {
+            Authorization: "Bearer " + currentUser.data.access_token
+          }
+        },
+        revert:{
+          url: "deleteImage",
           headers: {
             Authorization: "Bearer " + currentUser.data.access_token
           }
@@ -217,25 +274,56 @@ export default {
   },
   created() {},
   methods: {
+    setUploadIndex() {
+      this.uploadInProgress = true;
+    },
     handleProcessFile1: function(error, file) {
       this.addForm.document = file.serverId;
       this.docError = false;
+      this.uploadInProgress = false;
+    },
+    handleRemoveFile1: function(file){
+      this.addForm.document = '';
+      this.docError = true;
     },
     handleProcessFile2: function(error, file) {
       this.addForm.insurance_document = file.serverId;
       this.insdocError = false;
+      this.uploadInProgress = false;
     },
-    save() {
+    handleRemoveFile2: function(file){
+      this.addForm.insurance_document = '';
+       this.insdocError = true;
+    },
+    save: function(e) {
+      //stop page to reload
+      e.preventDefault();
    	if(this.addForm.document == ''){
 		this.docError = true;
 	}
         if(this.addForm.insurance_document == ''){
 		this.insdocError = true;
 	}
+      if(this.uploadInProgress) {
+        this.$toast.open({
+              message: "Image uploading is in progress!",
+              type: "error",
+              position: "top-right"
+            });
+            return false;
+      }
       this.addForm.insurance_date = this.date;
       this.addForm.insurance_expiry = this.date1;
       if (this.$refs.form.validate() && (!this.insdocError) && (!this.docError)) {
+        if(this.loading) {
+          return false;
+        }
+        //start loader
+        this.loading = true;
+
         skidsteerService.add(this.addForm).then(response => {
+          //stop loader
+          this.loading = false;
          //handle response
          if(response.status) {
              this.$toast.open({
@@ -244,7 +332,13 @@ export default {
                position: 'top-right'
              });
           //redirect to login
-          router.push("/admin/skidsteers");
+	    const currentUser = authenticationService.currentUserValue;
+	    if(currentUser.data.user.role_id == 1){
+		router.push("/admin/skidsteers");
+	    }else{
+	        router.push("/manager/skidsteers");
+	    }
+
          } else {
              this.$toast.open({
                message: response.message,

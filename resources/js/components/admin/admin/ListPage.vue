@@ -2,12 +2,12 @@
   <v-app>
     <v-container>
       <v-row>
-        <v-col cols="12" md="12">
+        <div class="add-icon">
           <router-link to="/admin/admin/add" class="nav-item nav-link">
             <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon>
           </router-link>
-        </v-col>
-        <v-col cols="12" md="12">
+        </div>
+        <v-col cols="12" md="12" class="mt-5">
           <v-simple-table>
             <template v-slot:default>
               <thead>
@@ -16,11 +16,11 @@
                   <th class="text-left">Name</th>
                   <th class="text-left">Email</th>
                   <!-- <th class="text-left">Active</th> -->
-                  <th class="text-left">Action</th>
+                  <th class="text-left">Options</th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="item in managers" :key="item.name">
+                <tr v-for="(item, index) in managers" :key="item.name" v-on:click="selectTr" v-bind:class="{ 'selected' : isActive}">
 		<template v-if="currentUser.id != item.id">
                   <td>
                     <div
@@ -47,16 +47,16 @@
                       text-color="white"
                     >Activate</v-chip>
                   </td> -->
-                  <td>
-                    <!-- <router-link :to="'/admin/admin/view/' + item.id" class="nav-item nav-link">
-                      <user-icon size="1.5x" class="custom-class"></user-icon>
-                    </router-link> -->
-                    <router-link :to="'/admin/admin/edit/' + item.id" class="nav-item nav-link">
-                      <edit-icon size="1.5x" class="custom-class"></edit-icon>
-                    </router-link>
-                    <v-btn color="blue darken-1" text @click="Delete(item.id)">
-                      <trash-icon size="1.5x" class="custom-class"></trash-icon>
-                    </v-btn>
+                  <td class="action-col">
+                    <div class="dropdown" v-bind:class="{ 'show': triggerDropdown == index }">
+                      <more-vertical-icon size="1.5x" class="custom-class dropdown-trigger" v-on:click="dropdownToggle(index)"></more-vertical-icon>
+                      <span class="dropdown-menu">
+                        <router-link :to="'/admin/admin/edit/' + item.id" class="dropdown-item">
+                          <button class="btn">Edit</button>
+                        </router-link>
+                        <button class="btn dropdown-item" v-if="item.id != 1" text @click="Delete(item.id)">Delete</button>
+                      </span>
+                    </div>
                   </td>
                  </template>
                 </tr>
@@ -78,7 +78,8 @@ import {
   UserIcon,
   EditIcon,
   TrashIcon,
-  PlusCircleIcon
+  PlusCircleIcon,
+  MoreVerticalIcon
 } from "vue-feather-icons";
 import { router } from "../../../_helpers/router";
 export default {
@@ -86,14 +87,18 @@ export default {
     UserIcon,
     EditIcon,
     TrashIcon,
-    PlusCircleIcon
+    PlusCircleIcon,
+    MoreVerticalIcon
   },
   data() {
     return {
+     loading: false,
       dialog: false,
       on: false,
       managers: [],
-      currentUser: ''
+      currentUser: '',
+      triggerDropdown: null,
+      isActive: false,
     };
   },
   getList() {},
@@ -106,6 +111,7 @@ export default {
 
     //list admin
     listAdmin() {
+      this.loading = true;
       adminService.listAdmin().then(response => {
         //handle response
         if (response.status) {
@@ -117,11 +123,13 @@ export default {
             position: "top-right"
           });
         }
+       this.loading = false;
       });
     },
 
     Delete(e) {
       if (e) {
+       this.loading = true;
         adminService.Delete(e).then(response => {
           //handle response
           if (response.status) {
@@ -144,11 +152,23 @@ export default {
               position: "top-right"
             });
           }
+         this.loading = false;
         });
       }
     },
     Close() {
       this.dialog = false;
+    },
+    dropdownToggle: function(setIndex) {
+      //if same index is called up again then close it
+      if(this.triggerDropdown == setIndex) {
+        this.triggerDropdown = null;
+      } else {
+        this.triggerDropdown = setIndex;
+      }
+    },
+    selectTr: function(){
+      this.isActive = !this.isActive;
     }
   }
 };

@@ -4,54 +4,70 @@
       <v-row>
      <h2>Edit Admin</h2>
         <v-col cols="12" md="12">
-          <v-form ref="form" v-model="valid" lazy-validation>
+          <v-form ref="form" v-model="valid" lazy-validation @submit="update">
             <v-col cols="12" md="12">
-              <div
+              <div v-if="avatar"
                 class="v-avatar v-list-item__avatar"
-                style="height: 40px; min-width: 40px; width: 40px;"
+                style="height: 80px; min-width: 80px; width: 80px;"
               >
-                <img :src="'../../../'+addForm.user_image" />
+              <button type="button" class="close AClass" style="margin-right: 13px; margin-top: -25px; font-size: 30px;" v-if="cross" @click="Remove()">
+               <span>&times;</span>
+             </button>
+                <img :src="avatar" />
               </div>
 
               <file-pond
                 name="uploadImage"
                 ref="pond"
                 label-idle="Drop files here..."
-                allow-multiple="false"
+                v-bind:allow-multiple="false"
                 accepted-file-types="image/jpeg, image/png"
                 v-bind:server="serverOptions"
                 v-bind:files="myFiles"
-                v-on:updatefiles="handleFilePondUpdateFile"
+               v-on:addfilestart="setUploadIndex"
                 v-on:processfile="handleProcessFile"
+                v-on:processfilerevert="handleRemoveFile"
               />
             </v-col>
-            <v-col cols="12" md="12">
+            <v-col cols="12" md="12" class="pt-0">
+              <v-col sm="2" class="label-align pt-0">
+                <label>First name</label>
+              </v-col>
+              <v-col sm="4" class="pt-0">
               <v-text-field
                 v-model="addForm.first_name"
                 :rules="FnameRules"
-                label="First name"
                 required
               ></v-text-field>
+              </v-col>
             </v-col>
-            <v-col cols="12" md="12">
+            <v-col cols="12" md="12" class="pt-0">
+              <v-col sm="2" class="label-align pt-0">
+                <label>Last name</label>
+              </v-col>
+              <v-col sm="4" class="pt-0">
               <v-text-field
                 v-model="addForm.last_name"
                 :rules="LnameRules"
-                label="Last name"
                 required
               ></v-text-field>
+              </v-col>
             </v-col>
 
-            <v-col cols="12" md="12">
+            <v-col cols="12" md="12" class="pt-0">
+              <v-col sm="2" class="label-align pt-0">
+                <label>E-mail</label>
+              </v-col>
+              <v-col sm="4" class="pt-0">
               <v-text-field
                 v-model="addForm.email"
                 :rules="emailRules"
                 name="email"
-                label="E-mail"
                 required
               ></v-text-field>
+              </v-col>
             </v-col>
-            <v-btn color="success" class="mr-4" @click="update">Submit</v-btn>
+            <v-btn type="submit" :loading="loading" :disabled="loading" color="success" class="mr-4 custom-save-btn" @click="update">Submit</v-btn>
           </v-form>
         </v-col>
       </v-row>
@@ -71,9 +87,13 @@ export default {
   },
   data() {
     return {
+      loading: false,
       valid: true,
       avatar: null,
+     uploadInProgress:false,
       apiUrl: environment.apiUrl,
+      imgUrl: environment.imgUrl,
+      cross: false,
       addForm: {
         first_name: "",
         last_name: "",
@@ -107,7 +127,13 @@ export default {
           headers: {
             Authorization: "Bearer " + currentUser.data.access_token
           }
-        }
+        },
+         revert:{
+	  url: "deleteImage",
+	  headers: {
+	    Authorization: "Bearer " + currentUser.data.access_token
+	  }
+	}
       };
     },
     url() {
@@ -120,15 +146,16 @@ export default {
     }
   },
   created() {
+   this.loading = true;
     adminService.getAdmin(this.$route.params.id).then(response => {
       if (response.status) {
         this.addForm.user_id = response.data.id;
         if (response.data.user_image) {
+          this.cross=true;
           this.addForm.user_image = response.data.user_image;
+          this.avatar = this.imgUrl+response.data.user_image;
         }
-        if (response.data.user_image) {
-          this.avatar = '../../../'+response.data.user_image;
-        } else {
+        else {
           this.avatar = "/images/avatar.png";
         }
         this.addForm.first_name = response.data.first_name;
@@ -143,27 +170,50 @@ export default {
           position: "top-right"
         });
       }
+      this.loading = false;
     });
   },
   methods: {
-    GetImage(e) {
-      this.avatar = URL.createObjectURL(e);
-      this.addForm.user_image = e;
-    },
+     setUploadIndex() {
+      this.uploadInProgress = true;
+      },
     handleProcessFile: function(error, file) {
       this.addForm.user_image = file.serverId;
+      this.avatar = this.imgUrl+file.serverId;
+      this.uploadInProgress = false;
+      this.cross=false;
     },
-    handleFilePondUpdateFile(files) {
-      const reader = new FileReader();
-      reader.onload = e => {
-        console.log(e.target.result);
-      };
-      this.myFiles = files.map(files => files.file);
+    handleRemoveFile: function(file){
+      this.addForm.user_image = '';
+      this.avatar = "/images/avatar.png";
+      this.cross=false;
     },
-
-    update() {
+    Remove(){
+	    this.avatar = "/images/avatar.png";
+	    this.cross=false;
+	    this.addForm.user_image = '';
+   },
+   update: function(e) {
+     //stop page to reload
+      e.preventDefault();
+      
+    if(this.uploadInProgress) {
+        this.$toast.open({
+              message: "Profile image uploading is in progress!",
+              type: "error",
+              position: "top-right"
+            });
+            return false;
+      }
       if (this.$refs.form.validate()) {
+        if(this.loading) {
+          return false;
+        }
+        //start loading
+        this.loading = true;
         adminService.edit(this.addForm, this.$route.params.id).then(response => {
+          //stop loading
+          this.loading = false;
           //handle response
           if (response.status) {
             this.$toast.open({
@@ -180,6 +230,7 @@ export default {
               position: "top-right"
             });
           }
+          this.loading = false;
         });
       }
     }

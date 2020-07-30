@@ -1,6 +1,6 @@
 <template>
       <v-app>
-             <v-container>
+             <v-container fluid>
       <v-row>
    <h2>View Truck</h2>
       <v-subheader>Truck</v-subheader>     

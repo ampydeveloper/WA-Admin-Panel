@@ -36,6 +36,7 @@ Route::get('/', function () {
 })->name('/');
 
 Route::get('confirm-email/{decode_code}', 'AuthController@confirmEmail');
+Route::get('confirm-update-email/{email}/{id}', 'AuthController@confirmUpdateEmail');
 
 
 Route::get('/{any}', function () {

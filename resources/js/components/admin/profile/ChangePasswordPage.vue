@@ -2,7 +2,7 @@
     <v-app>
              <v-container>
       <v-row>
- 	<h2>Chanage Password</h2>
+ 	<h4 class="main-title text-left">Change Password</h4>
        <v-col
           cols="12"
           md="12"
@@ -13,6 +13,10 @@
            lazy-validation
          >
        <v-col cols="12" sm="12">
+          <v-col sm="2" class="label-align pt-0">
+            <label>Password</label>
+          </v-col>
+          <v-col sm="4" class="pt-0">
           <v-text-field
             v-model="password"
             :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
@@ -24,8 +28,14 @@
             counter
             @click:append="show1 = !show1"
           ></v-text-field>
-            <v-col cols="12" sm="12">
+          </v-col>
             </v-col>
+
+            <v-col cols="12" sm="12" class="pt-0">
+            <v-col sm="2" class="label-align pt-0">
+              <label>Change Password</label>
+            </v-col>
+            <v-col sm="4" class="pt-0">
            <v-text-field
             v-model="confirm_password"
             :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
@@ -37,8 +47,9 @@
             counter
             @click:append="show2 = !show2"
           ></v-text-field>
+          </v-col>
         </v-col>
-           <v-btn color="success" class="mr-4 ml-3" @click="validate">Update</v-btn>
+           <v-btn color="success" class="mr-4 ml-3 custom-save-btn" @click="validate">Update</v-btn>
    
   </v-form>
        </v-col>

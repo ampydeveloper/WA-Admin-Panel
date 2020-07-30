@@ -15,6 +15,8 @@ export const authenticationService = {
   register,
   updateProfile,
   changePassword,
+  recoverPassword,
+  forgetpassword,
   Delete,
   apiUrl: environment.apiUrl,
   currentUrl: '',
@@ -75,7 +77,22 @@ function login(email, password) {
       if(user.data.user.role_id === 4){
         this.currentUrl = "Home"; 
       }
+      if(user.data.user.role_id === 5){
+        this.currentUrl = "Home"; 
+      }
       return this.currentUrl;
+    });
+}
+function recoverPassword(data){
+  return fetch(
+      this.apiUrl+`recover-password`,
+      requestOptions.post(data)
+    )
+    .then(handleResponse)
+    .then(user => {
+      // store user details and passport token in local storage to keep user logged in between page refreshes
+
+      return user;
     });
 }
 
@@ -101,6 +118,20 @@ function Delete(data) {
   return fetch(
     this.apiUrl+`admin/delete-manager/`+data,
     requestOptions.get()
+  )
+    .then(handleResponse)
+    .then(user => {
+      // store user details and passport token in local storage to keep user logged in between page refreshes
+
+      return user;
+    });
+}
+
+function forgetpassword(data) {
+
+  return fetch(
+    this.apiUrl+`forgot-password`,
+    requestOptions.post(data)
   )
     .then(handleResponse)
     .then(user => {

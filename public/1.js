@@ -85,6 +85,74 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 // Utilities
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -103,43 +171,55 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         active: true,
         items: [{
           title: 'Overview',
-          url: '/admin/dashboard'
+          url: '/admin/dashboard',
+          icon: 'mdi-view-dashboard'
         }, {
           title: 'Jobs',
-          url: '/admin/jobs'
+          url: '/admin/jobs',
+          icon: 'mdi-wallet-travel'
         }, {
           title: 'Dispatches',
-          url: '/admin/dispatches'
+          url: '/admin/dispatches',
+          icon: 'mdi-cube-outline'
         }, {
           title: 'Services',
-          url: '/admin/services'
+          url: '/admin/services',
+          icon: 'mdi-camera-timer'
         }]
       }, {
         action: 'local_activity',
         title: 'Customer',
+        active: true,
         items: [{
           title: 'Customer',
-          url: '/admin/customer'
+          url: '/admin/customer',
+          icon: 'mdi-account'
         }, {
-          title: 'Customer Compnay',
-          url: '/admin/company'
+          title: 'Hauler',
+          url: '/admin/hauler',
+          icon: 'mdi-account-plus'
         }]
       }, {
         action: 'local_activity',
         title: 'Employee',
+        active: true,
         items: [{
           title: 'Managers',
-          url: '/admin/manager'
+          url: '/admin/manager',
+          icon: 'mdi-account-check'
         }, {
           title: 'Drivers',
-          url: '/admin/truckdrivers'
+          url: '/admin/truckdrivers',
+          icon: 'mdi-account-outline'
         }]
       }, {
         action: 'local_activity',
         title: 'Fleet',
+        active: true,
         items: [{
           title: 'Truck',
-          url: '/admin/trucks'
+          url: '/admin/trucks',
+          icon: 'mdi-truck'
         }, {
           title: 'SkidSteer',
           url: '/admin/skidsteers'
@@ -147,15 +227,115 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }, {
         action: 'local_activity',
         title: 'Accounts',
+        active: true,
         items: [{
           title: 'Accountings',
-          url: '/admin/accounting'
+          url: '/admin/accounting',
+          icon: 'mdi-book-open'
         }, {
           title: 'Reports',
-          url: '/admin/reports'
+          url: '/admin/reports',
+          icon: 'mdi-file-document'
         }]
-      }]
+      }],
+      manageritems: [{
+        action: 'local_activity',
+        title: 'Main',
+        active: true,
+        items: [{
+          title: 'Overview',
+          url: '/manager/dashboard'
+        }, {
+          title: 'Jobs',
+          url: '/manager/jobs'
+        }, {
+          title: 'Dispatches',
+          url: '/manager/dispatches'
+        }, {
+          title: 'Services',
+          url: '/manager/services'
+        }]
+      }, {
+        action: 'local_activity',
+        title: 'Customer',
+        items: [{
+          title: 'Customer',
+          url: '/manager/customer'
+        }, {
+          title: 'Hauler',
+          url: '/manager/company'
+        }]
+      }, {
+        action: 'local_activity',
+        title: 'Employee',
+        items: [{
+          title: 'Managers',
+          url: '/manager/manager'
+        }, {
+          title: 'Drivers',
+          url: '/manager/truckdrivers'
+        }]
+      }, {
+        action: 'local_activity',
+        title: 'Fleet',
+        items: [{
+          title: 'Truck',
+          url: '/manager/trucks'
+        }, {
+          title: 'SkidSteer',
+          url: '/manager/skidsteers'
+        }]
+      }, {
+        action: 'local_activity',
+        title: 'Accounts',
+        items: [{
+          title: 'Accountings',
+          url: '/manager/accounting'
+        }, {
+          title: 'Reports',
+          url: '/manager/reports'
+        }]
+      }],
+      driveritems: [{
+        action: 'local_activity',
+        active: true,
+        title: 'Overview',
+        url: '/driver/dashboard'
+      }, {
+        action: 'local_activity',
+        title: 'Ongoing Jobs',
+        url: '/driver/dashboard'
+      }, {
+        action: 'local_activity',
+        title: 'Pending Jobs',
+        url: '/driver/dashboard'
+      }, {
+        action: 'local_activity',
+        title: 'Delivered Jobs',
+        url: '/driver/dashboard'
+      }, {
+        action: 'local_activity',
+        title: 'Monthly Earning',
+        url: '/driver/dashboard'
+      }],
+      isManager: false,
+      isDriver: false,
+      isAdmin: false,
+      isActive: null
     };
+  },
+  created: function created() {
+    var currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+    if (currentUser.data.user.role_id == 1) {
+      this.isAdmin = true;
+    } else if (currentUser.data.user.role_id == 2) {
+      this.isManager = true;
+    } else if (currentUser.data.user.role_id == 3) {
+      this.isDriver = true;
+    } else {
+      this.isAdmin = true;
+    }
   },
   computed: _objectSpread(_objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapState"])(['barColor', 'barImage'])), {}, {
     drawer: {
@@ -167,7 +347,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
     },
     computedItems: function computedItems() {
-      return this.items.map(this.mapItem);
+      var currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+      if (currentUser.data.user.role_id == 1) {
+        return this.items.map(this.mapItem);
+      } else if (currentUser.data.user.role_id == 2) {
+        return this.manageritems.map(this.mapItem);
+      } else if (currentUser.data.user.role_id == 3) {
+        return this.driveritems.map(this.mapItem);
+      } else {
+        return this.items.map(this.mapItem);
+      }
     },
     profile: function profile() {
       return {
@@ -182,6 +372,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         children: item.children ? item.children.map(this.mapItem) : undefined //title: this.$t(item.title),
 
       });
+    },
+    showAdvanced: function showAdvanced(subIindex, mainIndex) {
+      this.isActive = subIindex + '' + mainIndex;
     }
   }
 });
@@ -305,97 +498,306 @@ var render = function() {
         [
           _c("div"),
           _vm._v(" "),
-          _c(
-            "v-list",
-            _vm._l(_vm.items, function(item) {
-              return _c(
-                "v-list-group",
-                {
-                  key: item.title,
-                  attrs: { "prepend-icon": item.action, "no-action": "" },
-                  scopedSlots: _vm._u(
+          _vm.isAdmin
+            ? _c(
+                "v-list",
+                _vm._l(_vm.items, function(item, mainIndex) {
+                  return _c(
+                    "v-list-group",
+                    {
+                      key: item.title,
+                      attrs: { "prepend-icon": item.action, "no-action": "" },
+                      scopedSlots: _vm._u(
+                        [
+                          {
+                            key: "activator",
+                            fn: function() {
+                              return [
+                                _c(
+                                  "v-list-item",
+                                  [
+                                    _c(
+                                      "v-list-item-content",
+                                      [
+                                        _c("v-list-item-title", [
+                                          _vm._v(_vm._s(item.title))
+                                        ])
+                                      ],
+                                      1
+                                    )
+                                  ],
+                                  1
+                                )
+                              ]
+                            },
+                            proxy: true
+                          }
+                        ],
+                        null,
+                        true
+                      ),
+                      model: {
+                        value: item.active,
+                        callback: function($$v) {
+                          _vm.$set(item, "active", $$v)
+                        },
+                        expression: "item.active"
+                      }
+                    },
                     [
-                      {
-                        key: "activator",
-                        fn: function() {
-                          return [
+                      _vm._v(" "),
+                      _vm._l(item.items, function(subItem, subIindex) {
+                        return _c(
+                          "v-list-item",
+                          {
+                            key: subItem.title,
+                            class: {
+                              overlay:
+                                _vm.isActive == subIindex + "" + mainIndex
+                            }
+                          },
+                          [
                             _c(
-                              "v-list-item",
+                              "v-list-item-action",
+                              [
+                                _c("v-icon", {
+                                  domProps: {
+                                    textContent: _vm._s(subItem.icon)
+                                  }
+                                })
+                              ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "v-list-item-content",
                               [
                                 _c(
-                                  "v-list-item-content",
+                                  "v-list-item-title",
+                                  {
+                                    on: {
+                                      click: function($event) {
+                                        return _vm.showAdvanced(
+                                          subIindex,
+                                          mainIndex
+                                        )
+                                      }
+                                    }
+                                  },
                                   [
-                                    _c("v-list-item-title", [
-                                      _vm._v(_vm._s(item.title))
-                                    ])
+                                    _c(
+                                      "router-link",
+                                      {
+                                        staticClass: "nav-item nav-link",
+                                        attrs: { to: subItem.url }
+                                      },
+                                      [_vm._v(_vm._s(subItem.title))]
+                                    )
                                   ],
                                   1
                                 )
                               ],
                               1
                             )
-                          ]
-                        },
-                        proxy: true
-                      }
+                          ],
+                          1
+                        )
+                      })
                     ],
-                    null,
-                    true
-                  ),
-                  model: {
-                    value: item.active,
-                    callback: function($$v) {
-                      _vm.$set(item, "active", $$v)
+                    2
+                  )
+                }),
+                1
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.isManager
+            ? _c(
+                "v-list",
+                _vm._l(_vm.manageritems, function(item) {
+                  return _c(
+                    "v-list-group",
+                    {
+                      key: item.title,
+                      attrs: { "prepend-icon": item.action, "no-action": "" },
+                      scopedSlots: _vm._u(
+                        [
+                          {
+                            key: "activator",
+                            fn: function() {
+                              return [
+                                _c(
+                                  "v-list-item",
+                                  [
+                                    _c(
+                                      "v-list-item-content",
+                                      [
+                                        _c("v-list-item-title", [
+                                          _vm._v(_vm._s(item.title))
+                                        ])
+                                      ],
+                                      1
+                                    )
+                                  ],
+                                  1
+                                )
+                              ]
+                            },
+                            proxy: true
+                          }
+                        ],
+                        null,
+                        true
+                      ),
+                      model: {
+                        value: item.active,
+                        callback: function($$v) {
+                          _vm.$set(item, "active", $$v)
+                        },
+                        expression: "item.active"
+                      }
                     },
-                    expression: "item.active"
-                  }
-                },
-                [
-                  _vm._v(" "),
-                  _vm._l(item.items, function(subItem) {
-                    return _c(
-                      "v-list-item",
-                      {
-                        key: subItem.title,
-                        on: { click: function($event) {} }
-                      },
-                      [
-                        _c(
-                          "v-list-item-content",
+                    [
+                      _vm._v(" "),
+                      _vm._l(item.items, function(subItem) {
+                        return _c(
+                          "v-list-item",
+                          {
+                            key: subItem.title,
+                            on: { click: function($event) {} }
+                          },
                           [
                             _c(
-                              "v-list-item-title",
+                              "v-list-item-content",
                               [
                                 _c(
-                                  "router-link",
-                                  {
-                                    staticClass: "nav-item nav-link",
-                                    attrs: { to: subItem.url }
-                                  },
-                                  [_vm._v(_vm._s(subItem.title))]
+                                  "v-list-item-title",
+                                  [
+                                    _c(
+                                      "router-link",
+                                      {
+                                        staticClass: "nav-item nav-link",
+                                        attrs: { to: subItem.url }
+                                      },
+                                      [_vm._v(_vm._s(subItem.title))]
+                                    )
+                                  ],
+                                  1
                                 )
                               ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "v-list-item-action",
+                              [_c("v-icon", [_vm._v(_vm._s(subItem.action))])],
                               1
                             )
                           ],
                           1
-                        ),
-                        _vm._v(" "),
-                        _c(
-                          "v-list-item-action",
-                          [_c("v-icon", [_vm._v(_vm._s(subItem.action))])],
+                        )
+                      })
+                    ],
+                    2
+                  )
+                }),
+                1
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.isDriver
+            ? _c(
+                "v-list",
+                _vm._l(_vm.driveritems, function(item) {
+                  return _c(
+                    "v-list-group",
+                    {
+                      key: item.title,
+                      attrs: { "prepend-icon": item.action, "no-action": "" },
+                      scopedSlots: _vm._u(
+                        [
+                          {
+                            key: "activator",
+                            fn: function() {
+                              return [
+                                _c(
+                                  "v-list-item",
+                                  [
+                                    _c(
+                                      "v-list-item-content",
+                                      [
+                                        _c("v-list-item-title", [
+                                          _vm._v(_vm._s(item.title))
+                                        ])
+                                      ],
+                                      1
+                                    )
+                                  ],
+                                  1
+                                )
+                              ]
+                            },
+                            proxy: true
+                          }
+                        ],
+                        null,
+                        true
+                      ),
+                      model: {
+                        value: item.active,
+                        callback: function($$v) {
+                          _vm.$set(item, "active", $$v)
+                        },
+                        expression: "item.active"
+                      }
+                    },
+                    [
+                      _vm._v(" "),
+                      _vm._l(item.items, function(subItem) {
+                        return _c(
+                          "v-list-item",
+                          {
+                            key: subItem.title,
+                            on: { click: function($event) {} }
+                          },
+                          [
+                            _c(
+                              "v-list-item-content",
+                              [
+                                _c(
+                                  "v-list-item-title",
+                                  [
+                                    _c(
+                                      "router-link",
+                                      {
+                                        staticClass: "nav-item nav-link",
+                                        attrs: { to: subItem.url }
+                                      },
+                                      [_vm._v(_vm._s(subItem.title))]
+                                    )
+                                  ],
+                                  1
+                                )
+                              ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "v-list-item-action",
+                              [_c("v-icon", [_vm._v(_vm._s(subItem.action))])],
+                              1
+                            )
+                          ],
                           1
                         )
-                      ],
-                      1
-                    )
-                  })
-                ],
-                2
+                      })
+                    ],
+                    2
+                  )
+                }),
+                1
               )
-            }),
-            1
-          ),
+            : _vm._e(),
           _vm._v(" "),
           _c("div")
         ],

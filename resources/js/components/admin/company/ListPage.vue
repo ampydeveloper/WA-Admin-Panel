@@ -1,50 +1,74 @@
 <template>
   <v-app>
-    <v-container>
+    <v-container fluid>
       <v-row>
         <div class="add-icon">
-          <router-link to="/admin/company/add" class="nav-item nav-link">
-          <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon>
+          <router-link v-if="isAdmin" to="/admin/hauler/add" class="nav-item nav-link">
+            <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon>
+          </router-link>
+          <router-link v-if="!isAdmin" to="/manager/hauler/add" class="nav-item nav-link">
+            <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon>
           </router-link>
         </div>
-        <v-col cols="12" md="12">
-          <v-simple-table class="custom-table">
-            <template v-slot:default>
-              <thead>
-                <tr>
-                  <th class="text-left"></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="item in customers" :key="item.name">
-                  <td>
-                    <div
-                      class="v-avatar v-list-item__avatar"
-                      style="height: 40px; min-width: 40px; width: 40px;"
-                    >
-                      <img v-if="item.user_image" :src="'../'+item.user_image" alt="John" />
-                      <img v-if="!item.user_image" src="/images/avatar.png" alt="driver" />
-                    </div>
-                    {{ item.first_name }} {{ item.last_name }}
-			 <v-data-table
-			    :headers="headers"
-			    :items="items"
-			    hide-default-footer
-			    class="elevation-1"
-			  >
-			    <template slot="items" slot-scope="props">
-{{item}}
-			      <td>{{ props.item.name }}</td>
-			      <td class="text-xs-right">{{ props.item.first_name }}</td>
-			      <td class="text-xs-right">{{ props.item.email }}</td>
-			      <td class="text-xs-right">{{ props.item.phone }}</td>
-			    </template>
-			  </v-data-table>
-                  </td>
-                </tr>
-              </tbody>
-            </template>
-          </v-simple-table>
+      <table id="example" class="table table-striped table-bordered" style="width:100%">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Active</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="(customer, index) in customers">
+	       <td>   
+                     <div
+		        class="v-avatar v-list-item__avatar"
+		        style="height: 60px; min-width: 60px; width: 60px;"
+		      >
+		        <img v-if="customer.user_image" :src="'../'+customer.user_image"/>
+		        <img v-if="!customer.user_image" src="/images/avatar.png"/>
+		      </div>
+             </td>
+               <td>{{customer.prefix}} {{customer.first_name}}</td>
+               <td>{{customer.email}}</td>
+               <td>{{customer.phone}}</td>
+	       <td>{{customer.address}} {{customer.city}} {{customer.state}}, {{customer.zip_code}}</td>
+               <td>
+               <v-chip v-if="!customer.is_active" class="ma-2" color="red" text-color="white">No</v-chip>
+                      <v-chip
+                        v-if="customer.is_active"
+                        class="ma-2"
+                        color="green"
+                        text-color="white"
+                      >Yes</v-chip>
+               </td>
+               <td class="action-col">
+                   <router-link
+                        v-if="isAdmin"
+                        :to="'/admin/hauler/edit/' + customer.id"
+                        class="nav-item nav-link"
+                      >
+                        <span class="custom-action-btn">Edit</span>
+                      </router-link>
+                      <router-link
+                        v-if="!isAdmin"
+                        :to="'/manager/hauler/edit/' + customer.id"
+                        class="nav-item nav-link"
+                      >
+                        <span class="custom-action-btn">Edit</span>
+                      </router-link>
+
+                      <v-btn color="blue darken-1" text @click="Delete(customer.id)">
+                        <span class="custom-action-btn">Delete</span>
+                      </v-btn>
+               </td>
+            </tr>
+        </tbody>
+            </table>
         </v-col>
       </v-row>
     </v-container>
@@ -53,7 +77,8 @@
 
 <script>
 import { required } from "vuelidate/lib/validators";
-import { customerService } from "../../../_services/customer.service";
+import { companyService } from "../../../_services/company.service";
+import { authenticationService } from "../../../_services/authentication.service";
 import {
   UserIcon,
   EditIcon,
@@ -67,37 +92,33 @@ export default {
     UserIcon,
     EditIcon,
     TrashIcon,
-    PlusCircleIcon
+    PlusCircleIcon,
   },
   data() {
     return {
-      search: '',
-        headers: [
-        {
-        text:'Name',
-        align: 'left',
-        sortable: false,
-        value:'index'
-        },
-        { text: 'First Name', value: 'first_name' },
-        { text: 'Email', value: 'email' },
-        { text: 'Phone', value: 'phone' }
-     ],
-     items: [],
-     customers: [],
- 
+      customers: [],
+      isAdmin: true,
     };
   },
   getList() {},
   mounted() {
+    const currentUser = authenticationService.currentUserValue;
+    if(currentUser.data.user.role_id == 1){
+    this.isAdmin = true;
+    }else{
+    this.isAdmin = false;
+    }
     this.getResults();
   },
   methods: {
+    getTagNames: tags => {
+      return tags.map(tag => tag.name);
+    },
     getResults() {
-      customerService.listCustomer().then(response => {
+      companyService.listHauler().then(response => {
         //handle response
         if (response.status) {
-         // this.customers = response.data;
+          this.customers = response.data;
         } else {
           this.$toast.open({
             message: response.message,
@@ -109,7 +130,7 @@ export default {
     },
     Delete(e) {
       if (e) {
-        customerService.Delete(e).then(response => {
+        companyService.deleteHauler(e).then(response => {
           //handle response
           if (response.status) {
             this.$toast.open({
@@ -121,7 +142,7 @@ export default {
             this.dialog = false;
             //load new data
             this.getResults();
-            //router.push("/admin/customer");
+            //router.push("/admin/company");
           } else {
             this.dialog = false;
             this.$toast.open({
@@ -136,6 +157,13 @@ export default {
     Close() {
       this.dialog = false;
     }
-  }
+  },
+updated() {
+setTimeout(function() {
+     $(document).ready(function() {
+	    $('#example').DataTable();
+	} );
+  }, 1000);
+    }
 };
 </script>

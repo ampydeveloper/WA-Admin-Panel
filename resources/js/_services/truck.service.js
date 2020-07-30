@@ -19,12 +19,13 @@ export const truckService = {
   getTruckService,
   updateTruckService,
   getTruckSingleService,
-getTruckSingleInsurance,
-updateInsurance,
-DeleteService,
-DeleteInsurance,
+  getTruckSingleInsurance,
+  updateInsurance,
+  DeleteService,
+  DeleteInsurance,
   addInsurance, 
   getTruckInsurance,
+  getLastInsu,
   apiUrl: environment.apiUrl,
   currentUrl: '',
   currentUser: currentUserSubject.asObservable(),
@@ -203,6 +204,20 @@ function updateInsurance(data) {
       return user;
     });
 }
+
+function getLastInsu(vehicle_id) {
+  return fetch(
+    this.apiUrl+`admin/get-last-insurance/`+vehicle_id,
+    requestOptions.get()
+  )
+    .then(handleResponse)
+    .then(user => {
+      // store user details and passport token in local storage to keep user logged in between page refreshes
+
+      return user;
+    });
+}
+
 
 function DeleteService(data) {
   return fetch(

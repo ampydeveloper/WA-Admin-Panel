@@ -1,10 +1,13 @@
 <template>
   <v-app>
-    <v-container>
+    <v-container fluid>
       <v-row>
-<h2>Skidsteer List</h2>
+        <h2>Skidsteer List</h2>
         <div class="add-icon">
-          <router-link to="/admin/skidsteer/add" class="nav-item nav-link">
+          <router-link v-if="isAdmin" to="/admin/skidsteer/add" class="nav-item nav-link">
+            <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon>
+          </router-link>
+          <router-link v-if="!isAdmin" to="/manager/skidsteer/add" class="nav-item nav-link">
             <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon>
           </router-link>
         </div>
@@ -20,40 +23,74 @@
                   <th class="text-left">Service Details</th>
                   <th class="text-left">Documents</th>
                   <th class="text-left">Status</th>
-                  <th class="text-left">Action</th>
-                  
+                  <th class="text-left">Options</th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="item in trucks" :key="item.name">
-                  <td><router-link :to="'/admin/skidsteer/view/' + item.id" class="nav-item nav-link">{{item.company_name}}</router-link></td>
+                <tr v-for="(item, index) in trucks" :key="item.name" v-on:click="selectTr(index)" v-bind:class="{ 'selected' : isActive == index}">
+                  <td>
+                    <router-link
+                      v-if="isAdmin"
+                      :to="'/admin/skidsteer/view/' + item.id"
+                      class="nav-item nav-link"
+                    >{{item.company_name}}</router-link>
+                    <router-link
+                      v-if="!isAdmin"
+                      :to="'/manager/skidsteer/view/' + item.id"
+                      class="nav-item nav-link"
+                    >{{item.company_name}}</router-link>
+                  </td>
                   <td>{{item.truck_number}}</td>
                   <td>{{item.chaase_number}}</td>
                   <td>{{item.killometer}}</td>
                   <td>
                     <router-link
+                      v-if="isAdmin"
                       :to="'/admin/skidsteer/service/' + item.id"
                       class="nav-item nav-link"
                     >View Service</router-link>
+                    <router-link
+                      v-if="!isAdmin"
+                      :to="'/manager/skidsteer/service/' + item.id"
+                      class="nav-item nav-link"
+                    >View Service</router-link>
                   </td>
-                  <td><router-link :to="'/admin/skidsteer/docview/' + item.id" class="nav-item nav-link">View Documents</router-link></td>
                   <td>
-                    <span v-if="item.status == 1">
-                      Available
-                    </span>
-                    <span v-else>
-                      Unavailable
-                    </span>
+                    <router-link
+                      v-if="isAdmin"
+                      :to="'/admin/skidsteer/docview/' + item.id"
+                      class="nav-item nav-link"
+                    >View Documents</router-link>
+                    <router-link
+                      v-if="!isAdmin"
+                      :to="'/manager/skidsteer/docview/' + item.id"
+                      class="nav-item nav-link"
+                    >View Documents</router-link>
+                  </td>
+                  <td>
+                    <span v-if="item.status == 1">Available</span>
+                    <span v-else>Unavailable</span>
                   </td>
                   <td class="action-col">
-                    <router-link :to="'/admin/skidsteer/edit/' + item.id" class="nav-item nav-link">
-                      <!-- <edit-icon size="1.5x" class="custom-class"></edit-icon> -->
-                      <span class="custom-action-btn">Edit</span>
-                    </router-link>
-                    <v-btn color="blue darken-1" text @click="Delete(item.id)">
-                      <!-- <trash-icon size="1.5x" class="custom-class"></trash-icon> -->
-                      <span class="custom-action-btn">Delete</span>
-                    </v-btn>
+                    <div class="dropdown" v-bind:class="{ 'show': triggerDropdown == index }">
+                      <more-vertical-icon size="1.5x" class="custom-class dropdown-trigger" v-on:click="dropdownToggle(index)"></more-vertical-icon>
+                      <span class="dropdown-menu">
+                        <router-link v-if="isAdmin" :to="'/admin/skidsteer/edit/' + item.id" class="dropdown-item">
+                          <button class="btn">Edit</button>
+                        </router-link>
+                        <router-link v-if="!isAdmin" :to="'/manager/skidsteer/edit/' + item.id" class="dropdown-item">
+                          <button class="btn">Edit</button>
+                        </router-link>
+                        <button class="btn dropdown-item" @click="Delete(item.id)">Delete</button>
+                      </span>
+                    </div>
+                  </td>
+                </tr>
+                <tr class="no-data" v-if="trucks.length == 0">
+                  <td>
+                    <template>
+                      No skidsteer till now.
+                    </template>
                   </td>
                 </tr>
               </tbody>
@@ -68,11 +105,13 @@
 <script>
 import { required } from "vuelidate/lib/validators";
 import { skidsteerService } from "../../../_services/skidsteer.service";
+import { authenticationService } from "../../../_services/authentication.service";
 import {
   UserIcon,
   EditIcon,
   TrashIcon,
-  PlusCircleIcon
+  PlusCircleIcon,
+  MoreVerticalIcon
 } from "vue-feather-icons";
 import { router } from "../../../_helpers/router";
 export default {
@@ -80,16 +119,26 @@ export default {
     UserIcon,
     EditIcon,
     TrashIcon,
-    PlusCircleIcon
+    PlusCircleIcon,
+    MoreVerticalIcon
   },
   data() {
     return {
       dialog: false,
+      triggerDropdown: null,
+      isActive: null,
       on: false,
-      trucks: []
+      trucks: [],
+      isAdmin: true
     };
   },
   mounted() {
+    const currentUser = authenticationService.currentUserValue;
+    if (currentUser.data.user.role_id == 1) {
+      this.isAdmin = true;
+    } else {
+      this.isAdmin = false;
+    }
     this.getResults();
   },
 
@@ -135,7 +184,18 @@ export default {
     },
     Close() {
       this.dialog = false;
-    }
+    },
+    dropdownToggle: function(setIndex) {
+      //if same index is called up again then close it
+      if(this.triggerDropdown == setIndex) {
+        this.triggerDropdown = null;
+      } else {
+        this.triggerDropdown = setIndex;
+      }
+    },
+    selectTr: function(rowIndex){
+      this.isActive = rowIndex;
+    },
   }
 };
 </script>

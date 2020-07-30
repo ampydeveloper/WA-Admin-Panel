@@ -31,6 +31,9 @@ class CreateVehicleServicesTable extends Migration
 
             $table->dateTime("service_date")->nullable();
             $table->dateTime("service_expiry")->nullable();
+             $table->string("note")->nullable();
+            $table->string("receipt")->nullable();
+            $table->string("document")->nullable();
             $table->float("service_killometer")->nullable();
 
             $table->timestamps();

@@ -12,9 +12,11 @@ const currentUserSubject = new BehaviorSubject(
 export const companyService = {
   add,
   edit,
-  Delete,
-  getManager,
-  listCompany,
+  getHauler,
+  listHauler,
+  deleteHauler,
+  getCustomerCard,
+  getCustomerRecord,
   apiUrl: environment.apiUrl,
   currentUrl: '',
   currentUser: currentUserSubject.asObservable(),
@@ -26,7 +28,7 @@ export const companyService = {
 function add(data) {
 
   return fetch(
-    this.apiUrl+`admin/create-customer`,
+    this.apiUrl+`admin/create-hauler`,
     requestOptions.post(data)
   )
     .then(handleResponse)
@@ -37,9 +39,9 @@ function add(data) {
     });
 }
 
-function edit(data, managerId) {
+function edit(data, id) {
   return fetch(
-    this.apiUrl+`admin/update-manager/`+managerId,
+    this.apiUrl+`admin/update-customer/`+id,
     requestOptions.post(data)
   )
     .then(handleResponse)
@@ -49,10 +51,11 @@ function edit(data, managerId) {
       return user;
     });
 }
-function Delete(data) {
+
+function deleteHauler(id) {
   return fetch(
-    this.apiUrl+`admin/delete-manager/`+data,
-    requestOptions.get()
+    this.apiUrl+`admin/delete-hauler/`+id,
+    requestOptions.delete()
   )
     .then(handleResponse)
     .then(user => {
@@ -62,9 +65,10 @@ function Delete(data) {
     });
 }
 
-function listCompany(){
+
+function listHauler(){
       return fetch(
-    this.apiUrl+`admin/list-customer`,
+    this.apiUrl+`admin/list-hauler`,
     requestOptions.get()
   )
     .then(handleResponse)
@@ -74,9 +78,9 @@ function listCompany(){
       return user;
     });
 }
-function getManager(data) {
+function getHauler(data) {
   return fetch(
-    this.apiUrl+`admin/get-manager/`+data,
+    this.apiUrl+`admin/get-hauler/`+data,
     requestOptions.get()
   )
     .then(handleResponse)
@@ -87,3 +91,29 @@ function getManager(data) {
     });
 }
 
+
+function getCustomerCard(data) {
+  return fetch(
+    this.apiUrl+`admin/card-list/`+data,
+    requestOptions.get()
+  )
+    .then(handleResponse)
+    .then(user => {
+      // store user details and passport token in local storage to keep user logged in between page refreshes
+
+      return user;
+    });
+}
+
+function getCustomerRecord(data) {
+  return fetch(
+    this.apiUrl+`admin/record-list/`+data,
+    requestOptions.get()
+  )
+    .then(handleResponse)
+    .then(user => {
+      // store user details and passport token in local storage to keep user logged in between page refreshes
+
+      return user;
+    });
+}

@@ -21,7 +21,7 @@ class CreateDriversTable extends Migration
 
             $table->string("driver_licence")->nullable();
             $table->dateTime("expiry_date")->nullable();
-            $table->tinyInteger("salary_type")->comments("1: Per Hour, 2: Per Load")->nullable();
+            $table->tinyInteger("salary_type")->comments("0: Per Hour, 1: Per Load")->nullable();
             $table->string("document")->nullable();
 
             $table->timestamps();

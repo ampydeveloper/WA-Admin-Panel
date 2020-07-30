@@ -49,7 +49,7 @@ class VehicleController extends Controller
                 'truck_number' => $request->truck_number,
                 'chaase_number' => $request->chaase_number,
                 'killometer' => $request->total_killometer,
-                // 'capacity' => $request->insurance_date,
+                'capacity' => $request->capacity,
                 'document' => $request->document,
                 'insurance_document' => $request->insurance_document,
 		'status' => $request->is_active
@@ -120,6 +120,7 @@ class VehicleController extends Controller
                 'truck_number' => $request->truck_number,
                 'chaase_number' => $request->chaase_number,
                 'killometer' => $request->total_killometer,
+	        'capacity' => $request->capacity,
                 'document' => $request->document,
 	        'insurance_document' => $request->insurance_document,
 		'status' => $request->is_active
@@ -252,6 +253,9 @@ class VehicleController extends Controller
                 'vehicle_id' => $request->vehicle_id,
                 'service_date' => $request->service_date,
                 'service_killometer' => $request->total_killometer,
+                'receipt' => $request->receipt,
+                'document' => $request->document, 
+                'note' => $request->note,
             ]);
 	    $vechicle->Save();
             //commit all transactions now
@@ -374,7 +378,10 @@ class VehicleController extends Controller
         try {
             VehicleService::whereId($request->service_id)->update([
                 'service_killometer' => $request->service_killometer,
-                'service_date' => $request->service_date
+                'service_date' => $request->service_date,
+                'receipt' => $request->receipt,
+                'document' => $request->document,
+                'note' => $request->note,
             ]);
 
             return response()->json([
@@ -420,6 +427,15 @@ class VehicleController extends Controller
                 'data' => []
             ], 500);
         }    
+    }
+
+    public function getLastInsurance(Request $request){
+	$vehicleInsu = VehicleInsurance::where('vehicle_id', $request->vehicle_id)->latest()->first();
+        return response()->json([
+                'status' => true,
+                'message' => 'Vehicle service deleted successfully',
+                'data' => $vehicleInsu
+            ], 200);
     }
 
     /**
