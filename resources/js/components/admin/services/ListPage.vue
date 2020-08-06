@@ -2,7 +2,7 @@
   <v-app>
     <div class="bread_crum">
       <ul>
-       <li><h4 class="main-title top_heading">Services List |</h4></li>
+       <li><h4 class="main-title top_heading">Services |</h4></li>
         <li>
           <router-link to="/admin/dashboard" class="home_svg">
             <svg
@@ -39,7 +39,7 @@
             </span>
           </router-link>
         </li>
-        <li>
+        <li> 
             List
         </li>
       </ul>

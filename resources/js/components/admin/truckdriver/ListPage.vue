@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app id="driver_list">
     <v-container fluid>
       <v-row>
         <h4 class="main-title text-left">Driver list</h4>

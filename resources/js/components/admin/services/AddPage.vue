@@ -2,7 +2,7 @@
   <v-app>
     <div class="bread_crum">
       <ul>
-<li><h4 class="main-title text-left top_heading">Add Service | </h4></li>
+<li><h4 class="main-title text-left top_heading">Add Services | </h4></li>
         <li>
           <router-link to="/admin/dashboard" class="home_svg">
             <svg
@@ -69,7 +69,7 @@
     <div class="main_box">
       <v-container fluid>
         <v-row>
-          <v-col cols="12" md="12" class="pl-0 pt-0 slide-right">
+          <v-col cols="12" md="12" class="pl-0 pt-0 slide-left">
             <v-form
               ref="form"
               v-model="valid"
@@ -211,6 +211,10 @@
                 </v-col>
               </v-col>
               <v-col cols="12" md="12">
+<v-col sm="2" class="label-align pt-0">
+                  <label class="label_text">Upload file</label>
+                </v-col>
+<v-col sm="4" class="pt-0">
                 <file-pond
                   name="uploadImage"
                   ref="pond"
@@ -228,11 +232,14 @@
                     <div class="v-messages__message">Document upload is required</div>
                   </div>
                 </div>
+</v-col>
               </v-col>
 
               <v-col cols="12" md="12">
+              <v-col sm="2" class="label-align pt-0">
                 <header class="label_text">Service Rate</header>
-                <v-radio-group
+                </v-col>
+                <v-radio-group sm="4" class="test"
                   row
                   v-model="addForm.service_rate"
                   :mandatory="false"
@@ -242,8 +249,7 @@
                   <v-radio label="Per Load" value="1" class="mor_eve"></v-radio>
                   <v-radio label="Round" value="2" class="mor_eve"></v-radio>
                 </v-radio-group>
-              </v-col>
-              <v-btn
+<v-btn
                 type="submit"
                 :loading="loading"
                 :disabled="loading"
@@ -252,6 +258,8 @@
                 @click="save"
                 id="submit_btn"
               >Add Service</v-btn>
+              </v-col>
+              
             </v-form>
           </v-col>
         </v-row>

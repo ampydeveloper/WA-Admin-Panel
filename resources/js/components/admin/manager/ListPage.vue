@@ -11,7 +11,7 @@
             <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon>
           </router-link>
         </div>
-        <v-col cols="12" md="12">
+        <v-col cols="12" md="12" id="manager_wrap">
           <v-simple-table>
             <template v-slot:default>
               <thead>
@@ -189,3 +189,4 @@ export default {
   }
 };
 </script>
+
