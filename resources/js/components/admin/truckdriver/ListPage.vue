@@ -2,7 +2,7 @@
   <v-app id="driver_list">
     <v-container fluid>
       <v-row>
-        <h4 class="main-title text-left">Driver list</h4>
+        <h4 class="main-title text-left">Driver list 3</h4>
         <div class="add-icon">
           <router-link v-if="isAdmin" to="/admin/truckdriver/add" class="nav-item nav-link">
             <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon>
@@ -11,7 +11,8 @@
             <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon>
           </router-link>
         </div>
-        <v-col cols="12" md="12">
+
+        <v-col cols="12" md="12" id="manager_wrap">
           <v-simple-table>
             <template v-slot:default>
               <thead>

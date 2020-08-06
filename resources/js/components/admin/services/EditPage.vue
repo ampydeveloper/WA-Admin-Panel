@@ -69,7 +69,7 @@
     <div class="main_box">
       <v-container fluid>
         <v-row>
-          <v-col cols="12" md="12" class="slide-right">
+          <v-col cols="12" md="12" class="slide-left">
             <v-form
               ref="form"
               v-model="valid"
@@ -134,6 +134,8 @@
               </v-col>
 
               <v-col class="time-slots pt-0" cols="12" md="12" v-if="morningSlots.length">
+              <v-col sm="2" class="pt-0"></v-col>
+            <v-col sm="8" class="pt-0">
                 <template v-for="timeSlot in morningSlots">
                   <span
                     class="checkbox"
@@ -151,9 +153,12 @@
                   </span>
                   <!-- <v-checkbox v-model="editForm.slot_time" :value="timeSlot.id" class="mx-2" :label="timeSlot.slot_start+'-'+timeSlot.slot_end"></v-checkbox> -->
                 </template>
+                </v-col>
               </v-col>
 
               <v-col class="time-slots pt-0" cols="12" md="12" v-if="eveningSlots.length">
+            <v-col sm="2" class="pt-0"></v-col>
+            <v-col sm="8" class="pt-0">
                 <template v-for="timeSlot in eveningSlots">
                   <span
                     class="checkbox"
@@ -171,6 +176,7 @@
                   </span>
                   <!-- <v-checkbox v-model="editForm.slot_time" :value="timeSlot.id" class="mx-2" :label="timeSlot.slot_start+'-'+timeSlot.slot_end"></v-checkbox> -->
                 </template>
+            </v-col>
               </v-col>
 
               <v-col cols="12" md="12" class="pt-0">
@@ -208,6 +214,8 @@
                 </v-col>
               </v-col>
               <v-col cols="12" md="12" class="mb-4">
+                <v-col sm="2" class="pt-0"></v-col>
+                <v-col sm="8" class="pt-0">
                 <file-pond
                   name="uploadImage"
                   ref="pond"
@@ -226,6 +234,7 @@
                     <div class="v-messages__message">Document upload is required</div>
                   </div>
                 </div>
+            <v-col sm="2" class="pt-0">
                 <div
                   class
                   v-if="editForm.service_image"
@@ -243,10 +252,15 @@
                   </button>
                   <img width="100%" :src="baseUrl+editForm.service_image" alt="John" />
                 </div>
+                </v-col>
+                </v-col>
               </v-col>
 
               <v-col cols="12" md="12">
-                <header>Service Rate</header>
+                <v-col sm="2" class="label-align pt-0">
+                    <header>Service Rate</header>
+                </v-col>
+ <v-col sm="8" class="label-align pt-0">
                 <v-radio-group
                   row
                   v-model="editForm.service_rate"
@@ -257,8 +271,7 @@
                   <v-radio label="per Load" value="perload" class="mor_eve"></v-radio>
                   <v-radio label="Round" value="round" class="mor_eve"></v-radio>
                 </v-radio-group>
-              </v-col>
-              <v-btn
+ <v-btn
                 type="submit"
                 :loading="loading"
                 :disabled="loading"
@@ -267,6 +280,10 @@
                 @click="update"
                 id="submit_btn"
               >Update</v-btn>
+              </v-col>
+             
+</v-col>
+
             </v-form>
           </v-col>
         </v-row>

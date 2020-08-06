@@ -156,7 +156,7 @@ $hover-white: #fff;
     .primary--text {
       color: #53bf7b !important;
       caret-color: #53bf7b !important;
-      margin-bottom: 20px;
+      margin-bottom: 0px;
     }
     .wd-100 {
       width: 100% !important;
@@ -259,7 +259,7 @@ $hover-white: #fff;
             a {
                  padding-top: 10px;
                 padding-bottom: 10px; 
-                font-family: Montserrat,Helvetica,Arial,sans-serif;
+                font-family: 'Montserrat', sans-serif;
                 padding-left: 42px;
                 font-size: 15px;
                 border: 1px solid transparent;
@@ -483,12 +483,22 @@ $hover-white: #fff;
       form {
         .label-align {
             vertical-align: top;
-          label {
-            margin-top: 23px;
             font-size: 15px;
-            padding-left: 0px;
-            font-weight: 300;
             color: #626262;
+            font-weight: 300;
+            .v-input--selection-controls {
+                margin-top: 0px;
+                padding-top: 0px;
+            }
+          label {
+                margin-top: 0;
+                font-size: 15px;
+                padding-left: 0px;
+                font-weight: 300;
+                margin-bottom: 0;
+                color: #626262;
+                padding-bottom: 3px;
+                text-transform: capitalize;
           }
         }
         .custom-col {
@@ -585,10 +595,12 @@ $hover-white: #fff;
             padding-left: 0;
             display: inline-block;
             padding-bottom: 3px;
+            font-weight: 300;
             cursor: pointer;
             text-align: center;
             border-radius: 6px;
             padding-right: 1px;
+            margin-bottom: 0px;
             font-size: 15px;
               &:before, &:after {
                 content: "";
@@ -1192,14 +1204,15 @@ $hover-white: #fff;
       padding-left: 0px !important;
   }
   .label_text{
-    font-size: 14px;
+    font-size: 15px;
     font-family: 'Montserrat', sans-serif;
-    font-weight: 500;
+    font-weight: 300;
+    color: #626262;
   }
   .mor_eve{
     font-size: 14px;
     font-family: 'Montserrat', sans-serif;
-    font-weight: 500;
+    font-weight: 300;
   }
   #form_field.custom_form_field{
     input{
@@ -1220,10 +1233,28 @@ $hover-white: #fff;
   }
   .custom_form_field{
     button#submit_btn{
-      background: #28c76f !important;
-      border-radius: 4px;
+        background: #28c76f !important;
+        text-shadow: none;
+        margin-left: 0px !important;
+        opacity: 1;
+        border-radius: 30px;
+        margin-top: 5px !important;
+        color: #fff;
+        line-height: 15px;
+        font-weight: 300;
+        margin-right: 0px !important;
       &:hover{
         box-shadow: 0 8px 25px -8px #28c76f9c;
+      }
+      &.close {
+        font-size: 24px !important;
+        position: absolute;
+        left: 0;
+        line-height: 10px;
+        top: -6px;
+        margin-top: 0 !important;
+        width: 20px;
+        height: 20px;
       }
     }
   }
@@ -1765,4 +1796,34 @@ $hover-white: #fff;
     }
     .time-slots {
         padding-bottom: 0px;
+    }
+    .main-title {
+        margin-top: 0px !important;
+    }
+    .bread_crum svg {
+        width: 17px;
+    }
+    .v-btn__content {
+        font-weight: 300;
+    }
+    .new_driver {
+        background-color: #fff;
+        box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.05);
+        border-radius: 7px;
+        .v-text-field {
+            padding-top: 0;
+            margin-top: 0;
+            .v-text-field__slot input {
+                border: 0px;
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+        }
+    }
+    .theme--light.v-input input, .theme--light.v-input textarea {
+        font-weight: 300;
+    }
+    .row .col {
+        height: auto !important;
+        background-color: transparent !important;
     }

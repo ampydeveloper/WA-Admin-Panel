@@ -137,7 +137,8 @@
               </v-col>
 
               <v-col class="time-slots pt-0" cols="12" md="12" v-if="morningSlots.length">
-                <v-col sm="10">
+                <v-col sm="2"></v-col>
+                <v-col sm="9">
                   <template v-for="(timeSlot, index) in morningSlots">
                     <span
                       class="checkbox"
@@ -156,7 +157,8 @@
               </v-col>
 
               <v-col class="time-slots pt-0" cols="12" md="12" v-if="eveningSlots.length">
-                <v-col sm="10">
+                <v-col sm="2"></v-col>
+                <v-col sm="9">
                   <template v-for="(timeSlot, index) in eveningSlots">
                     <span
                       class="checkbox"
@@ -239,6 +241,7 @@
               <v-col sm="2" class="label-align pt-0">
                 <header class="label_text">Service Rate</header>
                 </v-col>
+            <v-col sm="8" class="label-align pt-0">
                 <v-radio-group sm="4" class="test"
                   row
                   v-model="addForm.service_rate"
@@ -258,6 +261,9 @@
                 @click="save"
                 id="submit_btn"
               >Add Service</v-btn>
+                </v-col>
+                
+                
               </v-col>
               
             </v-form>

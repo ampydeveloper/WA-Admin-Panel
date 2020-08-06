@@ -3,15 +3,17 @@
     <v-container fluid>
       <v-row>
      <h4 class="main-title text-left">Add New Manager</h4>
-        <v-col cols="12" md="12">
+        <v-col cols="12" md="12" class="new_driver">
           <v-form ref="form" v-model="valid" lazy-validation @submit="update">
             <v-row>
+            <v-col cols="12" md="12">
              <div
                 class="v-avatar v-list-item__avatar"
                 style="height: 80px; min-width: 80px; width: 80px;"
               >
                 <img :src="avatar" />
               </div>
+            </v-col>
 
               <v-col cols="12" md="12" class="custom-img-holder">
                 <file-pond

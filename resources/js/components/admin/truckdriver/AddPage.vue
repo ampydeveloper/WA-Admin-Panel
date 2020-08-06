@@ -3,7 +3,7 @@
     <v-container fluid>
       <v-row>
         <h2>Add New Driver</h2>
-        <v-col cols="12" md="12">
+        <v-col cols="12" md="12" class="new_driver">
           <v-form ref="form" v-model="valid" lazy-validation @submit="save">
             <v-row>
               <v-col cols="6" md="6">
