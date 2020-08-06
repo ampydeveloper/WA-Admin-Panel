@@ -140,31 +140,12 @@ export default {
   background-repeat: no-repeat;
   background-size: cover;
 }
-.login_form {
-  max-width: 1000px;
-  width: 100%;
-  margin: auto;
-  padding: 20px;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: calc(50% - 265px);
-}
-.login_txt {
-  padding-bottom: 26px;
-}
 .login_form .row {
   background: #fff;
   box-shadow: 0 4px 25px 0 rgba(0, 0, 0, 0.1);
 }
 .login_form .img_bg img {
   max-width: 100%;
-}
-.login_txt h2 {
-  color: #2c2c2c;
-  font-size: 22px;
-  font-weight: 500;
-  margin-bottom: 10px;
 }
 .login_txt p {
   color: #2c2c2c;
@@ -198,15 +179,6 @@ export default {
 .social_btn button {
   margin-right: 20px;
 }
-.img_bg_outside {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #eff2f7;
-}
-.login_box {
-  padding: 1rem;
-}
 .v-text-field {
   padding-top: 0px;
   margin-top: 0px;
@@ -227,12 +199,6 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
-}
-.forget .custom_checkbox {
-  margin: 0;
-}
-.forget .custom_checkbox label {
-  top: 4px;
 }
 .v-application .primary--text {
   color: #5c8545 !important;

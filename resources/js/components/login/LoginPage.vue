@@ -1,14 +1,14 @@
 <template class="bg_login_img">
   <v-app id="login_bg">
     <div class="login_form">
-      <v-container>
+     
         <v-row>
-          <v-col cols="6" md="6" class="img_bg_outside">
+          <v-col cols="6" md="7" class="img_bg_outside">
             <div class="img_bg">
-              <img src="images/login_img.png" />
+              <img src="images/loginImage.jpg" />
             </div>
           </v-col>
-          <v-col cols="12" md="6">
+          <v-col cols="12" md="5">
             <div class="login_box">
               <div class="login_txt">
                 <h2>Login</h2>
@@ -40,31 +40,23 @@
                   ></v-text-field>
                 </div>
                 <div class="forget">
-                  <v-checkbox v-model="readonly" class="mx-2 custom_checkbox" label="Remember me"></v-checkbox>
+                    <v-col cols="12" md="6" class="remember-me-div">
+                  <v-checkbox v-model="readonly" class="mx-2 custom_checkbox remember-me" label="Remember me"></v-checkbox>
+                    </v-col>
+                    <v-col cols="12" md="6" class="forget-password-div">
                   <div class="forget_password">
                     <router-link to="/forgot-password">Forgot Password?</router-link>
                   </div>
-                </div>
-                <div class="btn_grp">
+<div class="btn_grp">
                   <v-btn class="login_btn" @click="onSubmit">Login</v-btn>
-                  <div class="social_btn">
-                    <button type="button" @click="AuthProvider('google')">Google</button>
-                    <button type="button" @click="AuthProvider('facebook')">Facebook</button>
                   </div>
+                    </v-col>
                 </div>
-                <v-col>
-                  <div class="sign_up">
-                    Don’t have an account?
-                    <router-link to="/register">Sign Up</router-link>
-                  </div>
-                </v-col>
-
-                <!-- <button type="button" @click="AuthProvider('facebook')">Facebook</button> -->
               </v-form>
             </div>
           </v-col>
         </v-row>
-      </v-container>
+     
     </div>
   </v-app>
 </template>
@@ -206,37 +198,38 @@ export default {
 	animation: 1s ease-out 0s 1 slideInFromLeft;
 }
 
+.slide-right label {
+    font-size: .7rem;
+    padding: .7rem;
+    margin-bottom: 0px !important;
+    color: rgba(0,0,0,.4);
+    padding-top: 0px;
+}
+
 #login_bg {
   background-image: url("/images/login-bg4.jpg");
   background-position: 50%;
   background-repeat: no-repeat;
   background-size: cover;
 }
-.login_form {
-  max-width: 1000px;
-  width: 100%;
-  margin: auto;
-  padding: 20px;
-  /* position: absolute;
-  left: 0;
-  right: 0;
-  top: calc(50% - 265px); */
+
+.login_form .img_bg_outside {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
 }
-.login_txt {
-  padding-bottom: 26px;
-}
-.login_form .row {
-  background: #fff;
-  box-shadow: 0 4px 25px 0 rgba(0, 0, 0, 0.1);
-}
+
 .login_form .img_bg img {
   max-width: 100%;
+    height: 100vh;
 }
 .login_txt h2 {
   color: #2c2c2c;
-  font-size: 22px;
+  font-size: 18.48px;
   font-weight: 500;
-  margin-bottom: 10px;
+line-height: 1.2;
+padding-left: .7rem;
+    margin-bottom: 15px;
 }
 .login_txt p {
   color: #626262;
@@ -270,25 +263,20 @@ export default {
 .social_btn button {
   margin-right: 20px;
 }
-.img_bg_outside {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #eff2f7;
-}
 .login_box {
-  padding: 1rem;
+  padding-top: 30%;
+    padding-right: 15px;
 }
 .v-text-field {
   padding-top: 0px;
   margin-top: 0px;
 }
 .v-input input {
-  max-height: 94px;
-  padding: 13px;
+  max-height: 35px;
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 6px;
-  padding-left: 48px !important;
+  padding-left: 40px !important;
+    font-size: .7rem;
 }
 .v-application .error--text {
   border: none;
@@ -307,9 +295,10 @@ export default {
 }
 .forget .custom_checkbox {
   margin: 0;
+    padding-top: 0px;
 }
 .forget .custom_checkbox label {
-  top: 4px;
+  top: 5px;
 }
 .forget .v-application .primary--text {
   color: #5c8545;
@@ -319,11 +308,37 @@ export default {
 }
 .custom_input .icons_custom {
   position: absolute;
-  top: 12px;
-  left: 15px;
+  top: 8px;
+  left: 10px;
+    color: rgba(0, 0, 0, 0.4);
+    font-size: .7rem;
 }
-.custom_input .icons_custom {
-  color: rgba(0, 0, 0, 0.4);
+.login_form .remember-me-div {
+    padding-left:0px;
+}
+
+.login_form .remember-me label {
+    font-size: 14px;
+    line-height: 1.5;
+    letter-spacing: .01rem;
+    font-weight: 400;
+    font-family: Montserrat,Helvetica,Arial,sans-serif;
+    color: #626262;
+    padding-left: 0px;
+}
+.login_form .forget-password-div {
+    padding-top:0px;
+    padding-right:0px;
+}
+.login_form .forget-password-div .forget_password {
+    float: right;
+}
+.login_form .forget-password-div .forget_password a{
+    color: green;
+}
+.login_form .forget-password-div .forget_password a:hover{
+    text-decoration: none;
+    color: green;
 }
 @media only screen and (max-width: 992px) {
   .img_bg_outside {
