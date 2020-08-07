@@ -295,7 +295,6 @@ export default {
   font-size: 14px !important;
   text-transform: capitalize;
   font-weight: 300 !important;
-  padding: 19px 30px !important;
   border-radius: 6px !important;
   outline: none;
 }

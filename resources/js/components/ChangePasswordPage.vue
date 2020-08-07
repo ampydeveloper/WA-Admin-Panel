@@ -1,54 +1,83 @@
 <template class="bg_login_img">
   <v-app id="login_bg">
     <div class="login_form">
-      <v-container>
         <v-row>
-          <v-col cols="6" md="6" class="img_bg_outside">
-            <div class="img_bg">
-              <img :src="'../images/login_img.png'" />
-            </div>
-          </v-col>
-          <v-col cols="6" md="6">
-            <v-form ref="form" v-model="valid" lazy-validation class="slide-right">
-              <v-col cols="12" sm="12">
+            <v-col cols="6" md="7" class="img_bg_outside">
+                <div class="green-overlay"></div>
+                <div class="img_bg"></div>
+                <div class="back-text">
+                    <h3>Wellington</h3>
+                    <h3>Agricultural Services</h3>
+                    <p>Affordable solutions for smaller farms.</p>
+                </div>
+            </v-col>
+            <v-col cols="12" md="5" class="login_box-outer">
+            <div class="login_box">
+                <div class="login_txt">
+                    <h2>Reset Password</h2>
+                    <p>Please enter your new password.</p>
+                </div>
+              
+              <v-form 
+                ref="form" 
+                v-model="valid" 
+                lazy-validation 
+                class="slide-right"
+                autocomplete="off"
+                >
+                <div class="custom_input">
+                <lock-icon size="1.5x" class="custom-class icons_custom"></lock-icon>
+                
                 <v-text-field
                   v-model="password"
-                  :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
                   :rules="[rules.required, rules.min]"
                   :type="show1 ? 'text' : 'password'"
                   name="password"
-                  label="Password"
                   hint="At least 8 characters"
-                  counter
-                  @click:append="show1 = !show1"
+                  placeholder="Enter password"
+                  autocomplete="nope"
                 ></v-text-field>
-                <v-col cols="12" sm="12"></v-col>
+              </div>
+              
+              <div class="custom_input">
+                <lock-icon size="1.5x" class="custom-class icons_custom"></lock-icon>
+               
+
                 <v-text-field
                   v-model="confirm_password"
-                  :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
-                  :rules="[rules.required, rules.min, passwordConfirmationRule]"
+                  :rules="[rules.required, rules.min]"
                   :type="show2 ? 'text' : 'password'"
                   name="confirm_password"
-                  label="Confirm Password"
                   hint="At least 8 characters"
-                  counter
-                  @click:append="show2 = !show2"
+                  placeholder="Confirmed password"
+                  autocomplete="nope"
                 ></v-text-field>
-              </v-col>
-              <v-btn color="success" class="mr-4 recover_btn" @click="validate">Update</v-btn>
-            </v-form>
+              </div>
+
+                <div class="forget forget-login">
+                <v-col cols="12" class="login-btn-div">
+                  <div class="btn_grp">
+                    <v-btn color="success" class="mr-4 login_btn" @click="validate">Update</v-btn>
+                  </div>
+                </v-col>
+              </div>
+              </v-form>
+            </div>
           </v-col>
         </v-row>
-      </v-container>
     </div>
   </v-app>
 </template>
 
 <script>
 import { required } from "vuelidate/lib/validators";
+import { LockIcon } from "vue-feather-icons";
 import { router } from "../_helpers/router";
 import { authenticationService } from "../_services/authentication.service";
 export default {
+    components: {
+    LockIcon
+  },
   data: () => ({
     show1: false,
     show2: false,
@@ -99,110 +128,3 @@ export default {
   }
 };
 </script>
-<style>
-@keyframes slideInFromLeft {
-  0% {
-    transform: translateX(-10%);
-  }
-  100% {
-    transform: translateX(0);
-  }
-}
-
-.slide-right {
-	animation: 1s ease-out 0s 1 slideInFromLeft;
-}
-
-.recover_btn {
-  margin: 0px 9px 0px 0px;
-  float: right;
-  background: #5c8546 !important;
-  color: #fff;
-  font-size: 13px;
-  text-transform: capitalize;
-  font-weight: 400;
-  padding: 10px 30px;
-  border-radius: 7px;
-  outline: none;
-}
-
-#login_bg {
-  background-image: url("/images/login-bg4.jpg");
-  background-position: 50%;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
-.change_password label {
-    padding: 5px;
-}
-.login_form .row {
-  background: #fff;
-  box-shadow: 0 4px 25px 0 rgba(0, 0, 0, 0.1);
-}
-.login_form .img_bg img {
-  max-width: 100%;
-}
-.login_txt p {
-  color: #626262;
-  font-size: 16px;
-  font-weight: 400;
-  margin-bottom: 10px;
-}
-.sign_up {
-  color: #2c2c2c;
-  font-size: 18px;
-  font-weight: 500;
-  text-align: center;
-}
-.btn_grp {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 0px;
-  flex-direction: row-reverse;
-}
-#login_bg .login_form .btn_grp button.login_btn {
-  background: #5c8546;
-  color: #fff;
-  font-size: 13px;
-  text-transform: capitalize;
-  font-weight: 400;
-  padding: 10px 30px;
-  border-radius: 7px;
-  outline: none;
-}
-.social_btn button {
-  margin-right: 20px;
-}
-.v-text-field {
-  padding-top: 0px;
-  margin-top: 0px;
-}
-
-.v-application .error--text {
-  border: none;
-}
-.v-text-field.v-input--has-state > .v-input__control > .v-input__slot:before {
-  border: none;
-}
-.v-text-field > .v-input__control > .v-input__slot:after,
-.v-text-field > .v-input__control > .v-input__slot:before {
-  content: none;
-}
-.v-application .primary--text {
-  color: #5c8545 !important;
-}
-a.back-btn {
-    padding: 10px;
-    border: 1px solid rgba(0,0,0,0.51);
-    text-decoration: none;
-    color: rgba(0, 0, 0, 0.51) !important;
-    border-radius:6px
-}
-@media only screen and (max-width: 992px) {
-  .img_bg_outside {
-    display: none;
-  }
-}
-</style>
