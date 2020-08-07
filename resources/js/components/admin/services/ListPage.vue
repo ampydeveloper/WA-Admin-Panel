@@ -2,7 +2,12 @@
   <v-app>
     <div class="bread_crum">
       <ul>
-       <li><h4 class="main-title top_heading">Services |</h4></li>
+        <li>
+          <h4 class="main-title top_heading">
+            All Services
+            <span class="right-bor"></span>
+          </h4>
+        </li>
         <li>
           <router-link to="/admin/dashboard" class="home_svg">
             <svg
@@ -39,9 +44,7 @@
             </span>
           </router-link>
         </li>
-        <li> 
-            List
-        </li>
+        <li>List</li>
       </ul>
     </div>
     <div class="main_box">
@@ -55,18 +58,21 @@
               <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon>
             </router-link>
           </div>
-          <v-col cols="12" md="12" id="#custom_tabel">
+          <v-col cols="12" md="12" id="#custom_tabel" class="main-box-inner">
+            <!-- <div v-bar="{
+    preventParentScroll: true,
+    scrollThrottle: 30, }"> -->
             <table id="example" class="table table-striped table-bordered" style="width:100%">
               <thead>
                 <tr>
-                  <th class="text-left">Sno</th>
+                  <th class="text-left">#</th>
                   <th class="text-left">Service Name</th>
                   <th class="text-left">Service Rate</th>
                   <th class="text-left">Price</th>
-                  <th class="text-left">type</th>
-                  <th class="text-left">time</th>
-                  <th class="text-left">Descriptions</th>
-                  <th class="text-left">Options</th>
+                  <th class="text-left">Type</th>
+                  <th class="text-left">Time</th>
+                  <th class="text-left">Description</th>
+                  <th class="text-left">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -99,14 +105,14 @@
                       :to="'/admin/service/edit/' + item.id"
                       class="nav-item nav-link"
                     >
-                      <edit-3-icon size="1.5x" class="custom-class"></edit-3-icon>
+                      <edit-3-icon size="1.2x" class="custom-class"></edit-3-icon>
                     </router-link>
                     <router-link
                       v-if="!isAdmin"
                       :to="'/manager/service/edit/' + item.id"
                       class="nav-item nav-link"
                     >
-                      <edit-3-icon size="1.5x" class="custom-class"></edit-3-icon>
+                      <edit-3-icon size="1.2x" class="custom-class"></edit-3-icon>
                     </router-link>
                     <a href="javascript:void(0);" text @click="Delete(item.id)">
                       <trash-icon size="1.5x" class="custom-class"></trash-icon>
@@ -115,6 +121,7 @@
                 </tr>
               </tbody>
             </table>
+            <!-- </div> -->
           </v-col>
         </v-row>
       </v-container>
@@ -184,7 +191,7 @@ export default {
     Delete(e) {
       this.$swal({
         title: "Are you sure?",
-        text: "You can't revert your action",
+        text: "Are you sure you want to delete this service?",
         type: "warning",
         showCancelButton: true,
         confirmButtonText: "Yes Delete it!",
@@ -235,13 +242,26 @@ export default {
     setTimeout(function () {
       $(document).ready(function () {
         $("#example").DataTable({
-	"language": {
-	    "paginate": {
-	      "previous": "<",
-               "next": ">"
-	    }
-	  }
+          aoColumnDefs: [
+            {
+              bSortable: false,
+              aTargets: [-1, -2, -3, -4, -6],
+            },
+          ],
+          // language: {
+          //   paginate: {
+          //     previous: "",
+          //     next: "",
+          //   },
+          // },
+          oLanguage: { sSearch: "" },
         });
+        $("#example_wrapper .dataTables_filter input").attr(
+          "placeholder",
+          "Search Services"
+        );
+         $("#example_wrapper .dataTables_paginate .paginate_button.previous").text('');
+         $("#example_wrapper .dataTables_paginate .paginate_button.next").text('');
       });
     }, 1000);
   },

@@ -2,7 +2,12 @@
   <v-app>
     <div class="bread_crum">
       <ul>
-<li><h4 class="main-title text-left top_heading">Add Services | </h4></li>
+        <li>
+          <h4 class="main-title text-left top_heading">
+            Add Services
+            <span class="right-bor"></span>
+          </h4>
+        </li>
         <li>
           <router-link to="/admin/dashboard" class="home_svg">
             <svg
@@ -61,9 +66,7 @@
             </span>
           </router-link>
         </li>
-        <li>
-          Add
-        </li>
+        <li>Add</li>
       </ul>
     </div>
     <div class="main_box">
@@ -78,15 +81,15 @@
               class="custom_form_field"
               id="form_field"
             >
-              <v-col cols="12" md="12" class="pt-0">
+              <v-col cols="12" md="12" class="pt-0 pb-0">
                 <v-col sm="2" class="label-align pt-0">
                   <label class="label_text">Service name</label>
                 </v-col>
-                <v-col sm="4" class="pt-0">
+                <v-col sm="4" class="pt-0 pb-0">
                   <v-text-field
                     v-model="addForm.service_name"
                     required
-                    :rules="[v => !!v || 'Service name is required']"
+                    :rules="[v => !!v || 'Service name is required.']"
                     label="Enter service name"
                     placeholder
                   ></v-text-field>
@@ -98,11 +101,11 @@
                   </template>-->
                 </v-col>
               </v-col>
-              <v-col cols="12" md="12" class="pt-0">
+              <v-col cols="12" md="12" class="pt-0 pb-0">
                 <v-col sm="2" class="label-align pt-0">
-                  <label class="label_text">Service Time Period</label>
+                  <label class="label_text">Service Time</label>
                 </v-col>
-                <v-col sm="4">
+                <v-col sm="4" class="pt-0 pb-0">
                   <div class="custom-checkbox d-ib">
                     <input
                       type="checkbox"
@@ -130,7 +133,7 @@
                   </div>
                   <div class="v-messages theme--light error--text" role="alert" v-if="!timeSlotErr">
                     <div class="v-messages__wrapper">
-                      <div class="v-messages__message">Service time period is required.</div>
+                      <div class="v-messages__message">Service time is required.</div>
                     </div>
                   </div>
                 </v-col>
@@ -138,7 +141,7 @@
 
               <v-col class="time-slots pt-0" cols="12" md="12" v-if="morningSlots.length">
                 <v-col sm="2"></v-col>
-                <v-col sm="9">
+                <v-col sm="9" class="pt-0 pb-0">
                   <template v-for="(timeSlot, index) in morningSlots">
                     <span
                       class="checkbox"
@@ -156,9 +159,9 @@
                 </v-col>
               </v-col>
 
-              <v-col class="time-slots pt-0" cols="12" md="12" v-if="eveningSlots.length">
+              <v-col class="time-slots pt-0 pb-0" cols="12" md="12" v-if="eveningSlots.length">
                 <v-col sm="2"></v-col>
-                <v-col sm="9">
+                <v-col sm="9" class="pt-0 pb-0">
                   <template v-for="(timeSlot, index) in eveningSlots">
                     <span
                       class="checkbox"
@@ -176,11 +179,11 @@
                 </v-col>
               </v-col>
 
-              <v-col cols="12" md="12" class="pt-0">
+              <v-col cols="12" md="12" class="pt-0 pb-0">
                 <v-col sm="2" class="label-align pt-0">
                   <label class="label_text">Service Price</label>
                 </v-col>
-                <v-col sm="4" class="pt-0">
+                <v-col sm="4" class="pt-0 pb-0">
                   <v-text-field
                     label="Enter service price"
                     placeholder
@@ -194,11 +197,11 @@
                 </v-col>
               </v-col>
 
-              <v-col cols="12" md="12" class="textarea-parent pt-0">
+              <v-col cols="12" md="12" class="textarea-parent pt-0 pb-0">
                 <v-col sm="2" class="label-align pt-0">
                   <label class="label_text">Description</label>
                 </v-col>
-                <v-col sm="4" class="pt-0">
+                <v-col sm="4" class="pt-0 pb-0">
                   <v-textarea
                     label="Enter description"
                     placeholder
@@ -212,60 +215,66 @@
                   ></v-textarea>
                 </v-col>
               </v-col>
-              <v-col cols="12" md="12">
-<v-col sm="2" class="label-align pt-0">
-                  <label class="label_text">Upload file</label>
+
+              <v-col cols="12" md="12" class="pt-0 pb-0">
+                <v-col sm="2" class="label-align pt-0 service-image1">
+                  <label class="label_text">Service Image</label>
                 </v-col>
-<v-col sm="4" class="pt-0">
-                <file-pond
-                  name="uploadImage"
-                  ref="pond"
-                  label-idle="Drop files here..."
-                  v-bind:allow-multiple="false"
-                  v-bind:server="serverOptions"
-                  v-bind:files="myFiles"
-                  v-on:processfile="handleProcessFile"
-                  v-on:processfilerevert="handleRemoveFile"
-                  allow-file-type-validation="true"
-                  accepted-file-types="image/jpeg, image/png"
-                />
-                <div class="v-messages theme--light error--text" role="alert" v-if="docError">
-                  <div class="v-messages__wrapper">
-                    <div class="v-messages__message">Document upload is required</div>
+                <v-col sm="4" class="pt-0 pb-0">
+                  <file-pond
+                    name="uploadImage"
+                    ref="pond"
+                    label-idle="Drop or Browse your files"
+                    v-bind:allow-multiple="false"
+                    v-bind:server="serverOptions"
+                    v-bind:files="myFiles"
+                    v-on:processfile="handleProcessFile"
+                    v-on:processfilerevert="handleRemoveFile"
+                    allow-file-type-validation="true"
+                    accepted-file-types="image/jpeg, image/png"
+                  />
+                  <div class="v-messages theme--light error--text" role="alert" v-if="docError">
+                    <div class="v-messages__wrapper">
+                      <div class="v-messages__message">Service Image is required.</div>
+                    </div>
                   </div>
-                </div>
-</v-col>
+                </v-col>
               </v-col>
 
-              <v-col cols="12" md="12">
-              <v-col sm="2" class="label-align pt-0">
-                <header class="label_text">Service Rate</header>
+              <v-col cols="12" md="12" class="pt-0 pb-0">
+                <v-col sm="2" class="label-align pt-0">
+                  <label class="label_text">Service Rate</label>
                 </v-col>
-            <v-col sm="8" class="label-align pt-0">
-                <v-radio-group sm="4" class="test"
-                  row
-                  v-model="addForm.service_rate"
-                  :mandatory="false"
-                  required
-                  :rules="[v => !!v || 'Service rate is required']"
-                >
-                  <v-radio label="Per Load" value="1" class="mor_eve"></v-radio>
-                  <v-radio label="Round" value="2" class="mor_eve"></v-radio>
-                </v-radio-group>
-<v-btn
-                type="submit"
-                :loading="loading"
-                :disabled="loading"
-                color="success"
-                class="mr-4 custom-save-btn ml-4 mt-4"
-                @click="save"
-                id="submit_btn"
-              >Add Service</v-btn>
+                <v-col sm="8" class="label-align pt-0 pb-0 radio-group-outer">
+                  <v-radio-group
+                    sm="4"
+                    class="test"
+                    row
+                    v-model="addForm.service_rate"
+                    :mandatory="false"
+                    required
+                    :rules="[v => !!v || 'Service rate is required.']"
+                  >
+                    <v-radio label="Per Load" value="1" class="mor_eve"></v-radio>
+                    <v-radio label="Round" value="2" class="mor_eve"></v-radio>
+                  </v-radio-group>
                 </v-col>
-                
-                
               </v-col>
-              
+
+              <v-col class="pt-0 pb-0" cols="12" md="12">
+                <v-col sm="2"></v-col>
+                <v-col sm="9" class="pt-0 pb-0">
+                  <v-btn
+                    type="submit"
+                    :loading="loading"
+                    :disabled="loading"
+                    color="success"
+                    class="custom-save-btn mt-4"
+                    @click="save"
+                    id="submit_btn"
+                  >Add Service</v-btn>
+                </v-col>
+              </v-col>
             </v-form>
           </v-col>
         </v-row>

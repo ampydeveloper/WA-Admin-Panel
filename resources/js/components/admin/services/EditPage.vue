@@ -2,7 +2,9 @@
   <v-app>
     <div class="bread_crum">
       <ul>
-	<li><h4 class="main-title text-left top_heading">Edit Service | </h4></li>
+        <li>
+          <h4 class="main-title text-left top_heading">Edit Service |</h4>
+        </li>
         <li>
           <router-link to="/admin/dashboard" class="home_svg">
             <svg
@@ -69,7 +71,7 @@
     <div class="main_box">
       <v-container fluid>
         <v-row>
-          <v-col cols="12" md="12" class="slide-left">
+          <v-col cols="12" md="12" class="slide-left pl-0 pt-0">
             <v-form
               ref="form"
               v-model="valid"
@@ -78,11 +80,11 @@
               class="custom_form_field"
               id="form_field"
             >
-              <v-col cols="12" md="12" class="pt-0">
+              <v-col cols="12" md="12" class="pt-0 pb-0">
                 <v-col sm="2" class="label-align pt-0">
                   <label class="label_text">Service name</label>
                 </v-col>
-                <v-col sm="4" class="pt-0">
+                <v-col sm="4" class="pt-0 pb-0">
                   <v-text-field
                     label="Enter service name"
                     placeholder
@@ -92,12 +94,11 @@
                   ></v-text-field>
                 </v-col>
               </v-col>
-              <v-col cols="12" md="12">
+              <v-col cols="12" md="12" class="pt-0 pb-0">
                 <v-col sm="2" class="label-align pt-0">
-                  <label class="label_text">Service Time Period</label>
+                  <label class="label_text">Service Time</label>
                 </v-col>
-                <!-- <header class="label_text">Service Time Period</header> -->
-                <v-col sm="4">
+                <v-col sm="4" class="pt-0 pb-0">
                   <div class="custom-checkbox d-ib">
                     <input
                       type="checkbox"
@@ -127,63 +128,63 @@
                   </div>
                   <div class="v-messages theme--light error--text" role="alert" v-if="!timeSlotErr">
                     <div class="v-messages__wrapper">
-                      <div class="v-messages__message">Service time period is required.</div>
+                      <div class="v-messages__message">Service time is required.</div>
                     </div>
                   </div>
                 </v-col>
               </v-col>
 
-              <v-col class="time-slots pt-0" cols="12" md="12" v-if="morningSlots.length">
-              <v-col sm="2" class="pt-0"></v-col>
-            <v-col sm="8" class="pt-0">
-                <template v-for="timeSlot in morningSlots">
-                  <span
-                    class="checkbox"
-                    v-bind:class="[editForm.slot_time.includes(timeSlot.id) ? 'activeClass' : '']"
-                  >
-                    <input
-                      type="checkbox"
-                      @click="setTimeSlot(timeSlot.id)"
-                      :value="timeSlot.id"
-                      :id="timeSlot.id"
-                      required
-                      :checked="editForm.slot_time.includes(timeSlot.id) ? true:false"
-                    />
-                    <label v-bind:for="timeSlot.id">{{timeSlot.slot_start+'-'+timeSlot.slot_end}}</label>
-                  </span>
-                  <!-- <v-checkbox v-model="editForm.slot_time" :value="timeSlot.id" class="mx-2" :label="timeSlot.slot_start+'-'+timeSlot.slot_end"></v-checkbox> -->
-                </template>
+              <v-col class="time-slots pt-0 pb-0" cols="12" md="12" v-if="morningSlots.length">
+                <v-col sm="2" class="pt-0"></v-col>
+                <v-col sm="8" class="pt-0 pb-0">
+                  <template v-for="timeSlot in morningSlots">
+                    <span
+                      class="checkbox"
+                      v-bind:class="[editForm.slot_time.includes(timeSlot.id) ? 'activeClass' : '']"
+                    >
+                      <input
+                        type="checkbox"
+                        @click="setTimeSlot(timeSlot.id)"
+                        :value="timeSlot.id"
+                        :id="timeSlot.id"
+                        required
+                        :checked="editForm.slot_time.includes(timeSlot.id) ? true:false"
+                      />
+                      <label v-bind:for="timeSlot.id">{{timeSlot.slot_start+'-'+timeSlot.slot_end}}</label>
+                    </span>
+                    <!-- <v-checkbox v-model="editForm.slot_time" :value="timeSlot.id" class="mx-2" :label="timeSlot.slot_start+'-'+timeSlot.slot_end"></v-checkbox> -->
+                  </template>
                 </v-col>
               </v-col>
 
-              <v-col class="time-slots pt-0" cols="12" md="12" v-if="eveningSlots.length">
-            <v-col sm="2" class="pt-0"></v-col>
-            <v-col sm="8" class="pt-0">
-                <template v-for="timeSlot in eveningSlots">
-                  <span
-                    class="checkbox"
-                    v-bind:class="[editForm.slot_time.includes(timeSlot.id) ? 'activeClass' : '']"
-                  >
-                    <input
-                      type="checkbox"
-                      @click="setTimeSlot(timeSlot.id)"
-                      :value="timeSlot.id"
-                      :id="timeSlot.id"
-                      required
-                      :checked="editForm.slot_time.includes(timeSlot.id) ? true:false"
-                    />
-                    <label v-bind:for="timeSlot.id">{{timeSlot.slot_start+'-'+timeSlot.slot_end}}</label>
-                  </span>
-                  <!-- <v-checkbox v-model="editForm.slot_time" :value="timeSlot.id" class="mx-2" :label="timeSlot.slot_start+'-'+timeSlot.slot_end"></v-checkbox> -->
-                </template>
-            </v-col>
+              <v-col class="time-slots pt-0 pb-0" cols="12" md="12" v-if="eveningSlots.length">
+                <v-col sm="2" class="pt-0"></v-col>
+                <v-col sm="8" class="pt-0 pb-0">
+                  <template v-for="timeSlot in eveningSlots">
+                    <span
+                      class="checkbox"
+                      v-bind:class="[editForm.slot_time.includes(timeSlot.id) ? 'activeClass' : '']"
+                    >
+                      <input
+                        type="checkbox"
+                        @click="setTimeSlot(timeSlot.id)"
+                        :value="timeSlot.id"
+                        :id="timeSlot.id"
+                        required
+                        :checked="editForm.slot_time.includes(timeSlot.id) ? true:false"
+                      />
+                      <label v-bind:for="timeSlot.id">{{timeSlot.slot_start+'-'+timeSlot.slot_end}}</label>
+                    </span>
+                    <!-- <v-checkbox v-model="editForm.slot_time" :value="timeSlot.id" class="mx-2" :label="timeSlot.slot_start+'-'+timeSlot.slot_end"></v-checkbox> -->
+                  </template>
+                </v-col>
               </v-col>
 
-              <v-col cols="12" md="12" class="pt-0">
+              <v-col cols="12" md="12" class="pt-0 pb-0">
                 <v-col sm="2" class="label-align pt-0">
                   <label class="label_text">Service Price</label>
                 </v-col>
-                <v-col sm="4" class="pt-0">
+                <v-col sm="4" class="pt-0 pb-0">
                   <v-text-field
                     type="number"
                     max="100"
@@ -196,11 +197,11 @@
                 </v-col>
               </v-col>
 
-              <v-col cols="12" md="12" class="textarea-parent pt-0">
+              <v-col cols="12" md="12" class="textarea-parent pt-0 pb-0">
                 <v-col sm="2" class="label-align pt-0">
                   <label class="label_text">Description</label>
                 </v-col>
-                <v-col sm="4" class="pt-0">
+                <v-col sm="4" class="pt-0 pb-0">
                   <v-textarea
                     rows="3"
                     auto-grow
@@ -213,77 +214,82 @@
                   ></v-textarea>
                 </v-col>
               </v-col>
-              <v-col cols="12" md="12" class="mb-4">
-                <v-col sm="2" class="pt-0"></v-col>
-                <v-col sm="8" class="pt-0">
-                <file-pond
-                  name="uploadImage"
-                  ref="pond"
-                  label-idle="Drop files here..."
-                  v-bind:allow-multiple="false"
-                  v-bind:server="serverOptions"
-                  v-bind:files="myFiles"
-                  v-on:addfilestart="setUploadIndex"
-                  v-on:processfile="handleProcessFile"
-                  v-on:processfilerevert="handleRemoveFile"
-                  allow-file-type-validation="true"
-                  accepted-file-types="image/jpeg, image/png"
-                />
-                <div class="v-messages theme--light error--text" role="alert" v-if="docError">
-                  <div class="v-messages__wrapper">
-                    <div class="v-messages__message">Document upload is required</div>
+              <v-col cols="12" md="12" class="pt-0 mb-4 pb-0">
+              <v-col sm="2" class="label-align pt-0 service-image1">
+                  <label class="label_text">Service Image</label>
+                </v-col>
+                <v-col sm="4" class="pt-0 pb-0">
+                  <file-pond
+                    name="uploadImage"
+                    ref="pond"
+                    label-idle="Drop or Browse your files"
+                    v-bind:allow-multiple="false"
+                    v-bind:server="serverOptions"
+                    v-bind:files="myFiles"
+                    v-on:addfilestart="setUploadIndex"
+                    v-on:processfile="handleProcessFile"
+                    v-on:processfilerevert="handleRemoveFile"
+                    allow-file-type-validation="true"
+                    accepted-file-types="image/jpeg, image/png"
+                  />
+                  <div class="v-messages theme--light error--text" role="alert" v-if="docError">
+                    <div class="v-messages__wrapper">
+                      <div class="v-messages__message">Document upload is required</div>
+                    </div>
                   </div>
-                </div>
-            <v-col sm="2" class="pt-0">
-                <div
-                  class
-                  v-if="editForm.service_image"
-                  style="height: 100px; min-width: 100px; width: 100px;"
-                >
-                  <button
-                    id="submit_btn"
-                    type="button"
-                    class="close AClass"
-                    style="margin-right: 13px; margin-top: -25px; font-size: 30px;"
-                    v-if="cross"
-                    @click="Remove()"
-                  >
-                    <span>&times;</span>
-                  </button>
-                  <img width="100%" :src="baseUrl+editForm.service_image" alt="John" />
-                </div>
-                </v-col>
+                  <v-col sm="12" class="p-0">
+                    <div
+                      class="service-image-outer"
+                      v-if="editForm.service_image"
+                    >
+                      <button
+                        id="submit_btn"
+                        type="button"
+                        class="close AClass"
+                        style="margin-right: 13px; margin-top: -25px; font-size: 30px;"
+                        v-if="cross"
+                        @click="Remove()"
+                      >
+                        <span>&times;</span>
+                      </button>
+                      <img width="100%" :src="baseUrl+editForm.service_image" alt="John" />
+                    </div>
+                  </v-col>
                 </v-col>
               </v-col>
 
-              <v-col cols="12" md="12">
+              <v-col cols="12" md="12" class="pt-0 pb-0">
                 <v-col sm="2" class="label-align pt-0">
-                    <header>Service Rate</header>
+                  <header>Service Rate</header>
                 </v-col>
- <v-col sm="8" class="label-align pt-0">
-                <v-radio-group
-                  row
-                  v-model="editForm.service_rate"
-                  :mandatory="false"
-                  required
-                  :rules="[v => !!v || 'Service rate is required']"
-                >
-                  <v-radio label="per Load" value="perload" class="mor_eve"></v-radio>
-                  <v-radio label="Round" value="round" class="mor_eve"></v-radio>
-                </v-radio-group>
- <v-btn
-                type="submit"
-                :loading="loading"
-                :disabled="loading"
-                color="success"
-                class="mr-4 custom-save-btn ml-4 mt-4"
-                @click="update"
-                id="submit_btn"
-              >Update</v-btn>
-              </v-col>
-             
-</v-col>
+                <v-col sm="8" class="label-align pt-0 pb-0 radio-group-outer">
+                  <v-radio-group
+                    row
+                    v-model="editForm.service_rate"
+                    :mandatory="false"
+                    required
+                    :rules="[v => !!v || 'Service rate is required.']"
+                  >
+                    <v-radio label="Per Load" value="perload" class="mor_eve"></v-radio>
+                    <v-radio label="Round" value="round" class="mor_eve"></v-radio>
+                  </v-radio-group>
+                </v-col>
 
+                <v-col class="pt-0 pb-0" cols="12" md="12">
+                  <v-col sm="2"></v-col>
+                  <v-col sm="9" class="p-0">
+                    <v-btn
+                      type="submit"
+                      :loading="loading"
+                      :disabled="loading"
+                      color="success"
+                      class="custom-save-btn mt-4"
+                      @click="update"
+                      id="submit_btn"
+                    >Update</v-btn>
+                  </v-col>
+                </v-col>
+              </v-col>
             </v-form>
           </v-col>
         </v-row>

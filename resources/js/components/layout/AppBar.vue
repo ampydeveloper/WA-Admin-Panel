@@ -72,7 +72,7 @@ List Admin</router-link>
     <div class="header-right">
       <v-icon v-if="!drawer" @click="setDrawer(!drawer)">mdi-format-indent-increase</v-icon>
       <v-icon v-if="drawer" @click="setDrawer(!drawer)">mdi-format-indent-decrease</v-icon>
-      <span class="page-title">Overview</span>
+      <span class="page-title"></span>
     </div>
 
     <!--  <v-spacer />

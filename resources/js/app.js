@@ -19,7 +19,8 @@ import * as VueGoogleMaps from "vue2-google-maps";
 import { router } from "./_helpers/router";
 import store from './store';
 import moment from 'moment';
-import VueMoment from 'vue-moment'
+import VueMoment from 'vue-moment';
+import Vuebar from 'vuebar';
 import App from "./app/App";
 
 // Import Vue FilePond
@@ -80,7 +81,8 @@ Vue.use(VueGoogleMaps, {
 Vue.use(Vuelidate);
 Vue.use(Vuetify);
 Vue.use(VueToast);
-Vue.use(VueFeatherIcon)
+Vue.use(VueFeatherIcon);
+Vue.use(Vuebar);
 
 Vue.filter('formatDateLic', function(value) {
     if (value) {

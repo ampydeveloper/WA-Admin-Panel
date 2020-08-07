@@ -28,7 +28,41 @@
     >
       <div />
 
-     <v-list v-if="isAdmin">
+     <!-- <v-list v-if="isAdmin">
+
+<v-list-group>
+<template v-slot:activator>
+              <v-list-item>
+                <v-list-item-content>
+                  <v-list-item-title>Main</v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </template>
+
+            <v-list-item>
+              <v-list-item-action>
+                <bell-icon size='1.5x' class='custom-class'></bell-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title v-on:click="showAdvanced(subIindex, mainIndex)">
+                  <router-link to="/admin/dashboard" class="nav-item nav-link">Overview</router-link>
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+             <v-list-item>
+              <v-list-item-action>
+                <bell-icon size='1.5x' class='custom-class'></bell-icon>
+              </v-list-item-action>
+              <v-list-item-content>
+                <v-list-item-title v-on:click="showAdvanced(subIindex, mainIndex)">
+                  <router-link to="/admin/dashboard" class="nav-item nav-link">Overview</router-link>
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+  </v-list-group>
+    </v-list> -->
+    
+<v-list v-if="isAdmin">
           <v-list-group
             v-for="(item, mainIndex) in items"
             :key="item.title"
@@ -58,6 +92,7 @@
                 </v-list-item-title>
               </v-list-item-content>
             </v-list-item>
+
           </v-list-group>
         </v-list>
 
@@ -138,9 +173,18 @@
 <script>
   // Utilities
   import { mapState } from 'vuex'
-
+// import { UserIcon, LogOutIcon, UserPlusIcon, ListIcon, Edit3Icon, BellIcon } from 'vue-feather-icons';
   export default {
     name: 'DashboardCoreDrawer',
+
+  //   components: {
+  //       UserIcon,
+	// LogOutIcon,
+	// UserPlusIcon,
+	// ListIcon,
+	// Edit3Icon,
+  // BellIcon,
+  //   },
     props: {
       expandOnHover: {
         type: Boolean,
@@ -155,7 +199,7 @@
             title: 'Main',
             active: true,
             items: [
-              { title: 'Overview', url: '/admin/dashboard', icon: 'mdi-view-dashboard' },
+              { title: 'Overview', url: '/admin/dashboard', icon: "mdi-view-dashboard" },
               { title: 'Jobs', url: '/admin/jobs', icon: 'mdi-wallet-travel' },
               { title: 'Dispatches', url: '/admin/dispatches', icon: 'mdi-cube-outline' },
               { title: 'Services', url: '/admin/services', icon: 'mdi-camera-timer' },
@@ -185,7 +229,7 @@
             active: true,
             items: [
               { title: 'Truck', url: '/admin/trucks', icon: 'mdi-truck' },
-	            { title: 'SkidSteer', url: '/admin/skidsteers',  }
+	            { title: 'SkidSteer', url: '/admin/skidsteers', icon: 'mdi-truck'  }
             ]
           },
           {
