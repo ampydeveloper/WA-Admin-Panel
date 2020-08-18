@@ -362,29 +362,21 @@ class AuthController extends Controller
 
         $getUser = User::whereEmail($email)->first();
         //check if email exist
-        if ($getUser != null) {
+        if ($getUser != null && $getUser->is_confirmed == 0) {
             $getUser->is_confirmed = 1;
             $getUser->save();
-            $message = "Your account has been successfully confirmed. Please login to proceed further.";
-            $status = true;
-            $errCode = 200;
+            return response()->json([
+                'status' => true,
+                'message' => 'Your account has been successfully confirmed. Please login to proceed further.',
+                'data' => []
+            ], 200);
         } else {
-            $status = false;
-            $message = "Your confirmation link has been expired.";
-            $errCode = 400;
+            return response()->json([
+                'status' => false,
+                'message' => 'Your confirmation link has been expired',
+                'data' => []
+            ], 400);
         }
-
-        // return response()->json([
-        //     'status' => $status,
-        //     'message' => $message,
-        //     'data' => []
-        // ], $errCode);
-
-        // return redirect()->route('test.index');
-
-        return redirect()->route('/');
-
-        // return Redirect::back();
     }
 
     /**
