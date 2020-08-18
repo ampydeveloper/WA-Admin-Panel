@@ -7,27 +7,16 @@ use App\Message;
 
 class MessageController extends Controller
 {
-    public function index()
-    {
-        $messages = Message::with(['user'])->get();
+   public function send(Request $request)
+	{
 
-           return response()->json([
-                'status' => true,
-                'message' => 'messages successful',
-                'data' => $messages
-            ], 200);
-    }
-
-    public function store(Request $request)
-    {
-
-        $message = $request->user()->messages()->create([
-            'body' => $request->message,
-	    'receiver_id' => $request->receiver_id
-        ]);
-
-        broadcast(new ChatEvent($message->load('user')))->toOthers();
-	$mesaage[] = $message;
-        return response()->json($mesaage);
-    }
+		$data = [
+			'message' => $request->input('message'),
+			'nickname' => $request->input('nickname'),
+		];
+		event(new ChatEvent($data));
+                return response()->json([
+                'status' => 'message is sent successfuly!'
+               ]);
+	}
 }

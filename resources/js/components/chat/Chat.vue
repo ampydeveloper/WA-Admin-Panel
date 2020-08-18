@@ -1,111 +1,66 @@
 <template>
-   <div class="row">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card card-default">
+                    <div class="card-header"><h5>Simple Public Chat <small>({{users - 1}} users online)</small></h5></div>
 
-       <div class="col-8">
-           <div class="card card-default">
-               <div class="card-header">Messages</div>
-               <div class="card-body p-0">
-                   <ul class="list-unstyled" style="height:300px; overflow-y:scroll">
-                       <li class="p-2" v-for="(message, index) in messages" :key="index" >
-                           <strong>{{ message.user.first_name }}</strong>
-                           {{ message.body }}
-                       </li>
-                   </ul>
-               </div>
-
-               <input
-                    @keydown="sendTypingEvent"
-                    @keyup.enter="sendMessage"
-                    v-model="newMessage"
-                    type="text"
-                    name="message"
-                    placeholder="Enter your message..."
-                    class="form-control">
-           </div>
-            <span class="text-muted" v-if="activeUser" >{{ activeUser.name }} is typing...</span>
-       </div>
-
-        <div class="col-4">
-            <div class="card card-default">
-                <div class="card-header">Active Users</div>
-                <div class="card-body">
-                    <ul>
-                        <li class="py-2" v-for="(user, index) in users" :key="index">
-                            {{ user.name }}
-                        </li>
-                    </ul>
+                    <div class="form-group">
+                        <div class="form-group p-2">
+                            <label for="nickname">Your nickname:</label>
+                            <input type="text" name="nickname" v-model="nickname" class="chat-input nickname" required>
+                        </div>
+                        <textarea rows="12" readonly="" class="form-control">{{dataMessages.join('\n')}}</textarea>
+                        
+                        <div class="p-2 message_block">
+                        <input type="text" v-model="message" placeholder="Your message" required class="chat-input">
+                        <button @click="sendMessage" class="btn btn-primary">Send</button>
+                        </div>
+                    </div>
                 </div>
+                <div>{{ error }}</div>
             </div>
         </div>
-
-   </div>
+    </div>
 </template>
-
 <script>
-   
+import { environment } from "../../config/test.env";
+import { chatService } from "../../_services/chat.service";
+
     export default {
-        props:['user'],
-        data: function () {
+        data: function() {
             return {
-                messages: [],
-                newMessage: '',
-                users:[],
-                activeUser: false,
-                typingTimer: false,
+                dataMessages: [],
+                message: "",
+                nickname: "",
+                users: "",
+                error: ""
             }
         },
-        created() {
-            this.fetchMessages();
-	  	  Echo.private('chat')
-            .listen('ChatEvent', (e) => {
-		console.log(e)
-                this.messages.push({
-                    message: e.message.message,
-                   
-                });
-            });
-                
+        mounted() {
+            var socket = io.connect('http://localhost:3000');
+            socket.on('userCount', function (data) {
+                this.users = data.userCount;
+            }.bind(this));
+            socket.on("news-action:App\\Events\\ChatEvent", function(data){
+		console.log(data);
+                this.dataMessages.push(data.nickname + ' : ' + data.message);
+            }.bind(this));
+
         },
         methods: {
-           
-            fetchMessages() {
-                const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-                axios.get('/api/auth/admin/message',
-		 { 
-	          headers:
-		    {
-			Authorization: "Bearer " + currentUser.data.access_token
-		    }
-		    }		
-		).then(response => {
-                    this.messages = response.data.data;
-                })
-            },
-            sendMessage() {
-            const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-                this.messages.push({
-                    user: 1,
-                    message: this.newMessage,
-		    receiver_id: 2
-                });
-                axios.post('/api/auth/admin/message', 
-		{message: this.newMessage, receiver_id: 2},
-		 { 
-	          headers:
-		    {
-			Authorization: "Bearer " + currentUser.data.access_token
-		    }
-		    }
-		).then(response => {
+            sendMessage: function() {
+                if (this.message === "" || this.nickname === "") {
+                    this.error = 'Type-in your nickname and message then kuldeep';
+                } else {
 
-                    this.messages.push(response.data[0]);
-		console.log(this.messages)
-                });
-                this.newMessage = '';
-            },
-            sendTypingEvent() {
-                
+		      chatService.send({message: this.message, nickname: this.nickname}).then((response) => {
+			this.message = "";
+			});
+
+              
+                }
             }
         }
     }
-</script> 
+</script>
