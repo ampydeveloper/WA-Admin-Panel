@@ -1,0 +1,2194 @@
+[33mcommit d6c0e391bc5e7abeea34996df74f7f5491f0b3c5[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m)[m
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Tue Aug 11 18:45:45 2020 +0000
+
+    add socket
+
+[33mcommit c0b7ea50689e650a48b21a405dee2b5adff94e2c[m
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Tue Aug 11 18:05:47 2020 +0000
+
+    fixed changes
+
+[33mcommit a15616b9555fef43f656708334b8f5b3c40777a1[m
+Merge: b318614 abe5650
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Mon Jul 27 16:17:17 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit abe5650e68c609fa9990181655608274df5b50ea[m
+Author: expertdev-designer <rohitpathania04@gmail.com>
+Date:   Mon Jul 27 21:16:25 2020 +0530
+
+    app.scss
+
+[33mcommit 757fb74408c05cca25708d30adb2d9c84842fb55[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Mon Jul 27 12:31:40 2020 +0530
+
+    fixed add bar menu icon and layout
+
+[33mcommit 7e220244372c3ef20e0fe1232463f0672d40c254[m
+Merge: 7785d0d 4df4f75
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Mon Jul 27 11:51:10 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 7785d0d9f905390fb06e98cdd07c4481fc96cd6c[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Mon Jul 27 11:50:58 2020 +0530
+
+    add sweetalert package
+
+[33mcommit 4df4f75f665bb81ee3cfbe27322fec1f0c302b08[m
+Merge: 99737df 9a47013
+Author: expertdev-designer <rohitpathania04@gmail.com>
+Date:   Sun Jul 26 22:49:32 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 99737dff67d93ef803cee66295d85158f31f272e[m
+Author: expertdev-designer <rohitpathania04@gmail.com>
+Date:   Sun Jul 26 22:49:18 2020 +0530
+
+    app.scss
+
+[33mcommit 9a470139f30b0998fbaa0ae19e5be2b50dca0944[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sun Jul 26 11:37:27 2020 +0530
+
+    fixed sidebar and add edit service page issue
+
+[33mcommit 68391a8178f455eac7e5bb45a2b308e20e20d6c1[m
+Author: expertdev-designer <rohitpathania04@gmail.com>
+Date:   Sun Jul 26 00:55:24 2020 +0530
+
+    app.scss,list,add,edit
+
+[33mcommit 56675e0c444c1573c546dac6e89d00bcd89a812b[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sat Jul 25 21:14:04 2020 +0530
+
+    added sweatalert
+
+[33mcommit e2a5c3a59cab82ee35084e910b1b4bd405107f5a[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sat Jul 25 20:44:58 2020 +0530
+
+    added animations
+
+[33mcommit e2e5f18ae1ac45d3547c79f02ef1968ab0137969[m
+Merge: 97538c3 00377dd
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sat Jul 25 20:23:07 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 97538c312eb4903c904ab77473c0c3cb2d31a697[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sat Jul 25 20:21:59 2020 +0530
+
+    add table and delete icon
+
+[33mcommit 00377dd767a22a35754c40088e5557b3a292c661[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sat Jul 25 20:21:39 2020 +0530
+
+    fixed header issue
+
+[33mcommit 27b82d0459babb93f8013b42cf85064e43a6b7ce[m
+Author: expertdev-designer <rohitpathania04@gmail.com>
+Date:   Sat Jul 25 19:44:49 2020 +0530
+
+    app.css,appbar
+
+[33mcommit f843f2af77ce0d818f9708bcd9812000323217ab[m
+Merge: 7ed1da4 9ae5b85
+Author: expertdev-designer <rohitpathania04@gmail.com>
+Date:   Sat Jul 25 18:42:30 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 7ed1da46d5517cc8db676c10b10f630b41e86671[m
+Author: expertdev-designer <rohitpathania04@gmail.com>
+Date:   Sat Jul 25 18:42:18 2020 +0530
+
+    nothing
+
+[33mcommit 9ae5b855c660d4677fa2e8c398ffe041b6b06533[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sat Jul 25 18:29:15 2020 +0530
+
+    fixed highlight
+
+[33mcommit cf755970fb9f0f7de675b8ca07b2eaa950dc2d13[m
+Author: expertdev-designer <rohitpathania04@gmail.com>
+Date:   Sat Jul 25 16:33:55 2020 +0530
+
+    app.scss,add-edit-list
+
+[33mcommit b318614f34e2ec4982c56918cb6c5af4332d0a09[m
+Merge: cb234e8 0137dcb
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Sun Jul 12 05:53:17 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 0137dcb6e63f316aa9578cbbf9eddccf63182006[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sun Jul 12 09:12:16 2020 +0530
+
+    fix ui changes
+
+[33mcommit bab1580bedaa26148d70053f5baeeacab3fabac1[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sat Jul 11 21:28:41 2020 +0530
+
+    customer farm warning message
+
+[33mcommit e2158e2553d7a60f4de75153f0a8cba8ea6cb731[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sat Jul 11 20:45:04 2020 +0530
+
+    api recover password, forgot password
+
+[33mcommit f0b00fe3ed2086497a96c3cd678abbef9ffd9813[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sat Jul 11 19:56:46 2020 +0530
+
+    fixed change password
+
+[33mcommit 53538b8f0ea92dbcfe03ace7d3cff46d5e7ba05f[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sat Jul 11 19:50:35 2020 +0530
+
+    fixed forgot password issue
+
+[33mcommit cb234e849fe4c9aa30874caf89e3d24789f3307a[m
+Merge: cc682cd f8b4dc6
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Sat Jul 11 12:52:34 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit f8b4dc6f38da39ece36fa11e915b60b9bedb6abf[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sat Jul 11 18:22:11 2020 +0530
+
+    added images
+
+[33mcommit 67ade8346fc7693d72bf7730573b1791fca11b83[m
+Merge: f83ab06 0626960
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sat Jul 11 18:16:11 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit f83ab06ba28adcfa9a0087a34e84e706f187e433[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sat Jul 11 18:16:07 2020 +0530
+
+    add login page design
+
+[33mcommit cc682cd4ec702ba85cfafd6cfdafca5cce9ee2da[m
+Merge: b5e2c16 0626960
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Sat Jul 11 12:45:34 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 06269606df03c4cfa422400d64b173f3e65ede82[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sat Jul 11 18:14:10 2020 +0530
+
+    added css animations register login
+
+[33mcommit 33be0a74159de8a1c33e5752353287c938c443e5[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sat Jul 11 17:56:17 2020 +0530
+
+    add login page design
+
+[33mcommit b77463dc5e234bfa7a3bf232e7cff1b12c0a524a[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sat Jul 11 17:31:29 2020 +0530
+
+    add login page design
+
+[33mcommit 23d8881d230c67f8526fea1f4002314134ee503f[m
+Merge: 9a9768e defa167
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sat Jul 11 17:07:52 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 9a9768e2dab9446ec1e42d9dcdf55cb91f3ea664[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sat Jul 11 17:07:37 2020 +0530
+
+    add login page design
+
+[33mcommit 07308fcf7879b084734b2aa228041b688107e8aa[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sat Jul 11 17:07:00 2020 +0530
+
+    add login page design
+
+[33mcommit b5e2c16d39acc7d2184d7b38af196e68dee310ec[m
+Merge: 33e3e2f defa167
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Sat Jul 11 11:15:16 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit defa16722a2e225c8e4fb12e23042409e3a232ff[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sat Jul 11 15:15:47 2020 +0530
+
+    add user to hubspot on time of registration
+
+[33mcommit 33e3e2f3af6feaaa1f6b356572c4562b2e467ca4[m
+Merge: 023759c 5f0c03a
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Sat Jul 11 07:29:53 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 5f0c03a856b15ce437ef5a8bb629720fb4b77bc7[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Fri Jul 10 08:02:40 2020 +0530
+
+    fix customer add more link broken and customer listing or add more for customer edit section
+
+[33mcommit b58e9750af10ddfb41e7e1584cd6ef87a1cafbdf[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Thu Jul 9 23:08:26 2020 +0530
+
+    fixed issue add more farm in customer
+
+[33mcommit 4d67e3bc93799661ce931832db347f6bea0258ff[m
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Thu Jul 9 00:31:27 2020 +0530
+
+    Form changes.
+
+[33mcommit 1000ce49aeecf606bc2552c253390099c09f2c5f[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Wed Jul 8 21:12:36 2020 +0530
+
+    fixed header icon issue
+
+[33mcommit 1f00d66e4c91065588c6157eadb0acd398ba9b4e[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Wed Jul 8 20:40:33 2020 +0530
+
+    fixed close edit popUp
+
+[33mcommit 023759c703cad307969687f5cb70aaac0864fbd3[m
+Merge: d0e080d 43d2467
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Wed Jul 8 09:09:12 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 43d246725730ee0391ea9fecf9ce8ff74a6b1751[m
+Merge: 436169a a8d6ce9
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Wed Jul 8 00:43:48 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 436169a2ba3e5693cf5f53b844d7784da28caa76[m
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Wed Jul 8 00:43:20 2020 +0530
+
+    Header changes.
+
+[33mcommit a8d6ce9f940c49a031eadc72b63f9e04296dfd62[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Tue Jul 7 22:51:30 2020 +0530
+
+    fixed chart
+
+[33mcommit 4ada1463ceafcfda52ecbb7687bd327d656ee37a[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Tue Jul 7 22:18:40 2020 +0530
+
+    fixed sidebar issue and added charts on dashboard
+
+[33mcommit caa1a5180ca5334dfbecd10c16c8ccd8a1452781[m
+Merge: 944dc63 a31ea1d
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Tue Jul 7 22:03:52 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 944dc63d48e492e4293c63f2dbe8a805309b5d80[m
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Tue Jul 7 22:03:43 2020 +0530
+
+    Sidebar changes.
+
+[33mcommit a31ea1d9a20aed297665df9a09d55e7f2e80da54[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Tue Jul 7 21:54:12 2020 +0530
+
+    fixed edit issue on service
+
+[33mcommit 61d1526207192d88d4fa67dfada674e09d016f3a[m
+Merge: f2ec554 3309d28
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Tue Jul 7 21:12:38 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit f2ec554396336e660545747635d85bf36d733f55[m
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Tue Jul 7 21:12:29 2020 +0530
+
+    Skidsteer button change.
+
+[33mcommit 3309d289cd15337ed5c973ca5c90380fff72dc38[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Tue Jul 7 12:06:48 2020 +0530
+
+    fix form validation in edit customer farm
+
+[33mcommit 0f43dca459e6be30e778eca20c24f00dc4bac6f5[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Tue Jul 7 10:02:21 2020 +0530
+
+    fixed highlight only selected row
+
+[33mcommit b65383e913a52fd5cbe0c13b9900fc8e17b1a09e[m
+Merge: faef133 7bb7ce2
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Mon Jul 6 23:30:23 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit faef133e7b07e017918d70b736dbfc8413fdfea1[m
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Mon Jul 6 23:30:13 2020 +0530
+
+    Design changes.
+
+[33mcommit 7bb7ce26bc0d3fac38558a9f5b09ab32e16ee265[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Mon Jul 6 23:01:57 2020 +0530
+
+    rollback drawer
+
+[33mcommit 45db77abd9c7da2261cf6b50a2db1846ba4e5272[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Mon Jul 6 22:52:48 2020 +0530
+
+    fixed farm tab issue
+
+[33mcommit 0252712c1a54082fc1c36409faa305243508c4de[m
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Sun Jul 5 23:54:24 2020 +0530
+
+    Design changes.
+
+[33mcommit 0cfdad103b5940985b815db2b22a8435f11964fd[m
+Merge: eb16cf9 140eb6a
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Sun Jul 5 19:25:18 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit eb16cf9f49c112de2d9b87b3b27e4c1272eb2f67[m
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Sun Jul 5 19:25:10 2020 +0530
+
+    Design modification.
+
+[33mcommit 140eb6a31abd3e4a39bb2a2fb9f23d73cca4d44f[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sun Jul 5 18:02:16 2020 +0530
+
+    fixed edit farm and customer
+
+[33mcommit 50dff72bab5e69ab79965cc0ccca9228955ff787[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sun Jul 5 14:47:19 2020 +0530
+
+    fixed id card image validation and default image issue
+
+[33mcommit 9a907cf5d9f72c1d462b771b0c9543be36d824f7[m
+Merge: 236e276 62de983
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sun Jul 5 06:51:57 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 236e276c8a3eda103e64e636d3205760d93f2567[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sun Jul 5 06:51:47 2020 +0530
+
+    merge request
+
+[33mcommit 62de983c77deaa4c0963b126ad031ef49f0c79b8[m
+Merge: 5d86866 75b1766
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Sun Jul 5 00:23:35 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 5d8686661d86d9dff1debbb65a40feb74af1944d[m
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Sun Jul 5 00:23:22 2020 +0530
+
+    Worked on jobs page design.
+
+[33mcommit 75b17667d721ee1cf114b4fc455699776eef81f6[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sat Jul 4 20:06:52 2020 +0530
+
+    fixed add customer and add more farms
+
+[33mcommit 2e6374a97d60d466c97771f4c8bec09695e17566[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sat Jul 4 18:07:29 2020 +0530
+
+    fixed customer add issue
+
+[33mcommit 533fb79456e2039c0692d6880a87d4d22b865214[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Wed Jul 1 20:52:10 2020 +0530
+
+    fixed add job
+
+[33mcommit 248260ef990dec802bbb8ab8bf886c828f6cd463[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Wed Jul 1 15:15:18 2020 +0530
+
+    add another farm tab
+
+[33mcommit d0e080dd305ab1d567339ec8549b9700086df94b[m
+Merge: 1517d41 d465ff4
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Tue Jun 30 15:51:00 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit d465ff4c2b5b84470a660a3567e5c4da22c67c6f[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Tue Jun 30 21:20:43 2020 +0530
+
+    fixed facebook and login issue
+
+[33mcommit 1517d41e9d424a4b32a5ca4071acd868ceafa6a5[m
+Merge: a2e40b7 208a161
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Tue Jun 30 15:49:47 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 208a1616a1a21304f36d44e48a8516a51f8c415e[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Tue Jun 30 21:19:03 2020 +0530
+
+    fixed facebook and login issue
+
+[33mcommit a2e40b74f27fbc194505b3176b37d4050741fb8e[m
+Merge: 934b82e 671d327
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Tue Jun 30 15:40:16 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 671d327a9e024c06323700b4d13d0c6659739cd1[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Tue Jun 30 21:09:32 2020 +0530
+
+    fixed facebook login issue
+
+[33mcommit 934b82e6f3cbaddd0be56a5069812030d6a54b75[m
+Merge: 56c5efb f4b9b9b
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Tue Jun 30 15:13:05 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit f4b9b9b32e0d81ec24a793caee6a84c020e02a51[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Tue Jun 30 20:42:32 2020 +0530
+
+    added facebook login
+
+[33mcommit 56c5efbfee4e076f7f9a20b7ff82b6f71894f2e9[m
+Merge: fac5869 d081c1b
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Mon Jun 29 17:19:04 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit d081c1b67edddd12c3a629883b837195dedf4baf[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Mon Jun 29 22:48:13 2020 +0530
+
+    fixed enter issue on services
+
+[33mcommit fac5869779ae710e2264370e0b23aa52157b1345[m
+Merge: 9666928 13d4db5
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Mon Jun 29 15:21:48 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 13d4db5a4c93866cb55cc42555853e5122f8e0f7[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Mon Jun 29 20:50:54 2020 +0530
+
+    for submit on enter button
+
+[33mcommit 43f8799e13f08f910f47febbda2bdbfca2f7edfe[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Mon Jun 29 16:50:20 2020 +0530
+
+    fix image issue on hauler add edit
+
+[33mcommit 96669281b9ab5a022f1d36b99595d541dd45d264[m
+Merge: 89dde7e cbbff6b
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Mon Jun 29 10:40:13 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit ad5a10b03c72af1994236ed0ea08d50cb12261f0[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Mon Jun 29 16:09:23 2020 +0530
+
+    fixed admin image loading
+
+[33mcommit cbbff6bd870df2e60a6865606ba2951e2c0c3e2d[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Mon Jun 29 16:04:19 2020 +0530
+
+    fixed admin image loading
+
+[33mcommit 89dde7e75dc80c8afb7a2396e7e0f411a563ab76[m
+Merge: e2dd11b 8ecf841
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Mon Jun 29 10:12:50 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 8ecf8415417fd086785cdfb0a54df7de416866e7[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Mon Jun 29 15:41:22 2020 +0530
+
+    fixed admin profile image uplaoding issue
+
+[33mcommit 38909b8974e3311bbf7a6bd0c651e1d6662d9cee[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Mon Jun 29 15:38:16 2020 +0530
+
+    fixed admin image loading
+
+[33mcommit e2dd11b01a6252f9ef1b923ada6776a055ba9e63[m
+Merge: 37a5624 3e0e7bb
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Mon Jun 29 09:45:46 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 3e0e7bb7aa0bba2029304790a087ec0cb414cac2[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Mon Jun 29 15:14:59 2020 +0530
+
+    fixed admin image loading
+
+[33mcommit 37a5624fdb8921915b3ec36edc7f1dcc450f193a[m
+Merge: 1ef5cba 67117c6
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Mon Jun 29 09:30:31 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 67117c634cebf56505fa0fe4a41126090b911d2c[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Mon Jun 29 14:59:14 2020 +0530
+
+    fixed admin profile image uplaoding issue
+
+[33mcommit 1ef5cba937f284e60aa5664344632010ffdf43d0[m
+Merge: eca9b37 1ab45b8
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Mon Jun 29 09:14:53 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 1ab45b8907ab541b9e44bd89edd5d13f42638459[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Mon Jun 29 14:32:15 2020 +0530
+
+    fix image laoding issue
+
+[33mcommit eca9b37c6748a5ef88873fb74c9ccf493793d7dc[m
+Merge: ddab1e4 dc1b8fb
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Sun Jun 28 13:36:55 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit dc1b8fbe7089a498ea3a274346b969774f4a278b[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sun Jun 28 19:05:49 2020 +0530
+
+    fixed list customer issue
+
+[33mcommit ddab1e4bfd277db1ab2f9d91c962ac8b2bc0fe06[m
+Merge: f7c390d 00155ce
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Sun Jun 28 12:19:47 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 00155ce29d7222691af97c82737c64865eb79265[m
+Merge: e6859ae a0f0734
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sun Jun 28 17:46:52 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit e6859aeacbbb8c86c7318be3a77190650f5ae6c5[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sun Jun 28 17:46:41 2020 +0530
+
+    fixed migrate issue and chaged table name
+
+[33mcommit f7c390dbb4202b741d401f2de8a674904c21d017[m
+Merge: bfdc39f a0f0734
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Sun Jun 28 11:34:16 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit a0f073424fd00d370889e96e1e5fb9a204443de0[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sun Jun 28 15:03:28 2020 +0530
+
+    hauler customer crud done
+
+[33mcommit bfdc39f1e0818ac33ac811c7d49d4c79a7b78a13[m
+Merge: dae4c65 35359b1
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Sun Jun 28 07:59:58 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 35359b150f86176e9f6fbc5844a71aec7efef5c9[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sun Jun 28 13:27:58 2020 +0530
+
+    add image uploading validation
+
+[33mcommit dae4c652c76481744fdd195f07b433ea6bd7039e[m
+Merge: 4a1c9d7 8c25377
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Sun Jun 28 06:47:36 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 8c2537750e1b590964704ac5265bcb90b8f825e0[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sun Jun 28 12:16:37 2020 +0530
+
+    add farm_id in user table new migration
+
+[33mcommit 0e933e7684e72a5e76014daa7ce7d28e4ccaf8f2[m
+Merge: d82fd75 0019b20
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sun Jun 28 01:42:49 2020 +0530
+
+    add truck insurance date validation and pofile image
+
+[33mcommit d82fd75710bbd35ac0b8b6903a4e1348d9187eb4[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sun Jun 28 00:05:17 2020 +0530
+
+    pull request
+
+[33mcommit 4a1c9d7d0a13c12bdb5ec7d7bdecd657a1c914f2[m
+Merge: a1ad770 0019b20
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Sat Jun 27 18:07:02 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 0019b20692ef450a3ca353e819e481dbf6d67590[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sat Jun 27 23:36:18 2020 +0530
+
+    fixed validation issue
+
+[33mcommit a1ad7704b4497fe7c92a3e0ee3c2bc9d6d6e8465[m
+Merge: b8fe5da d560cc1
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Sat Jun 27 17:26:38 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit d560cc10aa4805fa6f20e684f15c999fb31a4584[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sat Jun 27 22:55:56 2020 +0530
+
+    removed driver image required
+
+[33mcommit b8fe5da61b8983e3af7adae293ec5f59ed00726c[m
+Merge: b074891 be2b8a0
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Sat Jun 27 17:18:16 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit be2b8a016c24504371de00376da57d92e7465923[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sat Jun 27 20:38:37 2020 +0530
+
+    fixed customer add form
+
+[33mcommit b07489122cbdeb5d94262bae135f0ae3700c9de1[m
+Merge: ccbd390 d58de2b
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Sat Jun 27 09:23:38 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit d58de2bd47711ae42f731889b563ad4a0fb345fd[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sat Jun 27 12:12:20 2020 +0530
+
+    added step form for customer
+
+[33mcommit ccbd390761d0f955276441c3b5974a5b6be05f80[m
+Merge: 75d8716 5f3972b
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Fri Jun 26 19:12:00 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 5f3972bb617c13bea2c1451e6cd41ef841e35cef[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sat Jun 27 00:40:55 2020 +0530
+
+    add skidsteer data
+
+[33mcommit 75d87163b0c0ec123ab407c51e69e9a5ead7ef5f[m
+Merge: bd3c2cb a13508a
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Fri Jun 26 18:52:39 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit a13508a34d57c902edeeebda0212ad6579c7a020[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sat Jun 27 00:05:59 2020 +0530
+
+    add service edit row lenght
+
+[33mcommit bd3c2cbc2ab4d358570b284b5f5fe8807a927915[m
+Merge: 4a3d00f 23a74cd
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Fri Jun 26 17:59:51 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 23a74cd0b89d44300a0e314837c7a590eadec51d[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Fri Jun 26 23:29:15 2020 +0530
+
+    fixed issues
+
+[33mcommit 4a3d00fc51994d67af47bcdd3331f2d5282197fc[m
+Merge: f62d5cd a8cfce0
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Fri Jun 26 15:13:13 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit a8cfce0a8af71affac1a5290a73700a6f9e6c17e[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Fri Jun 26 20:42:11 2020 +0530
+
+    removed add manager and farm
+
+[33mcommit d10c61fcc15ef01908dd5e5ed12905cf62f17856[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Fri Jun 26 17:37:00 2020 +0530
+
+    fix changes
+
+[33mcommit 5efe4570521330f302b6e6ee895f6c73a7a39132[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Fri Jun 26 16:40:54 2020 +0530
+
+    pull request
+
+[33mcommit 0bd370cb998c5112bfa01369e910a02a136f6cd5[m
+Merge: e6808fd 8f31fc3
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Fri Jun 26 00:01:31 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit e6808fd1f2e8915d34078a93f898aef401da5a7e[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Fri Jun 26 00:01:22 2020 +0530
+
+    add new changes of job lisitng and add status filter
+
+[33mcommit f62d5cde40878c6e3d0944352fa180f658130122[m
+Merge: b94ebfe 8f31fc3
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Thu Jun 25 18:03:18 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 8f31fc37d4e786c99c6d4769c4c008f8be5bee7b[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Thu Jun 25 23:32:32 2020 +0530
+
+    added add manager and add farm
+
+[33mcommit b94ebfee3e82e494ac7856b9acb2f2b91f1a7567[m
+Merge: 478e61c 4ba3cfe
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Thu Jun 25 17:58:37 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 4ba3cfeceb79e134d16d5895c3ff3fef86fadf92[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Thu Jun 25 23:27:39 2020 +0530
+
+    fixed hauler add and list backend frontend
+
+[33mcommit 478e61cff068085e8793fa40c01711c5a584df2c[m
+Merge: b50f113 b6ed890
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Thu Jun 25 15:12:28 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit b6ed890457596f8ba9654d57aaa63e9d23740444[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Wed Jun 24 20:28:39 2020 +0530
+
+    add video upload validation in truck serivce
+
+[33mcommit b50f113196fa34f430fb7f2f88de0dd67475b3c7[m
+Merge: 4da864f 32ec5eb
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Wed Jun 24 09:22:35 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 32ec5eb32158f4387b1799363e8f0ca7b5aeaf48[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Wed Jun 24 11:35:14 2020 +0530
+
+    add manager role route
+
+[33mcommit 4da864ff0a7e218505c7332a8dadb49f19e6635b[m
+Merge: 116e8dd 7632885
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Tue Jun 23 18:42:33 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 76328859b34f75e4df09d6d85dc7705ed453cd27[m
+Merge: 017f526 65cab73
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Wed Jun 24 00:12:11 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 017f5264dc0017f1f376f0d0219bc06bc4ae22a1[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Wed Jun 24 00:12:01 2020 +0530
+
+    add manager menu and driver menu
+
+[33mcommit 116e8ddb6d12f2a50fac0a4811c0f5e56ea06af6[m
+Merge: 0b04d38 65cab73
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Tue Jun 23 18:26:05 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 65cab7351139ecf41d4be79e5987c7aa5564cb64[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Tue Jun 23 23:55:27 2020 +0530
+
+    fixed time slots issue
+
+[33mcommit 12e9503929da12fb72385a7bfce54ea91c2b4fca[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Tue Jun 23 23:10:14 2020 +0530
+
+    fixed cross icon
+
+[33mcommit 0b04d3822f504506e39bdd6eeabb121b8cf6d66b[m
+Merge: 167556b 7663274
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Tue Jun 23 17:32:52 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 7663274e8ba830c011cbd02d03b58768e7f22824[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Tue Jun 23 23:01:59 2020 +0530
+
+    fixed tome slots issue
+
+[33mcommit cf8b0f091cbea6a3b4e21c3e1f5c8698ef809322[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Tue Jun 23 20:54:58 2020 +0530
+
+    added loader
+
+[33mcommit 167556bff122712c65eafe2187e266390398fd8e[m
+Merge: 19fd887 13c0f1b
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Tue Jun 23 14:54:09 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 13c0f1b6e90fdb14393ee38c3391666c0ee7a78c[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Tue Jun 23 20:11:47 2020 +0530
+
+    add service time slot required
+
+[33mcommit 29dc50f47b73ddc3b87ddf3055d571f3630c0a36[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Tue Jun 23 19:54:13 2020 +0530
+
+    add truck dashboard
+
+[33mcommit 0ef5512cc7a23591afd443590eb18d6d204e3380[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Tue Jun 23 19:33:30 2020 +0530
+
+    add crsoo on image and add trcuk route
+
+[33mcommit e02c3631c978c3f8e62f4c325872c1e84fa5dea3[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Tue Jun 23 14:42:02 2020 +0530
+
+    add manager role menu
+
+[33mcommit 19fd8878195dc88e042b2389a9edfc168c8ed628[m
+Merge: 3e63dc1 7a8bb72
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Mon Jun 22 18:53:29 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 7a8bb72e29cc89193acf5d26d5c6e5c0566beacc[m
+Merge: 103d4e6 08ef6c5
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Tue Jun 23 00:22:57 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 103d4e60767d215168c67b50ca1832f777d25113[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Tue Jun 23 00:22:47 2020 +0530
+
+    add email confimation cehck
+
+[33mcommit 3e63dc122eb73b7aab38a011409b78c603d538b5[m
+Merge: 3907556 08ef6c5
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Mon Jun 22 18:47:06 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 08ef6c52ead9258c605eb707b6a830b255d0b45b[m
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Tue Jun 23 00:12:50 2020 +0530
+
+    Css fix.
+
+[33mcommit e4bb45c57e3c9ee7d4a0d2a615ccaaf7c4d9a911[m
+Merge: dbcb822 da2fda6
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Tue Jun 23 00:01:03 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit dbcb82208ef6875b3e151d083a0e6568aae2d071[m
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Tue Jun 23 00:00:48 2020 +0530
+
+    admin design.
+
+[33mcommit da2fda60f3603c65c816a22d44c2d78fe1ce0cf6[m
+Merge: 1eff7a1 cd13b06
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Mon Jun 22 23:57:50 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 1eff7a16a870d21c37dc55072d075a608395928b[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Mon Jun 22 23:57:36 2020 +0530
+
+    fixed admin profile issue
+
+[33mcommit 39075569d65bb65ce5d0fdc9f2bc8823958cf491[m
+Merge: 0d1d6e2 cd13b06
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Mon Jun 22 17:49:26 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit cd13b06d5dc0488b7ae8de81ce028ba997dc9068[m
+Merge: 1b5c10b 3d94f98
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Mon Jun 22 23:18:30 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 1b5c10b302236fbdcf487b7df9726c4f5ca29f3e[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Mon Jun 22 23:18:11 2020 +0530
+
+    add dumping area lat long on dispatch
+
+[33mcommit 0d1d6e2061e58c1b118f09567ff3f7b679747cbb[m
+Merge: b7428ae 3d94f98
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Mon Jun 22 17:34:34 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 3d94f9888abc03c3607e4f4818c95ccd5468f09d[m
+Merge: 672a2f4 faeb628
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Mon Jun 22 23:02:31 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 672a2f49437863735480af7edc523c077ecb964c[m
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Mon Jun 22 23:02:20 2020 +0530
+
+    Search place fix.
+
+[33mcommit faeb6284ca8944354772eba918c6a3e444bba250[m
+Merge: 04d7aed 46e4bca
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Mon Jun 22 23:01:43 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 04d7aedf4d645e78b87224ebdd618b917950ee12[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Mon Jun 22 23:01:38 2020 +0530
+
+    add dumping area lat long on dispatch
+
+[33mcommit b7428ae8858daac1d9b0501597db91c02f0ebb18[m
+Merge: 58adeed 46e4bca
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Mon Jun 22 17:30:32 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 46e4bcaf1a5ac8b1211bfafecc9855b025b1fb78[m
+Merge: 2364b04 19888ab
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Mon Jun 22 22:58:33 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 2364b043249de258b7f72a394238ac6e03ff800b[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Mon Jun 22 22:58:21 2020 +0530
+
+    fixed user image issue
+
+[33mcommit e896fe3bcf271d5d151f150d03a393e6454d6b91[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Mon Jun 22 22:52:15 2020 +0530
+
+    add dumping area lat long on dispatch
+
+[33mcommit 19888ab3d819442b67b44c7cefcb3d5c3540ef42[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Mon Jun 22 22:42:15 2020 +0530
+
+    fix gate number migration
+
+[33mcommit a0632ef8cacf79a87eb8d0dcad1ce00e32f75580[m
+Merge: ba0b9ad 47451e6
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Mon Jun 22 22:28:02 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit ba0b9ad364b8cab3f0493a06537bde04f4c1591d[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Mon Jun 22 22:27:48 2020 +0530
+
+    fix lat and long value in add customer farm
+
+[33mcommit 47451e67713a9710c01a1227387828fab26a57c3[m
+Merge: c0bc203 c99859d
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Mon Jun 22 22:17:58 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit c0bc2036d421042bebbb9c35bcddff1d10eac4ed[m
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Mon Jun 22 22:15:55 2020 +0530
+
+    Container fluid added.
+
+[33mcommit 58adeed801437a7711f7165eed58add82edc0f3e[m
+Merge: 7b0075c c99859d
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Mon Jun 22 16:21:04 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit c99859dadd27cc696b34dae86dd0b645630b4b3b[m
+Merge: cb93397 71378de
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Mon Jun 22 21:48:39 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit cb9339744e44b7f5a599123e4eb1eb96d9c5009c[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Mon Jun 22 21:48:27 2020 +0530
+
+    fixed date issue
+
+[33mcommit 71378def7f8a29afe3e821bb7e75fbf18bf4b3b9[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Mon Jun 22 21:36:07 2020 +0530
+
+    remove chat migration
+
+[33mcommit 9648e4d9e7c64cedeb38d7af3081418b39e044fc[m
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Mon Jun 22 00:20:02 2020 +0530
+
+    Dispatch container fluid added.
+
+[33mcommit c3f63869f6722dcfbc14ad1b9271af004948631c[m
+Merge: fb082a4 87fdda9
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Mon Jun 22 00:10:21 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit fb082a4a0c3d553814139bfae4b1cd8487b9244b[m
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Mon Jun 22 00:10:11 2020 +0530
+
+    Css fixes.
+
+[33mcommit 87fdda93041783cbf62f61bd248995ca3c17a73d[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Mon Jun 22 00:00:55 2020 +0530
+
+    added all jobs api
+
+[33mcommit 80b0cf2c7913fd096e03a14a254c4228d6da6d40[m
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Sun Jun 21 23:30:45 2020 +0530
+
+    Dispatch table.
+
+[33mcommit 284c7eff7e5f64aaeb1cc9c56203e8144eff1f97[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sun Jun 21 22:05:35 2020 +0530
+
+    fixed map issue on customer edit page
+
+[33mcommit 183e0a46e94b6ac52a27e0f02fd4ec96167a62c5[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sun Jun 21 21:42:12 2020 +0530
+
+    added uber creds to env
+
+[33mcommit e31119abdd4ba4f431b7711ca6c3edf07faf1aea[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sun Jun 21 21:04:37 2020 +0530
+
+    add setting migration
+
+[33mcommit 60b70f4b5fd3ffafc26060d49c321bb901e18093[m
+Merge: bfcb5d1 4d9aac1
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sun Jun 21 20:51:37 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit bfcb5d15418a8f4f1536c258d35ea1a9159e19d5[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sun Jun 21 20:51:26 2020 +0530
+
+    add map search on customer add screen
+
+[33mcommit 4d9aac18945114444c418e90f7d65e0a90541282[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sun Jun 21 17:34:27 2020 +0530
+
+    fixed image upload issue
+
+[33mcommit e7d988b7b525f45f2ef6428e5561b80235065666[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sun Jun 21 13:39:05 2020 +0530
+
+    add salary and driver salary details
+
+[33mcommit 59d7dbb79a79307beeeec198ec49e70c899a4e10[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sun Jun 21 12:17:55 2020 +0530
+
+    add details page for salary
+
+[33mcommit 0dbf945d7f8eab1171cb88fb610b857827b6df3f[m
+Merge: 86849fa dc2b683
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sun Jun 21 01:24:36 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 86849faeb31d9c17f8cc9fb65e5f354c632a3747[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sun Jun 21 01:24:24 2020 +0530
+
+    fixed account query issue
+
+[33mcommit dc2b6836f473d15fb813defecf22259cd1769ef1[m
+Merge: cf7b8a0 be7bf3b
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sun Jun 21 00:47:47 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit cf7b8a0b3168cf2438e175c33558f9b9eff25f1f[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sun Jun 21 00:47:33 2020 +0530
+
+    salary tab
+
+[33mcommit be7bf3bc217d5fb319ec76570a0c46b927d6b14b[m
+Merge: 063e389 6f928fc
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sun Jun 21 00:44:46 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 063e389ada39fa526c6392f76b3349bd6e95c038[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sun Jun 21 00:44:37 2020 +0530
+
+    fixed customer farm issue
+
+[33mcommit 6f928fc65f89a5d859aa180cec6fcacabec400ba[m
+Merge: f12990d 22c3caf
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sun Jun 21 00:20:33 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit f12990db01752d1094ed129d6f1730bb98f2acb4[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sun Jun 21 00:20:23 2020 +0530
+
+    add payment, salary accounting tabs and api
+
+[33mcommit 22c3caf541a0f6fc84e328732d3a6c7da6f73b53[m
+Merge: d61b046 fab1ce2
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sat Jun 20 20:57:09 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit d61b0469e07c66888d2685fc775662f2b4aa2278[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sat Jun 20 20:56:54 2020 +0530
+
+    added customer loader
+
+[33mcommit fab1ce27fe6d532de99b1c0879603f4852b4daef[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sat Jun 20 19:26:38 2020 +0530
+
+    add images in service section
+
+[33mcommit aca11ef81100a38c8ae67afc29a60b39d2c9a2b4[m
+Merge: 4bacf98 a528b80
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sat Jun 20 18:01:57 2020 +0530
+
+    fixed regiser form and truck capacity
+
+[33mcommit 4bacf98b8850bcd5088bc71edddfdf4ff8b8af5a[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sat Jun 20 18:00:17 2020 +0530
+
+    fixed regiser form and truck capacity
+
+[33mcommit a528b80e9dacfc08029f390517ec873563d7dd9b[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sat Jun 20 17:58:37 2020 +0530
+
+    added loader fixed customer and manager update issue
+
+[33mcommit 1b2aed94997ec74c8f3813e0b233aaa3f5256eab[m
+Merge: 638d568 e171ebc
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sat Jun 20 14:12:02 2020 +0530
+
+    new change in service section
+
+[33mcommit 638d568fe39844d7f285bf9df7094bc1706becae[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sat Jun 20 14:07:18 2020 +0530
+
+    new change in service section
+
+[33mcommit e171ebcb531e3c103eb87f31df752830918c69ff[m
+Merge: fb90242 717715f
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sat Jun 20 00:01:09 2020 +0530
+
+    fixed conflicts
+
+[33mcommit fb902423f3041cc1ac99fd6d3a735827e1e418b5[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Fri Jun 19 23:59:23 2020 +0530
+
+    resolved
+
+[33mcommit 0e6062cd9a8a79c0ef37b34a275831b5a3972b56[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Fri Jun 19 23:58:46 2020 +0530
+
+    fixed farm page
+
+[33mcommit 717715f5b792f039bd457c6f4a10100d51d48efb[m
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Fri Jun 19 23:55:48 2020 +0530
+
+    Customer farm tab disable.
+
+[33mcommit 608639d009b0c677110819f05050534989e79944[m
+Merge: f08573d 710fe02
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Thu Jun 18 00:30:38 2020 +0530
+
+    resolved conflicts
+
+[33mcommit f08573d2f91730fe37e221715a97e3955ae5b11b[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Thu Jun 18 00:29:45 2020 +0530
+
+    fixed cron
+
+[33mcommit 710fe02c10f191aee519761f7ace34ee193380b0[m
+Merge: 21e08b1 e36f4d4
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Wed Jun 17 23:58:06 2020 +0530
+
+    Conflict resolve.
+
+[33mcommit 21e08b18faeb6178031b4987cdf2b9250d6487cf[m
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Wed Jun 17 23:57:05 2020 +0530
+
+    user layout.
+
+[33mcommit e36f4d4cc14f62e3c227db29b61a40640e9ebb79[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Wed Jun 17 22:27:53 2020 +0530
+
+    add invoice lisitng and api
+
+[33mcommit 11ae9cccb059d8c2a7f5c8b88e22f5311c2ecb94[m
+Merge: 6ef7c86 9bb08eb
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Wed Jun 17 00:45:36 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 6ef7c8635f6d2c57c985cce508f54fed93b1bb8e[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Wed Jun 17 00:45:26 2020 +0530
+
+    add driver type
+
+[33mcommit 9bb08ebd1dd02f253d9429a2cea470a341c61468[m
+Merge: 7957560 442b427
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Wed Jun 17 00:25:51 2020 +0530
+
+    fixed conflicts
+
+[33mcommit 79575608338199ff5bcd7795f5a9e97086bb1b06[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Wed Jun 17 00:25:24 2020 +0530
+
+    added cronjob
+
+[33mcommit 442b427d7d704ec465175e49e98e7de5d234d080[m
+Merge: 512c2e8 2f93baf
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Wed Jun 17 00:11:39 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 512c2e815ca3eb4b086040ce97a9be7b263b96b8[m
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Wed Jun 17 00:11:31 2020 +0530
+
+    Accounting section.
+
+[33mcommit 2f93bafa67929fa9bd2a42e2eb240967c1f5f0f2[m
+Merge: 0629394 cfd6dd0
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Tue Jun 16 23:34:04 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 0629394f06bad13e03280cf69ab5442d69676ee5[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Tue Jun 16 23:33:50 2020 +0530
+
+    fixed chat redirect issue
+
+[33mcommit cfd6dd0c9c099e12bb71f5a8fda64c159c5136f3[m
+Merge: 13a4cd0 d14b3d9
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Tue Jun 16 22:25:08 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 13a4cd05581c4fa9aedc6a140d7fc9e1ccd8875f[m
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Tue Jun 16 22:24:48 2020 +0530
+
+    chat screen design.
+
+[33mcommit d14b3d93d7d25c22d83e784984886507a3d94355[m
+Merge: a181997 d46b4d7
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Tue Jun 16 22:12:57 2020 +0530
+
+    add mapbox
+
+[33mcommit a181997e4e24ac8815693f9cfaecbceb5292b194[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Tue Jun 16 22:08:25 2020 +0530
+
+    ad mapbox
+
+[33mcommit 8201b2641fac9a717d4e8824ef281505010873b7[m
+Merge: 07e0bfc d46b4d7
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Tue Jun 16 20:52:57 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit d46b4d75a45452f77a169e5f2f1f2a66ece7006a[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Tue Jun 16 00:44:43 2020 +0530
+
+    added pusher and chatting system
+
+[33mcommit 07e0bfc38502efd0aa67a9a15932c560e1ebf38e[m
+Merge: b9bbd7a 7d8e05c
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Mon Jun 15 21:10:22 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 7b0075c9a236d47ab599517e1a46dd335a45e2fb[m
+Merge: eb1a26a 7d8e05c
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Mon Jun 15 15:40:20 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit eb1a26a7b58b60fdef739b82bb79333389a41064[m
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Mon Jun 15 15:40:13 2020 +0000
+
+    added public files
+
+[33mcommit 7d8e05c14c195d05caa5f10c57c21656d3486994[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Mon Jun 15 21:05:50 2020 +0530
+
+    fixed payment issue
+
+[33mcommit b9bbd7a4342e5763c572ebea3c563abbd92fd180[m
+Merge: 8c29c15 1fc6388
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Mon Jun 15 20:49:28 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 8c29c15167d2e8d9b888e90645067660e66ce38d[m
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Mon Jun 15 20:49:17 2020 +0530
+
+    JS files.
+
+[33mcommit 5de3a8d4fcd66d9d970f3dd2cb9dd05a68110252[m
+Merge: 767f6dd 1fc6388
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Mon Jun 15 20:46:51 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 767f6dd5dbe2733d74b6e8f13a53d4c874989506[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Mon Jun 15 20:46:38 2020 +0530
+
+    pull request
+
+[33mcommit 1fc63880f0eecfb8b054d39c110fcaaed1bb2e6f[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Mon Jun 15 20:45:15 2020 +0530
+
+    fixed route issue
+
+[33mcommit f9748d08e0d0c2f72d4546227b0b9f9403c9830a[m
+Merge: 25a6531 e3f82fd
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Mon Jun 15 00:27:31 2020 +0530
+
+    fixed payment redirection issue
+
+[33mcommit 25a6531a41f9d5cda6f2ab0876998be5b36c0d71[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Mon Jun 15 00:25:03 2020 +0530
+
+    fixed payment redirection issue
+
+[33mcommit e3f82fda72bc3baf167c84894037951a7c5e5c72[m
+Merge: 6d23f0a 6165b8d
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Mon Jun 15 00:13:47 2020 +0530
+
+    Conflict resolve.
+
+[33mcommit 6d23f0ab4266f94eba06137f7bf92d6c1b3b38da[m
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Mon Jun 15 00:12:49 2020 +0530
+
+    Job chat design.
+
+[33mcommit 6165b8db6ac6efc53835ee678c8af6bc942d7ba6[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sun Jun 14 23:43:24 2020 +0530
+
+    fixed open job api issue
+
+[33mcommit fa1d885318ac99238f2e9ded0eb139f27ec51b03[m
+Merge: 8cdca72 b016f57
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sun Jun 14 23:07:48 2020 +0530
+
+    resolved conflicts
+
+[33mcommit 8cdca72caa2f620c0d7a5858a28eba5e9f7da593[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sun Jun 14 23:06:14 2020 +0530
+
+    added public files
+
+[33mcommit b016f57a5ad65e1fbeaf0742fe1a5eed0461f660[m
+Merge: c7c25d9 decd77b
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sun Jun 14 23:01:01 2020 +0530
+
+    job lisitng api done
+
+[33mcommit c7c25d939375b83766a2df2c3ec6d90e4be214d7[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sun Jun 14 23:00:12 2020 +0530
+
+    job lisitng api done
+
+[33mcommit decd77b300e5bc0e556f010a135e81cb196bbbba[m
+Merge: 6316dd1 0efc6d0
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Sun Jun 14 22:53:49 2020 +0530
+
+    Conflict resolve.
+
+[33mcommit 6316dd1fe7f9673f258dfe26c47dd9c32dc101f7[m
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Sun Jun 14 22:52:14 2020 +0530
+
+    Customer details.
+
+[33mcommit 0efc6d0ec8fe5facbbb65bb028bad162b1b1accf[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sun Jun 14 22:37:35 2020 +0530
+
+    add single job api and view
+
+[33mcommit 6e9179c3ae841787b8abad58c9c742f2a92e0eed[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sun Jun 14 22:19:29 2020 +0530
+
+    add chat screen in job
+
+[33mcommit 02de2f94ad0946e9970748b85dd2f41d7d3c3aad[m
+Merge: 4727e16 bb98341
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sun Jun 14 22:01:23 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 4727e160d7c1c9f48d233e3ebc3349d69343db17[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sun Jun 14 22:01:15 2020 +0530
+
+    add all job table
+
+[33mcommit bb9834149ffbf7c1907ae67ac7da0128f3dd93cb[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sun Jun 14 21:55:53 2020 +0530
+
+    fixed json relationship issue
+
+[33mcommit 55a304c2cf4a876df4d47a1adfd4787102669655[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sun Jun 14 20:48:40 2020 +0530
+
+    add table in record tab
+
+[33mcommit a00667bcc4ed4cd2e8d4e57438cadcf8b2ed441d[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sun Jun 14 19:49:18 2020 +0530
+
+    changed intending
+
+[33mcommit 6984c5d0f989726c524df91896f899b667c1adb4[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sun Jun 14 17:25:53 2020 +0530
+
+    added pagination package
+
+[33mcommit 2f18f1100f32e286c5615e9fe93f993f1fce1de5[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sun Jun 14 15:21:04 2020 +0530
+
+    add search on record atb
+
+[33mcommit 1bd25627881d2757d9d9dda9625efc0a0644e842[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sun Jun 14 14:53:03 2020 +0530
+
+    add pagination on record tabs
+
+[33mcommit aa2edb9ae87c084521806bb8bb4197f8b541f4de[m
+Merge: 08576a8 82eaafe
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sun Jun 14 02:19:25 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 08576a84d23e046dc2a8bac5dce3cc3dea5b3cbc[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sun Jun 14 02:19:17 2020 +0530
+
+    added testing code
+
+[33mcommit 82eaafe9f7cc6a225164a25eea422c2b50b5a7a2[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sun Jun 14 01:59:35 2020 +0530
+
+    add customer recode api
+
+[33mcommit 815ffeeda677f37c9159324c5dc9737791a34770[m
+Merge: b04ffdf cdba22b
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sun Jun 14 01:39:13 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit cdba22b0f734275dff969ccfd50e992b4d4144f6[m
+Merge: b3c526f da7d05c
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sun Jun 14 01:36:29 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit b3c526fa590f2d5783f0562b410f9741049ce25d[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sun Jun 14 01:36:19 2020 +0530
+
+    add customer payment and recode tables
+
+[33mcommit b04ffdf2dd1d0d7f979e3148c1ec6c1edf80921b[m
+Merge: 970005d da7d05c
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sun Jun 14 01:34:31 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 970005d44078210162d92e2e0ffbddf44d82d243[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sun Jun 14 01:34:20 2020 +0530
+
+    added jobs api
+
+[33mcommit da7d05c098a755ea51b938d3339d1c4f2697c659[m
+Merge: 82ab567 9e28232
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Sun Jun 14 00:50:48 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 82ab5672e23fcb6c205debbbc8f5ed120f167748[m
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Sun Jun 14 00:50:38 2020 +0530
+
+    Customer page design.
+
+[33mcommit 9e2823236bde4ffcf36192010b1f602e62aab41a[m
+Merge: 5053df2 5c01588
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sat Jun 13 23:35:05 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 5053df287821fad7aca83e8b00ed89cbbee267e4[m
+Merge: 7bfe1b9 20a2ebc
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sat Jun 13 23:33:46 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 5c01588fc85320679dd11d106f607010e49cc3f8[m
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Sat Jun 13 23:33:36 2020 +0530
+
+    Search bar added.
+
+[33mcommit 7bfe1b98becfee715226a9e8621088e8d9f43ca9[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sat Jun 13 23:32:37 2020 +0530
+
+    add payment api
+
+[33mcommit 20a2ebc707c10db7c83556702626a666d08ae3d1[m
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Sat Jun 13 23:24:29 2020 +0530
+
+    Search bar color code.
+
+[33mcommit 3d8475b9466a0fd4cc65312eef1a0c9c07333188[m
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Sat Jun 13 23:16:50 2020 +0530
+
+    Deisgn fixes.
+
+[33mcommit 1a9ecd475511bf9d2e9f9a079bbd1a3b7bee5003[m
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Sat Jun 13 22:54:30 2020 +0530
+
+    search field.
+
+[33mcommit 496bbaf2b9d453266bea612cbf725ac47fa9a405[m
+Merge: f13c913 c2e0c55
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Sat Jun 13 22:40:10 2020 +0530
+
+    Resolve conflicts.
+
+[33mcommit f13c9139f06e80daaeeb46334d1ad34f68af582a[m
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Sat Jun 13 22:38:46 2020 +0530
+
+    Jobs section.
+
+[33mcommit c2e0c5531b4466550b96d234cfdbb4b952295463[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sat Jun 13 20:51:03 2020 +0530
+
+    added stripe key into env
+
+[33mcommit 76aa48b70ce4b3947209f058cda50cdaf461a9eb[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sat Jun 13 19:30:55 2020 +0530
+
+    Add stripe charge api
+
+[33mcommit ed415392c8abca37e63569608df4c7526058433e[m
+Merge: 9b77745 c0fc3e4
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sat Jun 13 19:26:18 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 9b777454dcc4af4db06b7fa99e203dc2472475ac[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sat Jun 13 19:26:07 2020 +0530
+
+    Add stripe charge api
+
+[33mcommit c0fc3e43f2077869f5cc979a16b47501bd9ee733[m
+Merge: 9f8dc1b e9ed111
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sat Jun 13 19:18:40 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 9f8dc1bbd140560278c38252b93701b8b8ebb1dc[m
+Merge: b5966c4 b7a29c6
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sat Jun 13 19:18:26 2020 +0530
+
+    fixed conflicts
+
+[33mcommit e9ed1115fbe15f4f24932b1425de6fa003b1f4c8[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sat Jun 13 19:15:16 2020 +0530
+
+    alljob tab add data table
+
+[33mcommit b5966c4719e82a51a9eef8979f168ddb4ae06dfa[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sat Jun 13 19:06:10 2020 +0530
+
+    added stripe for one time charge
+
+[33mcommit b7a29c61c3df3e8be3aaefcb6fdb9655fab57f8d[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sat Jun 13 17:57:46 2020 +0530
+
+    add pyment redirect url
+
+[33mcommit fe40b5fa1be7fc2b99637c033ac2b63b1a43cefe[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sat Jun 13 12:51:30 2020 +0530
+
+    fixed favicon
+
+[33mcommit 89abd36ebf1fb4aad9ebb5a5291905718d4a75bf[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sat Jun 13 11:39:16 2020 +0530
+
+    fix conflict
+
+[33mcommit 4c28a81ef61325b5a9b287932071e3c4d3e8617c[m
+Merge: 36a5b61 23bbc2b
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Fri Jun 12 20:47:14 2020 +0000
+
+    fixed conflicts
+
+[33mcommit 36a5b61b2c417087fd8c262f6999be0091823133[m
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Fri Jun 12 20:45:42 2020 +0000
+
+    public
+
+[33mcommit 23bbc2bc5684a5d6320fb29f22bd19cfe98b1c0a[m
+Merge: 9df01e7 587d188
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sat Jun 13 02:13:03 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 9df01e75a945714b3bcfe4292c305dc8b1d5a580[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sat Jun 13 02:12:50 2020 +0530
+
+    added favicon
+
+[33mcommit 587d1882eddf67af4491275906928035857a63a0[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sat Jun 13 02:07:09 2020 +0530
+
+    payment api done
+
+[33mcommit 32acfe5698be699e80e0e606b9fa73316312aae4[m
+Merge: c69a3d1 0e5e5b5
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sat Jun 13 01:30:56 2020 +0530
+
+    resolved conflicts
+
+[33mcommit c69a3d1fee0f7ee0a30566294b332632b1ad551a[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sat Jun 13 01:28:59 2020 +0530
+
+    fixed payment link
+
+[33mcommit 0e5e5b57725431e2aaf916f6bd45f2c01c987685[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sat Jun 13 01:18:28 2020 +0530
+
+    add job details page
+
+[33mcommit e40912580c060e254f811b221dfe9e3158874619[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sat Jun 13 01:14:16 2020 +0530
+
+    fixed payment link
+
+[33mcommit bfcba6782588659ea61f8a3db958fc0a1dbcad36[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sat Jun 13 00:40:30 2020 +0530
+
+    add job done
+
+[33mcommit e2b1f4777e5161da67dd7053aae1bcace2230524[m
+Merge: 65d861c ebd79f1
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sat Jun 13 00:25:44 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 65d861cea7eebde4d611755d5d62025a2c6605ec[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Sat Jun 13 00:25:31 2020 +0530
+
+    fixed job
+
+[33mcommit ebd79f1c47331d6ccebd5fcfb2251ada0f34d27f[m
+Merge: c71b9b2 18ac809
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Sat Jun 13 00:23:17 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit c71b9b2f5b3fbf7ef15dd1ed216bff75441c97fa[m
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Sat Jun 13 00:23:07 2020 +0530
+
+    Customer page payment and record tab.
+
+[33mcommit 18ac8090a9730a4d80fd08ad8f1c8f98ac8977d5[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sat Jun 13 00:20:17 2020 +0530
+
+    add job done
+
+[33mcommit 8cc0e775412f45d7dd42aac7c128965ca1951b66[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Sat Jun 13 00:09:30 2020 +0530
+
+    add job done
+
+[33mcommit 494927589486c17a4f35f935216776a116b36db7[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Fri Jun 12 23:58:23 2020 +0530
+
+    add job done
+
+[33mcommit 0d20f94b92d7497863131b84193a270329d30d01[m
+Merge: 7c31550 2b04617
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Fri Jun 12 23:57:15 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 7c3155090bd2ba5d32ee63b092d832d0ddce14a4[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Fri Jun 12 23:57:07 2020 +0530
+
+    add job done
+
+[33mcommit 790c5436e99a69560cc2ecf2e3c5c01e11720b6e[m
+Merge: 5df3fad 2b04617
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Fri Jun 12 17:33:17 2020 +0000
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 5df3fadda70db8ef752a46a3b53708e04c34488f[m
+Author: ampydeveloper <mpthebest29@gmail.com>
+Date:   Fri Jun 12 17:33:11 2020 +0000
+
+    fixed conflicts
+
+[33mcommit 2b04617062638ab46e7d5546fa070d6ddda84835[m
+Merge: bb2fd0d a417f93
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Fri Jun 12 22:58:30 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit bb2fd0de89e972142e332000dd8b230479ad06c2[m
+Merge: 64688fa 22295eb
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Fri Jun 12 22:57:54 2020 +0530
+
+    Conflicted code.
+
+[33mcommit a417f93f454a36e43a35e380a3e43864ba79c812[m
+Merge: 6fb5eb6 22295eb
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Fri Jun 12 22:47:48 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 6fb5eb6fb569773c900472a08160e66789c96139[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Fri Jun 12 22:47:36 2020 +0530
+
+    add job
+
+[33mcommit 64688fa56ec7903ad273eec474cd2b3afa8a0ed1[m
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Fri Jun 12 22:32:50 2020 +0530
+
+    remove code.
+
+[33mcommit 22295eb9da7106fd03253ac73c6a1106e8d15d58[m
+Merge: 5ace596 589df22
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Fri Jun 12 22:29:29 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 5ace596421eb994c84e3273376f577c9d0d6bd18[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Fri Jun 12 22:28:56 2020 +0530
+
+    fixed component loading issue
+
+[33mcommit 589df227b97bb7bae16daa50985de7f33669f5b6[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Fri Jun 12 22:07:19 2020 +0530
+
+    add job api
+
+[33mcommit 8fa59656444a94b1cb2de462aadaf048bb1b93de[m
+Merge: 9991b8a eb55c7e
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Fri Jun 12 01:06:30 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 9991b8a95c1a7748e6145fb9c3011b535fbe215c[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Fri Jun 12 01:06:20 2020 +0530
+
+    added job feature
+
+[33mcommit eb55c7e6fa3aacc32f80751275f7985188c5cefb[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Fri Jun 12 00:26:43 2020 +0530
+
+    add customer fram tab
+
+[33mcommit f01edfa9b7727eccf1917096cd5267cf877ee542[m
+Merge: 9cf4209 eb1db3f
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Fri Jun 12 00:07:05 2020 +0530
+
+    pull request
+
+[33mcommit 9cf4209cc8235001e15968e1d5ab120eb0bf4fb8[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Fri Jun 12 00:05:47 2020 +0530
+
+    pull request
+
+[33mcommit eb1db3f990f810612f5d75559bfe83d78bf58e7b[m
+Merge: c51b782 7923b88
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Thu Jun 11 23:58:59 2020 +0530
+
+    fixed conflicts
+
+[33mcommit c51b78238cd5ed86e9da0e4e4d9dd03c88707beb[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Thu Jun 11 23:58:19 2020 +0530
+
+    added jobs
+
+[33mcommit 7923b88cd0236138945076f062f06d9c8e50034b[m
+Merge: ce252cb dd308fb
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Thu Jun 11 23:49:32 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit ce252cbdf13c6b228e58a4153d34faf24ddd21db[m
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Thu Jun 11 23:49:19 2020 +0530
+
+    Job add and listing page.
+
+[33mcommit dd308fbd66faa464b9b41bba3a134f1126550983[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Thu Jun 11 23:12:04 2020 +0530
+
+    edit customer profile
+
+[33mcommit 1a29ae68daa3700287fd73ac2f17927e56603dc1[m
+Merge: 965d673 b4d4e9d
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Thu Jun 11 01:04:36 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 965d6733c2abfc4254cd91a6a624d314a10092cd[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Thu Jun 11 01:04:23 2020 +0530
+
+    fleet section done
+
+[33mcommit b4d4e9da26f06b8b89bc9d07b0ea931764a525e7[m
+Merge: 2854d95 a01d337
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Thu Jun 11 00:32:50 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit 2854d95bbc33113006641a128e2659a564e26a8a[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Thu Jun 11 00:32:39 2020 +0530
+
+    fixed list customer issue
+
+[33mcommit a01d33781cd2f3ac02933ef6cdb4e68c79f502f4[m
+Merge: bdd5870 1b443a2
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Thu Jun 11 00:23:20 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse
+
+[33mcommit bdd58704cfe7cf638b686d6e0c401ecbdefd4e14[m
+Author: kdinfo13 <kd.saini@mail.com>
+Date:   Thu Jun 11 00:23:09 2020 +0530
+
+    edit service and insurance screen
+
+[33mcommit 1b443a280b2251e4f6a0c011d750e536a5e7e2cf[m
+Author: DevilShub <shubhamgakhar13@gmail.com>
+Date:   Thu Jun 11 00:20:59 2020 +0530
+
+    fixed button
+
+[33mcommit 592606d44e6df581c7c83b5a8f857cde0bce812a[m
+Merge: a963cd0 114dcef
+Author: Diksh <diksha.luminoguru@gmail.com>
+Date:   Thu Jun 11 00:17:27 2020 +0530
+
+    Merge branch 'master' of https://github.com/Devil-Shub/wellington-farmhouse

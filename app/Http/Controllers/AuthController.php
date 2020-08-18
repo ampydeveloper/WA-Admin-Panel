@@ -188,6 +188,22 @@ class AuthController extends Controller
                 ], 401);
             }
 
+            //restrict user with user type
+            if ($request->requestType == 1 && ($user->role_id == 4 || $user->role_id == 5 || $user->role_id == 5 || $user->role_id == 6)) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Not Authorized',
+                    'data' => []
+                ], 401);
+
+            } else if ($request->requestType == 2 && ($user->role_id == 1 || $user->role_id == 2 || $user->role_id == 3)) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Not Authorized',
+                    'data' => []
+                ], 401);
+            }
+
             $tokenResult = $user->createToken('Personal Access Token');
             $token = $tokenResult->token;
             // if ($request->remember_me)

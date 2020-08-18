@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css?family=Nunito);@import url(https://fonts.googleapis.com/css2?family=Montserrat:wght@100;
+@import url(https://fonts.googleapis.com/css2?family=Montserrat:wght@100;
 
 300;400;500;600;700;800;900&display=swap);@charset "UTF-8";
 
@@ -35,7 +35,7 @@
   --breakpoint-md: 768px;
   --breakpoint-lg: 992px;
   --breakpoint-xl: 1200px;
-  --font-family-sans-serif: "Nunito", sans-serif;
+  --font-family-sans-serif: "Montserrat", sans-serif;
   --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
@@ -67,7 +67,7 @@ section {
 
 body {
   margin: 0;
-  font-family: "Nunito", sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-size: 0.9rem;
   font-weight: 400;
   line-height: 1.6;
@@ -6377,7 +6377,7 @@ a.close.disabled {
   z-index: 1070;
   display: block;
   margin: 0;
-  font-family: "Nunito", sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-style: normal;
   font-weight: 400;
   line-height: 1.6;
@@ -6502,7 +6502,7 @@ a.close.disabled {
   z-index: 1060;
   display: block;
   max-width: 276px;
-  font-family: "Nunito", sans-serif;
+  font-family: "Montserrat", sans-serif;
   font-style: normal;
   font-weight: 400;
   line-height: 1.6;
@@ -10983,7 +10983,7 @@ a.text-dark:focus {
 
 .v-menu__content .header-right-menu .v-list-item {
   display: block;
-  padding: 15px;
+  padding: 7px;
 }
 
 .v-menu__content .header-right-menu .v-list-item a {
@@ -11006,8 +11006,10 @@ a.text-dark:focus {
 }
 
 #app {
-  background-color: #f3f3f3;
-  font-family: "Roboto", sans-serif !important;
+  background-color: #f8f8f8;
+  font-family: "Montserrat", sans-serif;
+  letter-spacing: 0.01rem;
+  color: #626262;
 }
 
 #app.dispatcher-area {
@@ -11118,6 +11120,10 @@ a.text-dark:focus {
   background: #ccc;
 }
 
+#app .sidebar-nav .v-list-group {
+  margin-bottom: 25px;
+}
+
 #app .sidebar-nav .v-list {
   padding-right: 0;
 }
@@ -11138,7 +11144,10 @@ a.text-dark:focus {
 #app .sidebar-nav .v-list .v-list-item.v-list-group__header .v-list-item__title {
   font-weight: 500;
   font-size: 12px;
-  color: #c3c3c3;
+  text-transform: uppercase;
+  color: #999;
+  letter-spacing: 0.01rem;
+  padding-left: 10px;
 }
 
 #app .sidebar-nav .v-list .v-list-group__header.v-list-item--active:before {
@@ -11155,7 +11164,7 @@ a.text-dark:focus {
   min-height: auto;
   cursor: default;
   border-radius: 0;
-  margin-bottom: 5px;
+  margin-bottom: 2px;
 }
 
 #app .sidebar-nav .v-list .v-list-group--no-action > .v-list-group__items > .v-list-item:hover:before,
@@ -11176,16 +11185,18 @@ a.text-dark:focus {
 #app .sidebar-nav .v-list .v-list-group--no-action > .v-list-group__items > .v-list-item .v-list-item__title a {
   padding-top: 10px;
   padding-bottom: 10px;
-  padding-left: 25px;
-  font-size: 14px;
+  padding-left: 45px;
+  font-size: 15px;
   border: 1px solid transparent;
   border-radius: 6px;
+  font-weight: 300;
+  letter-spacing: 0.01rem;
 }
 
 #app .sidebar-nav .v-list .v-list-group--no-action > .v-list-group__items > .v-list-item .v-list-item__title a.router-link-active {
   color: #fff;
-  background-color: #00be7a;
-  border-radius: 6px;
+  background-color: #11b276;
+  border-radius: 4px;
 }
 
 #app .sidebar-nav .v-list .v-list-group--no-action > .v-list-group__items > .v-list-item .v-ripple__container {
@@ -11212,12 +11223,12 @@ a.text-dark:focus {
   position: absolute;
   margin: 0;
   font-size: 12px;
-  left: 14px;
+  left: 25px;
 }
 
 #app .sidebar-nav .v-list .v-list-group__items .v-list-item__action .v-icon {
-  font-size: 18px;
-  color: #333;
+  font-size: 22px;
+  color: #565656;
 }
 
 #app .custom-toolbar {
@@ -11232,7 +11243,7 @@ a.text-dark:focus {
 
 #app .custom-toolbar .v-toolbar__content {
   display: block;
-  height: 60px !important;
+  height: 62px !important;
   padding-top: 15px;
 }
 
@@ -11285,8 +11296,8 @@ a.text-dark:focus {
 
 #app .add-icon {
   position: absolute;
-  top: 20px !important;
-  right: 22px;
+  top: 23px !important;
+  right: 0;
   z-index: 1;
 }
 
@@ -11298,6 +11309,7 @@ a.text-dark:focus {
   fill: #fff;
   width: 35px;
   height: 35px;
+  stroke-width: 1.3;
 }
 
 #app .add-icon svg circle {
@@ -11309,7 +11321,7 @@ a.text-dark:focus {
 }
 
 #app main.v-content {
-  padding-top: 85px !important;
+  padding-top: 90px !important;
 }
 
 #app main.v-content .v-content__wrap {
@@ -11317,9 +11329,8 @@ a.text-dark:focus {
 }
 
 #app main.v-content .v-content__wrap h4.main-title {
-  font-size: 20px;
-  padding-left: 10px;
-  font-weight: 400;
+  font-size: 24.36px;
+  font-weight: 500;
   display: block;
   width: 100%;
   margin-bottom: 30px;
@@ -11437,6 +11448,11 @@ a.text-dark:focus {
   border: none;
 }
 
+#app main.v-content form .v-textarea textarea {
+  font-size: 14px;
+  font-weight: 300;
+}
+
 #app main.v-content form .input-max .v-input .v-input__slot {
   max-width: none;
 }
@@ -11482,11 +11498,12 @@ a.text-dark:focus {
 
 #app main.v-content form .time-slots .checkbox {
   border: 1px solid #ccc;
-  padding: 4px 8px 2px;
+  padding: 4px 8px 2px 5px;
   margin-right: 15px;
   display: inline-block;
   margin-bottom: 5px;
   cursor: pointer;
+  border-radius: 5px;
 }
 
 #app main.v-content form .time-slots .checkbox.activeClass {
@@ -11514,7 +11531,7 @@ a.text-dark:focus {
   display: inline-block;
   cursor: pointer;
   margin-bottom: 0;
-  font-size: 15px;
+  font-size: 13px;
 }
 
 #app main.v-content form .time-slots .checkbox label:before,
@@ -11546,6 +11563,12 @@ a.text-dark:focus {
   max-width: 400px;
 }
 
+#app main.v-content form .filepond--wrapper .filepond--root .filepond--drop-label {
+  border-radius: 5px;
+  background: #f5f5f5;
+  border: 1px dashed rgba(0, 0, 0, 0.1);
+}
+
 #app main.v-content form .custom-img-holder .filepond--wrapper {
   max-width: 150px;
   min-height: 150px;
@@ -11567,10 +11590,12 @@ a.text-dark:focus {
 }
 
 #app main.v-content #dashboard {
-  background-color: #fff;
+  /*background-color: #fff;*/
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+  /*box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);*/
+  margin-left: 15px;
+  padding-right: 20px;
 }
 
 #app main.v-content #dashboard .dashboard .v-card {
@@ -11911,23 +11936,21 @@ a.text-dark:focus {
   overflow-x: auto;
 }
 
+#app .dataTables_wrapper .dataTables_length {
+  display: none;
+}
+
 #app .dataTables_wrapper .dataTables_filter label {
   padding: relative;
 }
 
-#app .dataTables_wrapper .dataTables_filter label:after {
-  content: "\F002";
-  font-family: "FontAwesome";
-  position: absolute;
-  right: 10px;
-  top: 5px;
-}
-
 #app .dataTables_wrapper .dataTables_filter input {
-  border: 1px solid #ccc;
-  padding: 6px 15px;
-  border-radius: 24px;
+  padding: 7px 15px;
+  border-radius: 5px;
   cursor: text;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  font-size: 14px;
+  font-weight: 300;
 }
 
 #app .dataTables_wrapper .dataTables_filter input:focus {
@@ -12145,7 +12168,7 @@ a.text-dark:focus {
 
 h4.top_heading {
   font-family: "Montserrat", sans-serif;
-  padding-left: 20px !important;
+  padding-left: 0px !important;
 }
 
 .label_text {
@@ -12158,6 +12181,10 @@ h4.top_heading {
   font-size: 14px;
   font-family: "Montserrat", sans-serif;
   font-weight: 500;
+}
+
+#form_field.custom_form_field label {
+  font-size: 14px;
 }
 
 #form_field.custom_form_field input {
@@ -12197,12 +12224,32 @@ h4.top_heading {
 }
 
 .custom_form_field button#submit_btn {
-  background: #28c76f !important;
-  border-radius: 4px;
+  background: #11b276 !important;
+  border-radius: 6px;
+  font-weight: 300;
+  height: 38px;
 }
 
 .custom_form_field button#submit_btn:hover {
   box-shadow: 0 8px 25px -8px #28c76f9c;
+}
+
+.radio-group-outer label {
+  margin: 0 !important;
+  margin-top: -10px !important;
+}
+
+.service-image1 {
+  float: left;
+}
+
+.service-image1 label {
+  margin: 0 !important;
+}
+
+.v-input--radio-group--row {
+  margin: 0;
+  padding: 0;
 }
 
 #custom_tabel {
@@ -12258,7 +12305,7 @@ h4.top_heading {
   margin: 0px 20px;
   margin-left: 20px;
   margin-left: 0;
-  border-radius: 10px;
+  border-radius: 7px;
   background: #fff;
   box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.05);
 }
@@ -12274,56 +12321,68 @@ h4.top_heading {
   padding-top: 4px !important;
 }
 
-#app main.v-content {
-  padding-top: 104px !important;
-}
-
 #app .sidebar-nav {
   top: 0 !important;
+  box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.05);
 }
 
-#example {
+.table.dataTable {
   font-family: "Montserrat", sans-serif !important;
 }
 
-#example thead tr th {
+.table.dataTable thead tr th {
   padding-bottom: 10px !important;
   font-size: 14px !important;
-  font-weight: 600 !important;
+  font-weight: 500 !important;
   color: rgba(0, 0, 0, 0.54) !important;
 }
 
-#example tbody tr tr:nth-of-type(2n+1) {
+.table.dataTable tbody tr tr:nth-of-type(2n+1) {
   background-color: unset;
 }
 
-#example tbody tr td {
+.table.dataTable tbody tr td {
   border-top: 1px solid #e2e2e2 !important;
   font-size: 14px !important;
-  color: #000;
-  font-weight: 400;
+  color: rgba(0, 0, 0, 0.87);
+  font-weight: 300;
   padding-top: 15px !important;
 }
 
-#example tbody tr td#description_txt {
+.table.dataTable tbody tr td#description_txt {
   max-width: 150px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-#example tbody tr td.action-col {
+.table.dataTable tbody tr td.action-col {
   display: flex;
   align-items: center;
   padding-top: 6px !important;
 }
 
-#example tbody tr:hover {
+.table.dataTable tbody tr td.action-col svg {
+  width: 18px;
+  height: 18px;
+  color: rgba(0, 0, 0, 0.87);
+  stroke-width: 1.6;
+}
+
+.table.dataTable tbody tr:hover {
   background: #f9f9f9 !important;
 }
 
-#example tbody tr .selected {
+.table.dataTable tbody tr .selected {
   background: #f9f9f9 !important;
+}
+
+.dataTables_paginate .paginate_button.previous:before {
+  content: "<";
+}
+
+.dataTables_paginate .paginate_button.next:after {
+  content: ">";
 }
 
 .v-list-item.theme--dark {
@@ -12350,21 +12409,36 @@ h4.top_heading {
 
 .bread_crum ul li {
   display: inline-block;
+  font-weight: 300;
+  vertical-align: middle;
+}
+
+.bread_crum ul li .right-bor {
+  border: 1px solid #dae1e7 !important;
+  margin-left: 11px;
+  vertical-align: middle;
 }
 
 .bread_crum ul li h4.main-title.top_heading {
-  padding-right: 11px;
+  padding-right: 8px;
 }
 
 .bread_crum ul li a {
   display: inline-block;
   font-family: "Montserrat", sans-serif;
   font-size: 14px;
-  color: #00000096;
-  font-weight: 500;
-  padding-right: 11px;
+  font-weight: 300;
+  padding-right: 4px;
   padding-top: 10px;
   padding-bottom: 10px;
+  vertical-align: middle;
+  color: #626262 !important;
+}
+
+.bread_crum ul li a svg {
+  width: 18px;
+  height: 18px;
+  margin-right: 2px;
 }
 
 #app main.v-content .v-content__wrap {
@@ -12378,17 +12452,18 @@ h4.top_heading {
 
 .main_box {
   background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+  border-radius: 7px;
+  box-shadow: 0 4px 25px 0 rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
+}
+
+.main_box .main-box-inner {
+  padding-left: 24px;
+  padding-right: 24px;
 }
 
 a.home_svg > svg {
   color: #56bf7a !important;
-}
-
-#app .add-icon {
-  top: 117px;
 }
 
 .swal2-actions button.swal2-confirm.swal2-styled {
@@ -12420,6 +12495,7 @@ a.home_svg > svg {
   padding-right: 0 !important;
   padding-left: 0 !important;
   width: 28em !important;
+  padding: 0 0 10px 0 !important;
 }
 
 .swal2-popup .swal2-header {
@@ -12519,10 +12595,11 @@ table#example tr.odd {
 
 .user-image-inner .logged-name span {
   color: #626262;
+  font-weight: 300;
 }
 
 .user-image-inner .logged-name span.log-name {
-  font-weight: 600;
+  font-weight: 500;
   font-size: 15px !important;
   color: #626262;
 }
@@ -12609,25 +12686,70 @@ div#example_info {
   padding-top: 26px;
 }
 
-.v-menu__content.theme--light.v-menu__content--fixed.menuable__content__active {
-  top: 86px !important;
+.service-image-outer {
+  width: 150px;
+  position: relative;
 }
 
-.v-menu__content .header-right-menu .v-list-item__title a {
+.service-image-outer button#submit_btn {
+  margin-right: -13px !important;
+  margin-top: -13px !important;
+  font-size: 30px !important;
+  background: #fff !important;
+  box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 5px !important;
+  padding: 8px 6px;
+  color: rgba(0, 0, 0, 0.6);
+  line-height: 12px;
+  opacity: 1;
+  height: 29px !important;
+}
+
+.v-menu__content.v-menu__content--fixed {
+  box-shadow: 0 5px 25px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  top: 83px !important;
+  transform: translate(-8px, 0px);
+}
+
+.v-menu__content.v-menu__content--fixed .header-right-menu .v-list-item__title a {
   text-align: left !important;
   color: #626262 !important;
   font-family: "Montserrat", sans-serif;
   font-size: 14px;
-  font-weight: 400;
+  font-weight: 300;
   border: none;
+  vertical-align: middle;
+  padding: 9px 10px;
 }
 
-.v-menu__content .header-right-menu button.nav-item.nav-link {
+.v-menu__content.v-menu__content--fixed .header-right-menu .v-list-item__title a:hover {
+  color: #fff !important;
+}
+
+.v-menu__content.v-menu__content--fixed .header-right-menu .v-list-item__title a svg {
+  width: 17px;
+  height: 17px;
+  vertical-align: bottom;
+  margin-right: 8px;
+}
+
+.v-menu__content.v-menu__content--fixed .header-right-menu button.nav-item.nav-link {
   width: 100%;
   text-align: left;
-  padding: 0.5rem 1rem;
-  padding-top: 15px;
+  padding: 9px 10px;
   border-top: 1px solid rgba(0, 0, 0, 0.12);
-  padding-bottom: 0;
+  color: #626262 !important;
+  font-family: "Montserrat", sans-serif;
+  font-size: 14px;
+  font-weight: 300;
+  margin-top: 0px;
+}
+
+.v-menu__content.v-menu__content--fixed .header-right-menu button.nav-item.nav-link svg {
+  width: 17px;
+  height: 17px;
+  vertical-align: bottom;
+  margin-right: 8px;
 }
 

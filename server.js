@@ -3,6 +3,7 @@ var io = require('socket.io')(http);
 var Redis = require('ioredis');
 
 var redis = new Redis();
+console.log(redis)
 redis.subscribe('news-action');
 redis.on('message', function(channel, message) {
 	console.log('Message recieved: ' + message);

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddServiceImageToServicesTable extends Migration
+class AddServiceForToServicesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,7 @@ class AddServiceImageToServicesTable extends Migration
     public function up()
     {
         Schema::table('services', function (Blueprint $table) {
-            $table->string("service_image")->after("description")->nullable();
-            $table->string("description", 1000)->nullable()->change();
+            $table->tinyInteger('service_for')->nullable()->after("service_name")->comment("4: Customer, 6: Hauler");
         });
     }
 
@@ -27,8 +26,7 @@ class AddServiceImageToServicesTable extends Migration
     public function down()
     {
         Schema::table('services', function (Blueprint $table) {
-            $table->dropColumn("service_image");
-            $table->string("description")->nullable()->change();
+            $table->dropColumn('service_for');
         });
     }
 }

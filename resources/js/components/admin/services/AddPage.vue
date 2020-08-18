@@ -101,83 +101,106 @@
                   </template>-->
                 </v-col>
               </v-col>
+
               <v-col cols="12" md="12" class="pt-0 pb-0">
                 <v-col sm="2" class="label-align pt-0">
-                  <label class="label_text">Service Time</label>
+                  <label class="label_text">Service For</label>
                 </v-col>
-                <v-col sm="4" class="pt-0 pb-0">
-                  <div class="custom-checkbox d-ib">
-                    <input
-                      type="checkbox"
-                      class="pr-6"
-                      v-model="addForm.slot_type"
-                      :checked="true"
-                      @change="getTime(1)"
-                      value="1"
-                      id="morningJob"
-                    />
-                    <label for="morningJob"></label>
-                    <span class="checkbox-title mor_eve">Morning</span>
-                  </div>
-                  <div class="custom-checkbox d-ib">
-                    <input
-                      type="checkbox"
-                      class="pr-6"
-                      v-model="addForm.slot_type"
-                      @change="getTime(2)"
-                      value="2"
-                      id="eveningJob"
-                    />
-                    <label for="eveningJob"></label>
-                    <span class="checkbox-title mor_eve">Evening</span>
-                  </div>
-                  <div class="v-messages theme--light error--text" role="alert" v-if="!timeSlotErr">
-                    <div class="v-messages__wrapper">
-                      <div class="v-messages__message">Service time is required.</div>
+                <v-col sm="8" class="label-align pt-0 pb-0 radio-group-outer">
+                  <v-radio-group
+                    sm="4"
+                    class="test"
+                    row
+                    v-model="addForm.service_for"
+                    :mandatory="true"
+                    required
+                    :rules="[v => !!v || 'Service for is required.']"
+                  >
+                    <v-radio label="Customer" @change="getSelectedType(4)" value="4" class="mor_eve"></v-radio>
+                    <v-radio label="Hauler" @change="getSelectedType(6)" value="6" class="mor_eve"></v-radio>
+                  </v-radio-group>
+                </v-col>
+              </v-col>
+
+              <div v-if="selectedType == 4">
+                <v-col cols="12" md="12" class="pt-0 pb-0">
+                  <v-col sm="2" class="label-align pt-0">
+                    <label class="label_text">Service Time</label>
+                  </v-col>
+                  <v-col sm="4" class="pt-0 pb-0">
+                    <div class="custom-checkbox d-ib">
+                      <input
+                        type="checkbox"
+                        class="pr-6"
+                        v-model="addForm.slot_type"
+                        :checked="true"
+                        @change="getTime(1)"
+                        value="1"
+                        id="morningJob"
+                      />
+                      <label for="morningJob"></label>
+                      <span class="checkbox-title mor_eve">Morning</span>
                     </div>
-                  </div>
-                </v-col>
-              </v-col>
-
-              <v-col class="time-slots pt-0" cols="12" md="12" v-if="morningSlots.length">
-                <v-col sm="2"></v-col>
-                <v-col sm="9" class="pt-0 pb-0">
-                  <template v-for="(timeSlot, index) in morningSlots">
-                    <span
-                      class="checkbox"
-                      v-bind:class="[addForm.slot_time.includes(timeSlot.id) ? 'activeClass' : '']"
-                    >
+                    <div class="custom-checkbox d-ib">
                       <input
                         type="checkbox"
-                        @click="setTimeSlot(timeSlot.id, index)"
-                        :value="timeSlot.id"
-                        :id="timeSlot.id"
+                        class="pr-6"
+                        v-model="addForm.slot_type"
+                        @change="getTime(2)"
+                        value="2"
+                        id="eveningJob"
                       />
-                      <label v-bind:for="timeSlot.id">{{timeSlot.slot_start+'-'+timeSlot.slot_end}}</label>
-                    </span>
-                  </template>
+                      <label for="eveningJob"></label>
+                      <span class="checkbox-title mor_eve">Evening</span>
+                    </div>
+                    <div class="v-messages theme--light error--text" role="alert" v-if="!timeSlotErr">
+                      <div class="v-messages__wrapper">
+                        <div class="v-messages__message">Service time is required.</div>
+                      </div>
+                    </div>
+                  </v-col>
                 </v-col>
-              </v-col>
 
-              <v-col class="time-slots pt-0 pb-0" cols="12" md="12" v-if="eveningSlots.length">
-                <v-col sm="2"></v-col>
-                <v-col sm="9" class="pt-0 pb-0">
-                  <template v-for="(timeSlot, index) in eveningSlots">
-                    <span
-                      class="checkbox"
-                      v-bind:class="[addForm.slot_time.includes(timeSlot.id) ? 'activeClass' : '']"
-                    >
-                      <input
-                        type="checkbox"
-                        @click="setTimeSlot(timeSlot.id, index)"
-                        :value="timeSlot.id"
-                        :id="timeSlot.id"
-                      />
-                      <label v-bind:for="timeSlot.id">{{timeSlot.slot_start+'-'+timeSlot.slot_end}}</label>
-                    </span>
-                  </template>
+                <v-col class="time-slots pt-0" cols="12" md="12" v-if="morningSlots.length">
+                  <v-col sm="2"></v-col>
+                  <v-col sm="9" class="pt-0 pb-0">
+                    <template v-for="(timeSlot, index) in morningSlots">
+                      <span
+                        class="checkbox"
+                        v-bind:class="[addForm.slot_time.includes(timeSlot.id) ? 'activeClass' : '']"
+                      >
+                        <input
+                          type="checkbox"
+                          @click="setTimeSlot(timeSlot.id, index)"
+                          :value="timeSlot.id"
+                          :id="timeSlot.id"
+                        />
+                        <label v-bind:for="timeSlot.id">{{timeSlot.slot_start+'-'+timeSlot.slot_end}}</label>
+                      </span>
+                    </template>
+                  </v-col>
                 </v-col>
-              </v-col>
+
+                <v-col class="time-slots pt-0 pb-0" cols="12" md="12" v-if="eveningSlots.length">
+                  <v-col sm="2"></v-col>
+                  <v-col sm="9" class="pt-0 pb-0">
+                    <template v-for="(timeSlot, index) in eveningSlots">
+                      <span
+                        class="checkbox"
+                        v-bind:class="[addForm.slot_time.includes(timeSlot.id) ? 'activeClass' : '']"
+                      >
+                        <input
+                          type="checkbox"
+                          @click="setTimeSlot(timeSlot.id, index)"
+                          :value="timeSlot.id"
+                          :id="timeSlot.id"
+                        />
+                        <label v-bind:for="timeSlot.id">{{timeSlot.slot_start+'-'+timeSlot.slot_end}}</label>
+                      </span>
+                    </template>
+                  </v-col>
+                </v-col>
+              </div>
 
               <v-col cols="12" md="12" class="pt-0 pb-0">
                 <v-col sm="2" class="label-align pt-0">
@@ -302,8 +325,10 @@ export default {
       docError: false,
       apiUrl: environment.apiUrl,
       timeSlotErr: true,
+      selectedType: 4,
       addForm: {
         service_name: "",
+        service_for: "4",
         price: "",
         description: "",
         service_image: "",
@@ -401,6 +426,9 @@ export default {
         }
       });
     },
+    getSelectedType(checkType) {
+      this.selectedType = checkType;
+    },
     //set time slow
     setTimeSlot(timeSlotId, index) {
       var findIndex = this.addForm.slot_time.indexOf(timeSlotId);
@@ -422,54 +450,57 @@ export default {
       //stop page to reload
       e.preventDefault();
 
-      //time slots validation
-      if (this.addForm.slot_time.length > 0) {
-        //morning check
-        if (this.morningSlots.length > 0) {
-          var checkMorning = 0;
-          for (var i = 0; i < this.morningSlots.length; i++) {
-            if (this.addForm.slot_time.includes(this.morningSlots[i].id)) {
-              checkMorning++;
+      //time slot validation if customer service selected
+      if(this.selectedType == 4) {
+        //time slots validation
+        if (this.addForm.slot_time.length > 0) {
+          //morning check
+          if (this.morningSlots.length > 0) {
+            var checkMorning = 0;
+            for (var i = 0; i < this.morningSlots.length; i++) {
+              if (this.addForm.slot_time.includes(this.morningSlots[i].id)) {
+                checkMorning++;
+              }
+            }
+            //check if any morning selected
+            if (checkMorning == 0) {
+              this.$toast.open({
+                message: "Please select atleast one morning time slot",
+                type: "error",
+                position: "top-right",
+              });
+              return false;
             }
           }
-          //check if any morning selected
-          if (checkMorning == 0) {
-            this.$toast.open({
-              message: "Please select atleast one morning time slot",
-              type: "error",
-              position: "top-right",
-            });
-            return false;
-          }
-        }
 
-        //check for time slots
-        if (this.eveningSlots.length > 0) {
-          var checkEvening = 0;
-          for (var i = 0; i < this.eveningSlots.length; i++) {
-            if (this.addForm.slot_time.includes(this.eveningSlots[i].id)) {
-              checkEvening++;
+          //check for time slots
+          if (this.eveningSlots.length > 0) {
+            var checkEvening = 0;
+            for (var i = 0; i < this.eveningSlots.length; i++) {
+              if (this.addForm.slot_time.includes(this.eveningSlots[i].id)) {
+                checkEvening++;
+              }
+            }
+            //check if any morning selected
+            if (checkEvening == 0) {
+              this.$toast.open({
+                message: "Please select atleast one evening time slot",
+                type: "error",
+                position: "top-right",
+              });
+              return false;
             }
           }
-          //check if any morning selected
-          if (checkEvening == 0) {
-            this.$toast.open({
-              message: "Please select atleast one evening time slot",
-              type: "error",
-              position: "top-right",
-            });
-            return false;
-          }
+        } else {
+          this.$toast.open({
+            message: "Please select atleast one time slot",
+            type: "error",
+            position: "top-right",
+          });
+          return false;
         }
-      } else {
-        this.$toast.open({
-          message: "Please select atleast one time slot",
-          type: "error",
-          position: "top-right",
-        });
-        return false;
+        //time slots validation
       }
-      //time slots validation
 
       if (this.addForm.service_image == "") {
         this.docError = true;

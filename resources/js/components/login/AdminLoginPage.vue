@@ -125,7 +125,7 @@ export default {
         // stop here if form is invalid
 
         this.loading = true;
-        authenticationService.login(this.email, this.password, 2).then(
+        authenticationService.login(this.email, this.password, 1).then(
           (response) => {
             if (response === "Home") {
               var paymentUrl = localStorage.getItem("payment");
