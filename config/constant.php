@@ -7,21 +7,15 @@ return [
         'Driver' => 3,
         'Customer' => 4,
         'Customer_Manager' => 5,
-        'haulers' => 6,
-        'vehicle_service_provider' => 7
-    ],
-    'slot_type' => [
-        'morning' => 1,
-        'afternoon' => 2,
+        'Company' => 6,
+        'Company_Manager' => 7
     ],
     'vehicle_type' => [
         'truck' => 1,
         'skidsteer' => 2
     ],
     'payment_methods' => [
-        'stripe' => 1,
-        'cheque' => 2,
-        'cash' => 3
+        'stripe' => 1
     ],
     'payment_status' => [
         'succeeded' => 'succeeded'
@@ -48,9 +42,5 @@ return [
     'hubspot' => [
         'api_url' => 'https://api.hubapi.com/contacts/v1/contact?hapikey=',
         'api_key' => 'c6fd7eb1-da62-4717-9ceb-8c6516b1831f'
-    ],
-    'service_type' => [
-        'by_round' => 1,
-        'by_weight' => 2
     ],
 ];

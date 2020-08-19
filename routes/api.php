@@ -137,21 +137,3 @@ Route::group(['prefix' => 'auth'], function () {
         Route::delete('deleteImage', 'ImageController@deleteImage');
     });
 });
-
-Route::group(['prefix' => 'user'], function () {
-//    dd('api');
-    Route::post('signup', 'User\AuthController@signup');
-    Route::post('login', 'User\AuthController@login');
-    Route::group(['middleware' => 'auth:api'], function () {
-        Route::get('logout', 'User\AuthController@logout');
-        Route::get('user-details', 'User\AuthController@user');
-        Route::get('edit-profile', 'User\AuthController@editProfile');
-        
-        
-        
-        Route::get('services-list', 'User\ServicesController@listServices');
-        Route::post('book-service', 'User\ServicesController@bookService');
-        Route::get('show-booked-services', 'User\ServicesController@showBookedServices');
-        Route::post('update-booked-service', 'User\ServicesController@updateBookedService');
-    });
-});

@@ -21,7 +21,7 @@ class Job extends Model
      */
     protected $fillable = [
         'payment_status', 'job_amount', 'job_weight', 'customer_id', 'manager_id', 'farm_id', 'job_description', 'gate_no', 'service_id', 'time_slots_id', 'truck_id',
-        'skidsteer_id', 'truck_driver_id', 'skidsteer_driver_id', 'start_date', 'start_time', 'end_date', 'end_time', 'notes_for_techs', 'notes', 'job_images'
+        'skidsteer_id', 'truck_driver_id', 'skidsteer_driver_id', 'job_date', 'notes_for_techs', 'notes', 'job_images'
     ];
 
     public function customer()

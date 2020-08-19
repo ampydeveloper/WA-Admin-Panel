@@ -29,24 +29,21 @@ export const planetChartData = {
             //     borderWidth: 3
             // },
             { // another line graph
-                label: '',
+                label: 'Planet Mass (x1,000 km)',
                 data: [4.8, 12.1, 12.7, 6.7, 139.8, 116.4, 50.7, 49.2],
                 backgroundColor: [
-                    '#dff7e9', // Green
+                    'rgb(60,179,113)', // Green
                 ],
                 borderColor: [
-                    '#11b276',
+                    '#47b784',
                 ],
-                borderWidth: 2
+                borderWidth: 3
             }
         ]
     },
     options: {
         responsive: true,
-        lineTension: 0,
-        legend: {
-            display: false
-        },
+        lineTension: 1,
         scales: {
             yAxes: [{
                 ticks: {
