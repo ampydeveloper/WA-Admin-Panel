@@ -21,10 +21,9 @@ class ServicesController extends Controller
         //validate request
         $validator = Validator::make($request->all(), [
             'service_name' => 'required|string',
+            'service_for' => 'required',
             'price' => 'required',
             'description' => 'required',
-            'slot_type' => 'required',
-            'slot_time' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -43,6 +42,7 @@ class ServicesController extends Controller
             //create new user
             $service = new Service([
                 'service_name' => $request->service_name,
+                'service_for' => $request->service_for,
                 'price' => $request->price,
                 'description' => $request->description,
                 'service_image' => $request->service_image,

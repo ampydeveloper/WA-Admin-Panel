@@ -54,11 +54,11 @@ function updateProfile(data) {
     });
 }
 
-function login(email, password) {
+function login(email, password, requestType) {
 
   return fetch(
     this.apiUrl+`login`,
-    requestOptions.post({ email, password })
+    requestOptions.post({ email, password, requestType})
   )
     .then(handleResponse)
     .then(user => {
