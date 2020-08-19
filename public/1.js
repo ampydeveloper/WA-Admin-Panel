@@ -153,10 +153,54 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 // Utilities
+ // import { UserIcon, LogOutIcon, UserPlusIcon, ListIcon, Edit3Icon, BellIcon } from 'vue-feather-icons';
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'DashboardCoreDrawer',
+  //   components: {
+  //       UserIcon,
+  // LogOutIcon,
+  // UserPlusIcon,
+  // ListIcon,
+  // Edit3Icon,
+  // BellIcon,
+  //   },
   props: {
     expandOnHover: {
       type: Boolean,
@@ -172,7 +216,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         items: [{
           title: 'Overview',
           url: '/admin/dashboard',
-          icon: 'mdi-view-dashboard'
+          icon: "mdi-view-dashboard"
         }, {
           title: 'Jobs',
           url: '/admin/jobs',
@@ -222,7 +266,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           icon: 'mdi-truck'
         }, {
           title: 'SkidSteer',
-          url: '/admin/skidsteers'
+          url: '/admin/skidsteers',
+          icon: 'mdi-truck'
         }]
       }, {
         action: 'local_activity',

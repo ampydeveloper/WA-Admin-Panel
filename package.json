@@ -56,6 +56,7 @@
         "vue-sweetalert2": "^3.0.6",
         "vue-toast-notification": "^0.4.0",
         "vue2-google-maps": "^0.10.7",
+        "vuebar": "0.0.20",
         "vuejs-google-maps": "0.0.10",
         "vuelidate": "^0.7.5",
         "vuex": "^3.4.0"
