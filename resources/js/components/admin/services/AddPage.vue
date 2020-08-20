@@ -264,19 +264,19 @@
                 </v-col>
               </v-col>
 
-              <v-col cols="12" md="12" class="pt-0 pb-0">
+              <v-col cols="12" md="12" class="pt-0 pb-0" v-if="selectedType == 4">
                 <v-col sm="2" class="label-align pt-0">
-                  <label class="label_text">Service Rate</label>
+                  <label class="label_text">Service Type</label>
                 </v-col>
                 <v-col sm="8" class="label-align pt-0 pb-0 radio-group-outer">
                   <v-radio-group
                     sm="4"
                     class="test"
                     row
-                    v-model="addForm.service_rate"
+                    v-model="addForm.service_type"
                     :mandatory="false"
                     required
-                    :rules="[v => !!v || 'Service rate is required.']"
+                    :rules="[v => !!v || 'Service type is required.']"
                   >
                     <v-radio label="Per Load" value="1" class="mor_eve"></v-radio>
                     <v-radio label="Round" value="2" class="mor_eve"></v-radio>
@@ -332,7 +332,7 @@ export default {
         price: "",
         description: "",
         service_image: "",
-        service_rate: "1",
+        service_type: "1",
         slot_type: ["1"],
         slot_time: [],
       },

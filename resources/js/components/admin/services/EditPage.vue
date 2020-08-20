@@ -282,21 +282,23 @@
               </v-col>
 
               <v-col cols="12" md="12" class="pt-0 pb-0">
-                <v-col sm="2" class="label-align pt-0">
-                  <header>Service Rate</header>
-                </v-col>
-                <v-col sm="8" class="label-align pt-0 pb-0 radio-group-outer">
-                  <v-radio-group
-                    row
-                    v-model="editForm.service_rate"
-                    :mandatory="false"
-                    required
-                    :rules="[v => !!v || 'Service rate is required.']"
-                  >
-                    <v-radio label="Per Load" value="perload" class="mor_eve"></v-radio>
-                    <v-radio label="Round" value="round" class="mor_eve"></v-radio>
-                  </v-radio-group>
-                </v-col>
+                <div v-if="selectedType == 4">
+                  <v-col sm="2" class="label-align pt-0">
+                    <header>Service Type</header>
+                  </v-col>
+                  <v-col sm="8" class="label-align pt-0 pb-0 radio-group-outer">
+                    <v-radio-group
+                      row
+                      v-model="editForm.service_type"
+                      :mandatory="false"
+                      required
+                      :rules="[v => !!v || 'Service type is required.']"
+                    >
+                      <v-radio label="Per Load" value="perload" class="mor_eve"></v-radio>
+                      <v-radio label="Round" value="round" class="mor_eve"></v-radio>
+                    </v-radio-group>
+                  </v-col>
+                </div>
 
                 <v-col class="pt-0 pb-0" cols="12" md="12">
                   <v-col sm="2"></v-col>
@@ -343,13 +345,13 @@ export default {
       selectedType: 4,
       cross: false,
       editForm: {
-        id: "",
+        service_id: "",
         service_name: "",
         service_for: "",
         price: "",
         description: "",
         service_image: "",
-        service_rate: "",
+        service_type: "",
         slot_type: [1, 2],
         slot_time: [],
       },
@@ -397,7 +399,7 @@ export default {
     serviceService.getService(this.$route.params.id).then((response) => {
       //handle response
       if (response.status) {
-        this.editForm.id = response.data.id;
+        this.editForm.service_id = response.data.id;
         this.editForm.service_name = response.data.service_name;
         this.editForm.price = response.data.price;
         this.editForm.description = response.data.description;
@@ -406,8 +408,6 @@ export default {
         this.editForm.slot_type = JSON.parse(response.data.slot_type);
 
         this.editForm.service_for = response.data.service_for;
-
-        alert(this.editForm.service_for);
         
         //service for check
         this.selectedType = this.editForm.service_for;
@@ -415,10 +415,10 @@ export default {
         if (response.data.service_image) {
           this.cross = true;
         }
-        if (response.data.service_rate == 1) {
-          this.editForm.service_rate = "perload";
+        if (response.data.service_type == 1) {
+          this.editForm.service_type = "perload";
         } else {
-          this.editForm.service_rate = "round";
+          this.editForm.service_type = "round";
         }
 
         if (this.editForm.slot_type.includes("1")) {
@@ -525,10 +525,10 @@ export default {
         });
         return false;
       }
-      if (this.editForm.service_rate == "perload") {
-        this.editForm.service_rate = 1;
+      if (this.editForm.service_type == "perload") {
+        this.editForm.service_type = 1;
       } else {
-        this.editForm.service_rate = 2;
+        this.editForm.service_type = 2;
       }
 
       //time slot validation if customer service selected
