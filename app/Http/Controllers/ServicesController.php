@@ -120,8 +120,10 @@ class ServicesController extends Controller
         $getAllServices = Service::get();
         if (count($getAllServices) > 0) {
             foreach ($getAllServices as $key => $service) {
-                $timeSlots = TimeSlots::whereIn('id', json_decode($service->slot_time))->get();
-                $getAllServices[$key]["timeSlots"] = $timeSlots;
+                if ($service->service_for == config('constant.roles.Customer')) {
+                    $timeSlots = TimeSlots::whereIn('id', json_decode($service->slot_time))->get();
+                    $getAllServices[$key]["timeSlots"] = $timeSlots;
+                }
             }
         }
         return response()->json([
