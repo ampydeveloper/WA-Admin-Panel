@@ -18,7 +18,7 @@ class CreateServicesTable extends Migration
             
             $table->string("service_name");
             $table->float("price");
-            $table->string("description");
+            $table->string("description", 1000);
             $table->tinyInteger("service_type")->comment("1: by weight, 2: by round");
             $table->string("service_image");
             $table->tinyInteger("service_for")->comment("4: for customer, 6: for haulers");

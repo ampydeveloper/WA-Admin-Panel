@@ -14,7 +14,7 @@ class AddServiceForToServicesTable extends Migration
     public function up()
     {
         Schema::table('services', function (Blueprint $table) {
-            $table->tinyInteger('service_for')->nullable()->after("service_name")->comment("4: Customer, 6: Hauler");
+//            $table->tinyInteger('service_for')->nullable()->after("service_name")->comment("4: Customer, 6: Hauler");
         });
     }
 
