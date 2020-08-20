@@ -16,11 +16,14 @@ class CreateServicesTable extends Migration
         Schema::create('services', function (Blueprint $table) {
             $table->id();
             
-            $table->string("service_name")->nullable();
-            $table->tinyInteger("service_rate")->comment("1: Per Load, 2: Round")->nullable();
-            $table->float("price")->nullable();
-            $table->string("description")->nullable();
-
+            $table->string("service_name");
+            $table->float("price");
+            $table->string("description");
+            $table->tinyInteger("service_type")->comment("1: by weight, 2: by round");
+            $table->string("service_image");
+            $table->tinyInteger("service_for")->comment("4: for customer, 6: for haulers");
+            $table->json("slot_type")->nullable();
+            $table->json("slot_time")->nullable();
             $table->timestamps();
         });
     }

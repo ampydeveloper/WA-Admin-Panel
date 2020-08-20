@@ -18,14 +18,16 @@ class ServicesController extends Controller
      */
     public function createService(Request $request)
     {
-        //validate request
         $validator = Validator::make($request->all(), [
             'service_name' => 'required|string',
-            'service_for' => 'required',
-            'price' => 'required',
-            'description' => 'required',
+            'price' => 'required|numeric',
+            'description' => 'required|string',
+            'service_type' => 'required|numeric',
+            'service_image' => 'required|string',
+            'service_for' => 'required|numeric',
+            'slot_type' => 'required_if:service_for,==,4|array',
+            'slot_time' => 'required_if:service_for,==,4|array',
         ]);
-
         if ($validator->fails()) {
             return response()->json([
                 'status' => false,
@@ -33,43 +35,28 @@ class ServicesController extends Controller
                 'data' => $validator->errors()
             ], 422);
         }
-
         try {
-
-            //use of db transactions
-            // DB::beginTransaction();
-
-            //create new user
             $service = new Service([
                 'service_name' => $request->service_name,
-                'service_for' => $request->service_for,
                 'price' => $request->price,
                 'description' => $request->description,
+                'service_type' => $request->service_type,
                 'service_image' => $request->service_image,
-                'service_rate' => $request->service_rate,
+                'service_for' => $request->service_for,
                 'slot_type' => json_encode($request->slot_type),
                 'slot_time' => json_encode($request->slot_time),
             ]);
-            //save service
             $service->save();
-         
-            // DB::commit();
-
-            //return success response
             return response()->json([
                 'status' => true,
                 'message' => 'Service created successfully.',
                 'data' => []
             ], 200);
         } catch (\Exception $e) {
-            //rollback transactions
-            // DB::rollBack();
-            //make log of errors
             Log::error(json_encode($e->getMessage()));
-            //return with error
             return response()->json([
                 'status' => false,
-                'message' => 'Internal server error!',
+                'message' => $e->getMessage(),
                 'data' => []
             ], 500);
         }
@@ -80,11 +67,16 @@ class ServicesController extends Controller
      */
     public function editService(Request $request)
     {
-        //validate request
         $validator = Validator::make($request->all(), [
+            'service_id' => 'required|numeric',
             'service_name' => 'required|string',
-            'price' => 'required',
-            'description' => 'required'
+            'price' => 'required|numeric',
+            'description' => 'required|string',
+            'service_type' => 'required|numeric',
+            'service_image' => 'required|string',
+            'service_for' => 'required|numeric',
+            'slot_type' => 'required_if:service_for,==,4|array',
+            'slot_time' => 'required_if:service_for,==,4|array',
         ]);
 
         if ($validator->fails()) {
@@ -96,30 +88,26 @@ class ServicesController extends Controller
         }
 
         try {
-            //update service
             Service::whereId($request->service_id)->update([
                 'service_name' => $request->service_name,
                 'price' => $request->price,
                 'description' => $request->description,
-		'service_rate' => $request->service_rate,
+                'service_type' => $request->service_type,
+                'service_image' => $request->service_image,
+                'service_for' => $request->service_for,
                 'slot_type' => json_encode($request->slot_type),
                 'slot_time' => json_encode($request->slot_time),
-                'service_image' => $request->service_image
             ]);
-
-            //return success response
             return response()->json([
                 'status' => true,
                 'message' => 'Service edit successfully.',
                 'data' => []
             ], 200);
         } catch (\Exception $e) {
-            //make log of errors
             Log::error(json_encode($e->getMessage()));
-            //return with error
             return response()->json([
                 'status' => false,
-                'message' => 'Internal server error!',
+                'message' => $e->getMessage(),
                 'data' => []
             ], 500);
         }
@@ -130,14 +118,12 @@ class ServicesController extends Controller
      */
     public function listServices() {
         $getAllServices = Service::get();
-
-        foreach($getAllServices as $key => $service) {
-            //get timeSlots
-            $timeSlots = TimeSlots::whereIn('id', json_decode($service->slot_time))->get();
-            //set timeSlots
-            $getAllServices[$key]["timeSlots"] = $timeSlots;
+        if (count($getAllServices) > 0) {
+            foreach ($getAllServices as $key => $service) {
+                $timeSlots = TimeSlots::whereIn('id', json_decode($service->slot_time))->get();
+                $getAllServices[$key]["timeSlots"] = $timeSlots;
+            }
         }
-        
         return response()->json([
             'status' => true,
             'message' => 'Service Listing.',
@@ -150,7 +136,6 @@ class ServicesController extends Controller
      */
     public function getService(Request $request) {
         $fetchService = Service::whereId($request->service_id)->first();
-        //check if exist
         if($fetchService != null) {
             $status = true;
             $message = "Service Found.";
@@ -172,7 +157,6 @@ class ServicesController extends Controller
      * delete service
      */
     public function deleteService(Request $request) {
-        //check if exist
         if(Service::whereId($request->service_id)->delete()) {
             $status = true;
             $message = "Service deleted successfully.";
@@ -182,7 +166,6 @@ class ServicesController extends Controller
             $message = "Service not found.";
             $statusCode = 400;
         }
-        
         return response()->json([
             'status' => $status,
             'message' => $message,
@@ -195,23 +178,20 @@ class ServicesController extends Controller
      * @param time slots type(morning, afternoon)
      * return array()
      */
-    public function getTimeSlots(Request $request){
-
-	     $getTime = TimeSlots::whereSlotType($request->slot_type)->get();
-	     if($getTime->count()){
+    public function getTimeSlots(Request $request) {
+        $getTime = TimeSlots::whereSlotType($request->slot_type)->get();
+        if ($getTime->count()) {
             return response()->json([
-                'status' => true,
-                'message' => 'success',
-                'data' => $getTime
-            ], 200);  
-	     }else {
+                        'status' => true,
+                        'message' => 'success',
+                        'data' => $getTime
+                            ], 200);
+        } else {
             return response()->json([
-                'status' => false,
-                'message' => 'no time slots found',
-                'data' => $getTime
-            ], 200);
-	     }
-	     
+                        'status' => false,
+                        'message' => 'no time slots found',
+                        'data' => $getTime
+                            ], 200);
+        }
     }
-  
 }
