@@ -15,12 +15,12 @@ class AddJobDateToJobsTable extends Migration
     {
         Schema::table('jobs', function (Blueprint $table) {
             //add new column
-            $table->date('job_date')->nullable()->after("skidsteer_driver_id");
-            //remove previous column
-            $table->dropColumn('start_date');
-            $table->dropColumn('start_time');
-            $table->dropColumn('end_date');
-            $table->dropColumn('end_time');
+//            $table->date('job_date')->nullable()->after("skidsteer_driver_id");
+//            //remove previous column
+//            $table->dropColumn('start_date');
+//            $table->dropColumn('start_time');
+//            $table->dropColumn('end_date');
+//            $table->dropColumn('end_time');
         });
     }
 

@@ -17,9 +17,6 @@ return [
     'payment_methods' => [
         'stripe' => 1
     ],
-    'payment_status' => [
-        'succeeded' => 'succeeded'
-    ],
     'payment_status_reverse' => [
         'succeeded' => 1
     ],
@@ -43,4 +40,28 @@ return [
         'api_url' => 'https://api.hubapi.com/contacts/v1/contact?hapikey=',
         'api_key' => 'c6fd7eb1-da62-4717-9ceb-8c6516b1831f'
     ],
+    'service_type' => [
+        'by_weight' => 1,
+        'by_round' => 2,
+    ],
+    'payment_mode' => [
+        'online' => 0,
+        'cheque' => 1,
+        'cash' => 2
+    ],
+    'job_status' => [
+        'open' => 0,
+        'assigned' => 1,
+        'completed' => 2,
+        'close' => 3,
+        'cancelled' => 4,
+    ],
+    'payment_status' => [
+        'unpaid' => 0,
+        'paid' => 1,
+    ],
+    'quick_book' => [
+        'Not_Sync' => 0,
+        'Sync' => 0,
+    ]
 ];

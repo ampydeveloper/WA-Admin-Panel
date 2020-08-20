@@ -67,15 +67,13 @@ class JobsController extends Controller
     {
         //validate request
         $validator = Validator::make($request->all(), [
-            'job_amount' => 'required',
             'customer_id' => 'required',
-            'manager_id' => 'required',
-            'farm_id' => 'required',
-            'job_description' => 'required',
-            'gate_no' => 'required',
             'service_id' => 'required',
-            'start_date' => 'required',
-            'time_slots_id' => 'required'
+            'job_providing_date' => 'required',
+            'is_repeating_job' => 'required',
+            'repeating_days' => 'required_if:is_repeating_job,==,1',
+            'payment_mode' => 'required',
+            'amount' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -85,23 +83,55 @@ class JobsController extends Controller
                 'data' => $validator->errors()
             ], 422);
         }
-
+        
+        $checkService = Service::where('id', $request->service_id)->first();
+        if($checkService->service_for == config('constant.roles.Customer')) {
+            if($request->manager_id == null || $request->manager_id == null || $request->farm_id == null || $request->time_slots_id == null) {
+                return response()->json([
+                'status' => false,
+                'message' => 'The given data was invalid.',
+                'data' => $validator->errors()
+            ], 422);
+            } 
+        }
+        
+        
         try {
 
             //create job
             $job = new Job([
-                'job_amount' => $request->job_weight != "" && $request->job_weight != null ? $request->job_weight * $request->job_amount : $request->job_amount,
+//                'job_amount' => $request->job_weight != "" && $request->job_weight != null ? $request->job_weight * $request->job_amount : $request->job_amount,
+//                'customer_id' => $request->customer_id,
+//                'job_weight' => $request->job_weight,
+//                'manager_id' => $request->manager_id,
+//                'farm_id' => $request->farm_id,
+//                'job_description' => $request->job_description,
+//                'gate_no' => $request->gate_no,
+//                'service_id' => $request->service_id,
+//                'time_slots_id' => $request->time_slots_id,
+//                'start_date' => $request->start_date,
+//                'start_time' => $request->start_time,
+//                'job_images' => json_encode($request->job_images),
+                
                 'customer_id' => $request->customer_id,
-                'job_weight' => $request->job_weight,
-                'manager_id' => $request->manager_id,
-                'farm_id' => $request->farm_id,
-                'job_description' => $request->job_description,
-                'gate_no' => $request->gate_no,
+                'manager_id' => (isset($request->manager_id)) ? $request->manager_id:null,
+                'farm_id' => isset($request->farm_id) ? $request->farm_id:null,
+                'gate_no' => isset($request->gate_no) ? $request->gate_no:null,
                 'service_id' => $request->service_id,
-                'time_slots_id' => $request->time_slots_id,
-                'start_date' => $request->start_date,
-                'start_time' => $request->start_time,
-                'job_images' => json_encode($request->job_images)
+                'time_slots_id' => isset($request->time_slots_id) ? $request->time_slots_id:null,
+                'job_providing_date' => $request->job_providing_date,
+                'weight' => isset($request->weight) ? $request->weight:null,
+                'is_repeating_job' => $request->is_repeating_job,
+                'repeating_days' => isset($request->repeating_days) ? $request->repeating_days:null,
+                'images' => isset($request->images) ? $request->images:null,
+                'notes' => isset($request->notes) ? $request->notes:null,
+                'amount' => $request->amount,
+//                'payment_mode' => $request->payment_mode,
+//                'job_status' => config('constants.job_status.open'),
+//                'payment_status' => config('constants.payment_status.pending'),
+//                'quick_book' => config('constants.quick_book.Not_Sync'),
+//                'invoice_number' => '123456',
+                
             ]);
             //save job
             if ($job->save()) {
@@ -234,17 +264,7 @@ class JobsController extends Controller
      */
     public function getAssignedJob()
     {
-        $getAllJobs = Job::with(
-            "customer",
-            "manager",
-            "farm",
-            "service",
-            "timeslots",
-            "truck",
-            "skidsteer",
-            "truck_driver",
-            "skidsteer_driver"
-        )
+        $getAllJobs = Job::with("customer","manager","farm","service","timeslots","truck","skidsteer","truck_driver","skidsteer_driver")
             ->whereNotNull("truck_driver_id")
             ->whereNotNull("truck_id")
             ->whereNotNull("skidsteer_id")
