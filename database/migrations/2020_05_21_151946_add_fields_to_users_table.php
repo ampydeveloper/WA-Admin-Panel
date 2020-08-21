@@ -15,16 +15,16 @@ class AddFieldsToUsersTable extends Migration
     {
         //add to users table
         Schema::table('users', function (Blueprint $table) {
-            $table->string("address")->after("phone")->nullable();
-            $table->string("city")->after("address")->nullable();
-            $table->string("state")->after("city")->nullable();
-            $table->string("country")->after("state")->nullable();
-            $table->string("zip_code")->after("country")->nullable();
+//            $table->string("address")->after("phone")->nullable();
+//            $table->string("city")->after("address")->nullable();
+//            $table->string("state")->after("city")->nullable();
+//            $table->string("country")->after("state")->nullable();
+//            $table->string("zip_code")->after("country")->nullable();
         });
         //add to drivers table
         Schema::table('drivers', function (Blueprint $table) {
-            $table->tinyInteger("driver_type")->after("user_id")->comment("1: Truck Driver, 2: JCB")->nullable();
-            $table->float("driver_salary")->after("salary_type")->nullable();
+//            $table->tinyInteger("driver_type")->after("user_id")->comment("1: Truck Driver, 2: JCB")->nullable();
+//            $table->float("driver_salary")->after("salary_type")->nullable();
         });
     }
 

@@ -55,8 +55,6 @@ class CreateJobsTable extends Migration
             
             $table->tinyInteger("quick_book")->default(0)->comment("0:Not Sync, 1: Sync");
             
-            $table->string('invoice_number')->nullable();
-
             $table->unsignedBigInteger('truck_id')->nullable();
             $table->foreign('truck_id')->references('id')->on('vehicles');
             

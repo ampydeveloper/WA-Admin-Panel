@@ -14,8 +14,8 @@ class AddIsConfirmedToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->tinyInteger('is_confirmed')->default(0)->after('role_id')->nullable();
-            $table->tinyInteger('is_active')->default(0)->after('is_confirmed')->nullable();
+//            $table->tinyInteger('is_confirmed')->default(0)->after('role_id')->nullable();
+//            $table->tinyInteger('is_active')->default(0)->after('is_confirmed')->nullable();
         });
     }
 

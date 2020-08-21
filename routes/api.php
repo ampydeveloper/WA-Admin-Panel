@@ -105,19 +105,23 @@ Route::group(['prefix' => 'auth'], function () {
             Route::delete('delete-hauler/{customer_id}', 'CompanyController@deleteHauler');
 
             //jobs
+            Route::post('job-list', 'JobsController@getAllJob');
+            Route::post('job-filter', 'JobsController@jobFilter');
             Route::get('job-customer', 'JobsController@getCustomers');
-            Route::get('fetch-job-details/{unique_job_id}', 'JobsController@fetchJobDetails');
             Route::get('job-farms/{customer_id}/{manager_id}', 'JobsController@getJobFrams');
             Route::get('get-service-slots/{service_id}', 'JobsController@getServiceSlots');
             Route::post('create-job', 'JobsController@createJob');
-            Route::post('job-list', 'JobsController@getAllJob');
+            Route::get('single-job/{job_id}', 'JobsController@getSingleJob');
+            Route::post('update-booked-job', 'JobsController@updateBookedJob');
+            Route::post('cancel-booked-job', 'JobsController@cancelJob');
+            
+//            Route::get('fetch-job-details/{unique_job_id}', 'JobsController@fetchJobDetails');
             // Route::get('assigned-job-list', 'JobsController@getAssignedJob');
             // Route::get('complete-job-list', 'JobsController@getCompleteJob');
             //  Route::get('open-job-list', 'JobsController@getOpenJob');
             // Route::get('repeating-job-list', 'JobsController@getRepeatingJob');
             //Route::get('unpaid-job-list', 'JobsController@getUnpaidJob');
-            Route::get('single-job/{job_id}', 'JobsController@getSingleJob');
-            Route::get('dispatch-job-list', 'JobsController@getDispatchJob');
+//            Route::get('dispatch-job-list', 'JobsController@getDispatchJob');
 
             //accounting
             Route::get('/job-invoices', 'AccountingController@getAllJobInvoices');
@@ -135,5 +139,25 @@ Route::group(['prefix' => 'auth'], function () {
         //upload image
         Route::post('uploadImage', 'ImageController@uploadImage');
         Route::delete('deleteImage', 'ImageController@deleteImage');
+    });
+});
+
+Route::group(['prefix' => 'user'], function () {
+//    dd('api');
+    Route::post('signup', 'User\AuthController@signup');
+    Route::post('login', 'User\AuthController@login');
+    Route::group(['middleware' => 'auth:api'], function () {
+        Route::get('logout', 'User\AuthController@logout');
+        Route::get('user-details', 'User\AuthController@user');
+        Route::get('edit-profile', 'User\AuthController@editProfile');
+        
+        
+        
+        Route::get('services-list', 'User\ServicesController@listServices');
+        Route::post('book-service', 'User\ServicesController@bookService');
+        Route::get('show-booked-services', 'User\ServicesController@showBookedServices');
+        Route::post('update-booked-service', 'User\ServicesController@updateBookedService');
+        
+        Route::post('create-farm', 'User\CustomerController@createFarm');
     });
 });

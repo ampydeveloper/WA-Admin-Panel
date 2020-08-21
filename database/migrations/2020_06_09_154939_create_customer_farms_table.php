@@ -18,17 +18,15 @@ class CreateCustomerFarmsTable extends Migration
 
             $table->unsignedBigInteger('customer_id')->nullable();
             $table->foreign('customer_id')->references('id')->on('users');
-
-            $table->string('farm_address')->nullable();
-            $table->string('farm_city')->nullable();
+            $table->string('farm_address');
+            $table->string('farm_city');
             $table->json('farm_image')->nullable();
-            $table->string('farm_province')->nullable();
-            $table->string('farm_unit')->nullable();
-            $table->string('farm_zipcode')->nullable();
-            $table->tinyInteger('farm_active')->nullable();
-            $table->string('latitude')->nullable();
-            $table->string('longitude')->nullable();
-
+            $table->string('farm_province');
+            $table->string('farm_unit');
+            $table->string('farm_zipcode');
+            $table->tinyInteger('farm_active');
+            $table->string('latitude');
+            $table->string('longitude');
             $table->timestamps();
             $table->softDeletes('deleted_at', 0);
         });

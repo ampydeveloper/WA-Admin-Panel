@@ -14,7 +14,7 @@ class AddPasswordChangedAtToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dateTime("password_changed_at")->after("password")->nullable();
+//            $table->dateTime("password_changed_at")->after("password")->nullable();
         });
     }
 

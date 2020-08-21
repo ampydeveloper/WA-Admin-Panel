@@ -30,9 +30,37 @@ class CustomerController extends Controller
     {
         //validate request
         $validator = Validator::make($request->all(), [
-            'customer_name' => 'required|string',
-            'email' => 'required|string|email|unique:users',
-            'prefix' => 'required'
+            'prefix' => 'required',
+            'customer_first_name' => 'required|string',
+            'customer_last_name' => 'required|string',
+            'customer_email' => 'required|string|email|unique:users',
+            'customer_phone' => 'required',
+            'customer_address' => 'required',
+            'customer_city' => 'required',
+            'customer_province' => 'required',
+            'customer_zipcode' => 'required',
+            'customer_role_id' => 'required',
+            'customer_is_active' => 'required',
+            'farm_address' => 'required',
+            'farm_city' => 'required',
+            'farm_province' => 'required',
+            'farm_unit' => 'required',
+            'farm_zipcode' => 'required',
+            'farm_active' => 'required',
+            'latitude' => 'required',
+            'longitude' => 'required',
+            'manager_details.*.manager_prefix' => 'required',
+            'manager_details.*.manager_first_name' => 'required',
+            'manager_details.*.manager_last_name' => 'required',
+            'manager_details.*.manager_email' => 'required|email|unique:users',
+            'manager_details.*.manager_phone' => 'required',
+            'manager_details.*.manager_address' => 'required',
+            'manager_details.*.manager_city' => 'required',
+            'manager_details.*.manager_province' => 'required',
+            'manager_details.*.manager_zipcode' => 'required',
+            'manager_details.*.manager_role' => 'required',
+            'manager_details.*.manager_card_image' => 'required',
+            'manager_details.*.manager_id_card' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -53,18 +81,19 @@ class CustomerController extends Controller
 
             //create new user
             $user = new User([
-                'first_name' => $request->customer_name,
                 'prefix' => $request->prefix,
-                'email' => $request->email,
-                'role_id' => $request->customer_role,
-                'phone' => $request->phone,
-                'user_image' => $request->user_image,
-                'address' => $request->address,
-                'city' => $request->city,
-                'state' => $request->province,
-                'zip_code' => $request->zipcode,
-                'is_active' => $request->is_active,
+                'first_name' => $request->customer_first_name,
+                'last_name' => $request->customer_last_name,
+                'email' => $request->customer_email,
+                'phone' => $request->customer_phone,
+                'address' => $request->customer_address,
+                'city' => $request->customer_city,
+                'state' => $request->customer_province,
+                'zip_code' => $request->customer_zipcode,
+                'user_image' => isset($request->user_image)? $request->user_image:null,
+                'role_id' => $request->customer_role_id,
                 'is_confirmed' => 1,
+                'is_active' => $request->customer_is_active,
                 'password' => bcrypt($newPassword)
             ]);
             if ($user->save()) {
@@ -75,7 +104,7 @@ class CustomerController extends Controller
                     'customer_id' => $user->id,
                     'farm_address' => $request->farm_address,
                     'farm_city' => $request->farm_city,
-                    'farm_image' => json_encode($request->farm_images),
+                    'farm_image' => isset($request->farm_images)?json_encode($request->farm_images):null,
                     'farm_province' => $request->farm_province,
                     'farm_unit' => $request->farm_unit,
                     'farm_zipcode' => $request->farm_zipcode,
@@ -86,31 +115,32 @@ class CustomerController extends Controller
 
                 $farmDetails->save();
 
-                $managerIds = array();
+//                $managerIds = array();
                 foreach ($request->manager_details as $manager) {
                     //random string for new password
                     $newPassword = Str::random();
 
                     $saveManger = new User([
-                        'first_name' => $manager['manager_name'],
                         'prefix' => $manager['manager_prefix'],
-                        'created_by' => $user->id,
-                        'farm_id' => $farmDetails->id,
+                        'first_name' => $manager['manager_first_name'],
+                        'last_name' => $manager['manager_last_name'],
                         'email' => $manager['manager_email'],
-                        'role_id' => $manager['manager_role'],
                         'phone' => $manager['manager_phone'],
-                        'user_image' => $manager['manager_image'],
                         'address' => $manager['manager_address'],
                         'city' => $manager['manager_city'],
                         'state' => $manager['manager_province'],
                         'zip_code' => $manager['manager_zipcode'],
-                        'is_active' => 1,
+                        'user_image' => isset($manager['manager_image'])?$manager['manager_image']:null,
+                        'role_id' => $manager['manager_role'],
                         'is_confirmed' => 1,
+                        'is_active' => 1,
+                        'created_by' => $user->id,
+                        'farm_id' => $farmDetails->id,
                         'password' => bcrypt($newPassword)
                     ]);
 
                     if ($saveManger->save()) {
-                        $managerIds[] = $saveManger->id;
+//                        $managerIds[] = $saveManger->id;
                         $mangerDetails = new ManagerDetail([
                             'user_id' => $saveManger->id,
                             'identification_number' => $manager['manager_id_card'],
@@ -140,7 +170,7 @@ class CustomerController extends Controller
             //return with error
             return response()->json([
                 'status' => false,
-                'message' => 'Internal server error!',
+                'message' => $e->getMessage(),
                 'data' => []
             ], 500);
         }
@@ -154,7 +184,27 @@ class CustomerController extends Controller
 
 	//validate request
 	$validator = Validator::make($request->all(), [
-	    'manager_details.*.email' => 'required|string|email|unique:users',
+	    'customer_id' => 'required',
+	    'farm_address' => 'required',
+            'farm_city' => 'required',
+            'farm_province' => 'required',
+            'farm_unit' => 'required',
+            'farm_zipcode' => 'required',
+            'farm_active' => 'required',
+            'latitude' => 'required',
+            'longitude' => 'required',
+            'manager_details.*.manager_prefix' => 'required',
+            'manager_details.*.manager_first_name' => 'required',
+            'manager_details.*.manager_last_name' => 'required',
+            'manager_details.*.manager_email' => 'required|email|unique:users',
+            'manager_details.*.manager_phone' => 'required',
+            'manager_details.*.manager_address' => 'required',
+            'manager_details.*.manager_city' => 'required',
+            'manager_details.*.manager_province' => 'required',
+            'manager_details.*.manager_zipcode' => 'required',
+            'manager_details.*.manager_role' => 'required',
+            'manager_details.*.manager_card_image' => 'required',
+            'manager_details.*.manager_id_card' => 'required',
 	]);
 
 	if ($validator->fails()) {
@@ -170,44 +220,45 @@ class CustomerController extends Controller
             //random string for new password
             $newPassword = Str::random();
             $farmDetails = new CustomerFarm([
-            'customer_id' => $request->customer_id,
-            'farm_address' => $request->farm_address,
-            'farm_city' => $request->farm_city,
-            'farm_image' => json_encode($request->farm_images),
-            'farm_province' => $request->farm_province,
-            'farm_unit' => $request->farm_unit,
-            'farm_zipcode' => $request->farm_zipcode,
-            'farm_active' => $request->farm_active,
-            'latitude' => $request->latitude,
-            'longitude' => $request->longitude
-        ]);
+                'customer_id' => $request->customer_id,
+                'farm_address' => $request->farm_address,
+                'farm_city' => $request->farm_city,
+                'farm_image' => isset($request->farm_images) ? json_encode($request->farm_images) : null,
+                'farm_province' => $request->farm_province,
+                'farm_unit' => $request->farm_unit,
+                'farm_zipcode' => $request->farm_zipcode,
+                'farm_active' => $request->farm_active,
+                'latitude' => $request->latitude,
+                'longitude' => $request->longitude
+            ]);
 
-        $farmDetails->save();
-        $managerIds = array();
+            $farmDetails->save();
+//        $managerIds = array();
         foreach ($request->manager_details as $manager) {
             //random string for new password
             $newPassword = Str::random();
 
             $saveManger = new User([
-                'first_name' => $manager['manager_name'],
-                'prefix' => $manager['manager_prefix'],
-                'created_by' => $request->customer_id,
-                'farm_id' => $farmDetails->id,
-                'email' => $manager['email'],
-                'role_id' => $manager['manager_role'],
-                'phone' => $manager['manager_phone'],
-                'user_image' => $manager['manager_image'],
-                'address' => $manager['manager_address'],
-                'city' => $manager['manager_city'],
-                'state' => $manager['manager_province'],
-                'zip_code' => $manager['manager_zipcode'],
-                'is_active' => 1,
-                'is_confirmed' => 1,
-                'password' => bcrypt($newPassword)
-            ]);
+                    'prefix' => $manager['manager_prefix'],
+                    'first_name' => $manager['manager_first_name'],
+                    'last_name' => $manager['manager_last_name'],
+                    'email' => $manager['manager_email'],
+                    'phone' => $manager['manager_phone'],
+                    'address' => $manager['manager_address'],
+                    'city' => $manager['manager_city'],
+                    'state' => $manager['manager_province'],
+                    'zip_code' => $manager['manager_zipcode'],
+                    'user_image' => isset($manager['manager_image']) ? $manager['manager_image'] : null,
+                    'role_id' => $manager['manager_role'],
+                    'is_confirmed' => 1,
+                    'is_active' => 1,
+                    'created_by' => $request->customer_id,
+                    'farm_id' => $farmDetails->id,
+                    'password' => bcrypt($newPassword)
+                ]);
 
-            if ($saveManger->save()) {
-                $managerIds[] = $saveManger->id;
+                if ($saveManger->save()) {
+//                $managerIds[] = $saveManger->id;
                 $mangerDetails = new ManagerDetail([
                     'user_id' => $saveManger->id,
                     'identification_number' => $manager['manager_id_card'],
@@ -236,7 +287,7 @@ class CustomerController extends Controller
             //return with error
             return response()->json([
                 'status' => false,
-                'message' => 'Internal server error!',
+                'message' => $e->getMessage(),
                 'data' => []
             ], 500);
         }
@@ -250,9 +301,17 @@ class CustomerController extends Controller
     {
         //validate request
         $validator = Validator::make($request->all(), [
-            'customer_name' => 'required|string',
-            'email' => 'required|string|email|unique:users',
-            'prefix' => 'required'
+            'prefix' => 'required',
+            'customer_first_name' => 'required|string',
+            'customer_last_name' => 'required|string',
+            'customer_email' => 'required|string|email|unique:users',
+            'customer_phone' => 'required',
+            'customer_address' => 'required',
+            'customer_city' => 'required',
+            'customer_province' => 'required',
+            'customer_zipcode' => 'required',
+            'customer_role_id' => 'required',
+            'customer_is_active' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -273,18 +332,19 @@ class CustomerController extends Controller
 
             //create new user
             $user = new User([
-                'first_name' => $request->customer_name,
                 'prefix' => $request->prefix,
-                'email' => $request->email,
-                'role_id' => $request->customer_role,
-                'phone' => $request->phone,
-                'user_image' => $request->user_image,
-                'address' => $request->address,
-                'city' => $request->city,
-                'state' => $request->province,
-                'zip_code' => $request->zipcode,
-                'is_active' => $request->is_active,
+                'first_name' => $request->customer_first_name,
+                'last_name' => $request->customer_last_name,
+                'email' => $request->customer_email,
+                'phone' => $request->customer_phone,
+                'address' => $request->customer_address,
+                'city' => $request->customer_city,
+                'state' => $request->customer_province,
+                'zip_code' => $request->customer_zipcode,
+                'user_image' => isset($request->user_image)? $request->user_image:null,
+                'role_id' => $request->customer_role_id,
                 'is_confirmed' => 1,
+                'is_active' => $request->customer_is_active,
                 'password' => bcrypt($newPassword)
             ]);
             if ($user->save()) {
@@ -307,7 +367,7 @@ class CustomerController extends Controller
             //return with error
             return response()->json([
                 'status' => false,
-                'message' => 'Internal server error!',
+                'message' => $e->getMessage(),
                 'data' => []
             ], 500);
         }
@@ -320,9 +380,20 @@ class CustomerController extends Controller
     {
         //validate request
         $validator = Validator::make($request->all(), [
-            'customer_name' => 'required|string',
-            'email' => 'required|string|email|unique:users',
-            'prefix' => 'required'
+            'customer_id' => 'required',
+            'farm_id' => 'required',
+            'manager_prefix' => 'required',
+            'manager_first_name' => 'required',
+            'manager_last_name' => 'required',
+            'manager_email' => 'required|email|unique:users',
+            'manager_phone' => 'required',
+            'manager_address' => 'required',
+            'manager_city' => 'required',
+            'manager_province' => 'required',
+            'manager_zipcode' => 'required',
+            'manager_role' => 'required',
+            'manager_card_image' => 'required',
+            'manager_id_card' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -342,19 +413,21 @@ class CustomerController extends Controller
             $newPassword = Str::random();
 
             $saveManger = new User([
-                'first_name' => $request->manager_name,
                 'prefix' => $request->manager_prefix,
-                'created_by' => 1234,
+                'first_name' => $request->manager_first_name,
+                'last_name' => $request->manager_last_name,
                 'email' => $request->manager_email,
-                'role_id' => $request->manager_role,
                 'phone' => $request->manager_phone,
-                'user_image' => $request->manager_image,
                 'address' => $request->manager_address,
                 'city' => $request->manager_city,
                 'state' => $request->manager_province,
                 'zip_code' => $request->manager_zipcode,
-                'is_active' => 1,
+                'user_image' => isset($request->manager_image)?$request->manager_image:null,
+                'role_id' => $request->manager_role,
                 'is_confirmed' => 1,
+                'is_active' => 1,
+                'created_by' => $request->customer_id,
+                'farm_id' => $request->id,
                 'password' => bcrypt($newPassword)
             ]);
 
@@ -382,7 +455,7 @@ class CustomerController extends Controller
             //return with error
             return response()->json([
                 'status' => false,
-                'message' => 'Internal server error!',
+                'message' => $e->getMessage(),
                 'data' => []
             ], 500);
         }
@@ -395,9 +468,15 @@ class CustomerController extends Controller
     {
         //validate request
         $validator = Validator::make($request->all(), [
-            'customer_name' => 'required|string',
-            'email' => 'required|string|email|unique:users',
-            'prefix' => 'required'
+            'customer_id' => 'required',
+	    'farm_address' => 'required',
+            'farm_city' => 'required',
+            'farm_province' => 'required',
+            'farm_unit' => 'required',
+            'farm_zipcode' => 'required',
+            'farm_active' => 'required',
+            'latitude' => 'required',
+            'longitude' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -415,11 +494,10 @@ class CustomerController extends Controller
 
             //save customer farm details
             $farmDetails = new CustomerFarm([
-                'customer_id' => 1234,
-                'manager_id' => 1234,
+                'customer_id' => $request->customer_id,
                 'farm_address' => $request->farm_address,
                 'farm_city' => $request->farm_city,
-                'farm_image' => json_encode($request->farm_images),
+                'farm_image' => isset($request->farm_images) ? json_encode($request->farm_images) : null,
                 'farm_province' => $request->farm_province,
                 'farm_unit' => $request->farm_unit,
                 'farm_zipcode' => $request->farm_zipcode,
@@ -446,7 +524,7 @@ class CustomerController extends Controller
             //return with error
             return response()->json([
                 'status' => false,
-                'message' => 'Internal server error!',
+                'message' => $e->getMessage(),
                 'data' => []
             ], 500);
         }
@@ -457,15 +535,11 @@ class CustomerController extends Controller
      */
     public function listCustomer()
     {
-        // \DB::connection()->enableQueryLog();
-
         $getCustomer = User::with('farmlist.farmManager')
             ->whereRoleId(config('constant.roles.Customer'))->get();
-        // $queries = \DB::getQueryLog();
-        // dd($queries);
         return response()->json([
             'status' => true,
-            'message' => 'Service Listing.',
+            'message' => 'Customer Listing.',
             'data' => $getCustomer
         ], 200);
     }
@@ -478,11 +552,11 @@ class CustomerController extends Controller
         $getCustomer = User::with(['customerManager' => function ($query) {
             $query->with("manager", "farms");
         }])
-            ->whereRoleId(config('constant.roles.Company'))->get();
+            ->whereRoleId(config('constant.roles.Haulers'))->get();
 
         return response()->json([
             'status' => true,
-            'message' => 'Service Listing.',
+            'message' => 'Haulers Listing.',
             'data' => $getCustomer
         ], 200);
     }

@@ -17,9 +17,159 @@ use App\CustomerFarm;
 
 class JobsController extends Controller
 {
+    /**
+     * get all jobs
+     */
+    public function getAllJob(Request $request)
+    {
+        $allJobs = Job::with("customer","manager","farm","service","timeslots","truck","skidsteer","truck_driver","skidsteer_driver")->get();
+        $repeatingJobs = Job::where('is_repeating_job', config('constant.repeating_job.yes'))->with("customer","manager","farm","service","timeslots","truck","skidsteer","truck_driver","skidsteer_driver")->get();
+        return response()->json([
+            'status' => true,
+            'message' => 'job Details',
+            'data' => [
+                'allJobs' => $allJobs,
+                'repeatingJobs' => $repeatingJobs
+            ]
+        ], 200);
+    }
+    
+    /**
+     * filter jobs
+     */
+    
+    public function jobFilter(Request $request) {
+        if($request->has('job_status')) {
+            $filterJobs = $repeatingJobs = Job::where('job_status', $request->job_status)->with("customer","manager","farm","service","timeslots","truck","skidsteer","truck_driver","skidsteer_driver")->get();
+        } elseif($request->has('payment_mode')) {
+            $filterJobs = $repeatingJobs = Job::where('payment_mode', $request->job_status)->with("customer","manager","farm","service","timeslots","truck","skidsteer","truck_driver","skidsteer_driver")->get();
+        } elseif($request->has('payment_status')) {
+            $filterJobs = $repeatingJobs = Job::where('payment_status', $request->job_status)->with("customer","manager","farm","service","timeslots","truck","skidsteer","truck_driver","skidsteer_driver")->get();
+        } elseif($request->has('quick_book')) {
+            $filterJobs = $repeatingJobs = Job::where('quick_book', $request->job_status)->with("customer","manager","farm","service","timeslots","truck","skidsteer","truck_driver","skidsteer_driver")->get();
+        }
+        return response()->json([
+            'status' => true,
+            'message' => 'job Details',
+            'data' => [
+                'filterJobs' => $filterJobs,
+            ]
+        ], 200);
+    }
+    
+    /**
+     * create job
+     */
+    public function createJob(Request $request)
+    {
+//        dd($request->is_repeating_job);
+        //validate request
+        $validator = Validator::make($request->all(), [
+            'customer_id' => 'required',
+            'service_id' => 'required',
+            'job_providing_date' => 'required',
+            'is_repeating_job' => 'required',
+            'payment_mode' => 'required',
+            'amount' => 'required',
+            'repeating_days' => 'required_if:is_repeating_job,==,2',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'The given data was invalid.',
+                'data' => $validator->errors()
+            ], 422);
+        }
+        $checkService = Service::where('id', $request->service_id)->first();
+        if($checkService->service_for == config('constant.roles.Customer')) {
+            if($request->manager_id == null || $request->manager_id == null || $request->farm_id == null || $request->time_slots_id == null) {
+                return response()->json([
+                'status' => false,
+                'message' => 'The given data was invalid.',
+                'data' => []
+            ], 422);
+            } 
+        }
+        
+        
+        try {
+            $job = new Job([
+                'customer_id' => $request->customer_id,
+                'manager_id' => (isset($request->manager_id)) ? $request->manager_id:null,
+                'farm_id' => isset($request->farm_id) ? $request->farm_id:null,
+                'gate_no' => isset($request->gate_no) ? $request->gate_no:null,
+                'service_id' => $request->service_id,
+                'time_slots_id' => isset($request->time_slots_id) ? $request->time_slots_id:null,
+                'job_providing_date' => $request->job_providing_date,
+                'weight' => isset($request->weight) ? $request->weight:null,
+                'is_repeating_job' => $request->is_repeating_job,
+                'repeating_days' => isset($request->repeating_days) ? $request->repeating_days:null,
+                'payment_mode' => $request->payment_mode,
+                'images' => isset($request->images) ? $request->images:null,
+                'notes' => isset($request->notes) ? $request->notes:null,
+                'amount' => $request->amount,
+            ]);
+            if ($job->save()) {
+                $mailData = [
+                'job_id' => $job->id,
+                'customer_id' => $request->customer_id,
+                'manager_id' => isset($request->manager_id)?$request->manager_id:null
+            ];
+                $this->_sendPaymentEmail($mailData);
+            }
+            return response()->json([
+                'status' => true,
+                'message' => 'Job created successfully.',
+                'data' => []
+            ], 200);
+        } catch (\Exception $e) {
+            Log::error(json_encode($e->getMessage()));
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+                'data' => []
+            ], 500);
+        }
+    }
 
     /**
-     * get customers and company
+     * Job booking email
+     */
+    public function _sendPaymentEmail($mailData) {
+        $customerDetails = User::whereId($mailData['customer_id'])->first();
+
+        $customerName = $customerDetails->first_name . ' ' . $customerDetails->last_name;
+        $data = array(
+            'user' => $customerDetails,
+            'name' => $customerName,
+        );
+
+        //send to customer
+        Mail::send('email_templates.payment_email', $data, function ($message) use ($customerDetails, $customerName) {
+            $message->to($customerDetails->email, $customerName)->subject('Job Created');
+            $message->from(env('MAIL_USERNAME'), env('MAIL_USERNAME'));
+        });
+
+        //send to manager
+        if ($mailData['manager_id'] !== null) {
+            $managerDetails = User::whereId($mailData['manager_id'])->first();
+            $managerName = $managerDetails->first_name . ' ' . $managerDetails->last_name;
+
+            $data = array(
+                'user' => $managerDetails,
+                'name' => $managerName,
+            );
+
+            Mail::send('email_templates.payment_email', $data, function ($message) use ($managerDetails, $managerName) {
+                $message->to($managerDetails->email, $managerName)->subject('Job Created');
+                $message->from(env('MAIL_USERNAME'), env('MAIL_USERNAME'));
+            });
+        }
+    }
+
+    /**
+     * get customers and hauler
      */
     public function getCustomers()
     {
@@ -61,410 +211,11 @@ class JobsController extends Controller
     }
 
     /**
-     * create job
-     */
-    public function createJob(Request $request)
-    {
-        //validate request
-        $validator = Validator::make($request->all(), [
-            'customer_id' => 'required',
-            'service_id' => 'required',
-            'job_providing_date' => 'required',
-            'is_repeating_job' => 'required',
-            'repeating_days' => 'required_if:is_repeating_job,==,1',
-            'payment_mode' => 'required',
-            'amount' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'message' => 'The given data was invalid.',
-                'data' => $validator->errors()
-            ], 422);
-        }
-        
-        $checkService = Service::where('id', $request->service_id)->first();
-        if($checkService->service_for == config('constant.roles.Customer')) {
-            if($request->manager_id == null || $request->manager_id == null || $request->farm_id == null || $request->time_slots_id == null) {
-                return response()->json([
-                'status' => false,
-                'message' => 'The given data was invalid.',
-                'data' => $validator->errors()
-            ], 422);
-            } 
-        }
-        
-        
-        try {
-
-            //create job
-            $job = new Job([
-//                'job_amount' => $request->job_weight != "" && $request->job_weight != null ? $request->job_weight * $request->job_amount : $request->job_amount,
-//                'customer_id' => $request->customer_id,
-//                'job_weight' => $request->job_weight,
-//                'manager_id' => $request->manager_id,
-//                'farm_id' => $request->farm_id,
-//                'job_description' => $request->job_description,
-//                'gate_no' => $request->gate_no,
-//                'service_id' => $request->service_id,
-//                'time_slots_id' => $request->time_slots_id,
-//                'start_date' => $request->start_date,
-//                'start_time' => $request->start_time,
-//                'job_images' => json_encode($request->job_images),
-                
-                'customer_id' => $request->customer_id,
-                'manager_id' => (isset($request->manager_id)) ? $request->manager_id:null,
-                'farm_id' => isset($request->farm_id) ? $request->farm_id:null,
-                'gate_no' => isset($request->gate_no) ? $request->gate_no:null,
-                'service_id' => $request->service_id,
-                'time_slots_id' => isset($request->time_slots_id) ? $request->time_slots_id:null,
-                'job_providing_date' => $request->job_providing_date,
-                'weight' => isset($request->weight) ? $request->weight:null,
-                'is_repeating_job' => $request->is_repeating_job,
-                'repeating_days' => isset($request->repeating_days) ? $request->repeating_days:null,
-                'images' => isset($request->images) ? $request->images:null,
-                'notes' => isset($request->notes) ? $request->notes:null,
-                'amount' => $request->amount,
-//                'payment_mode' => $request->payment_mode,
-//                'job_status' => config('constants.job_status.open'),
-//                'payment_status' => config('constants.payment_status.pending'),
-//                'quick_book' => config('constants.quick_book.Not_Sync'),
-//                'invoice_number' => '123456',
-                
-            ]);
-            //save job
-            if ($job->save()) {
-                $this->_sendPaymentEmail($job->id, $request->customer_id, $request->manager_id);
-            }
-
-            //return success response
-            return response()->json([
-                'status' => true,
-                'message' => 'Job created successfully.',
-                'data' => []
-            ], 200);
-        } catch (\Exception $e) {
-            //make log of errors
-            Log::error(json_encode($e->getMessage()));
-            //return with error
-            return response()->json([
-                'status' => false,
-                'message' => 'Internal server error!',
-                'data' => []
-            ], 500);
-        }
-    }
-
-    /**
-     * payment email
-     */
-    /**
-     * payment email
-     */
-    public function _sendPaymentEmail($jobId, $customerId, $managerId)
-    {
-        //check user role
-        $checkRole = User::whereId($customerId)->first();
-
-        $customerDetails = User::whereId($customerId)->first();
-        $managerDetails = User::whereId($managerId)->first();
-
-        $customerName = $customerDetails->first_name . ' ' . $customerDetails->last_name;
-        $data = array(
-            'user' => $customerDetails,
-            'name' => $customerName,
-            'paymentLink' => env('APP_URL') . 'payment/' . base64_encode($jobId),
-            'userRoler' => $checkRole
-        );
-
-        //send to customer
-        Mail::send('email_templates.payment_email', $data, function ($message) use ($customerDetails, $customerName) {
-            $message->to($customerDetails->email, $customerName)->subject('Job Created');
-            $message->from(env('MAIL_USERNAME'), env('MAIL_USERNAME'));
-        });
-
-        $managerName = $managerDetails->first_name . ' ' . $managerDetails->last_name;
-        $data = array(
-            'user' => $managerDetails,
-            'name' => $managerName,
-            'paymentLink' => env('APP_URL') . 'payment/' . base64_encode($jobId),
-            'userRoler' => $checkRole
-        );
-
-        //send to manager
-        Mail::send('email_templates.payment_email', $data, function ($message) use ($managerDetails, $managerName) {
-            $message->to($managerDetails->email, $managerName)->subject('Job Created');
-            $message->from(env('MAIL_USERNAME'), env('MAIL_USERNAME'));
-        });
-    }
-
-    /**
-     * get all jobs
-     */
-    public function getAllJob(Request $request)
-    {
-       if($request->status == 'Assigned Jobs'){
-         return $this->getAssignedJob();
-       }else if($request->status == 'Completed Jobs'){
-         return $this->getCompleteJob();
-       }else if($request->status == 'Paid'){
-           return $this->getPaidJob();
-       }else if($request->status == 'Unpaid'){
-	return $this->getUnpaidJob();
-       }else if($request->status == 'Open'){
-	return $this->getOpenJob();
-       }else{
-        $getAllJobs = Job::with(
-            "customer",
-            "manager",
-            "farm",
-            "service",
-            "timeslots",
-            "truck",
-            "skidsteer",
-            "truck_driver",
-            "skidsteer_driver"
-        )->get();
-
-        return response()->json([
-            'status' => true,
-            'message' => 'job Details',
-            'data' => $getAllJobs
-        ], 200);
-      }
-    }
-
-    /**
-     * get dispatch jobs
-     */
-    public function getDispatchJob()
-    {
-        $getAllJobs = Job::with(
-            "customer",
-            "manager",
-            "farm",
-            "service",
-            "timeslots",
-            "truck",
-            "skidsteer",
-            "truck_driver",
-            "skidsteer_driver"
-        )->whereStartDate(Carbon::today())->get();
-
-        return response()->json([
-            'status' => true,
-            'message' => 'job Details',
-            'data' => $getAllJobs
-        ], 200);
-    }
-
-    /**
-     * get assigned job
-     */
-    public function getAssignedJob()
-    {
-        $getAllJobs = Job::with("customer","manager","farm","service","timeslots","truck","skidsteer","truck_driver","skidsteer_driver")
-            ->whereNotNull("truck_driver_id")
-            ->whereNotNull("truck_id")
-            ->whereNotNull("skidsteer_id")
-            ->whereNotNull("skidsteer_driver_id")
-            ->get();
-	if($getAllJobs->count()){
-        return response()->json([
-            'status' => true,
-            'message' => 'job Details',
-            'data' => $getAllJobs
-        ], 200);
-	}else{
-        return response()->json([
-            'status' => false,
-            'message' => 'No assigned jobs found.',
-            'data' => ''
-        ], 200);
-	}	
-    }
-
-    /**
-     * get completed jobs
-     */
-    public function getCompleteJob()
-    {
-        $getAllJobs = Job::with(
-            "customer",
-            "manager",
-            "farm",
-            "service",
-            "timeslots",
-            "truck",
-            "skidsteer",
-            "truck_driver",
-            "skidsteer_driver"
-        )
-            ->whereJobStatus(config('constant.job_status.close'))
-            ->get();
-
-    	if($getAllJobs->count()){
-        return response()->json([
-            'status' => true,
-            'message' => 'job Details',
-            'data' => $getAllJobs
-        ], 200);
-	}else{
-        return response()->json([
-            'status' => false,
-            'message' => 'No completed jobs found.',
-            'data' => ''
-        ], 200);
-	}
-    }
-
-    /**
-     * get open jobs
-     */
-    public function getOpenJob()
-    {
-        $getAllJobs = Job::with(
-            "customer",
-            "manager",
-            "farm",
-            "service",
-            "timeslots",
-            "truck",
-            "skidsteer",
-            "truck_driver",
-            "skidsteer_driver"
-        )
-            ->whereJobStatus(config('constant.job_status.open'))
-            ->get();
-        	if($getAllJobs->count()){
-        return response()->json([
-            'status' => true,
-            'message' => 'job Details',
-            'data' => $getAllJobs
-        ], 200);
-	}else{
-        return response()->json([
-            'status' => false,
-            'message' => 'No opned job found.',
-            'data' => ''
-        ], 200);
-	}
-    }
-
-    /**
-     * get repeating jobs
-     */
-    public function getRepeatingJob()
-    {
-        $getAllJobs = Job::with(
-            "customer",
-            "manager",
-            "farm",
-            "service",
-            "timeslots",
-            "truck",
-            "skidsteer",
-            "truck_driver",
-            "skidsteer_driver"
-        )
-            ->whereRepeatingJob(config('constant.repeating_job.true'))
-            ->get();
-
-        return response()->json([
-            'status' => true,
-            'message' => 'job Details',
-            'data' => $getAllJobs
-        ], 200);
-    }
-
-    /**
-     * get unpaid jobs
-     */
-    public function getUnpaidJob()
-    {
-        $getAllJobs = Job::with(
-            "customer",
-            "manager",
-            "farm",
-            "service",
-            "timeslots",
-            "truck",
-            "skidsteer",
-            "truck_driver",
-            "skidsteer_driver"
-        )
-            ->wherePaymentStatus(config('constant.payment_history.pending'))
-            ->get();
-
-     	if($getAllJobs->count()){
-        return response()->json([
-            'status' => true,
-            'message' => 'job Details',
-            'data' => $getAllJobs
-        ], 200);
-	}else{
-        return response()->json([
-            'status' => false,
-            'message' => 'No unpaid job found.',
-            'data' => ''
-        ], 200);
-	}
-    }
-
-    /**
-     * get paid jobs
-     */
-    public function getPaidJob()
-    {
-        $getAllJobs = Job::with(
-            "customer",
-            "manager",
-            "farm",
-            "service",
-            "timeslots",
-            "truck",
-            "skidsteer",
-            "truck_driver",
-            "skidsteer_driver"
-        )
-            ->wherePaymentStatus(config('constant.payment_history.complete'))
-            ->get();
-
-    	if($getAllJobs->count()){
-        return response()->json([
-            'status' => true,
-            'message' => 'job Details',
-            'data' => $getAllJobs
-        ], 200);
-	}else{
-        return response()->json([
-            'status' => false,
-            'message' => 'No paid jobs found.',
-            'data' => ''
-        ], 200);
-	}
-    }
-
-    /**
      * get single jobs
      */
     public function getSingleJob(Request $request)
     {
-        $getSingleJobs = Job::with(
-            "customer",
-            "manager",
-            "farm",
-            "service",
-            "timeslots",
-            "truck",
-            "skidsteer",
-            "truck_driver",
-            "skidsteer_driver"
-        )
-            ->whereId($request->job_id)
-            ->first();
-
+        $getSingleJobs = Job::whereId($request->job_id)->with("customer","manager","farm","service","timeslots","truck","skidsteer","truck_driver","skidsteer_driver")->first();
         return response()->json([
             'status' => true,
             'message' => 'single job Details',
@@ -475,20 +226,137 @@ class JobsController extends Controller
     /**
      * get job
      */
-    public function fetchJobDetails(Request $request)
-    {
-        $loadJob = Job::whereId(base64_decode($request->unique_job_id))->first();
-        if ($loadJob != null) {
-            $message = "Job details!";
-            $data = $loadJob;
-        } else {
-            $message = "Job not found!";
-            $data = [];
+//    public function fetchJobDetails(Request $request)
+//    {
+//        $loadJob = Job::whereId(base64_decode($request->unique_job_id))->first();
+//        if ($loadJob != null) {
+//            $message = "Job details!";
+//            $data = $loadJob;
+//        } else {
+//            $message = "Job not found!";
+//            $data = [];
+//        }
+//        return response()->json([
+//            'status' => true,
+//            'message' => $message,
+//            'data' => $data
+//        ], 200);
+//    }
+    
+    public function updateBookedJob(Request $request) {
+        $validator = Validator::make($request->all(), [
+                    'job_id' => 'required',
+                    'customer_id' => 'required',
+                    'service_id' => 'required',
+                    'job_providing_date' => 'required',
+                    'is_repeating_job' => 'required',
+                    'payment_mode' => 'required',
+                    'amount' => 'required',
+                    'repeating_days' => 'required_if:is_repeating_job,==,2',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                        'status' => false,
+                        'message' => 'The given data was invalid.',
+                        'data' => $validator->errors()
+                            ], 422);
+        }
+        $checkService = Service::where('id', $request->service_id)->first();
+        if ($checkService->service_for == config('constant.roles.Customer')) {
+            if ($request->manager_id == null || $request->manager_id == null || $request->farm_id == null || $request->time_slots_id == null) {
+                return response()->json([
+                            'status' => false,
+                            'message' => 'The given data was invalid.',
+                            'data' => []
+                                ], 422);
+            }
+        }
+
+        $checkIfEdittingAllowed = Job::where('id', $request->job_id)->first();
+        if (round((strtotime($checkIfEdittingAllowed->job_providing_date) - strtotime(date('Y/m/d'))) / 3600, 1)) {
+
+            try {
+                Job::whereId($request->job_id)->update([
+                    'customer_id' => $request->customer_id,
+                    'manager_id' => (isset($request->manager_id)) ? $request->manager_id : null,
+                    'farm_id' => isset($request->farm_id) ? $request->farm_id : null,
+                    'gate_no' => isset($request->gate_no) ? $request->gate_no : null,
+                    'service_id' => $request->service_id,
+                    'time_slots_id' => isset($request->time_slots_id) ? $request->time_slots_id : null,
+                    'job_providing_date' => $request->job_providing_date,
+                    'weight' => isset($request->weight) ? $request->weight : null,
+                    'is_repeating_job' => $request->is_repeating_job,
+                    'repeating_days' => isset($request->repeating_days) ? $request->repeating_days : null,
+                    'payment_mode' => $request->payment_mode,
+                    'images' => isset($request->images) ? $request->images : null,
+                    'notes' => isset($request->notes) ? $request->notes : null,
+                    'amount' => $request->amount,
+                ]);
+                $mailData = [
+                    'job_id' => $job->id,
+                    'customer_id' => $request->customer_id,
+                    'manager_id' => isset($request->manager_id) ? $request->manager_id : null
+                ];
+                $this->_sendPaymentEmail($mailData);
+                return response()->json([
+                            'status' => true,
+                            'message' => 'Job created successfully.',
+                            'data' => []
+                                ], 200);
+            } catch (\Exception $e) {
+                Log::error(json_encode($e->getMessage()));
+                return response()->json([
+                            'status' => false,
+                            'message' => $e->getMessage(),
+                            'data' => []
+                                ], 500);
+            }
         }
         return response()->json([
-            'status' => true,
-            'message' => $message,
-            'data' => $data
-        ], 200);
+                    'status' => false,
+                    'message' => 'You cannot cancel the job.',
+                    'data' => []
+                        ], 500);
+    }
+
+    public function cancelJob(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'job_id' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'The given data was invalid.',
+                'data' => $validator->errors()
+            ], 422);
+        }
+        $bookedService = Job::where('id', $request->job_id)->first();
+        dump($bookedService->job_providing_date);
+        dump(date('Y/m/d'));
+       
+        if (round((strtotime($bookedService->job_providing_date) - strtotime(date('Y/m/d'))) / 3600, 1) >= 24) {
+            try {
+                Job::whereId($request->job_id)->update(['job_status' => config('constant.job_status.cancelled')]);
+                Job::whereId($request->job_id)->delete();
+
+                return response()->json([
+                            'status' => true,
+                            'message' => 'Job deleted successfully',
+                            'data' => []
+                                ], 200);
+            } catch (\Exception $e) {
+                Log::error(json_encode($e->getMessage()));
+                return response()->json([
+                            'status' => false,
+                            'message' => $e->getMessage(),
+                            'data' => []
+                                ], 500);
+            }
+        } 
+        return response()->json([
+                            'status' => false,
+                            'message' => 'You cannot cancel the job.',
+                            'data' => []
+                                ], 500);
     }
 }

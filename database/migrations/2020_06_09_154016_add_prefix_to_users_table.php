@@ -15,10 +15,10 @@ class AddPrefixToUsersTable extends Migration
     {
         //add to user table
         Schema::table('users', function (Blueprint $table) {
-            $table->string('prefix', 50)->after('last_name')->nullable();
+//            $table->string('prefix', 50)->after('last_name')->nullable();
 
-            $table->unsignedBigInteger('created_by')->after('id')->nullable();
-            $table->foreign('created_by')->references('id')->on('users');
+//            $table->unsignedBigInteger('created_by')->after('id')->nullable();
+//            $table->foreign('created_by')->references('id')->on('users');
         });
     }
 

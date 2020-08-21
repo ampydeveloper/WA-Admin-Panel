@@ -7,8 +7,7 @@ return [
         'Driver' => 3,
         'Customer' => 4,
         'Customer_Manager' => 5,
-        'Company' => 6,
-        'Company_Manager' => 7
+        'Haulers' => 6,
     ],
     'vehicle_type' => [
         'truck' => 1,
@@ -25,8 +24,8 @@ return [
         'close' => 1
     ],
     'repeating_job' => [
-        'true' => 1,
-        'false' => 0
+        'no' => 1,
+        'yes' => 2
     ],
     'payment_history' => [
         'pending' => 0,
