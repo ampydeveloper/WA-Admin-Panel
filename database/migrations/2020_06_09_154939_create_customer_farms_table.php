@@ -16,14 +16,14 @@ class CreateCustomerFarmsTable extends Migration
         Schema::create('customer_farms', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('customer_id')->nullable();
+            $table->unsignedBigInteger('customer_id');
             $table->foreign('customer_id')->references('id')->on('users');
             $table->string('farm_address');
+            $table->string('farm_unit')->nullable();
             $table->string('farm_city');
-            $table->json('farm_image')->nullable();
             $table->string('farm_province');
-            $table->string('farm_unit');
             $table->string('farm_zipcode');
+            $table->json('farm_image')->nullable();
             $table->tinyInteger('farm_active');
             $table->string('latitude');
             $table->string('longitude');

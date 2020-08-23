@@ -13,253 +13,268 @@ use Validator;
 use App\User;
 use App\ManagerDetail;
 
-class ManagerController extends Controller
-{
+class ManagerController extends Controller {
+
+    public function createAdmin() {
+        $validator = Validator::make($request->all(), [
+                    'admin_first_name' => 'required',
+                    'admin_last_name' => 'required',
+                    'admin_email' => 'required|email|unique:users',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                        'status' => false,
+                        'message' => 'The given data was invalid.',
+                        'data' => $validator->errors()
+                            ], 422);
+        }
+        try {
+            DB::beginTransaction();
+            $newPassword = Str::random();
+            $user = new User([
+                'first_name' => $request->admin_first_name,
+                'last_name' => $request->admin_last_name,
+                'email' => $request->admin_email,
+                'role_id' => config('constant.roles.Admin'),
+                'created_from_id' => $request->user()->id,
+                'is_confirmed' => 1,
+                'is_active' => 1,
+                'password' => bcrypt($newPassword)
+            ]);
+            if ($user->save()) {
+                $this->_confirmPassword($user, $newPassword);
+                DB::commit();
+                return response()->json([
+                            'status' => true,
+                            'message' => 'Successfully created Admin!',
+                            'data' => []
+                                ], 200);
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error(json_encode($e->getMessage()));
+            return response()->json([
+                        'status' => false,
+                        'message' => $e->getMessage(),
+                        'data' => []
+                            ], 500);
+        }
+    }
+
     /**
      * create manager
      */
-    public function createManager(Request $request)
-    {
-        //validate request
+    public function createManager(Request $request) {
         $validator = Validator::make($request->all(), [
-            'first_name' => 'required|string',
-            'email' => 'required|string|email|unique:users',
-            'password' => 'confirmed'
+                    'manager_first_name' => 'required',
+                    'manager_last_name' => 'required',
+                    'manager_email' => 'required|email|unique:users',
+                    'manager_phone' => 'required',
+                    'manager_address' => 'required',
+                    'manager_city' => 'required',
+                    'manager_province' => 'required',
+                    'manager_zipcode' => 'required',
+                    'manager_card_image' => 'required',
+                    'manager_id_card' => 'required',
+                    'salary' => 'required',
         ]);
-
         if ($validator->fails()) {
             return response()->json([
-                'status' => false,
-                'message' => 'The given data was invalid.',
-                'data' => $validator->errors()
-            ], 422);
+                        'status' => false,
+                        'message' => 'The given data was invalid.',
+                        'data' => $validator->errors()
+                            ], 422);
         }
-
         try {
             DB::beginTransaction();
-            if($request->user_image != '' && $request->user_image != null) {
-                $file= $request->user_image;
-            } else {
-                $file = '';
-            }
-
-            //random string for new password
             $newPassword = Str::random();
-
-            //create new user
             $user = new User([
-                'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
-                'email' => $request->email,
-                'role_id' => $request->role_id,
-                'phone' => $request->phone,
-                'user_image' => $file,
+                'prefix' => (isset($request->manager_prefix) && $request->manager_prefix != '' && $request->manager_prefix != null) ? $request->manager_prefix : null,
+                'first_name' => $request->manager_first_name,
+                'last_name' => $request->manager_last_name,
+                'email' => $request->manager_email,
                 'phone' => $request->manager_phone,
-                'address' => $request->address,
-                'city' => $request->city,
-                'state' => $request->state,
-                'country' => $request->country,
+                'address' => $request->manager_address,
+                'city' => $request->manager_city,
+                'state' => $request->manager_province,
                 'zip_code' => $request->manager_zipcode,
-                'user_image' => $file,
+                'user_image' => (isset($request->user_image) && $request->user_image != '' && $request->user_image != null) ? $request->user_image : null,
+                'role_id' => config('constant.roles.Admin_Manager'),
+                'created_from_id' => $request->user()->id,
                 'is_confirmed' => 1,
-		        'is_active' => 1,
+                'is_active' => 1,
                 'password' => bcrypt($newPassword)
             ]);
-            if($user->save() && $request->role_id != config('constant.roles.Admin')) {
+            if ($user->save()) {
                 $managerDetails = new ManagerDetail([
                     'user_id' => $user->id,
+                    'identification_number' => $request->manager_id_card,
+                    'document' => $request->manager_card_image,
                     'salary' => $request->salary,
-                    'identification_number' => $request->identification_number,
-                    'joining_date' => $request->joining_date,
-                    'releaving_date' => $request->releaving_date,
-                    'document' => $request->document
+                    'joining_date' => date('Y/m/d'),
                 ]);
-
-                $managerDetails->save();
+                if ($managerDetails->save()) {
+                    $this->_confirmPassword($user, $newPassword);
+                    DB::commit();
+                    return response()->json([
+                                'status' => true,
+                                'message' => 'Successfully created Manager!',
+                                'data' => []
+                                    ], 200);
+                }
             }
-            //send email for new email and password
-            $this->_confirmPassword($user, $newPassword);
-            DB::commit();
-            //return success response
-            return response()->json([
-                'status' => true,
-                'message' => 'Successfully created Manager!',
-                'data' => []
-            ], 200);
         } catch (\Exception $e) {
             DB::rollBack();
-            //make log of errors
             Log::error(json_encode($e->getMessage()));
-            //return with error
             return response()->json([
-                'status' => false,
-                'message' => 'Internal server error!',
-                'data' => []
-            ], 500);
+                        'status' => false,
+                        'message' => $e->getMessage(),
+                        'data' => []
+                            ], 500);
         }
     }
-
     /**
      * update manager
      */
-    public function updateManager(Request $request)
-    {
-        //validate request
+    public function updateManager(Request $request) {
         $validator = Validator::make($request->all(), [
-            'first_name' => 'required|string',
-            'email' => 'required|string|email|unique:users,email,'.$request->manager_id,
-            'password' => 'confirmed'
+                    'manager_id' => 'required',
+                    'manager_first_name' => 'required',
+                    'manager_last_name' => 'required',
+                    'manager_email' => 'required|email|unique:users,email.' . $request->manager_id,
+                    'manager_phone' => 'required',
+                    'manager_address' => 'required',
+                    'manager_city' => 'required',
+                    'manager_province' => 'required',
+                    'manager_zipcode' => 'required',
+                    'manager_is_active' => 'required',
+                    'manager_card_image' => 'required',
+                    'manager_id_card' => 'required',
+                    'salary' => 'required',
+                    'joining_date' => 'required',
         ]);
-
         if ($validator->fails()) {
             return response()->json([
-                'status' => false,
-                'message' => 'The given data was invalid.',
-                'data' => $validator->errors()
-            ], 422);
+                        'status' => false,
+                        'message' => 'The given data was invalid.',
+                        'data' => $validator->errors()
+                            ], 422);
         }
-
         try {
             DB::beginTransaction();
-            //gert manager details
             $managerDetails = User::whereId($request->manager_id)->first();
-            //if password request submitted
-            if($request->password != '' && $request->password != null) {
+            if ($request->password != '' && $request->password != null) {
                 $managerDetails->password = bcrypt($request->password);
             }
-
-            //create new user
-            $managerDetails->first_name = $request->first_name;
-            $managerDetails->last_name = $request->last_name;
-            $managerDetails->email = $request->email;
-            $managerDetails->phone = $request->manager_phone;
-            $managerDetails->address = $request->address;
-            $managerDetails->city = $request->city;
-            $managerDetails->state = $request->state;
-            $managerDetails->country = $request->country;
-            $managerDetails->zip_code = $request->manager_zipcode;
-            $managerDetails->user_image = $request->user_image;
-            
-            $managerDetails->save();
-            //check if not admin
-            if($managerDetails->role_id != config('constant.roles.Admin')) {
-                ManagerDetail::whereUserId($request->manager_id)->update([
-                    'salary' => $request->salary,
-                        'identification_number' => $request->identification_number,
+            $manager->prefix = (isset($request->manager_prefix) && $request->manager_prefix != '' && $request->manager_prefix != null) ? $request->manager_prefix : null;
+            $manager->first_name = $request->manager_first_name;
+            $manager->last_name = $request->manager_last_name;
+            $manager->email = $request->manager_email;
+            $manager->phone = $request->manager_phone;
+            $manager->address = $request->manager_address;
+            $manager->city = $request->manager_city;
+            $manager->state = $request->manager_province;
+            $manager->zip_code = $request->manager_zipcode;
+            $manager->user_image = (isset($request->manager_image) && $request->manager_image != '' && $request->manager_image != null) ? $request->manager_image : null;
+            $manager->is_active = $request->manager_is_active;
+            if ($manager->save()) {
+                if ($manager->role_id != config('constant.roles.Admin')) {
+                    ManagerDetail::whereUserId($request->manager_id)->update([
+                        'salary' => $request->salary,
+                        'identification_number' => $request->manager_id_card,
                         'joining_date' => $request->joining_date,
-                        'releaving_date' => $request->releaving_date,
-                        'document' => $request->document
-                ]);
+                        'releaving_date' => isset($request->releaving_date) ? $request->releaving_date : null,
+                        'document' => $request->manager_card_image,
+                    ]);
+                }
+                DB::commit();
+                return response()->json([
+                            'status' => true,
+                            'message' => 'Manager details updated Successfully!',
+                            'data' => []
+                                ], 200);
             }
-            DB::commit();
-            //return success response
-            return response()->json([
-                'status' => true,
-                'message' => 'Manager details updated Successfully!',
-                'data' => []
-            ], 200);
         } catch (\Exception $e) {
             DB::rollBack();
-            //make log of errors
             Log::error(json_encode($e->getMessage()));
-            //return with error
             return response()->json([
-                'status' => false,
-                'message' => 'Internal server error!',
-                'data' => []
-            ], 500);
+                        'status' => false,
+                        'message' => $e->getMessage(),
+                        'data' => []
+                            ], 500);
         }
     }
-
     /**
      * get manager details
      */
-    public function getManager(Request $request)
-    {
+    public function getManager(Request $request) {
         return response()->json([
-            'status' => true,
-            'message' => 'Manager Details',
-            'data' => ManagerDetail::whereUserId($request->manager_id)->with('user')->first()
-        ], 200);
-
+                    'status' => true,
+                    'message' => 'Manager Details',
+                    'data' => ManagerDetail::whereUserId($request->manager_id)->with('user')->first()
+                        ], 200);
     }
-
     /**
      * get admin details
      */
-    public function getAdmin(Request $request)
-    {
+    public function getAdmin(Request $request) {
         return response()->json([
-            'status' => true,
-            'message' => 'Admin Details',
-            'data' => User::whereId($request->admin_id)->first()
-        ], 200);
-
+                    'status' => true,
+                    'message' => 'Admin Details',
+                    'data' => User::whereId($request->admin_id)->first()
+                        ], 200);
     }
-
     /**
      * delete manager
      */
-    public function deleteManager(Request $request)
-    {
+    public function deleteManager(Request $request) {
         try {
             User::whereId($request->manager_id)->delete();
 
             return response()->json([
-                'status' => true,
-                'message' => 'User deleted Successfully',
-                'data' => []
-            ], 200);
+                        'status' => true,
+                        'message' => 'User deleted Successfully',
+                        'data' => []
+                            ], 200);
         } catch (\Exception $e) {
-            //make log of errors
             Log::error(json_encode($e->getMessage()));
-            //return with error
             return response()->json([
-                'status' => false,
-                'message' => 'Internal server error!',
-                'data' => []
-            ], 500);
+                        'status' => false,
+                        'message' => $e->getMessage(),
+                        'data' => []
+                            ], 500);
         }
-
     }
-
     /**
      * list manager
      */
-    public function listManager()
-    {
+    public function listManager() {
         return response()->json([
-            'status' => true,
-            'message' => 'Manager List',
-            'data' => User::whereRoleId(config('constant.roles.Admin_Manager'))->with('manager')->orderBy("created_at", 'DESC')->get()
-        ], 200);
-
+                    'status' => true,
+                    'message' => 'Manager List',
+                    'data' => User::whereRoleId(config('constant.roles.Admin_Manager'))->with('manager')->orderBy("created_at", 'DESC')->get()
+                        ], 200);
     }
-
     /**
      * list admin
      */
-    public function listAdmin()
-    {
+    public function listAdmin() {
         return response()->json([
-            'status' => true,
-            'message' => 'Admin List',
-            'data' => User::whereRoleId(config('constant.roles.Admin'))->orderBy("created_at", 'DESC')->get()
-        ], 200);
-
+                    'status' => true,
+                    'message' => 'Admin List',
+                    'data' => User::whereRoleId(config('constant.roles.Admin'))->orderBy("created_at", 'DESC')->get()
+                        ], 200);
     }
-
     /**
      * email for new registration and password
      */
-    public function _confirmPassword($user, $newPassword)
-    {
+    public function _confirmPassword($user, $newPassword) {
         $name = $user->first_name . ' ' . $user->last_name;
         $data = array(
             'user' => $user,
             'password' => $newPassword
         );
-
         Mail::send('email_templates.welcome_email_manager', $data, function ($message) use ($user, $name) {
             $message->to($user->email, $name)->subject('Login Details');
             $message->from(env('MAIL_USERNAME'), env('MAIL_USERNAME'));

@@ -15,7 +15,7 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('prefix', 50);
+            $table->string('prefix', 50)->nullable();
             $table->string('first_name');
             $table->string('last_name');
             $table->string('email')->unique();
@@ -25,12 +25,13 @@ class CreateUsersTable extends Migration
             $table->string("state")->nullable();
             $table->string("zip_code")->nullable();
             $table->string("user_image")->nullable();
-            $table->integer('role_id')->nullable();
-            $table->foreign('created_by')->references('id')->on('users');
+            $table->integer('role_id');
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->foreign('created_by')->references('id')->on('users')->nullable();
+            $table->unsignedBigInteger('created_from_id');
             $table->foreign('created_from_id')->references('id')->on('users');
-            $table->unsignedBigInteger('created_by')->after('id')->nullable();
-            $table->tinyInteger('is_confirmed')->default(0)->nullable();
-            $table->tinyInteger('is_active')->default(0)->nullable();
+            $table->tinyInteger('is_confirmed')->default(0);
+            $table->tinyInteger('is_active')->default(0);
             $table->string("provider")->nullable();
             $table->string("token")->nullable();
             $table->timestamp('email_verified_at')->nullable();
