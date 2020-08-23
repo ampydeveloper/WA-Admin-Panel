@@ -27,6 +27,7 @@ class CreateServicesTable extends Migration
             $table->unsignedBigInteger('service_created_by');
             $table->foreign('service_created_by')->references('id')->on('users');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
