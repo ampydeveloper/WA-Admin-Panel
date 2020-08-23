@@ -163,9 +163,9 @@ class ManagerController extends Controller {
         }
         try {
             DB::beginTransaction();
-            $managerDetails = User::whereId($request->manager_id)->first();
+            $manager = User::whereId($request->manager_id)->first();
             if ($request->password != '' && $request->password != null) {
-                $managerDetails->password = bcrypt($request->password);
+                $manager->password = bcrypt($request->password);
             }
             $manager->prefix = (isset($request->manager_prefix) && $request->manager_prefix != '' && $request->manager_prefix != null) ? $request->manager_prefix : null;
             $manager->first_name = $request->manager_first_name;

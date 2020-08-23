@@ -13,15 +13,19 @@ return [
         'truck' => 1,
         'skidsteer' => 2
     ],
+    'vehicle_status' => [
+        'available' => 1,
+        'unavailable' => 2
+    ],
+    'driver_status' => [
+        'available' => 1,
+        'unavailable' => 2
+    ],
     'payment_methods' => [
         'stripe' => 1
     ],
     'payment_status_reverse' => [
         'succeeded' => 1
-    ],
-    'job_status' => [
-        'open' => 0,
-        'close' => 1
     ],
     'repeating_job' => [
         'no' => 1,
@@ -62,5 +66,13 @@ return [
     'quick_book' => [
         'Not_Sync' => 0,
         'Sync' => 0,
+    ],
+    'driver_type' => [
+        'truck_driver' => 1,
+        'skidsteer' => 2,
+    ],
+    'salary_type' => [
+        'per_hour' => 1,
+        'per_month' => 2,
     ]
 ];

@@ -18,13 +18,15 @@ class CreateDriversTable extends Migration
 
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-
-            $table->string("driver_licence")->nullable();
-            $table->dateTime("expiry_date")->nullable();
-            $table->tinyInteger("salary_type")->comments("0: Per Hour, 1: Per Load")->nullable();
-            $table->string("document")->nullable();
-
+            $table->tinyInteger("driver_type")->after("user_id")->comment("1: Truck Driver, 2: JCB");
+            $table->string("driver_licence");
+            $table->dateTime("expiry_date");
+            $table->string("document");
+            $table->tinyInteger("salary_type")->comments("0: Per Hour, 1: Per month");
+            $table->float("driver_salary")->after("salary_type");
+            $table->tinyInteger("status")->comments("1: available, 2: not available");
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
