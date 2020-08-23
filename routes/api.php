@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
+
 Route::group(['prefix' => 'auth'], function () {
     //Auth free routes
     Route::post('login', 'AuthController@login');
@@ -25,6 +26,8 @@ Route::group(['prefix' => 'auth'], function () {
     Route::get('confirm-email/{decode_code}', 'AuthController@confirmEmail');
     Route::post('forgot-password', 'AuthController@forgotPassword');
     Route::post('recover-password', 'AuthController@recoverPassword');
+    Route::get('set-task', 'SetTaskController@setTaskCronjob');
+    Route::get('finish-job-from-farm/{id}', 'SetTaskController@finishJobFromFarm');
     //Route::get('confirm-update-email/{email}/{id}', 'AuthController@confirmUpdateEmail');
 
     //Auth full routes
@@ -84,22 +87,24 @@ Route::group(['prefix' => 'auth'], function () {
             Route::delete('delete-insurance-details/{insurance_id}', 'VehicleController@deleteInsuranceDetails');
 
             //customer
+            Route::get('list-customer', 'CustomerController@listCustomer');
             Route::post('create-customer', 'CustomerController@createCustomer');
             Route::post('create-farm', 'CustomerController@createFarm');
-            Route::get('list-customer', 'CustomerController@listCustomer');
+            Route::post('create-manager', 'CustomerController@createCustomerManager');
             Route::get('get-customer/{customer_id}', 'CustomerController@getCustomer');
-            Route::get('get-farm-and-manager/{customer_id}', 'CustomerController@getFarmAndManager');
-            Route::get('get-farm/{customer_id}', 'CustomerController@getFarm');
+            Route::get('get-farm/{customer_id}', 'CustomerController@getFarms');
+            Route::get('get-farm-and-manager/{customer_id}', 'CustomerController@getCustomerManager');
             Route::get('get-farm-manager/{farm_id}', 'CustomerController@getFarmManager');
-            Route::post('update-customer/{customer_id}', 'CustomerController@updateCustomer');
             Route::get('card-list/{customer_id}', 'CustomerController@getAllCard');
             Route::get('record-list/{customer_id}', 'CustomerController@getAllRecords');
-            Route::post('update-farm-manager', 'CustomerController@updateFarmManager');
+            Route::post('update-customer', 'CustomerController@updateCustomer');
+            Route::post('update-farm', 'CustomerController@updateFarm');
+            Route::post('update-manager', 'CustomerController@updateManager');
             //Route::delete('delete-driver/{driver_id}', 'CustomerController@deleteDriver');
 
             //CompanyController
-            Route::post('create-hauler', 'CompanyController@createHauler');
             Route::get('list-hauler', 'CompanyController@listHauler');
+            Route::post('create-hauler', 'CompanyController@createHauler');
             Route::get('get-hauler/{customer_id}', 'CompanyController@getHauler');
             Route::post('update-hauler/{customer_id}', 'CompanyController@updateHauler');
             Route::delete('delete-hauler/{customer_id}', 'CompanyController@deleteHauler');

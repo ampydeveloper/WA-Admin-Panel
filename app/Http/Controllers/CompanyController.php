@@ -14,79 +14,7 @@ use App\User;
 
 class CompanyController extends Controller
 {
-     /**
-     * create manager
-     */
-    public function createHauler(Request $request)
-    {
-        //validate request
-        $validator = Validator::make($request->all(), [
-            'customer_name' => 'required|string',
-            'email' => 'required|string|email|unique:users',
-            'password' => 'confirmed'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'message' => 'The given data was invalid.',
-                'data' => $validator->errors()
-            ], 422);
-        }
-
-        try {
-            DB::beginTransaction();
-            if($request->user_image != '' && $request->user_image != null) {
-                $file= $request->user_image;
-            } else {
-                $file = '';
-            }
-
-            //random string for new password
-            $newPassword = Str::random();
-
-            //create new user
-            $user = new User([
-                'prefix' => $request->prefix,
-                'first_name' => $request->customer_name,
-                'email' => $request->email,
-                'role_id' => $request->customer_role,
-                'phone' => $request->phone,
-                'user_image' => $file,
-                'phone' => $request->phone,
-                'address' => $request->address,
-                'city' => $request->city,
-                'state' => $request->province,
-                'zip_code' => $request->zipcode,
-                'user_image' => $file,
-                'is_confirmed' => 1,
-		'is_active' => $request->is_active,
-                'password' => bcrypt($newPassword)
-            ]);
-           if($user->save() && $request->role_id != config('constant.roles.Company')) {
-            //send email for new email and password
-            $this->_confirmPassword($user, $newPassword);
-           }
-            DB::commit();
-            //return success response
-            return response()->json([
-                'status' => true,
-                'message' => 'Successfully created Hauler!',
-                'data' => []
-            ], 200);
-        } catch (\Exception $e) {
-            DB::rollBack();
-            //make log of errors
-            Log::error(json_encode($e->getMessage()));
-            //return with error
-            return response()->json([
-                'status' => false,
-                'message' => 'Internal server error!',
-                'data' => []
-            ], 500);
-        }
-    }
-
+    
     /**
     * list of Hauler
     * return array()
@@ -95,8 +23,75 @@ class CompanyController extends Controller
       return response()->json([
             'status' => true,
             'message' => 'Hauler List',
-            'data' => User::whereRoleId(config('constant.roles.Company'))->orderBy("created_at", 'DESC')->get()
+            'data' => User::whereRoleId(config('constant.roles.Haulers'))->orderBy("created_at", 'DESC')->get()
         ], 200);
+    }
+    
+     /**
+     * create manager
+     */
+    public function createHauler(Request $request)
+    {
+        //validate request
+        $validator = Validator::make($request->all(), [
+            'prefix' => 'required',
+            'hauler_first_name' => 'required|string',
+            'hauler_last_name' => 'required|string',
+            'hauler_email' => 'required|string|email|unique:users',
+            'hauler_phone' => 'required',
+            'hauler_address' => 'required',
+            'hauler_city' => 'required',
+            'hauler_province' => 'required',
+            'hauler_zipcode' => 'required',
+            'hauler_role_id' => 'required',
+            'hauler_is_active' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'The given data was invalid.',
+                'data' => $validator->errors()
+            ], 422);
+        }
+        try {
+            DB::beginTransaction();
+            $newPassword = Str::random();
+            $user = new User([
+                'prefix' => $request->prefix,
+                'first_name' => $request->hauler_first_name,
+                'last_name' => $request->hauler_last_name,
+                'email' => $request->hauler_email,
+                'phone' => $request->hauler_phone,
+                'address' => $request->hauler_address,
+                'city' => $request->hauler_city,
+                'state' => $request->hauler_province,
+                'zip_code' => $request->hauler_zipcode,
+                'user_image' => isset($request->user_image)? $request->user_image:null,
+                'role_id' => $request->hauler_role_id,
+                'created_from_id' => $request->user()->id,
+                'is_confirmed' => 1,
+                'is_active' => $request->hauler_is_active,
+                'password' => bcrypt($newPassword)
+            ]);
+           if($user->save()) {
+            $this->_confirmPassword($user, $newPassword);
+            DB::commit();
+            //return success response
+            return response()->json([
+                'status' => true,
+                'message' => 'Successfully created Hauler!',
+                'data' => []
+            ], 200);
+           }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error(json_encode($e->getMessage()));
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+                'data' => []
+            ], 500);
+        }
     }
 
     /**
@@ -106,7 +101,7 @@ class CompanyController extends Controller
     public function getHauler(Request $request){
      return response()->json([
             'status' => true,
-            'message' => 'Manager Details',
+            'message' => 'Hauler details',
             'data' => user::whereId($request->customer_id)->first()
         ], 200);
     }
@@ -118,9 +113,18 @@ class CompanyController extends Controller
     {
         //validate request
         $validator = Validator::make($request->all(), [
-            'first_name' => 'required|string',
-            'email' => 'required|string|email|unique:users,email,'.$request->customer_id,
-            'password' => 'confirmed'
+            'hauler_id' => 'required',
+            'prefix' => 'required',
+            'hauler_first_name' => 'required|string',
+            'hauler_last_name' => 'required|string',
+            'hauler_email' => 'required|string|email|unique:users,email'.$request->customer_id,
+            'hauler_phone' => 'required',
+            'hauler_address' => 'required',
+            'hauler_city' => 'required',
+            'hauler_province' => 'required',
+            'hauler_zipcode' => 'required',
+            'hauler_role_id' => 'required',
+            'hauler_is_active' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -133,29 +137,23 @@ class CompanyController extends Controller
 
         try {
             DB::beginTransaction();
-            //gert hauler details
             $haulerDetails = User::whereId($request->customer_id)->first();
-            //if password request submitted
             if($request->password != '' && $request->password != null) {
                 $haulerDetails->password = bcrypt($request->password);
             }
-
-            //create new user
-            $haulerDetails->first_name = $request->customer_name;
             $haulerDetails->prefix = $request->prefix;
-            $haulerDetails->email = $request->email;
-            $haulerDetails->phone = $request->phone;
-            $haulerDetails->address = $request->address;
-            $haulerDetails->city = $request->city;
-            $haulerDetails->state = $request->province;
-            $haulerDetails->zip_code = $request->zipcode;
-            $haulerDetails->user_image = $request->user_image;
-            
+            $haulerDetails->first_name = $request->hauler_first_name;
+            $haulerDetails->last_name = $request->hauler_last_name;
+            $haulerDetails->email = $request->hauler_email;
+            $haulerDetails->phone = $request->hauler_phone;
+            $haulerDetails->address = $request->hauler_address;
+            $haulerDetails->city = $request->hauler_city;
+            $haulerDetails->state = $request->hauler_province;
+            $haulerDetails->zip_code = $request->hauler_zipcode;
+            $haulerDetails->user_image = isset($request->user_image)? $request->user_image:null;
+            $haulerDetails->is_active = $request->hauler_is_active;
             $haulerDetails->save();
-            //check if not admin
-         
             DB::commit();
-            //return success response
             return response()->json([
                 'status' => true,
                 'message' => 'Hauler Customer details updated Successfully!',
@@ -163,12 +161,10 @@ class CompanyController extends Controller
             ], 200);
         } catch (\Exception $e) {
             DB::rollBack();
-            //make log of errors
             Log::error(json_encode($e->getMessage()));
-            //return with error
             return response()->json([
                 'status' => false,
-                'message' => 'Internal server error!',
+                'message' => $e->getMessage(),
                 'data' => []
             ], 500);
         }
@@ -181,23 +177,19 @@ class CompanyController extends Controller
     {
         try {
             User::whereId($request->customer_id)->delete();
-
             return response()->json([
                 'status' => true,
                 'message' => 'Hauler customer deleted Successfully',
                 'data' => []
             ], 200);
         } catch (\Exception $e) {
-            //make log of errors
             Log::error(json_encode($e->getMessage()));
-            //return with error
             return response()->json([
                 'status' => false,
-                'message' => 'Internal server error!',
+                'message' => $e->getMessage(),
                 'data' => []
             ], 500);
         }
-
     }
 
 
@@ -211,7 +203,6 @@ class CompanyController extends Controller
             'user' => $user,
             'password' => $newPassword
         );
-
         Mail::send('email_templates.welcome_email_manager', $data, function ($message) use ($user, $name) {
             $message->to($user->email, $name)->subject('Login Details');
             $message->from(env('MAIL_USERNAME'), env('MAIL_USERNAME'));

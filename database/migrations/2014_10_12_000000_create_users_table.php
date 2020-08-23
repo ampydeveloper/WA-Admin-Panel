@@ -27,6 +27,7 @@ class CreateUsersTable extends Migration
             $table->string("user_image")->nullable();
             $table->integer('role_id')->nullable();
             $table->foreign('created_by')->references('id')->on('users');
+            $table->foreign('created_from_id')->references('id')->on('users');
             $table->unsignedBigInteger('created_by')->after('id')->nullable();
             $table->tinyInteger('is_confirmed')->default(0)->nullable();
             $table->tinyInteger('is_active')->default(0)->nullable();
@@ -37,6 +38,7 @@ class CreateUsersTable extends Migration
             $table->dateTime("password_changed_at")->after("password")->nullable();
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

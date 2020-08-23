@@ -27,6 +27,8 @@ class CreateCustomerFarmsTable extends Migration
             $table->tinyInteger('farm_active');
             $table->string('latitude');
             $table->string('longitude');
+            $table->unsignedBigInteger('created_by');
+            $table->foreign('created_by')->references('id')->on('users');
             $table->timestamps();
             $table->softDeletes('deleted_at', 0);
         });

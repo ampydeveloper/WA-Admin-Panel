@@ -17,8 +17,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'first_name', 'last_name', 'email', 'phone', 'user_image', 'role_id', 'is_confirmed', 'is_active', 'provider', 'token', 'password',
-        'address', 'city', 'state', 'country', 'zip_code', 'password_changed_at', 'created_by', 'prefix', 'farm_id'
+        'prefix','first_name', 'last_name', 'email', 'phone','address', 'city', 'state', 'zip_code', 'user_image', 'role_id','created_by', 'created_from', 'is_confirmed', 'is_active', 'provider', 'token', 'password',
+         'country', 'password_changed_at',   'farm_id',
     ];
 
     /**
@@ -39,7 +39,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function manager()
+    public function managerDetails()
     {
         return $this->hasOne('App\ManagerDetail');
     }
@@ -58,6 +58,11 @@ class User extends Authenticatable
     public function farmlist()
     {
         return $this->hasMany('App\CustomerFarm', 'customer_id');
+    }
+    
+    public function manager_farms()
+    {
+        return $this->hasOne('App\CustomerFarm', 'id', 'farm_id');
     }
 
     public function messages()
@@ -85,8 +90,5 @@ class User extends Authenticatable
         return $this->hasOne('App\EmployeeSalaries', 'user_id');
     }
 
-    public function manager_farms()
-    {
-        return $this->hasOne('App\CustomerFarm', 'id', 'farm_id');
-    }
+    
 }

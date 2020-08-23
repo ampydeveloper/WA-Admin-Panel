@@ -65,6 +65,7 @@ class JobsController extends Controller
 //        dd($request->is_repeating_job);
         //validate request
         $validator = Validator::make($request->all(), [
+            'job_created_by' => 'required',
             'customer_id' => 'required',
             'service_id' => 'required',
             'job_providing_date' => 'required',
@@ -95,6 +96,7 @@ class JobsController extends Controller
         
         try {
             $job = new Job([
+                'job_created_by' => $request->job_created_by,
                 'customer_id' => $request->customer_id,
                 'manager_id' => (isset($request->manager_id)) ? $request->manager_id:null,
                 'farm_id' => isset($request->farm_id) ? $request->farm_id:null,

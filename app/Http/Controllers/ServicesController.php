@@ -27,6 +27,7 @@ class ServicesController extends Controller
             'service_for' => 'required|numeric',
             'slot_type' => 'required_if:service_for,==,4|array',
             'slot_time' => 'required_if:service_for,==,4|array',
+            'service_created_by' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -45,6 +46,7 @@ class ServicesController extends Controller
                 'service_for' => $request->service_for,
                 'slot_type' => json_encode($request->slot_type),
                 'slot_time' => json_encode($request->slot_time),
+                'required' => $request->required,
             ]);
             $service->save();
             return response()->json([
