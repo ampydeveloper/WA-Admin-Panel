@@ -111,23 +111,28 @@ Route::group(['prefix' => 'auth'], function () {
             Route::delete('delete-driver/{driver_id}', 'DriverController@deleteDriver');
 
             //truck
+            Route::get('list-vehicle', 'VehicleController@listVehicle');
             Route::post('create-vehicle', 'VehicleController@createVehicle');
             Route::post('edit-vehicle/{vehicle_id}', 'VehicleController@editVehicle');
-            Route::get('list-vehicle', 'VehicleController@listVehicle');
-            Route::get('list-skidsteer', 'VehicleController@listSkidsteer');
             Route::get('get-vehicle/{vehicle_id}', 'VehicleController@getVehicle');
             Route::delete('delete-vehicle/{vehicle_id}', 'VehicleController@deleteVehicle');
-            Route::get('get-vehicleservice/{vehicle_id}', 'VehicleController@getVehicleService');
-            Route::post('create-vehicleservice', 'VehicleController@createVehicleService');
+            
             Route::post('create-vehicleinsurance', 'VehicleController@createVehicleInsurance');
-            Route::get('get-vehicleinsurance/{vehicle_id}', 'VehicleController@getVehicleInsurance');
-            Route::get('get-service-details/{service_id}', 'VehicleController@getServiceDetails');
+            Route::post('edit-vehicle-insurance/{vehicle_insurance_id}', 'VehicleController@editVehicleInsurance');
             Route::get('get-insurance-details/{insurance_id}', 'VehicleController@getInsuranceDetails');
-            Route::post('save-service-details/{service_id}', 'VehicleController@saveServiceDetails');
             Route::get('get-last-insurance/{vehicle_id}', 'VehicleController@getLastInsurance');
-            Route::post('save-insurance-details/{insurance_id}', 'VehicleController@saveInsuranceDetails');
-            Route::delete('delete-service-details/{service_id}', 'VehicleController@deleteServiceDetails');
+            Route::get('get-vehicleinsurance/{vehicle_id}', 'VehicleController@getVehicleInsurance');
             Route::delete('delete-insurance-details/{insurance_id}', 'VehicleController@deleteInsuranceDetails');
+            
+            Route::post('create-vehicleservice', 'VehicleController@createVehicleService');
+            Route::post('edit-vehicle-service/{vehicle_service_id}', 'VehicleController@editVehicleService');
+            Route::get('get-vehicleservice/{vehicle_id}', 'VehicleController@getVehicleService');
+            Route::get('get-service-details/{service_id}', 'VehicleController@getServiceDetails');
+            Route::delete('delete-service-details/{service_id}', 'VehicleController@deleteServiceDetails');
+            
+            Route::get('list-skidsteer', 'VehicleController@listSkidsteer');
+//            Route::post('save-service-details/{service_id}', 'VehicleController@saveServiceDetails');
+//            Route::post('save-insurance-details/{insurance_id}', 'VehicleController@saveInsuranceDetails');
             
             //accounting
             Route::get('/job-invoices', 'AccountingController@getAllJobInvoices');

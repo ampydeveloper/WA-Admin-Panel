@@ -18,12 +18,13 @@ class CreateVehicleInsurancesTable extends Migration
 
             $table->unsignedBigInteger('vehicle_id');
             $table->foreign('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade');
-
-            $table->dateTime("insurance_date")->nullable();
-            $table->dateTime("insurance_expiry")->nullable();
-            $table->string("insurance_number")->nullable();
-
+            $table->dateTime("insurance_date");
+            $table->dateTime("insurance_expiry");
+            $table->string("insurance_number");
+            $table->string("document");
+            $table->string("notes")->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

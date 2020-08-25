@@ -16,6 +16,7 @@ use App\ManagerDetail;
 class ManagerController extends Controller {
 
     public function createAdmin() {
+        dd('here');
         $validator = Validator::make($request->all(), [
                     'admin_first_name' => 'required',
                     'admin_last_name' => 'required',
