@@ -91,8 +91,13 @@ import ReportsViewPage from "../components/admin/reports/View";
 import AccountingViewPage from "../components/admin/accounting/View";
 import AccountingDetails from "../components/admin/accounting/Details";
 
-import LoginPage from "../components/login/LoginPage";
 import AdminLoginPage from "../components/login/AdminLoginPage";
+import LoginPage from "../components/login/LoginPage";
+import AboutPage from "../components/open/AboutPage";
+import ServicePage from "../components/open/ServicePage";
+import ContactPage from "../components/open/ContactPage";
+import FAQPage from "../components/open/FAQPage";
+
 import RegisterPage from "../components/register/RegisterPage";
 import ChangePassword from "../components/ChangePasswordPage";
 import RecoverPassword from "../components/RecoverPasswordPage";
@@ -270,9 +275,15 @@ export const router = new Router({
         { path: 'changepassword', component: ChangePasswordPage, name: 'DChangepassword', meta: { requiresAuth: [Role.Truck_Driver] } },
       ]
     },
+    { path: "/admin-login", component: AdminLoginPage },
+    
+    { path: "/about", component: AboutPage },
+    { path: "/service", component: ServicePage },
+    { path: "/contact", component: ContactPage },
+    { path: "/faq", component: FAQPage },
     { path: "/login", component: LoginPage },
-    { path: "/admin/login", component: AdminLoginPage },
     { path: "/register", component: RegisterPage },
+    
     { path: "/change-password", component: ChangePassword },
     { path: "/change-password/:hash_code", component: RecoverPassword },
     { path: "/forgot-password", component: ForgetPassword },
