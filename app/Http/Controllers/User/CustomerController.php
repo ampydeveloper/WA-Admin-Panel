@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
@@ -23,6 +23,10 @@ use Carbon\Carbon;
 
 class CustomerController extends Controller
 {
+    
+    public function dashboard(Request $request) {
+        dd('dashboard');
+    }
 
     /**
      * create customer farm

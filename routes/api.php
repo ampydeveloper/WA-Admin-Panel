@@ -185,6 +185,14 @@ Route::group(['prefix' => 'auth'], function () {
         
         Route::group(['prefix' => 'driver'], function () {
             Route::get('dashboard', 'Driver\DriverController@dashboard');
+            Route::post('edit-profile', 'Driver\DriverController@editProfile');
+            Route::get('earnings', 'Driver\DriverController@earnings');
+            Route::get('routes', 'Driver\DriverController@routes');
+            Route::get('start-route', 'Driver\DriverController@startRoute');
+            Route::get('start-job', 'Driver\DriverController@startJob');
+            Route::get('end-route', 'Driver\DriverController@endRoute');
+            Route::get('end-job', 'Driver\DriverController@endJob');
+            Route::post('job-filter', 'Driver\DriverController@jobFilter');
         });
         
 
