@@ -21,14 +21,17 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'auth'], function () {
     //Auth free routes
-    Route::post('login', 'AuthController@login');
     Route::post('signup', 'AuthController@signup');
-    Route::get('confirm-email/{decode_code}', 'AuthController@confirmEmail');
+    Route::post('social-signup', 'AuthController@SocialSignup');
+    Route::post('login', 'AuthController@login');
     Route::post('forgot-password', 'AuthController@forgotPassword');
+    Route::post('change-password', 'AuthController@changePassword');
     Route::post('recover-password', 'AuthController@recoverPassword');
+    Route::get('confirm-update-email/{email}/{id}', 'AuthController@confirmUpdateEmail');
+    
+    
     Route::get('set-task', 'SetTaskController@setTaskCronjob');
     Route::get('finish-job-from-farm/{id}', 'SetTaskController@finishJobFromFarm');
-    //Route::get('confirm-update-email/{email}/{id}', 'AuthController@confirmUpdateEmail');
 
     //Auth full routes
     Route::group(['middleware' => 'auth:api'], function () {
@@ -45,7 +48,7 @@ Route::group(['prefix' => 'auth'], function () {
             //manager
             Route::post('create-manager', 'ManagerController@createManager');
             Route::post('update-manager/{manager_id}', 'ManagerController@updateManager');
-            Route::get('delete-manager/{manager_id}', 'ManagerController@deleteManager');
+            Route::delete('delete-manager/{manager_id}', 'ManagerController@deleteManager');
             Route::get('get-manager/{manager_id}', 'ManagerController@getManager');
             Route::get('list-manager', 'ManagerController@listManager');
             //admin
@@ -146,6 +149,44 @@ Route::group(['prefix' => 'auth'], function () {
             //stripe
             Route::post('stripe-charge', 'PaymentController@stripeCharge');
         });
+        
+        Route::group(['prefix' => 'user'], function () {
+//    dd('api');
+            Route::get('dashboard', 'User\CustomerController@dashboard');
+            
+            Route::get('edit-profile', 'User\CustomerController@editProfile');
+            
+            Route::post('create-farm', 'User\CustomerController@createFarm');
+            Route::post('update-farm', 'User\CustomerController@updateFarm');
+            Route::get('get-farms', 'CustomerController@getFarms');
+            Route::get('get-farm/{farm_id}', 'CustomerController@getSingleFarm');
+            Route::delete('delete-farm/{farm_id}', 'User\CustomerController@deleteFarm');
+            
+            Route::post('create-manager', 'User\CustomerController@createManager');
+            Route::post('update-manager', 'User\CustomerController@updateManager');
+            Route::get('managers-list', 'User\CustomerController@managerLists');
+            Route::get('get-manager/{manager_id}', 'CustomerController@getSingleManager');
+            Route::post('delete-manager', 'User\CustomerController@deleteManager');
+            
+            Route::get('services-list', 'User\ServicesController@listServices');
+            Route::post('book-service', 'User\ServicesController@bookService');
+            Route::get('show-customer-services', 'User\ServicesController@showCustomerServices');
+            Route::post('update-booked-service', 'User\ServicesController@updateBookedService');
+            Route::post('cancel-booked-job', 'User\ServicesController@cancelJob');
+            Route::post('job-filter', 'User\ServicesController@jobFilter');
+            
+            Route::get('card-list', 'User\CustomerController@getAllCard');
+            Route::get('record-list', 'User\CustomerController@getAllRecords');
+            Route::get('primary-card', 'User\CustomerController@getPrimaryCard');
+            Route::post('add-card', 'User\CustomerController@addCard');
+            Route::post('change-primary-card', 'User\CustomerController@changePrimaryCard');
+
+        });
+        
+        Route::group(['prefix' => 'driver'], function () {
+            Route::get('dashboard', 'Driver\DriverController@dashboard');
+        });
+        
 
         //upload image
         Route::post('uploadImage', 'ImageController@uploadImage');
@@ -153,22 +194,3 @@ Route::group(['prefix' => 'auth'], function () {
     });
 });
 
-Route::group(['prefix' => 'user'], function () {
-//    dd('api');
-    Route::post('signup', 'User\AuthController@signup');
-    Route::post('login', 'User\AuthController@login');
-    Route::group(['middleware' => 'auth:api'], function () {
-        Route::get('logout', 'User\AuthController@logout');
-        Route::get('user-details', 'User\AuthController@user');
-        Route::get('edit-profile', 'User\AuthController@editProfile');
-        
-        
-        
-        Route::get('services-list', 'User\ServicesController@listServices');
-        Route::post('book-service', 'User\ServicesController@bookService');
-        Route::get('show-booked-services', 'User\ServicesController@showBookedServices');
-        Route::post('update-booked-service', 'User\ServicesController@updateBookedService');
-        
-        Route::post('create-farm', 'User\CustomerController@createFarm');
-    });
-});

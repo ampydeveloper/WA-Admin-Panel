@@ -206,74 +206,58 @@ class CustomerController extends Controller {
             $farmDetails = new CustomerFarm([
                 'customer_id' => $request->customer_id,
                 'farm_address' => $request->farm_address,
-                    'farm_unit' => (isset($request->farm_unit) && $request->farm_unit != '' && $request->farm_unit != null) ? ($request->farm_unit) : null,
-                    'farm_city' => $request->farm_city,
-                    'farm_province' => $request->farm_province,
-                    'farm_zipcode' => $request->farm_zipcode,
-                    'farm_image' => (isset($request->farm_images) && $request->farm_images != '' && $request->farm_images != null) ? json_encode($request->farm_images) : null,
-                    'farm_active' => $request->farm_active,
-                    'latitude' => $request->latitude,
-                    'longitude' => $request->longitude,
-                    'created_by' => $request->user()->id,
+                'farm_unit' => (isset($request->farm_unit) && $request->farm_unit != '' && $request->farm_unit != null) ? ($request->farm_unit) : null,
+                'farm_city' => $request->farm_city,
+                'farm_province' => $request->farm_province,
+                'farm_zipcode' => $request->farm_zipcode,
+                'farm_image' => (isset($request->farm_images) && $request->farm_images != '' && $request->farm_images != null) ? json_encode($request->farm_images) : null,
+                'farm_active' => $request->farm_active,
+                'latitude' => $request->latitude,
+                'longitude' => $request->longitude,
+                'created_by' => $request->user()->id,
             ]);
-            if ($user->save()) {
-                $this->_confirmPassword($user, $newPassword);
-                $farmDetails = new CustomerFarm([
-                    'customer_id' => $user->id,
-                    'farm_address' => $request->farm_address,
-                    'farm_unit' => (isset($request->farm_unit) && $request->farm_unit != '' && $request->farm_unit != null) ? ($request->farm_unit) : null,
-                    'farm_city' => $request->farm_city,
-                    'farm_province' => $request->farm_province,
-                    'farm_zipcode' => $request->farm_zipcode,
-                    'farm_image' => (isset($request->farm_images) && $request->farm_images != '' && $request->farm_images != null) ? json_encode($request->farm_images) : null,
-                    'farm_active' => $request->farm_active,
-                    'latitude' => $request->latitude,
-                    'longitude' => $request->longitude,
-                    'created_by' => $request->user()->id,
-                ]);
-                if ($farmDetails->save()) {
-                    foreach ($request->manager_details as $manager) {
-                        $newPassword = Str::random();
-                        $saveManger = new User([
-                            'prefix' => (isset($manager['manager_prefix']) && $manager['manager_prefix'] != '' && $manager['manager_prefix'] != null) ? $manager['manager_prefix'] : null,
-                            'first_name' => $manager['manager_first_name'],
-                            'last_name' => $manager['manager_last_name'],
-                            'email' => $manager['manager_email'],
-                            'phone' => $manager['manager_phone'],
-                            'address' => $manager['manager_address'],
-                            'city' => $manager['manager_city'],
-                            'state' => $manager['manager_province'],
-                            'zip_code' => $manager['manager_zipcode'],
-                            'user_image' => (isset($manager['manager_image']) && $manager['manager_image'] != '' && $manager['manager_image'] != null) ? $manager['manager_image'] : null,
-                            'role_id' => config('constant.roles.Customer_Manager'),
-                            'created_from_id' => $request->user()->id,
-                            'is_confirmed' => 1,
-                            'is_active' => 1,
-                            'created_by' => $user->id,
-                            'farm_id' => $farmDetails->id,
-                            'password' => bcrypt($newPassword)
-                        ]);
+            if ($farmDetails->save()) {
+                foreach ($request->manager_details as $manager) {
+                    $newPassword = Str::random();
+                    $saveManger = new User([
+                        'prefix' => (isset($manager['manager_prefix']) && $manager['manager_prefix'] != '' && $manager['manager_prefix'] != null) ? $manager['manager_prefix'] : null,
+                        'first_name' => $manager['manager_first_name'],
+                        'last_name' => $manager['manager_last_name'],
+                        'email' => $manager['manager_email'],
+                        'phone' => $manager['manager_phone'],
+                        'address' => $manager['manager_address'],
+                        'city' => $manager['manager_city'],
+                        'state' => $manager['manager_province'],
+                        'zip_code' => $manager['manager_zipcode'],
+                        'user_image' => (isset($manager['manager_image']) && $manager['manager_image'] != '' && $manager['manager_image'] != null) ? $manager['manager_image'] : null,
+                        'role_id' => config('constant.roles.Customer_Manager'),
+                        'created_from_id' => $request->user()->id,
+                        'is_confirmed' => 1,
+                        'is_active' => 1,
+                        'created_by' => $request->customer_id,
+                        'farm_id' => $farmDetails->id,
+                        'password' => bcrypt($newPassword)
+                    ]);
 
-                        if ($saveManger->save()) {
-                            $mangerDetails = new ManagerDetail([
-                                'user_id' => $saveManger->id,
-                                'identification_number' => $manager['manager_id_card'],
-                                'document' => $manager['manager_card_image'],
-                                'salary' => $manager['salary'],
-                                'joining_date' => date('Y/m/d'),
-                            ]);
-                            if($mangerDetails->save()) {
-                                $this->_confirmPassword($saveManger, $newPassword);
-                            }
+                    if ($saveManger->save()) {
+                        $mangerDetails = new ManagerDetail([
+                            'user_id' => $saveManger->id,
+                            'identification_number' => $manager['manager_id_card'],
+                            'document' => $manager['manager_card_image'],
+                            'salary' => $manager['salary'],
+                            'joining_date' => date('Y/m/d'),
+                        ]);
+                        if ($mangerDetails->save()) {
+                            $this->_confirmPassword($saveManger, $newPassword);
                         }
                     }
-                    DB::commit();
-                    return response()->json([
-                                'status' => true,
-                                'message' => 'Customer created successfully.',
-                                'data' => $user
-                                    ], 200);
                 }
+                DB::commit();
+                return response()->json([
+                            'status' => true,
+                            'message' => 'Customer created successfully.',
+                            'data' => $user
+                                ], 200);
             }
         } catch (\Exception $e) {
             DB::rollBack();
@@ -332,7 +316,7 @@ class CustomerController extends Controller {
                 'is_confirmed' => 1,
                 'is_active' => 1,
                 'created_by' => $request->customer_id,
-                'farm_id' => $request->id,
+                'farm_id' => $request->farm_id,
                 'password' => bcrypt($newPassword)
             ]);
 
@@ -407,7 +391,7 @@ class CustomerController extends Controller {
         return response()->json([
                     'status' => true,
                     'message' => 'Customer manager details',
-                    'data' => CustomerFarm::where('farm_id', $request->farm_id)->with('farmManager')->get()
+                    'data' => CustomerFarm::where('id', $request->farm_id)->with('farmManager')->get()
                         ], 200);
     }
 
