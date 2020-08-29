@@ -47,6 +47,10 @@ return [
         'by_weight' => 1,
         'by_round' => 2,
     ],
+    'service_for' => [
+        'customer' => 4,
+        'haulers' => 6,
+    ],
     'payment_mode' => [
         'online' => 0,
         'cheque' => 1,
@@ -74,5 +78,11 @@ return [
     'salary_type' => [
         'per_hour' => 1,
         'per_month' => 2,
+    ],
+    'time_slots' => [
+        'total_time_slots' => 11
+    ],
+    'range_cover' => [
+        'distance' => 4
     ]
 ];
