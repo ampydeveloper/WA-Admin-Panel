@@ -29,6 +29,7 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('recover-password', 'AuthController@recoverPassword');
     Route::get('confirm-update-email/{email}/{id}', 'AuthController@confirmUpdateEmail');
     
+    Route::get('test-task', 'CronController@assignTecs');
     
     Route::get('set-task', 'SetTaskController@setTaskCronjob');
     Route::get('finish-job-from-farm/{id}', 'SetTaskController@finishJobFromFarm');

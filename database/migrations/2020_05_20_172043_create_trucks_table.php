@@ -25,6 +25,7 @@ class CreateTrucksTable extends Migration
             $table->string("capacity")->nullable();
             $table->string("document");
             $table->tinyInteger("status")->comment("true: Available, false: Unavailable")->nullable();
+            $table->timestamp("assigned_job_date_time")->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -37,6 +38,6 @@ class CreateTrucksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('trucks');
+        Schema::dropIfExists('vehicles');
     }
 }

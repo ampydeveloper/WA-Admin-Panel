@@ -65,6 +65,8 @@ class CronController extends Controller
         }
          */
         
+        dd('here');
+        
         //select driver
         $cDrivers = Driver::where([
                 ['driver_type', '=', config('constant.driver_type.truck_driver')],
@@ -151,7 +153,7 @@ class CronController extends Controller
                     {
                         if($truck->capacity >= $job->weight && (in_array($truck->id, $iArrDriverTruckIdMapping) == TRUE))
                         {
-                            if($iPreviousJobAssignedWeight > 0 && $bIsPreviousJobAssigned == TRUE && (in_array($job->id, $arrAssignedJobId) == TRUE)) // next job for current truck
+                            if($iPreviousJobAssignedWeight > 0 && $bIsPreviousJobAssigned == TRUE && (in_array($job->id, $arrAssignedJobId) == FALSE)) // next job for current truck
                             {
                                 if(($truck->capacity - $iPreviousJobAssignedWeight) >= $job->weight 
                                     && (abs($iPreviousJobAssignedDistance - $job->farm['distance']) <= config('constant.range_cover.distance')))
@@ -167,7 +169,7 @@ class CronController extends Controller
                                     $iPreviousJobAssignedWeight += $job->weight;
                                     $iPreviousJobAssignedDistance += $job->farm['distance'];
                                     $bIsPreviousJobAssigned = TRUE;
-                                    //array_push($arrAssignedJobId, $job->id);
+                                    array_push($arrAssignedJobId, $job->id);
                                 }
                                 else // no space in truck for next job or no job available in given range
                                 {
