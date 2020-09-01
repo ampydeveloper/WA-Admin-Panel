@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'auth'], function () {
     //Auth free routes
+//    dd('here');
     Route::post('signup', 'AuthController@signup');
     Route::post('social-signup', 'AuthController@SocialSignup');
     Route::post('login', 'AuthController@login');
@@ -47,10 +48,14 @@ Route::group(['prefix' => 'auth'], function () {
             Route::post('create-admin', 'ManagerController@createAdmin');
 
             //manager
-            Route::post('create-manager', 'ManagerController@createManager');
+//            dd('here');
+//            Route::post('create-manager1', function() {
+//                    dd('here1');
+//            });
+            Route::post('create-manager-admin', 'ManagerController@createManager');
             Route::post('update-manager/{manager_id}', 'ManagerController@updateManager');
-            Route::delete('delete-manager/{manager_id}', 'ManagerController@deleteManager');
             Route::get('get-manager/{manager_id}', 'ManagerController@getManager');
+            Route::delete('delete-manager/{manager_id}', 'ManagerController@deleteManager');
             Route::get('list-manager', 'ManagerController@listManager');
             //admin
             Route::get('list-admin', 'ManagerController@listAdmin');
@@ -162,8 +167,8 @@ Route::group(['prefix' => 'auth'], function () {
             Route::get('get-farms', 'CustomerController@getFarms');
             Route::get('get-farm/{farm_id}', 'CustomerController@getSingleFarm');
             Route::delete('delete-farm/{farm_id}', 'User\CustomerController@deleteFarm');
-            
-            Route::post('create-manager', 'User\CustomerController@createManager');
+//            dd('user');
+//            Route::post('create-manager', 'User\CustomerController@createManager');
             Route::post('update-manager', 'User\CustomerController@updateManager');
             Route::get('managers-list', 'User\CustomerController@managerLists');
             Route::get('get-manager/{manager_id}', 'CustomerController@getSingleManager');

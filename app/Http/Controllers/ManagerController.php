@@ -15,14 +15,14 @@ use App\ManagerDetail;
 
 class ManagerController extends Controller {
 
-    public function createAdmin() {
-        dd('here');
+    public function createAdmin(Request $request) {
+//        dd($request->admin_email);
         $validator = Validator::make($request->all(), [
                     'admin_first_name' => 'required',
                     'admin_last_name' => 'required',
-                    'admin_email' => 'required|email|unique:users',
+                    'email' => 'required|email|unique:users',
         ]);
-
+//        dd($validator);
         if ($validator->fails()) {
             return response()->json([
                         'status' => false,
@@ -30,21 +30,23 @@ class ManagerController extends Controller {
                         'data' => $validator->errors()
                             ], 422);
         }
+//            dd('in');
         try {
             DB::beginTransaction();
             $newPassword = Str::random();
             $user = new User([
                 'first_name' => $request->admin_first_name,
                 'last_name' => $request->admin_last_name,
-                'email' => $request->admin_email,
+                'email' => $request->email,
                 'role_id' => config('constant.roles.Admin'),
                 'created_from_id' => $request->user()->id,
                 'is_confirmed' => 1,
                 'is_active' => 1,
                 'password' => bcrypt($newPassword)
             ]);
+//            dd($user);
             if ($user->save()) {
-                $this->_confirmPassword($user, $newPassword);
+//                $this->_confirmPassword($user, $newPassword);
                 DB::commit();
                 return response()->json([
                             'status' => true,
@@ -67,10 +69,11 @@ class ManagerController extends Controller {
      * create manager
      */
     public function createManager(Request $request) {
+//        dd($request->all());
         $validator = Validator::make($request->all(), [
                     'manager_first_name' => 'required',
                     'manager_last_name' => 'required',
-                    'manager_email' => 'required|email|unique:users',
+                    'email' => 'required|email|unique:users',
                     'manager_phone' => 'required',
                     'manager_address' => 'required',
                     'manager_city' => 'required',
@@ -87,6 +90,7 @@ class ManagerController extends Controller {
                         'data' => $validator->errors()
                             ], 422);
         }
+        
         try {
             DB::beginTransaction();
             $newPassword = Str::random();
@@ -94,7 +98,7 @@ class ManagerController extends Controller {
                 'prefix' => (isset($request->manager_prefix) && $request->manager_prefix != '' && $request->manager_prefix != null) ? $request->manager_prefix : null,
                 'first_name' => $request->manager_first_name,
                 'last_name' => $request->manager_last_name,
-                'email' => $request->manager_email,
+                'email' => $request->email,
                 'phone' => $request->manager_phone,
                 'address' => $request->manager_address,
                 'city' => $request->manager_city,
@@ -116,7 +120,7 @@ class ManagerController extends Controller {
                     'joining_date' => date('Y/m/d'),
                 ]);
                 if ($managerDetails->save()) {
-                    $this->_confirmPassword($user, $newPassword);
+//                    $this->_confirmPassword($user, $newPassword);
                     DB::commit();
                     return response()->json([
                                 'status' => true,
@@ -138,12 +142,10 @@ class ManagerController extends Controller {
     /**
      * update manager
      */
-    public function updateManager(Request $request) {
+    public function updateManager(Request $request, $manager_id) {
         $validator = Validator::make($request->all(), [
-                    'manager_id' => 'required',
                     'manager_first_name' => 'required',
                     'manager_last_name' => 'required',
-                    'manager_email' => 'required|email|unique:users,email.' . $request->manager_id,
                     'manager_phone' => 'required',
                     'manager_address' => 'required',
                     'manager_city' => 'required',
@@ -162,16 +164,29 @@ class ManagerController extends Controller {
                         'data' => $validator->errors()
                             ], 422);
         }
+            $manager = User::whereId($request->manager_id)->first();
+            if ($request->email != '' && $request->email != null) {
+                $checkEmail = User::where('email', $request->email)->first();
+                if($checkEmail !== null) {
+                    if($checkEmail->id !== $manager->id) {
+                        return response()->json([
+                        'status' => false,
+                        'message' => 'Email is already taken.',
+                        'data' => []
+                            ], 422);
+                    }
+                    
+                }
+            }
         try {
             DB::beginTransaction();
-            $manager = User::whereId($request->manager_id)->first();
             if ($request->password != '' && $request->password != null) {
                 $manager->password = bcrypt($request->password);
             }
             $manager->prefix = (isset($request->manager_prefix) && $request->manager_prefix != '' && $request->manager_prefix != null) ? $request->manager_prefix : null;
             $manager->first_name = $request->manager_first_name;
             $manager->last_name = $request->manager_last_name;
-            $manager->email = $request->manager_email;
+            $manager->email = $request->email;
             $manager->phone = $request->manager_phone;
             $manager->address = $request->manager_address;
             $manager->city = $request->manager_city;
@@ -209,29 +224,29 @@ class ManagerController extends Controller {
     /**
      * get manager details
      */
-    public function getManager(Request $request) {
+    public function getManager(Request $request, $manager_id) {
         return response()->json([
                     'status' => true,
                     'message' => 'Manager Details',
-                    'data' => ManagerDetail::whereUserId($request->manager_id)->with('user')->first()
+                    'data' => ManagerDetail::whereUserId($manager_id)->with('user')->first()
                         ], 200);
     }
     /**
      * get admin details
      */
-    public function getAdmin(Request $request) {
+    public function getAdmin(Request $request, $adminId) {
         return response()->json([
                     'status' => true,
                     'message' => 'Admin Details',
-                    'data' => User::whereId($request->admin_id)->first()
+                    'data' => User::whereId($adminId)->first()
                         ], 200);
     }
     /**
      * delete manager
      */
-    public function deleteManager(Request $request) {
+    public function deleteManager(Request $request, $managerId) {
         try {
-            User::whereId($request->manager_id)->delete();
+            User::whereId($managerId)->delete();
 
             return response()->json([
                         'status' => true,
@@ -254,7 +269,7 @@ class ManagerController extends Controller {
         return response()->json([
                     'status' => true,
                     'message' => 'Manager List',
-                    'data' => User::whereRoleId(config('constant.roles.Admin_Manager'))->with('manager')->orderBy("created_at", 'DESC')->get()
+                    'data' => User::whereRoleId(config('constant.roles.Admin_Manager'))->with('managerDetails')->orderBy("created_at", 'DESC')->get()
                         ], 200);
     }
     /**

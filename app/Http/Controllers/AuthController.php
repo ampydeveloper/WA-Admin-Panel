@@ -24,11 +24,11 @@ class AuthController extends Controller
      */
     public function signup(Request $request) {
         $validator = Validator::make($request->all(), [
-                    'prefix' => 'required',
                     'first_name' => 'required|string',
                     'last_name' => 'required|string',
                     'email' => 'required|string|email|unique:users',
                     'password' => 'required|confirmed',
+                    'phone' => 'required',
                     'address' => 'required',
                     'city' => 'required',
                     'province' => 'required',
@@ -55,12 +55,11 @@ class AuthController extends Controller
                     'state' => $request->province,
                     'zip_code' => $request->zipcode,
                     'user_image' => (isset($request->hauler_image) && $request->hauler_image != '' && $request->hauler_image != null) ? $request->hauler_image : null,
-                    'role_id' => $request->zipcode,
+                    'role_id' => $request->role_id,
                     'is_active' => 1,
                     'password' => bcrypt($request->password),
                     'password_changed_at' => Carbon::now(),
                 ]);
-
                 if ($user->save()) {
                     $this->_welcomeEmail($user);
                     $this->_saveUserToHubSpot($user);
