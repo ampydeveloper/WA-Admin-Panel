@@ -64,7 +64,7 @@ Route::group(['prefix' => 'auth'], function () {
             //services
             Route::post('create-service', 'ServicesController@createService');
             Route::post('edit-service/{service_id}', 'ServicesController@editService');
-            Route::post('edit-service-time-slot/{time_slot_id}', 'ServicesController@editTimeSlot');
+//            Route::post('edit-service-time-slot/{time_slot_id}', 'ServicesController@editTimeSlot');
             Route::get('list-services', 'ServicesController@listServices');
             Route::get('get-service/{service_id}', 'ServicesController@getService');
             Route::delete('delete-service/{service_id}', 'ServicesController@deleteService');

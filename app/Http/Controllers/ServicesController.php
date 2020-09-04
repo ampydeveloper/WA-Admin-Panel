@@ -67,10 +67,9 @@ class ServicesController extends Controller
     /**
      * edit service
      */
-    public function editService(Request $request)
+    public function editService(Request $request, $serviceId)
     {
         $validator = Validator::make($request->all(), [
-            'service_id' => 'required|numeric',
             'service_name' => 'required|string',
             'price' => 'required|numeric',
             'description' => 'required|string',
@@ -90,7 +89,7 @@ class ServicesController extends Controller
         }
 
         try {
-            Service::whereId($request->service_id)->update([
+            Service::whereId($serviceId)->update([
                 'service_name' => $request->service_name,
                 'price' => $request->price,
                 'description' => $request->description,
@@ -160,8 +159,8 @@ class ServicesController extends Controller
     /**
      * delete service
      */
-    public function deleteService(Request $request) {
-        if(Service::whereId($request->service_id)->delete()) {
+    public function deleteService(Request $request, $serviceId) {
+        if(Service::whereId($serviceId)->delete()) {
             $status = true;
             $message = "Service deleted successfully.";
             $statusCode = 200;
