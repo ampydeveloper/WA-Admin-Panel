@@ -2,25 +2,12 @@
   <v-app>
     <v-container fluid>
       <v-row>
-        <v-col sm="12" cols="12">
-          Job_id: {{job.id}}
-          <br />
-          Service Request: {{service.service_name}}
-          <br />
-          Service Date: {{job.start_date}}
-          <br />
-          Price: ${{job.job_amount}}
-          <br />
-          Manager Name: {{manager.first_name}}
-          <br />
-          Email Address: {{manager.email}}
-          <br />
-          Phone Number {{manager.phone}}
-          <br />
-          Farm Address: {{farm.farm_address}} {{farm.farm_unit}} {{farm.farm_city}} {{farm.farm_province}} {{farm.farm_zipcode}}
-        </v-col>
+     	<v-col cols="12" md="12" class="new_driver job_info pl-6 pr-6" id="new_driver">
+		Job_id: {{job.id}} <br>   Service Request: {{service.service_name}}<br>   Service Date: {{job.start_date}} <br>Price: ${{job.job_amount}}
+<br>Manager Name: {{manager.first_name}} <br>Email Address: {{manager.email}} <br>Phone Number {{manager.phone}}<br> Farm Address: {{farm.farm_address}} {{farm.farm_unit}} {{farm.farm_city}} {{farm.farm_province}} {{farm.farm_zipcode}}
+         </v-col>
 
-        <!-- <v-col sm="12" cols="12">
+         <v-col cols="12" md="12" class="new_driver pl-6 mt-6 pr-6" id="new_driver">
           <div class="chat-area">
             <div class="chat-sender mb-6">
               <div class="chat-img">
@@ -46,7 +33,7 @@
           </div>
          </v-col>
 
-          <v-col sm="12" cols="12" class="p-0">
+          <v-col cols="12" md="12" class="new_driver pl-6 mt-6 pr-6" id="new_driver">
             <div class="type_msg">
               <div class="input_msg_write">
                 <input type="text" class="write_msg" placeholder="Type a message" />
@@ -55,44 +42,8 @@
                 </button>
               </div>
             </div>
-        </v-col>-->
+          </v-col>
 
-        <div class="col-md-8">
-          <div class="card card-default">
-            <div class="card-header">
-              <h5>
-                Simple Public Chat
-                <small>({{users - 1}} users online)</small>
-              </h5>
-            </div>
-
-            <div class="form-group">
-              <div class="form-group p-2">
-                <label for="nickname">Your nickname:</label>
-                <input
-                  type="text"
-                  name="nickname"
-                  v-model="nickname"
-                  class="chat-input nickname"
-                  required
-                />
-              </div>
-              <textarea rows="12" readonly class="form-control">{{dataMessages.join('\n')}}</textarea>
-
-              <div class="p-2 message_block">
-                <input
-                  type="text"
-                  v-model="message"
-                  placeholder="Your message"
-                  required
-                  class="chat-input"
-                />
-                <button @click="sendMessage" class="btn btn-primary">Send</button>
-              </div>
-            </div>
-          </div>
-          <div>{{ error }}</div>
-        </div>
       </v-row>
     </v-container>
   </v-app>
@@ -102,10 +53,8 @@
 import { router } from "../../../_helpers/router";
 import { jobService } from "../../../_services/job.service";
 import { environment } from "../../../config/test.env";
-import { chatService } from "../../../_services/chat.service";
 import { PlusCircleIcon } from "vue-feather-icons";
-import { SendIcon } from "vue-feather-icons";
-import { authenticationService } from "../../../_services/authentication.service";
+import { SendIcon } from 'vue-feather-icons'
 export default {
   components: {
     PlusCircleIcon,
@@ -113,55 +62,27 @@ export default {
   },
   data() {
     return {
-      dataMessages: [],
-      message: "",
-      nickname: "",
-      users: "",
-      error: "",
-      job: "",
-      service: "",
-      manager: "",
-      farm: ""
+      job:'',
+      service:'',
+      manager:'',
+      farm: '',
     };
   },
-  created() {},
-  mounted() {
-    const currentUser = authenticationService.currentUserValue;
-
-    this.nickname = currentUser.data.user.first_name;
-    //chat code 
-    var socket = io.connect('http://localhost:3000');
-            socket.on('userCount', function (data) {
-                this.users = data.userCount;
-            }.bind(this));
-            socket.on("news-action:App\\Events\\ChatEvent", function(data){
-		console.log(data);
-                this.dataMessages.push(data.nickname + ' : ' + data.message);
-            }.bind(this));
-            //chat code
-    this.getResults();
+  created() {
+  
   },
-  methods: {
-    sendMessage: function() {
-                if (this.message === "" || this.nickname === "") {
-                    this.error = 'Type-in your nickname and message then kuldeep';
-                } else {
-
-		      chatService.send({message: this.message, nickname: this.nickname}).then((response) => {
-			this.message = "";
-			});
-
-              
-                }
-            },
-    getResults() {
+   mounted() {
+    this.getResults();
+   },
+    methods: {
+     getResults() {
       jobService.singleJob(this.$route.params.id).then(response => {
         //handle response
         if (response.status) {
           this.job = response.data;
-          this.service = response.data.service;
-          this.manager = response.data.manager;
-          this.farm = response.data.farm;
+	this.service = response.data.service;
+	this.manager = response.data.manager;
+	this.farm = response.data.farm;
         } else {
           this.$toast.open({
             message: response.message,
@@ -171,13 +92,52 @@ export default {
         }
       });
     }
-  },
-  updated() {
-    setTimeout(function() {
-      $(document).ready(function() {
-        $("#example").DataTable();
-      });
-    }, 1000);
-  }
+},
+updated() {
+setTimeout(function() {
+     $(document).ready(function() {
+	    $('#example').DataTable();
+	} );
+  }, 1000);
+    }
 };
 </script>
+<style> 
+#app .chat-area {
+    border-top: 0px solid #ebebeb;
+    padding-top: 15px;
+}
+#app .chat-area .chat-sender .chat-msg {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,.12),0 2px 4px 0 rgba(0,0,0,.08)!important;
+    padding: 10px 14px;
+    border-radius: 6px;
+    background-color: #11b276;
+    color: #fff;
+    font-weight: 300;
+}
+#app .chat-area .chat-sender .chat-msg:before {
+    border-right: 10px solid #11b276;
+}
+
+#app .chat-area .chat-receiver .chat-msg {
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,.12),0 2px 4px 0 rgba(0,0,0,.08)!important;
+    padding: 10px 14px;
+    border-radius: 6px;
+    background-color: #fff;
+    color: #333;
+    font-weight: 300;
+}
+#app .chat-area .chat-receiver .chat-msg:before {
+    border-left: 10px solid #fff;
+}
+#app .type_msg {
+    border-top: 0px solid #ebebeb;
+    padding-top: 1px;
+}
+#app .type_msg .input_msg_write input {
+    border-radius: 7px;
+}
+.job_info {
+    font-weight: 300;
+}
+</style> 

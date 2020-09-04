@@ -1,77 +1,152 @@
 <template>
   <v-app>
-    <v-container fluid>
-      <v-row>
-        <div class="add-icon">
-          <router-link v-if="isAdmin" to="/admin/hauler/add" class="nav-item nav-link">
-            <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon>
+    <div class="bread_crum">
+      <ul>
+        <li>
+          <h4 class="main-title text-left top_heading">
+            All Hauler
+            <span class="right-bor"></span>
+          </h4>
+        </li>
+        <li>
+          <router-link to="/admin/dashboard" class="home_svg">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24px"
+              height="24px"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="feather feather-home h-5 w-5 mb-1 stroke-current text-primary"
+            >
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+              <polyline points="9 22 9 12 15 12 15 22" />
+            </svg>
+            <span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16px"
+                height="16px"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="feather feather-chevrons-right w-4 h-4"
+              >
+                <polyline points="13 17 18 12 13 7" />
+                <polyline points="6 17 11 12 6 7" />
+              </svg>
+            </span>
           </router-link>
-          <router-link v-if="!isAdmin" to="/manager/hauler/add" class="nav-item nav-link">
-            <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon>
+        </li>
+        <li>
+          <router-link to="/admin/hauler">
+            Hauler
+            <span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16px"
+                height="16px"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="feather feather-chevrons-right w-4 h-4"
+              >
+                <polyline points="13 17 18 12 13 7" />
+                <polyline points="6 17 11 12 6 7" />
+              </svg>
+            </span>
           </router-link>
-        </div>
-      <table id="example" class="table table-striped table-bordered" style="width:100%">
-        <thead>
-            <tr>
-                <th>Image</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Address</th>
-                <th>Active</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="(customer, index) in customers">
-	       <td>   
-                     <div
-		        class="v-avatar v-list-item__avatar"
-		        style="height: 60px; min-width: 60px; width: 60px;"
-		      >
-		        <img v-if="customer.user_image" :src="'../'+customer.user_image"/>
-		        <img v-if="!customer.user_image" src="/images/avatar.png"/>
-		      </div>
-             </td>
-               <td>{{customer.prefix}} {{customer.first_name}}</td>
-               <td>{{customer.email}}</td>
-               <td>{{customer.phone}}</td>
-	       <td>{{customer.address}} {{customer.city}} {{customer.state}}, {{customer.zip_code}}</td>
-               <td>
-               <v-chip v-if="!customer.is_active" class="ma-2" color="red" text-color="white">No</v-chip>
-                      <v-chip
-                        v-if="customer.is_active"
-                        class="ma-2"
-                        color="green"
-                        text-color="white"
-                      >Yes</v-chip>
-               </td>
-               <td class="action-col">
-                   <router-link
-                        v-if="isAdmin"
-                        :to="'/admin/hauler/edit/' + customer.id"
-                        class="nav-item nav-link"
-                      >
-                        <span class="custom-action-btn">Edit</span>
-                      </router-link>
-                      <router-link
-                        v-if="!isAdmin"
-                        :to="'/manager/hauler/edit/' + customer.id"
-                        class="nav-item nav-link"
-                      >
-                        <span class="custom-action-btn">Edit</span>
-                      </router-link>
+        </li>
+        <li>All</li>
+      </ul>
+    </div>
 
-                      <v-btn color="blue darken-1" text @click="Delete(customer.id)">
-                        <span class="custom-action-btn">Delete</span>
-                      </v-btn>
-               </td>
-            </tr>
-        </tbody>
+    <div class="main_box">
+      <v-container fluid>
+        <v-row>
+          <div class="add-icon">
+            <router-link v-if="isAdmin" to="/admin/hauler/add" class="nav-item nav-link">
+              <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon>
+            </router-link>
+            <router-link v-if="!isAdmin" to="/manager/hauler/add" class="nav-item nav-link">
+              <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon>
+            </router-link>
+          </div>
+          <v-col cols="12" md="12" id="manager_wrap" class="main-box-inner">
+            <table id="hauler-table" class="table table-striped table-bordered table-main">
+              <thead>
+                <tr>
+                  <th class="text-left">#</th>
+                  <th class="text-left">Name</th>
+                  <th class="text-left">Email</th>
+                  <th class="text-left">Phone</th>
+                  <th class="text-left">Address</th>
+                  <th class="text-left">Active</th>
+                  <th class="text-left">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(customer, index) in customers">
+                  <td>{{index+1}}</td>
+                  <td>
+                    <div
+                      class="v-avatar v-list-item__avatar"
+                    >
+                      <img v-if="customer.user_image" class="small-img" :src="'../'+customer.user_image" />
+                      <img v-if="!customer.user_image" class="small-img" src="/images/avatar.png" />
+                    </div>
+
+                    {{customer.prefix}} {{customer.first_name}}
+                  </td>
+                  <td>{{customer.email}}</td>
+                  <td>{{customer.phone}}</td>
+                  <td>{{customer.address}} {{customer.city}} {{customer.state}}, {{customer.zip_code}}</td>
+                  <td>
+                    <span v-if="!customer.is_active" class="badges-item">No</span>
+                    <span v-if="customer.is_active" class="badges-item">Yes</span>
+                  </td>
+                  <td class="action-col">
+                    <router-link
+                      v-if="isAdmin"
+                      :to="'/admin/hauler/edit/' + customer.id"
+                      class="nav-item nav-link"
+                    >
+                      <edit-3-icon size="1.2x" class="custom-class"></edit-3-icon>
+                    </router-link>
+                    <router-link
+                      v-if="!isAdmin"
+                      :to="'/manager/hauler/edit/' + customer.id"
+                      class="nav-item nav-link"
+                    >
+                      <edit-3-icon size="1.2x" class="custom-class"></edit-3-icon>
+                    </router-link>
+
+                    <a href="javascript:void(0);" text @click="Delete(customer.id)">
+                      <trash-icon size="1.5x" class="custom-class"></trash-icon>
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
             </table>
-        </v-col>
-      </v-row>
-    </v-container>
+          </v-col>
+        </v-row>
+      </v-container>
+    </div>
+    <span id="table-chevron-left" class="d-none">
+      <chevron-left-icon size="1.5x" class="custom-class"></chevron-left-icon>
+    </span>
+    <span id="table-chevron-right" class="d-none">
+      <chevron-right-icon size="1.5x" class="custom-class"></chevron-right-icon>
+    </span>
   </v-app>
 </template>
 
@@ -81,18 +156,22 @@ import { companyService } from "../../../_services/company.service";
 import { authenticationService } from "../../../_services/authentication.service";
 import {
   UserIcon,
-  EditIcon,
+  Edit3Icon,
   TrashIcon,
-  PlusCircleIcon
+  PlusCircleIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
 } from "vue-feather-icons";
 import { router } from "../../../_helpers/router";
 
 export default {
   components: {
     UserIcon,
-    EditIcon,
+    Edit3Icon,
     TrashIcon,
     PlusCircleIcon,
+    ChevronLeftIcon,
+    ChevronRightIcon,
   },
   data() {
     return {
@@ -103,19 +182,19 @@ export default {
   getList() {},
   mounted() {
     const currentUser = authenticationService.currentUserValue;
-    if(currentUser.data.user.role_id == 1){
-    this.isAdmin = true;
-    }else{
-    this.isAdmin = false;
+    if (currentUser.data.user.role_id == 1) {
+      this.isAdmin = true;
+    } else {
+      this.isAdmin = false;
     }
     this.getResults();
   },
   methods: {
-    getTagNames: tags => {
-      return tags.map(tag => tag.name);
+    getTagNames: (tags) => {
+      return tags.map((tag) => tag.name);
     },
     getResults() {
-      companyService.listHauler().then(response => {
+      companyService.listHauler().then((response) => {
         //handle response
         if (response.status) {
           this.customers = response.data;
@@ -123,20 +202,38 @@ export default {
           this.$toast.open({
             message: response.message,
             type: "error",
-            position: "top-right"
+            position: "bottom-right",
           });
         }
       });
     },
     Delete(e) {
+      this.$swal({
+        title: "Are you sure?",
+        text: "Are you sure you want to delete this hauler?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes Delete it",
+        cancelButtonText: "No, Keep it",
+        showCloseButton: true,
+        showLoaderOnConfirm: true,
+      }).then((result) => {
+        if (result.value) {
+          this.deleteHauler(e);
+        }
+      });
+
+      return false;
+    },
+    deleteHauler(e) {
       if (e) {
-        companyService.deleteHauler(e).then(response => {
+        companyService.deleteHauler(e).then((response) => {
           //handle response
           if (response.status) {
             this.$toast.open({
               message: response.message,
               type: "success",
-              position: "top-right"
+              position: "bottom-right",
             });
             //redirect to login
             this.dialog = false;
@@ -148,7 +245,7 @@ export default {
             this.$toast.open({
               message: response.message,
               type: "error",
-              position: "top-right"
+              position: "bottom-right",
             });
           }
         });
@@ -156,14 +253,38 @@ export default {
     },
     Close() {
       this.dialog = false;
-    }
+    },
   },
-updated() {
-setTimeout(function() {
-     $(document).ready(function() {
-	    $('#example').DataTable();
-	} );
-  }, 1000);
-    }
+  updated() {
+    setTimeout(function () {
+      $(document).ready(function () {
+        $(".table-main").DataTable({
+          aoColumnDefs: [
+            {
+              bSortable: false,
+              aTargets: [-1, -2, -3, -4, -5, -6],
+            },
+          ],
+          oLanguage: { sSearch: "" },
+          drawCallback: function (settings) {
+            $(".dataTables_paginate .paginate_button.previous").html(
+              $("#table-chevron-left").html()
+            );
+            $(".dataTables_paginate .paginate_button.next").html(
+              $("#table-chevron-right").html()
+            );
+          },
+        });
+        $(".dataTables_filter input").attr("placeholder", "Search Haulers");
+        $(".dataTables_paginate .paginate_button.previous").html(
+          $("#table-chevron-left").html()
+        );
+        $(".dataTables_paginate .paginate_button.next").html(
+          $("#table-chevron-right").html()
+        );
+        $(".table-main").css({ opacity: 1 });
+      });
+    }, 1000);
+  },
 };
 </script>

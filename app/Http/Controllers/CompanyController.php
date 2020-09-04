@@ -29,15 +29,15 @@ class CompanyController extends Controller {
      */
     public function createHauler(Request $request) {
         $validator = Validator::make($request->all(), [
-                    'hauler_first_name' => 'required|string',
-                    'hauler_last_name' => 'required|string',
-                    'hauler_email' => 'required|string|email|unique:users',
-                    'hauler_phone' => 'required',
-                    'hauler_address' => 'required',
-                    'hauler_city' => 'required',
-                    'hauler_province' => 'required',
-                    'hauler_zipcode' => 'required',
-                    'hauler_is_active' => 'required',
+                    'first_name' => 'required|string',
+                    'last_name' => 'required|string',
+                    'email' => 'required|string|email|unique:users',
+                    'phone' => 'required',
+                    'address' => 'required',
+                    'city' => 'required',
+                    'state' => 'required',
+                    'zipcode' => 'required',
+                    'is_active' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -50,20 +50,20 @@ class CompanyController extends Controller {
             DB::beginTransaction();
             $newPassword = Str::random();
             $user = new User([
-                'prefix' => (isset($request->hauler_prefix) && $request->hauler_prefix != '' && $request->hauler_prefix != null) ? $request->hauler_prefix : null,
-                'first_name' => $request->hauler_first_name,
-                'last_name' => $request->hauler_last_name,
-                'email' => $request->hauler_email,
-                'phone' => $request->hauler_phone,
-                'address' => $request->hauler_address,
-                'city' => $request->hauler_city,
-                'state' => $request->hauler_province,
-                'zip_code' => $request->hauler_zipcode,
-                'user_image' => (isset($request->hauler_image) && $request->hauler_image != '' && $request->hauler_image != null) ? $request->hauler_image : null,
+                'prefix' => (isset($request->prefix) && $request->prefix != '' && $request->prefix != null) ? $request->prefix : null,
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'address' => $request->address,
+                'city' => $request->city,
+                'state' => $request->state,
+                'zip_code' => $request->zipcode,
+                'user_image' => (isset($request->user_image) && $request->user_image != '' && $request->user_image != null) ? $request->user_image : null,
                 'role_id' => config('constant.roles.Haulers'),
                 'created_from_id' => $request->user()->id,
                 'is_confirmed' => 1,
-                'is_active' => $request->hauler_is_active,
+                'is_active' => $request->is_active,
                 'password' => bcrypt($newPassword)
             ]);
             if ($user->save()) {

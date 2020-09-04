@@ -40,7 +40,7 @@ function add(data) {
 
 function edit(data) {
   return fetch(
-    this.apiUrl+`admin/edit-service/`+data.id,
+    this.apiUrl+`admin/edit-service/`+data.service_id,
     requestOptions.post(data)
   )
     .then(handleResponse)

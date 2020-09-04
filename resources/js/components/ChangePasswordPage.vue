@@ -3,6 +3,9 @@
     <div class="login_form">
         <v-row>
             <v-col cols="6" md="7" class="img_bg_outside">
+<div class="sidebar-logo">
+   <img src="/images/logo-basic.png" class="" />
+</div>
                 <div class="green-overlay"></div>
                 <div class="img_bg"></div>
                 <div class="back-text">
@@ -68,6 +71,86 @@
     </div>
   </v-app>
 </template>
+
+
+
+<template class="bg_login_img">
+  <v-app id="login_bg">
+    <div class="login_form">
+        <v-row>
+            <v-col cols="6" md="7" class="img_bg_outside">
+                <div class="green-overlay"></div>
+                <div class="img_bg"></div>
+                <div class="back-text">
+                    <h3>Wellington</h3>
+                    <h3>Agricultural Services</h3>
+                    <p>Affordable solutions for smaller farms.</p>
+                </div>
+            </v-col>
+            <v-col cols="12" md="5" class="login_box-outer">
+            <div class="login_box">
+                <div class="login_txt">
+                    <h2>Reset Password</h2>
+                    <p>Please enter your new password.</p>
+                </div>
+              
+              <v-form 
+                ref="form" 
+                v-model="valid" 
+                lazy-validation 
+                class="slide-right"
+                autocomplete="off"
+                >
+                <label for>Password</label>
+                <div class="custom_input">
+                <lock-icon size="1.5x" class="custom-class icons_custom"></lock-icon>
+                <v-text-field
+                  v-model="password"
+                  :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                  :rules="[rules.required, rules.min]"
+                  :type="show1 ? 'text' : 'password'"
+                  name="password"
+                  label="Password"
+                  hint="At least 8 characters"
+                  counter
+                  @click:append="show1 = !show1"
+                ></v-text-field>
+              </div>
+              
+              <div class="custom_input">
+                <lock-icon size="1.5x" class="custom-class icons_custom"></lock-icon>
+                <v-text-field
+                  v-model="confirm_password"
+                  :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
+                  :rules="[rules.required, rules.min, passwordConfirmationRule]"
+                  :type="show2 ? 'text' : 'password'"
+                  name="confirm_password"
+                  label="Confirm Password"
+                  hint="At least 8 characters"
+                  counter
+                  @click:append="show2 = !show2"
+                ></v-text-field>
+              </div>
+
+                <div class="forget forget-login">
+                <v-col cols="12" class="login-btn-div">
+                  <div class="btn_grp">
+                    <v-btn color="success" class="mr-4 recover_btn" @click="validate">Update</v-btn>
+                  </div>
+                </v-col>
+              </div>
+              </v-form>
+            </div>
+          </v-col>
+        </v-row>
+    </div>
+  </v-app>
+</template>
+
+
+
+
+
 
 <script>
 import { required } from "vuelidate/lib/validators";

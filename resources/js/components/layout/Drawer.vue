@@ -62,6 +62,14 @@
   </v-list-group>
     </v-list> -->
     
+<div class="sidebar-heading clearfix">
+  <img src="/images/logo-basic.png" class="" />
+  <div class="side-head">
+<h4>Wellington</h4>
+<h5>Agricultural</h5>
+  </div>
+  </div>
+
 <v-list v-if="isAdmin">
           <v-list-group
             v-for="(item, mainIndex) in items"
@@ -84,7 +92,7 @@
               v-bind:class="{ 'overlay': isActive == subIindex+''+mainIndex }"
             >
               <v-list-item-action>
-                <v-icon v-text="subItem.icon"></v-icon>
+<span v-html="subItem.icon"> </span>
               </v-list-item-action>
               <v-list-item-content>
                 <v-list-item-title v-on:click="showAdvanced(subIindex, mainIndex)">
@@ -167,6 +175,10 @@
 
       <div />
     </v-list>
+<div class="sidebar-logo">
+   <img src="/images/logo-basic.png" class="" />
+</div>
+   
   </v-navigation-drawer>
 </template>
 
@@ -199,10 +211,10 @@
             title: 'Main',
             active: true,
             items: [
-              { title: 'Overview', url: '/admin/dashboard', icon: "mdi-view-dashboard" },
-              { title: 'Jobs', url: '/admin/jobs', icon: 'mdi-wallet-travel' },
-              { title: 'Dispatches', url: '/admin/dispatches', icon: 'mdi-cube-outline' },
-              { title: 'Services', url: '/admin/services', icon: 'mdi-camera-timer' },
+              { title: 'Overview', url: '/admin/dashboard', icon: "<img src='/images/home.svg' />" },
+              { title: 'Jobs', url: '/admin/jobs', icon: "<img src='/images/briefcase.svg' />" },
+              { title: 'Dispatches', url: '/admin/dispatches', icon: "<img src='/images/package.svg' />" },
+              { title: 'Services', url: '/admin/services', icon: "<img src='/images/grid.svg' />" },
             ]
           },
           {
@@ -210,8 +222,8 @@
             title: 'Customer',
             active: true,
             items: [
-              { title: 'Customer', url: '/admin/customer', icon: 'mdi-account' },
-              { title: 'Hauler', url: '/admin/hauler', icon: 'mdi-account-plus' }
+              { title: 'Customer', url: '/admin/customer', icon: "<img src='/images/user.svg' />" },
+              { title: 'Hauler', url: '/admin/hauler', icon: "<img src='/images/user-plus.svg' />" }
             ]
           },
           {
@@ -219,8 +231,8 @@
             title: 'Employee',
             active: true,
             items: [
-              { title: 'Managers', url: '/admin/manager', icon: 'mdi-account-check' },
-	            { title: 'Drivers', url: '/admin/truckdrivers', icon: 'mdi-account-outline' }
+              { title: 'Managers', url: '/admin/manager', icon: "<img src='/images/user-check.svg' />" },
+	            { title: 'Drivers', url: '/admin/truckdrivers', icon: "<img src='/images/users.svg' />" }
             ]
           },
           {
@@ -228,8 +240,8 @@
             title: 'Fleet',
             active: true,
             items: [
-              { title: 'Truck', url: '/admin/trucks', icon: 'mdi-truck' },
-	            { title: 'SkidSteer', url: '/admin/skidsteers', icon: 'mdi-truck'  }
+              { title: 'Truck', url: '/admin/trucks', icon: "<img src='/images/truck.svg' />" },
+	            { title: 'SkidSteer', url: '/admin/skidsteers', icon: "<img src='/images/truck.svg' />"  }
             ]
           },
           {
@@ -237,8 +249,8 @@
             title: 'Accounts',
             active: true,
             items: [
-               { title: 'Accountings',url: '/admin/accounting', icon: 'mdi-book-open' },
-              { title: 'Reports', url: '/admin/reports', icon: 'mdi-file-document' }
+               { title: 'Accountings',url: '/admin/accounting', icon: "<img src='/images/book-open.svg' />" },
+              { title: 'Reports', url: '/admin/reports', icon: "<img src='/images/file-text.svg' />" }
             ]
           }
         ],

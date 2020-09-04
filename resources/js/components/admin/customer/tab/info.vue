@@ -3,172 +3,143 @@
     <v-container fluid>
       <v-row>
         <v-col cols="12" md="12">
-          <v-form ref="form" v-model="valid" lazy-validation>
+          <v-form
+            ref="form"
+            v-model="valid"
+            lazy-validation
+            class="v-form custom_form_field custom-fill"
+            id="form_field"
+          >
             <v-row>
-              <v-col cols="12" md="12">
-                <v-row>
-          <router-link v-if="isAdmin" :to="'/admin/customer/addfarmmore/' + addForm.id" class="nav-item nav-link">Add Another Farm</router-link>
-         <router-link v-if="!isAdmin" :to="'/manager/customer/addfarmmore/' + addForm.id" class="nav-item nav-link">Add Another Farm</router-link>
-                  <v-col cols="12" md="12">
-                    <div
-                      class="v-avatar v-list-item__avatar"
-                      style="height: 80px; min-width: 80px; width: 80px;"
-                    >
-            <button type="button" class="close AClass" style="margin-right: 13px; margin-top: -25px; font-size: 30px;" v-if="cross" @click="Remove()">
-               <span>&times;</span>
-             </button>
-                      <img :src="avatar" />
-                    </div>
-                    <file-pond
-                      name="uploadImage"
-                      ref="pond"
-                      label-idle="Add Profile pic..."
-                      allow-multiple="false"
-                      v-bind:server="serverOptions"
-                      v-bind:files="myFiles"
-                      v-on:addfilestart="setUploadIndex"
-                      allow-file-type-validation="true"
-                      accepted-file-types="image/jpeg, image/png"
-                      v-on:processfile="handleProcessFile"
-                      v-on:processfilerevert="handleRemoveFile"
-                      :disabled="disabled == 0"
-                    />
-                  </v-col>
-                  <v-col cols="3" md="3">
-                    <v-col cols="4" sm="4" class="pl-0 pt-0 pb-0">
-                      <label class="ft-normal">Prefix</label>
-                    </v-col>
-                    <v-col cols="8" sm="8" class="p-0 ml-m4">
-                      <v-select
-                        v-model="addForm.prefix"
-                        class="disabled-tag"
-                        :items="prefixs"
-                        :rules="[v => !!v || 'Prefix is required']"
-                        :disabled="disabled == 0"
-                      ></v-select>
-                    </v-col>
-                  </v-col>
-                  <v-col cols="3" sm="3">
-                    <v-col cols="4" sm="4" class="pl-0 pt-0 pb-0">
-                      <label class="ft-normal">Name</label>
-                    </v-col>
-                    <v-col cols="8" sm="8" class="p-0 ml-m4">
-                      <v-text-field
-                        v-model="addForm.customer_name"
-                        required
-                        :disabled="disabled == 0"
-                        class="disabled-tag"
-                        :rules="[v => !!v || 'Customer name is required']"
-                      ></v-text-field>
-                    </v-col>
-                  </v-col>
-                  <v-col cols="3" md="3">
-                    <v-col cols="4" sm="4" class="pl-0 pt-0 pb-0">
-                      <label class="ft-normal">Email</label>
-                    </v-col>
-                    <v-col cols="8" sm="8" class="p-0 ml-m4">
-                      <v-text-field
-                        v-model="addForm.email"
-                        :rules="emailRules"
-                        name="email"
-                        :disabled="disabled == 0"
-                        class="disabled-tag"
-                        required
-                      ></v-text-field>
-                    </v-col>
-                  </v-col>
-                  <v-col cols="3" md="3">
-                    <v-col cols="4" sm="4" class="pl-0 pt-0 pb-0">
-                      <label class="ft-normal">Phone</label>
-                    </v-col>
-                    <v-col cols="8" sm="8" class="p-0 ml-m4">
-                      <v-text-field
-                        v-model="addForm.phone"
-                        :rules="phoneRules"
-                        :disabled="disabled == 0"
-                        class="disabled-tag"
-                        required
-                        maxlength="10"
-                      ></v-text-field>
-                    </v-col>
-                  </v-col>
-                  <v-col cols="3" md="3">
-                    <v-col cols="4" sm="4" class="pl-0 pt-0 pb-0">
-                      <label class="ft-normal">Address</label>
-                    </v-col>
-                    <v-col cols="8" sm="8" class="p-0 ml-m4">
-                      <v-text-field
-                        v-model="addForm.address"
-                        :disabled="disabled == 0"
-                        class="disabled-tag"
-                        required
-                        :rules="[v => !!v || 'address is required']"
-                      ></v-text-field>
-                    </v-col>
-                  </v-col>
-                  <v-col cols="3" md="3">
-                    <v-col cols="4" sm="4" class="pl-0 pt-0 pb-0">
-                      <label class="ft-normal">City</label>
-                    </v-col>
-                    <v-col cols="8" sm="8" class="p-0 ml-m4">
-                      <v-text-field
-                        v-model="addForm.city"
-                        :disabled="disabled == 0"
-                        class="disabled-tag"
-                        required
-                        :rules="[v => !!v || 'City is required']"
-                      ></v-text-field>
-                    </v-col>
-                  </v-col>
-                  <v-col cols="3" md="3">
-                    <v-col cols="4" sm="4" class="pl-0 pt-0 pb-0">
-                      <label class="ft-normal">Province</label>
-                    </v-col>
-                    <v-col cols="8" sm="8" class="p-0 ml-m4">
-                      <v-text-field
-                        v-model="addForm.province"
-                        :disabled="disabled == 0"
-                        class="disabled-tag"
-                        required
-                        :rules="[v => !!v || 'Province is required']"
-                      ></v-text-field>
-                    </v-col>
-                  </v-col>
-                  <v-col cols="3" md="3">
-                    <v-col cols="4" sm="4" class="pl-0 pt-0 pb-0">
-                      <label class="ft-normal">ZipCode</label>
-                    </v-col>
-                    <v-col cols="8" sm="8" class="p-0 ml-m4">
-                      <v-text-field
-                        v-model="addForm.zipcode"
-                        :rules="[v => !!v || 'Zip code is required']"
-                        :disabled="disabled == 0"
-                        class="disabled-tag"
-                        required
-                      ></v-text-field>
-                    </v-col>
-                  </v-col>
-                  <v-col cols="2" md="2">
-                    <v-switch v-model="addForm.is_active" class="mx-2" label="Is Active"></v-switch>
-                  </v-col>
-                  <v-col cols="2" md="2">
-                    <v-switch
-                      v-model="editSwitch"
-                      class="mx-2"
-                      label="Edit"
-                      @click="disabled = (disabled + 1) % 2"
-                    ></v-switch>
-                  </v-col>
-                </v-row>
+              <v-col cols="12" md="12" class="customer-edit-first pt-0 pb-0">
+                <div class="v-avatar v-list-item__avatar">
+                  <button type="button" class="close" v-if="cross" @click="Remove()">
+                    <span>&times;</span>
+                  </button>
+                  <img :src="avatar" />
+                </div>
+                <file-pond
+                  name="uploadImage"
+                  ref="pond"
+                  label-idle="Update Profile Photo"
+                  allow-multiple="false"
+                  v-bind:server="serverOptions"
+                  v-bind:files="myFiles"
+                  v-on:addfilestart="setUploadIndex"
+                  allow-file-type-validation="true"
+                  accepted-file-types="image/jpeg, image/png"
+                  v-on:processfile="handleProcessFile"
+                  v-on:processfilerevert="handleRemoveFile"
+                  :disabled="disabled == 0"
+                />
               </v-col>
-              <v-btn
-                :loading="loading"
-                :disabled="loading"
-                color="success"
-                class="mr-4 custom-save-btn ml-4"
-                @click="update"
-              >Submit</v-btn>
-             <!-- <v-btn color="success" class="mr-4 custom-save-btn ml-4" @click="Delete">Delete</v-btn> -->
+              <v-col cols="4" md="4" class="pt-0 pb-0">
+                <v-select
+                  v-model="addForm.prefix"
+                  class="disabled-tag"
+                  :items="prefixs"
+                  label="Select Prefix"
+                  :rules="[v => !!v || 'Prefix is required.']"
+                  :disabled="disabled == 0"
+                ></v-select>
+              </v-col>
+              <v-col cols="4" sm="4" class="pt-0 pb-0">
+                <v-text-field
+                  v-model="addForm.customer_name"
+                  required
+                  :disabled="disabled == 0"
+                  label="Name"
+                  class="disabled-tag"
+                  :rules="[v => !!v || 'Customer name is required.']"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="4" md="4" class="pt-0 pb-0">
+                <v-text-field
+                  v-model="addForm.email"
+                  :rules="emailRules"
+                  name="email"
+                  label="Email"
+                  :disabled="disabled == 0"
+                  class="disabled-tag"
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-col cols="4" md="4" class="pt-0 pb-0">
+                <v-text-field
+                  v-model="addForm.phone"
+                  :rules="phoneRules"
+                  :disabled="disabled == 0"
+                  label="Phone"
+                  class="disabled-tag"
+                  required
+                  maxlength="10"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="4" md="4" class="pt-0 pb-0">
+                <v-text-field
+                  v-model="addForm.address"
+                  :disabled="disabled == 0"
+                  class="disabled-tag"
+                  label="Address"
+                  required
+                  :rules="[v => !!v || 'Address is required.']"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="4" md="4" class="pt-0 pb-0">
+                <v-text-field
+                  v-model="addForm.city"
+                  :disabled="disabled == 0"
+                  class="disabled-tag"
+                  label="City"
+                  required
+                  :rules="[v => !!v || 'City is required.']"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="4" md="4" class="pt-0 pb-0">
+                <v-text-field
+                  v-model="addForm.province"
+                  :disabled="disabled == 0"
+                  class="disabled-tag"
+                  label="Province"
+                  required
+                  :rules="[v => !!v || 'Province is required.']"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="4" md="4" class="pt-0 pb-0">
+                <v-text-field
+                  v-model="addForm.zipcode"
+                  label="Zipcode"
+                  :rules="[v => !!v || 'Zipcode is required.']"
+                  :disabled="disabled == 0"
+                  class="disabled-tag"
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-col cols="2" md="2">
+                <v-switch v-model="addForm.is_active" class="mx-2" label="Status"></v-switch>
+              </v-col>
+              <v-col cols="2" md="2">
+                <v-switch
+                  v-model="editSwitch"
+                  class="mx-2"
+                  label="Edit"
+                  @click="disabled = (disabled + 1) % 2"
+                ></v-switch>
+              </v-col>
+
+              <v-col class="pt-0 pb-0" cols="12" md="12">
+                <div class="p-0 float-right">
+                  <v-btn
+                    :loading="loading"
+                    :disabled="loading"
+                    color="success"
+                    type="submit"
+                    class="custom-save-btn mr-4"
+                    @click="update"
+                    id="submit_btn"
+                  >Save</v-btn>
+                </div>
+              </v-col>
             </v-row>
           </v-form>
         </v-col>
@@ -211,24 +182,24 @@ export default {
         province: "",
         user_image: null,
         zipcode: "",
-        is_active: ""
+        is_active: "",
       },
       emailRules: [
-        v => !!v || "E-mail is required",
-        v => /.+@.+/.test(v) || "E-mail must be valid"
+        (v) => !!v || "Email is required.",
+        (v) => /.+@.+/.test(v) || "Email must be valid.",
       ],
       phoneRules: [
-        v => !!v || "Phone number is required",
-        v => /^\d*$/.test(v) || "Enter valid number",
-        v => v.length >= 10 || "Enter valid number length"
+        (v) => !!v || "Phone number is required.",
+        (v) => /^\d*$/.test(v) || "Enter valid number.",
+        (v) => v.length >= 10 || "Enter valid number.",
       ],
       rules: [
-        value =>
+        (value) =>
           !value ||
           value.size < 2000000 ||
-          "Avatar size should be less than 2 MB!"
+          "Image size should be less than 2 MB.",
       ],
-      myFiles: []
+      myFiles: [],
     };
   },
   watch: {
@@ -238,16 +209,16 @@ export default {
       } else {
         // console.log('no');
       }
-    }
+    },
   },
-  mounted: function() {
+  mounted: function () {
     const currentUser = authenticationService.currentUserValue;
-    if(currentUser.data.user.role_id == 1){
-       this.isAdmin = true;
-    }else{
-       this.isAdmin = false;
+    if (currentUser.data.user.role_id == 1) {
+      this.isAdmin = true;
+    } else {
+      this.isAdmin = false;
     }
-    customerService.getCustomer(this.$route.params.id).then(response => {
+    customerService.getCustomer(this.$route.params.id).then((response) => {
       //handle response
       if (response.status) {
         this.addForm = {
@@ -262,7 +233,7 @@ export default {
           user_image: response.data.user_image,
           address: response.data.address,
           zipcode: response.data.zip_code,
-          is_active: response.data.is_active
+          is_active: response.data.is_active,
         };
         if (response.data.user_image) {
           this.cross = true;
@@ -274,7 +245,7 @@ export default {
         this.$toast.open({
           message: response.message,
           type: "error",
-          position: "top-right"
+          position: "top-right",
         });
       }
     });
@@ -288,15 +259,15 @@ export default {
         process: {
           url: "uploadImage",
           headers: {
-            Authorization: "Bearer " + currentUser.data.access_token
-          }
+            Authorization: "Bearer " + currentUser.data.access_token,
+          },
         },
-        revert:{
+        revert: {
           url: "deleteImage",
           headers: {
-            Authorization: "Bearer " + currentUser.data.access_token
-          }
-        }
+            Authorization: "Bearer " + currentUser.data.access_token,
+          },
+        },
       };
     },
     url() {
@@ -306,39 +277,39 @@ export default {
       } else {
         return null;
       }
-    }
+    },
   },
   methods: {
-   Remove(){
-    this.avatar = "/images/avatar.png";
-    this.cross=false;
-    this.addForm.user_image = '';
-   },
+    Remove() {
+      this.avatar = "/images/avatar.png";
+      this.cross = false;
+      this.addForm.user_image = "";
+    },
     setUploadIndex() {
       this.uploadInProgress = true;
     },
-    handleProcessFile: function(error, file) {
+    handleProcessFile: function (error, file) {
       this.avatar = this.imgUrl + file.serverId;
       this.addForm.user_image = file.serverId;
     },
-    handleRemoveFile: function(file){
-      this.addForm.user_image = '';
-      this.cross=false;
+    handleRemoveFile: function (file) {
+      this.addForm.user_image = "";
+      this.cross = false;
       this.avatar = "/images/avatar.png";
     },
     update() {
       if (this.uploadInProgress) {
         this.$toast.open({
-          message: "Image uploading is in progress!",
+          message: "Image uploading is in progress.",
           type: "error",
-          position: "top-right"
+          position: "top-right",
         });
         return false;
       }
       if (this.$refs.form.validate()) {
         //start loading
         this.loading = true;
-        customerService.edit(this.addForm).then(response => {
+        customerService.edit(this.addForm).then((response) => {
           //stop loading
           this.loading = false;
           //handle response
@@ -346,7 +317,7 @@ export default {
             this.$toast.open({
               message: response.message,
               type: "success",
-              position: "top-right"
+              position: "top-right",
             });
             //redirect to login
             //router.push("/admin/customer");
@@ -354,13 +325,13 @@ export default {
             this.$toast.open({
               message: response.message,
               type: "error",
-              position: "top-right"
+              position: "top-right",
             });
           }
         });
       }
     },
-    Delete() {}
-  }
+    Delete() {},
+  },
 };
 </script>

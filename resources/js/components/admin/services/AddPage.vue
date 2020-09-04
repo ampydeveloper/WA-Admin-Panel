@@ -93,18 +93,12 @@
                     label="Enter service name"
                     placeholder
                   ></v-text-field>
-                  <!-- <template>
-                  <div>
-                    <v-text-field label="Service name" :rules="rules" hide-details="auto"></v-text-field>
-                    <v-text-field label="Another input"></v-text-field>
-                  </div>
-                  </template>-->
                 </v-col>
               </v-col>
 
               <v-col cols="12" md="12" class="pt-0 pb-0">
                 <v-col sm="2" class="label-align pt-0">
-                  <label class="label_text">Service For</label>
+                  <label class="label_text label-full">Service For</label>
                 </v-col>
                 <v-col sm="8" class="label-align pt-0 pb-0 radio-group-outer">
                   <v-radio-group
@@ -230,8 +224,6 @@
                     placeholder
                     rows="3"
                     auto-grow
-                    clearable
-                    clear-icon="cancel"
                     v-model="addForm.description"
                     :rules="descriptionRules"
                     required
@@ -240,7 +232,7 @@
               </v-col>
 
               <v-col cols="12" md="12" class="pt-0 pb-0">
-                <v-col sm="2" class="label-align pt-0 service-image1">
+                <v-col sm="2" class="label-align pt-0 image-upload-label">
                   <label class="label_text">Service Image</label>
                 </v-col>
                 <v-col sm="4" class="pt-0 pb-0">
@@ -266,7 +258,7 @@
 
               <v-col cols="12" md="12" class="pt-0 pb-0" v-if="selectedType == 4">
                 <v-col sm="2" class="label-align pt-0">
-                  <label class="label_text">Service Type</label>
+                  <label class="label_text label-full">Service Type</label>
                 </v-col>
                 <v-col sm="8" class="label-align pt-0 pb-0 radio-group-outer">
                   <v-radio-group
@@ -341,8 +333,8 @@ export default {
       },
       morningSlots: [],
       eveningSlots: [],
-      priceRules: [(v) => !!v || "Service price is invalid/required"],
-      descriptionRules: [(v) => !!v || "Service description is required"],
+      priceRules: [(v) => !!v || "Service price is invalid/required."],
+      descriptionRules: [(v) => !!v || "Service description is required."],
       myFiles: [],
     };
   },
@@ -465,7 +457,7 @@ export default {
             //check if any morning selected
             if (checkMorning == 0) {
               this.$toast.open({
-                message: "Please select atleast one morning time slot",
+                message: "Please select at least one morning time slot.",
                 type: "error",
                 position: "top-right",
               });
@@ -484,7 +476,7 @@ export default {
             //check if any morning selected
             if (checkEvening == 0) {
               this.$toast.open({
-                message: "Please select atleast one evening time slot",
+                message: "Please select at least one evening time slot.",
                 type: "error",
                 position: "top-right",
               });
@@ -493,7 +485,7 @@ export default {
           }
         } else {
           this.$toast.open({
-            message: "Please select atleast one time slot",
+            message: "Please select at least one time slot.",
             type: "error",
             position: "top-right",
           });

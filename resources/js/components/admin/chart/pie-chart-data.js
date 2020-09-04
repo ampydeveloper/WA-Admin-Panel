@@ -29,7 +29,7 @@ export const planetChartData = {
             //     borderWidth: 3
             // },
             { // another line graph
-                label: 'Planet Mass (x1,000 km)',
+                label: '',
                 data: [116.4, 50.7, 49.2],
                 backgroundColor: [
                     '#4DBF7B', // Green
@@ -46,6 +46,9 @@ export const planetChartData = {
     options: {
         responsive: true,
         lineTension: 1,
+        legend: {
+            display: false
+        },
         scales: {
             yAxes: [{
                 ticks: {
@@ -53,6 +56,7 @@ export const planetChartData = {
                     padding: 25,
                 }
             }]
+              
         }
     }
 }

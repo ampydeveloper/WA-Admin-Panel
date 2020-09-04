@@ -1,113 +1,162 @@
 <template>
   <v-app id="driver_list">
-    <v-container fluid>
-      <v-row>
-        <h4 class="main-title text-left">Driver list 3</h4>
-        <div class="add-icon">
-          <router-link v-if="isAdmin" to="/admin/truckdriver/add" class="nav-item nav-link">
-            <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon>
+    <div class="bread_crum">
+      <ul>
+        <li>
+          <h4 class="main-title top_heading">
+            All Drivers
+            <span class="right-bor"></span>
+          </h4>
+        </li>
+        <li>
+          <router-link to="/admin/dashboard" class="home_svg">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24px"
+              height="24px"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="feather feather-home h-5 w-5 mb-1 stroke-current text-primary"
+            >
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+              <polyline points="9 22 9 12 15 12 15 22" />
+            </svg>
+            <span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16px"
+                height="16px"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="feather feather-chevrons-right w-4 h-4"
+              >
+                <polyline points="13 17 18 12 13 7" />
+                <polyline points="6 17 11 12 6 7" />
+              </svg>
+            </span>
           </router-link>
-          <router-link v-if="!isAdmin" to="/manager/truckdriver/add" class="nav-item nav-link">
-            <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon>
-          </router-link>
-        </div>
+        </li>
+        <li>Driver</li>
+        <li>
+          <span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16px"
+              height="16px"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="feather feather-chevrons-right w-4 h-4"
+            >
+              <polyline points="13 17 18 12 13 7" />
+              <polyline points="6 17 11 12 6 7" />
+            </svg>
+          </span>
+        </li>
+        <li>All</li>
+      </ul>
+    </div>
 
-        <v-col cols="12" md="12" id="manager_wrap">
-          <v-simple-table>
-            <template v-slot:default>
+    <div class="main_box">
+      <v-container fluid>
+        <v-row>
+          <div class="add-icon">
+            <router-link v-if="isAdmin" to="/admin/truckdriver/add" class="nav-item nav-link">
+              <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon>
+            </router-link>
+            <router-link v-if="!isAdmin" to="/manager/truckdriver/add" class="nav-item nav-link">
+              <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon>
+            </router-link>
+          </div>
+
+          <v-col cols="12" md="12" class="main-box-inner">
+            <table id="driver-table" class="table table-striped table-bordered table-main">
               <thead>
                 <tr>
-                  <th class="text-left">Image</th>
-                  <th class="text-left">Driver Name</th>
-                  <th class="text-left mgr-add-col">Address</th>
-                  <th class="text-left">Contact Number</th>
-                  <th class="text-left">Email Address</th>
-                  <th class="text-left">Driver License Number</th>
-                  <th class="text-left">License Expiry Date</th>
-                  <th class="text-left">Total Km</th>
-                  <th class="text-left">Salary Rate</th>
-                  <th class="text-left">Total Amount</th>
+                  <th class="text-left">#</th>
+                  <th class="text-left">Driver</th>
+                  <th class="text-left">Phone</th>
+                  <th class="text-left">Email</th>
+                  <th class="text-left">Distance</th>
+                  <th class="text-left">Salary</th>
+                  <th class="text-left">Amount</th>
                   <th class="text-left">Active</th>
-                  <th class="text-left">Options</th>
+                  <th class="text-left">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(item, index) in drivers" :key="item.name" v-on:click="selectTr(index)" v-bind:class="{ 'selected' : isActive == index}">
+                <tr
+                  v-for="(item, index) in drivers"
+                  :key="item.name"
+                  v-on:click="selectTr(index)"
+                  v-bind:class="{ 'selected' : isActive == index}"
+                >
+                  <td>{{index+1}}</td>
                   <td>
-                    <div
-                      class="v-avatar v-list-item__avatar"
-                      style="height: 40px; min-width: 40px; width: 40px;"
-                    >
+                    <div class="v-avatar v-list-item__avatar">
                       <img
                         v-if="item.user.user_image"
                         :src="'../../'+item.user.user_image"
-                        alt="John"
+                        alt
+                        class="small-img"
                       />
-                      <img v-if="!item.user.user_image" src="/images/avatar.png" alt="driver" />
+                      <img
+                        v-if="!item.user.user_image"
+                        src="/images/avatar.png"
+                        alt
+                        class="small-img"
+                      />
                     </div>
+                    {{ item.user.first_name }}
                   </td>
-                  <td>
-                    <router-link
-                      :to="'/admin/truckdriver/view/' + item.user.id"
-                      class="nav-item nav-link"
-                    >{{ item.user.first_name }}</router-link>
-                  </td>
-                  <td>{{ item.user.address }} {{ item.user.city }} {{ item.user.state }} {{ item.user.country }} {{ item.user.zip_code }}</td>
                   <td>{{ item.user.phone }}</td>
                   <td>{{ item.user.email }}</td>
-                  <td>{{ item.driver_licence }}</td>
-                  <td>{{ item.expiry_date | formatDateLic }}</td>
                   <td>0</td>
                   <td v-if="item.salary_type  == 0">${{ item.driver_salary }}/hr</td>
                   <td v-if="item.salary_type  == 1">${{ item.driver_salary }}/Per load</td>
                   <td>0</td>
                   <td>
-                    <v-chip
-                      v-if="!item.user.is_active"
-                      class="ma-2"
-                      color="red"
-                      text-color="white"
-                    >No</v-chip>
-                    <v-chip
-                      v-if="item.user.is_active"
-                      class="ma-2"
-                      color="green"
-                      text-color="white"
-                    >Yes</v-chip>
+                    <span v-if="!item.user.is_active" class="badges-item">No</span>
+                    <span v-if="item.user.is_active" class="badges-item">Yes</span>
                   </td>
-
                   <td class="action-col">
-                    <!-- <router-link
-                      :to="'/admin/truckdriver/view/' + item.user.id"
-                      class="nav-item nav-link"
-                    >
-                      <user-icon size="1.5x" class="custom-class"></user-icon>
-                    </router-link>-->
-                    <div class="dropdown" v-bind:class="{ 'show': triggerDropdown == index }">
-                      <more-vertical-icon size="1.5x" class="custom-class dropdown-trigger" v-on:click="dropdownToggle(index)"></more-vertical-icon>
-                      <span class="dropdown-menu">
-                        <router-link v-if="isAdmin" :to="'/admin/truckdriver/edit/' + item.id" class="dropdown-item">
-                          <button class="btn">Edit</button>
-                        </router-link>
-                        <router-link v-if="!isAdmin" :to="'/manager/truckdriver/edit/' + item.id" class="dropdown-item">
-                          <button class="btn">Edit</button>
-                        </router-link>
-                        <button class="btn dropdown-item" @click="Delete(item.id)">Delete</button>
-                      </span>
-                    </div>
+                    <router-link v-if="!isAdmin" :to="'/manager/truckdriver/edit/' + item.id">
+                      <edit-3-icon size="1.2x" class="custom-class"></edit-3-icon>
+                    </router-link>
+                    <router-link v-if="isAdmin" :to="'/admin/truckdriver/edit/' + item.id">
+                        <edit-3-icon size="1.2x" class="custom-class"></edit-3-icon>
+                    </router-link>
+                    <a href="javascript:void(0);" text @click="Delete(item.id)">
+                      <trash-icon size="1.5x" class="custom-class"></trash-icon>
+                    </a>
                   </td>
                 </tr>
                 <tr v-if="drivers.length == 0">
-                  <template>
-                    No driver till now.
-                  </template>
+                  <template>No driver till now.</template>
                 </tr>
               </tbody>
-            </template>
-          </v-simple-table>
-        </v-col>
-      </v-row>
-    </v-container>
+            </table>
+          </v-col>
+        </v-row>
+      </v-container>
+    </div>
+    <span id="table-chevron-left" class="d-none">
+      <chevron-left-icon size="1.5x" class="custom-class"></chevron-left-icon>
+    </span>
+    <span id="table-chevron-right" class="d-none">
+      <chevron-right-icon size="1.5x" class="custom-class"></chevron-right-icon>
+    </span>
   </v-app>
 </template>
 
@@ -117,19 +166,23 @@ import { driverService } from "../../../_services/driver.service";
 import { authenticationService } from "../../../_services/authentication.service";
 import {
   UserIcon,
-  EditIcon,
+  Edit3Icon,
   TrashIcon,
   PlusCircleIcon,
-  MoreVerticalIcon
+  MoreVerticalIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
 } from "vue-feather-icons";
 import { router } from "../../../_helpers/router";
 export default {
   components: {
     UserIcon,
-    EditIcon,
+     Edit3Icon,
     TrashIcon,
     PlusCircleIcon,
-    MoreVerticalIcon
+    MoreVerticalIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
   },
   data() {
     return {
@@ -138,7 +191,7 @@ export default {
       on: false,
       drivers: [],
       isAdmin: true,
-      triggerDropdown: null
+      triggerDropdown: null,
     };
   },
   mounted() {
@@ -151,11 +204,11 @@ export default {
     this.getResults();
   },
   methods: {
-    selectTr: function(rowIndex){
+    selectTr: function (rowIndex) {
       this.isActive = rowIndex;
     },
     getResults() {
-      driverService.listDrivers().then(response => {
+      driverService.listDrivers().then((response) => {
         //handle response
         if (response.status) {
           this.drivers = response.data;
@@ -163,20 +216,20 @@ export default {
           this.$toast.open({
             message: response.message,
             type: "error",
-            position: "top-right"
+            position: "top-right",
           });
         }
       });
     },
     Delete(e) {
       if (e) {
-        driverService.Delete(e).then(response => {
+        driverService.Delete(e).then((response) => {
           //handle response
           if (response.status) {
             this.$toast.open({
               message: response.message,
               type: "success",
-              position: "top-right"
+              position: "top-right",
             });
             this.getResults();
             //redirect to login
@@ -187,7 +240,7 @@ export default {
             this.$toast.open({
               message: response.message,
               type: "error",
-              position: "top-right"
+              position: "top-right",
             });
           }
         });
@@ -196,14 +249,51 @@ export default {
     Close() {
       this.dialog = false;
     },
-    dropdownToggle: function(setIndex) {
+    dropdownToggle: function (setIndex) {
       //if same index is called up again then close it
-      if(this.triggerDropdown == setIndex) {
+      if (this.triggerDropdown == setIndex) {
         this.triggerDropdown = null;
       } else {
         this.triggerDropdown = setIndex;
       }
-    }
-  }
+    },
+  },
+  updated() {
+    setTimeout(function () {
+      $(document).ready(function () {
+        $(".table-main").DataTable({
+          aoColumnDefs: [
+            {
+              bSortable: false,
+              aTargets: [-1, -2, -3, -4, -5, -6, -7],
+            },
+          ],
+          // language: {
+          //   paginate: {
+          //     previous: "",
+          //     next: "",
+          //   },
+          // },
+          oLanguage: { sSearch: "" },
+          drawCallback: function (settings) {
+            $(".dataTables_paginate .paginate_button.previous").html(
+              $("#table-chevron-left").html()
+            );
+            $(".dataTables_paginate .paginate_button.next").html(
+              $("#table-chevron-right").html()
+            );
+          },
+        });
+        $(".dataTables_filter input").attr("placeholder", "Search Driver");
+        $(".dataTables_paginate .paginate_button.previous").html(
+          $("#table-chevron-left").html()
+        );
+        $(".dataTables_paginate .paginate_button.next").html(
+          $("#table-chevron-right").html()
+        );
+        $(".table-main").css({ opacity: 1 });
+      });
+    }, 1000);
+  },
 };
 </script>

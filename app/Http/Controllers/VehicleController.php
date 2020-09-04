@@ -28,7 +28,7 @@ class VehicleController extends Controller {
      */
     public function createVehicle(Request $request) {
         $validator = Validator::make($request->all(), [
-                    'vehicle_type' => 'required|string',
+                    'vehicle_type' => 'required',
                     'company_name' => 'required|string',
                     'truck_number' => 'required',
                     'chaase_number' => 'required',
@@ -54,7 +54,7 @@ class VehicleController extends Controller {
                 'company_name' => $request->company_name,
                 'truck_number' => $request->truck_number,
                 'chaase_number' => $request->chaase_number,
-                'killometer' => $request->total_killometer,
+                'killometer' => $request->killometer,
                 'capacity' => (isset($request->capacity) && $request->capacity != '' && $request->capacity != null) ? $request->capacity : null,
                 'document' => $request->document,
                 'status' => config('constant.vehicle_status.available'),
@@ -72,7 +72,7 @@ class VehicleController extends Controller {
                     DB::commit();
                     return response()->json([
                                 'status' => true,
-                                'message' => 'Successfully created Vehicle!',
+                                'message' => 'Vehicle has been successfully created.',
                                 'data' => []
                                     ], 200);
                 }

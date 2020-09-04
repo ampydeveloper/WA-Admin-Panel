@@ -1,121 +1,272 @@
 <template>
   <v-app>
-    <v-container fluid>
-      <v-row>
-        <h4 class="main-title">Edit Hauler</h4>
-        <v-col cols="12" md="12">
-          <v-form ref="form" v-model="valid" lazy-validation>
-            <v-row>
-              <v-col cols="12" md="12">
-                <v-row>
-                  <v-col cols="12" md="12">
-                    <div
-                      class="v-avatar v-list-item__avatar"
-                      style="height: 80px; min-width: 80px; width: 80px;"
-                    >
-            <button type="submit" class="close AClass" style="margin-right: 13px; margin-top: -25px; font-size: 30px;" v-if="cross" @click="Remove()">
-               <span>&times;</span>
-             </button>
-                      <img :src="avatar" />
-                    </div>
-                    <file-pond
-                      name="uploadImage"
-                      ref="pond"
-                      label-idle="Add Profile pic..."
-                       v-bind:allow-multiple="false"
-                      v-bind:server="serverOptions"
-                      v-bind:files="myFiles"
-                  v-on:addfilestart="setUploadIndex"
-                      allow-file-type-validation="true"
-                      accepted-file-types="image/jpeg, image/png"
-                      v-on:processfile="handleProcessFile"
-                  v-on:processfilerevert="handleRemoveFile"
-                    />
-                  </v-col>
-                  <v-col cols="3" md="3">
-                    <v-select
-                      v-model="addForm.prefix"
-                      :items="prefixs"
-                      label="Prefix"
-                      :rules="[v => !!v || 'Prefix is required']"
-                    ></v-select>
-                  </v-col>
-                  <v-col cols="3" md="3">
-                    <v-text-field
-                      v-model="addForm.customer_name"
-                      label="Name"
-                      required
-                      :rules="[v => !!v || 'Customer name is required']"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="3" md="3">
-                    <v-text-field
-                      v-model="addForm.email"
-                      :rules="emailRules"
-                      name="email"
-                      label="E-mail"
-                      required
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="3" md="3">
-                    <v-text-field
-                      v-model="addForm.phone"
-                      :rules="phoneRules"
-                      label="Phone"
-                      required
-                      maxlength="10"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="3" md="3">
-                    <v-text-field
-                      v-model="addForm.address"
-                      label="Address"
-                      required
-                      :rules="[v => !!v || 'address is required']"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="3" md="3">
-                    <v-text-field
-                      v-model="addForm.city"
-                      label="City"
-                      required
-                      :rules="[v => !!v || 'City is required']"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="3" md="3">
-                    <v-text-field
-                      v-model="addForm.province"
-                      label="Province"
-                      required
-                      :rules="[v => !!v || 'Province is required']"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="3" md="3">
-                    <v-text-field
-                      v-model="addForm.zipcode"
-                      :rules="[v => !!v || 'Zip code is required']"
-                      label="zipcode"
-                      required
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="3" md="3">
-                    <v-switch v-model="addForm.is_active" class="mx-2" label="Is Active"></v-switch>
-                  </v-col>
-                </v-row>
-              </v-col>
+    <div class="bread_crum">
+      <ul>
+        <li>
+          <h4 class="main-title text-left top_heading">
+            Edit Hauler
+            <span class="right-bor"></span>
+          </h4>
+        </li>
+        <li>
+          <router-link to="/admin/dashboard" class="home_svg">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24px"
+              height="24px"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="feather feather-home h-5 w-5 mb-1 stroke-current text-primary"
+            >
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+              <polyline points="9 22 9 12 15 12 15 22" />
+            </svg>
+            <span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16px"
+                height="16px"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="feather feather-chevrons-right w-4 h-4"
+              >
+                <polyline points="13 17 18 12 13 7" />
+                <polyline points="6 17 11 12 6 7" />
+              </svg>
+            </span>
+          </router-link>
+        </li>
+        <li>
+          <router-link to="/admin/hauler">
+            List
+            <span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16px"
+                height="16px"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="feather feather-chevrons-right w-4 h-4"
+              >
+                <polyline points="13 17 18 12 13 7" />
+                <polyline points="6 17 11 12 6 7" />
+              </svg>
+            </span>
+          </router-link>
+        </li>
+        <li>Edit</li>
+      </ul>
+    </div>
 
-              <v-btn
-                :loading="loading"
-                :disabled="loading"
-                color="success"
-                class="mr-4 custom-save-btn ml-4 mt-4"
-                @click="update"
-              >Submit</v-btn>
-            </v-row>
-          </v-form>
-        </v-col>
-      </v-row>
-    </v-container>
+    <div class="main_box">
+      <v-container fluid>
+        <v-row>
+          <v-col cols="12" md="12">
+            <v-form
+              ref="form"
+              v-model="valid"
+              class="v-form custom_form_field divide-50"
+              lazy-validation
+              id="form_field"
+            >
+              <v-row>
+                <v-col cols="6" md="6" class="pl-0 manager-cols">
+                  <div class="custom-col row custom-img-holder">
+                    <v-col sm="4" class="label-align pt-0 image-upload-label">
+                      <label>Profile Image</label>
+                    </v-col>
+                    <v-col sm="8" class="pt-0 pb-0">
+                      <div
+                       class="service-image-outer"
+                      >
+                        <button
+                          type="submit"
+                          class="close"
+                          v-if="cross"
+                          @click="Remove()"
+                        >
+                          <span>&times;</span>
+                        </button>
+                        <img :src="avatar" />
+                      </div>
+                      <file-pond
+                        name="uploadImage"
+                        ref="pond"
+                        label-idle="Drop or Browse your files"
+                        v-bind:allow-multiple="false"
+                        v-bind:server="serverOptions"
+                        v-bind:files="myFiles"
+                        v-on:addfilestart="setUploadIndex"
+                        allow-file-type-validation="true"
+                        accepted-file-types="image/jpeg, image/png"
+                        v-on:processfile="handleProcessFile"
+                        v-on:processfilerevert="handleRemoveFile"
+                      />
+                    </v-col>
+                  </div>
+                  <div class="custom-col row">
+                    <v-col sm="4" class="label-align pt-0">
+                      <label>Prefix</label>
+                    </v-col>
+                    <v-col sm="8" class="pt-0 pb-0">
+                      <v-select
+                        v-model="addForm.prefix"
+                        :items="prefixs"
+                        label="Select Prefix"
+                        :rules="[v => !!v || 'Prefix is required.']"
+                      ></v-select>
+                    </v-col>
+                  </div>
+                  <div class="custom-col row">
+                    <v-col sm="4" class="label-align pt-0">
+                      <label>First Name</label>
+                    </v-col>
+                    <v-col sm="8" class="pt-0 pb-0">
+                      <v-text-field
+                        v-model="addForm.first_name"
+                        label="Enter First Name"
+                        required
+                        :rules="[v => !!v || 'Customer Name is required.']"
+                      ></v-text-field>
+                    </v-col>
+                  </div>
+                  <div class="custom-col row">
+                    <v-col sm="4" class="label-align pt-0">
+                      <label>Last Name</label>
+                    </v-col>
+                    <v-col sm="8" class="pt-0 pb-0">
+                      <v-text-field
+                        v-model="addForm.last_name"
+                        label="Enter Las Name"
+                        required
+                        :rules="[v => !!v || 'Customer Name is required.']"
+                      ></v-text-field>
+                    </v-col>
+                  </div>
+                  <div class="custom-col row">
+                    <v-col sm="4" class="label-align pt-0">
+                      <label>Email</label>
+                    </v-col>
+                    <v-col sm="8" class="pt-0 pb-0">
+                      <v-text-field
+                        v-model="addForm.email"
+                        :rules="emailRules"
+                        name="email"
+                        label="Enter Email"
+                        required
+                      ></v-text-field>
+                    </v-col>
+                  </div>
+                </v-col>
+                <v-col cols="6" md="6" class="pl-0 manager-cols">
+                                    <div class="custom-col row">
+                    <v-col sm="4" class="label-align pt-0">
+                      <label>Phone</label>
+                    </v-col>
+                    <v-col sm="8" class="pt-0 pb-0">
+                      <v-text-field
+                        v-model="addForm.phone"
+                        :rules="phoneRules"
+                        label="Enter Phone"
+                        required
+                        maxlength="10"
+                      ></v-text-field>
+                    </v-col>
+                  </div>
+                  <div class="custom-col row">
+                    <v-col sm="4" class="label-align pt-0">
+                      <label>Address</label>
+                    </v-col>
+                    <v-col sm="8" class="pt-0 pb-0">
+                      <v-text-field
+                        v-model="addForm.address"
+                        label="Enter Address"
+                        required
+                        :rules="[v => !!v || 'Address is required.']"
+                      ></v-text-field>
+                    </v-col>
+                  </div>
+                  <div class="custom-col row">
+                    <v-col sm="4" class="label-align pt-0">
+                      <label>City</label>
+                    </v-col>
+                    <v-col sm="8" class="pt-0 pb-0">
+                      <v-text-field
+                        v-model="addForm.city"
+                        label="Enter City"
+                        required
+                        :rules="[v => !!v || 'City is required.']"
+                      ></v-text-field>
+                    </v-col>
+                  </div>
+                  <div class="custom-col row">
+                    <v-col sm="4" class="label-align pt-0">
+                      <label>Province</label>
+                    </v-col>
+                    <v-col sm="8" class="pt-0 pb-0">
+                      <v-text-field
+                        v-model="addForm.state"
+                        label="Enter Province"
+                        required
+                        :rules="[v => !!v || 'Province is required.']"
+                      ></v-text-field>
+                    </v-col>
+                  </div>
+                  <div class="custom-col row">
+                    <v-col sm="4" class="label-align pt-0">
+                      <label>Zipcode</label>
+                    </v-col>
+                    <v-col sm="8" class="pt-0 pb-0">
+                      <v-text-field
+                        v-model="addForm.zipcode"
+                        :rules="[v => !!v || 'Zipcode is required.']"
+                        label="Enter Zipcode"
+                        required
+                      ></v-text-field>
+                    </v-col>
+                  </div>
+
+                  <div class="custom-col row">
+                    <v-col sm="4" class="label-align pt-0">
+                      <label class="label_text label-check-half">Status</label>
+                    </v-col>
+                    <v-col sm="8" class="pt-0 pb-0">
+                      <v-switch v-model="addForm.is_active" class="mx-2"></v-switch>
+                    </v-col>
+                  </div>
+                </v-col>
+
+                <v-col class="pt-0 pb-0" cols="12" md="12">
+                  <div class="p-0 float-right">
+                    <v-btn
+                      :loading="loading"
+                      :disabled="loading"
+                      color="success"
+                      type="submit"
+                      class="custom-save-btn"
+                      @click="update"
+                      id="submit_btn"
+                    >Update</v-btn>
+                  </div>
+                </v-col>
+              </v-row>
+            </v-form>
+          </v-col>
+        </v-row>
+      </v-container>
+    </div>
   </v-app>
 </template>
 
@@ -128,7 +279,7 @@ import VueGoogleAutocomplete from "vue-google-autocomplete";
 import { authenticationService } from "../../../_services/authentication.service";
 export default {
   components: {
-    VueGoogleAutocomplete
+    VueGoogleAutocomplete,
   },
   data() {
     return {
@@ -145,33 +296,34 @@ export default {
       cross: false,
       addForm: {
         prefix: "",
-        customer_name: "",
+        first_name: "",
+        last_name: "",
         email: "",
         phone: "",
         address: "",
         city: "",
-        province: "",
+        state: "",
         user_image: null,
         zipcode: "",
         is_active: true,
-        customer_role: 6
+        customer_role: 6,
       },
       emailRules: [
-        v => !!v || "E-mail is required",
-        v => /.+@.+/.test(v) || "E-mail must be valid"
+        (v) => !!v || "Email is required.",
+        (v) => /.+@.+/.test(v) || "Email must be valid.",
       ],
       phoneRules: [
-        v => !!v || "Phone number is required",
-        v => /^\d*$/.test(v) || "Enter valid number",
-        v => v.length >= 10 || "Enter valid number length"
+        (v) => !!v || "Phone Number is required.",
+        (v) => /^\d*$/.test(v) || "Enter valid number.",
+        (v) => v.length >= 10 || "Enter valid number.",
       ],
       rules: [
-        value =>
+        (value) =>
           !value ||
           value.size < 2000000 ||
-          "Avatar size should be less than 2 MB!"
+          "Profile Image size should be less than 2 MB.",
       ],
-      myFiles: []
+      myFiles: [],
     };
   },
   computed: {
@@ -183,15 +335,15 @@ export default {
         process: {
           url: "uploadImage",
           headers: {
-            Authorization: "Bearer " + currentUser.data.access_token
-          }
+            Authorization: "Bearer " + currentUser.data.access_token,
+          },
         },
-        revert:{
+        revert: {
           url: "deleteImage",
           headers: {
-            Authorization: "Bearer " + currentUser.data.access_token
-          }
-        }
+            Authorization: "Bearer " + currentUser.data.access_token,
+          },
+        },
       };
     },
     url() {
@@ -201,101 +353,104 @@ export default {
       } else {
         return null;
       }
-    }
+    },
   },
   created() {
     this.customer_img = "/images/avatar.png";
   },
-  mounted: function() {
-    companyService.getHauler(this.$route.params.id).then(response => {
+  mounted: function () {
+    companyService.getHauler(this.$route.params.id).then((response) => {
       //handle response
       if (response.status) {
         console.log(response.data.joining_date);
         this.addForm = {
           prefix: response.data.prefix,
-          customer_name: response.data.first_name,
+          first_name: response.data.first_name,
+          last_name: response.data.last_name,
           city: response.data.city,
           email: response.data.email,
-          province: response.data.state,
+          state: response.data.state,
           user_image: response.data.user_image,
           phone: response.data.phone,
           zipcode: response.data.zip_code,
           address: response.data.address,
           is_active: response.data.is_active,
         };
-        if(response.data.user_image){
-          this.cross=true;
-          this.avatar = this.imgUrl+response.data.user_image;
-        }else{
-           this.avatar = "/images/avatar.png";
+        if (response.data.user_image) {
+          this.cross = true;
+          this.avatar = this.imgUrl + response.data.user_image;
+        } else {
+          this.avatar = "/images/avatar.png";
         }
       } else {
         this.$toast.open({
           message: response.message,
           type: "error",
-          position: "top-right"
+          position: "top-right",
         });
       }
     });
   },
   methods: {
-    Remove(){
-     this.avatar = "/images/avatar.png";
-     this.cross=false;
-     this.addForm.user_image = '';
+    Remove() {
+      this.avatar = "/images/avatar.png";
+      this.cross = false;
+      this.addForm.user_image = "";
     },
     setUploadIndex() {
       this.uploadInProgress = true;
     },
-    handleProcessFile: function(error, file) {
+    handleProcessFile: function (error, file) {
       this.avatar = this.imgUrl + file.serverId;
       this.addForm.user_image = file.serverId;
       this.uploadInProgress = false;
     },
-    handleRemoveFile: function(file){
-      this.addForm.user_image = '';
+    handleRemoveFile: function (file) {
+      this.addForm.user_image = "";
       this.avatar = "/images/avatar.png";
-      this.cross=false;
+      this.cross = false;
     },
     update() {
-      if(this.uploadInProgress) {
+      if (this.uploadInProgress) {
         this.$toast.open({
-              message: "Image uploading is in progress!",
-              type: "error",
-              position: "top-right"
-            });
-            return false;
+          message: "Image uploading is in progress.",
+          type: "error",
+          position: "top-right",
+        });
+        return false;
       }
       if (this.$refs.form.validate()) {
         //start loading
         this.loading = true;
-        companyService.edit(this.addForm, this.$route.params.id).then(response => {
-          //stop loading
-          this.loading = false;
-          //handle response
-          if (response.status) {
-            this.$toast.open({
-              message: response.message,
-              type: "success",
-              position: "top-right"
-            });
-            //redirect to login
-            const currentUser = authenticationService.currentUserValue;
-	    if(currentUser.data.user.role_id == 1){
-	     router.push("/admin/hauler");
-	    }else{
-	     router.push("/manager/hauler");
-	    }
-          } else {
-            this.$toast.open({
-              message: response.message,
-              type: "error",
-              position: "top-right"
-            });
-          }
-        });
+        companyService
+          .edit(this.addForm, this.$route.params.id)
+          .then((response) => {
+            //stop loading
+            this.loading = false;
+            //handle response
+            if (response.status) {
+              this.$toast.open({
+                message: response.message,
+                type: "success",
+                position: "top-right",
+              });
+              //redirect to login
+              const currentUser = authenticationService.currentUserValue;
+              if (currentUser.data.user.role_id == 1) {
+                router.push("/admin/hauler");
+              } else {
+                router.push("/manager/hauler");
+              }
+            } else {
+              this.$toast.open({
+                message: response.message,
+                type: "error",
+                position: "top-right",
+              });
+            }
+          });
       }
-    }
-  }
+    },
+  },
 };
 </script>

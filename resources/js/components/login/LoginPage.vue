@@ -3,6 +3,9 @@
     <div class="login_form">
       <v-row>
         <v-col cols="6" md="7" class="img_bg_outside">
+<div class="sidebar-logo">
+   <img src="/images/logo-basic.png" class="" />
+</div>
           <div class="green-overlay"></div>
           <div class="img_bg"></div>
           <div class="back-text">
@@ -125,7 +128,7 @@ export default {
         // stop here if form is invalid
 
         this.loading = true;
-        authenticationService.login(this.email, this.password, 2).then(
+        authenticationService.login(this.email, this.password).then(
           (response) => {
             if (response === "Home") {
               var paymentUrl = localStorage.getItem("payment");
@@ -314,7 +317,7 @@ export default {
 }
 .v-input input {
   max-height: 38px;
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.2) !important;
   border-radius: 5px;
   padding-left: 40px !important;
   font-size: 14px;
@@ -455,5 +458,14 @@ export default {
 .img_bg_outside .back-text h3 {
   font-size: 70px;
   font-weight: 400;
+}
+.img_bg_outside .sidebar-logo{
+    position: absolute;
+    z-index: 3;
+    margin-top: 25px;
+    margin-left: 25px;
+}
+.img_bg_outside .sidebar-logo img{
+    width: 100px;
 }
 </style>

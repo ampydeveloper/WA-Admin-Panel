@@ -3,6 +3,9 @@
     <div class="login_form">
         <v-row>
             <v-col cols="6" md="7" class="img_bg_outside">
+<div class="sidebar-logo">
+   <img src="/images/logo-basic.png" class="" />
+</div>
                 <div class="green-overlay"></div>
                 <div class="img_bg"></div>
                 <div class="back-text">
@@ -67,14 +70,14 @@ export default {
     valid: true,
     email: "",
     emailRules: [
-      v => !!v || "E-mail is required",
-      v => /.+@.+/.test(v) || "E-mail must be valid"
+      v => !!v || "Email is required.",
+      v => /.+@.+/.test(v) || "Email must be valid."
     ]
   }),
   computed: {
     passwordConfirmationRule() {
       return () =>
-        this.password === this.confirm_password || "Password must match";
+        this.password === this.confirm_password || "Password doesn't match.";
     }
   },
   methods: {

@@ -58,21 +58,19 @@
               <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon>
             </router-link>
           </div>
-          <v-col cols="12" md="12" id="#custom_tabel" class="main-box-inner">
+          <v-col cols="12" md="12" class="main-box-inner">
             <!-- <div v-bar="{
     preventParentScroll: true,
-    scrollThrottle: 30, }"> -->
-            <table id="example" class="table table-striped table-bordered" style="width:100%">
+            scrollThrottle: 30, }">-->
+            <table id="service-table" class="table table-striped table-bordered table-main">
               <thead>
                 <tr>
                   <th class="text-left">#</th>
                   <th class="text-left">Service Name</th>
-                  <th class="text-left">Service For</th>
                   <th class="text-left">Service Rate</th>
                   <th class="text-left">Price</th>
                   <th class="text-left">Type</th>
                   <th class="text-left">Time</th>
-                  <th class="text-left">Description</th>
                   <th class="text-left">Actions</th>
                 </tr>
               </thead>
@@ -84,30 +82,23 @@
                 >
                   <td>{{index+1}}</td>
                   <td>{{ item.service_name }}</td>
-                  <td>
-                    <span v-if="item.service_for == 4">
-                      Customer
-                    </span>
-                    <span v-if="item.service_for == 6">
-                      Hauler
-                    </span>
-                  </td>
                   <td v-if="item.service_type == 1">Per Load</td>
                   <td v-if="item.service_type == 2">Round</td>
                   <td>${{ item.price }}</td>
                   <td>
                     <span v-for="(type, index) in item.slot_type">
-                      <label v-if="type == 1">Morning</label>
-                      <label v-if="type == 2">Afternoon</label>
+                      <span class="badges-item" v-if="type == 1 || type == 2">
+                        <label v-if="type == 1">Morning</label>
+                        <label v-if="type == 2">Afternoon</label>
+                      </span>
                     </span>
                   </td>
                   <td>
-                    <span v-for="(tSlot, index) in item.timeSlots">
+                    <span v-for="(tSlot, index) in item.timeSlots" class="badges-item">
                       <label>{{tSlot.slot_start+'-'+tSlot.slot_end}}</label>
-                      <label v-if="item.timeSlots.length-1 != index">, &nbsp;</label>
+                      <label v-if="item.timeSlots.length-1 != index"></label>
                     </span>
                   </td>
-                  <td id="description_txt">{{ item.description }}</td>
                   <td class="action-col">
                     <router-link
                       v-if="isAdmin"
@@ -135,6 +126,12 @@
         </v-row>
       </v-container>
     </div>
+    <span id="table-chevron-left" class="d-none">
+      <chevron-left-icon size="1.5x" class="custom-class"></chevron-left-icon>
+    </span>
+    <span id="table-chevron-right" class="d-none">
+      <chevron-right-icon size="1.5x" class="custom-class"></chevron-right-icon>
+    </span>
   </v-app>
 </template>
 
@@ -145,21 +142,23 @@ import { authenticationService } from "../../../_services/authentication.service
 import { environment } from "../../../config/test.env";
 import {
   UserIcon,
-  EditIcon,
   TrashIcon,
   PlusCircleIcon,
   MoreVerticalIcon,
   Edit3Icon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
 } from "vue-feather-icons";
 import { router } from "../../../_helpers/router";
 export default {
   components: {
     UserIcon,
-    EditIcon,
     TrashIcon,
     PlusCircleIcon,
     MoreVerticalIcon,
     Edit3Icon,
+    ChevronLeftIcon,
+    ChevronRightIcon,
   },
   data() {
     return {
@@ -192,7 +191,7 @@ export default {
           this.$toast.open({
             message: response.message,
             type: "error",
-            position: "top-right",
+            position: "bottom-right",
           });
         }
       });
@@ -250,27 +249,34 @@ export default {
   updated() {
     setTimeout(function () {
       $(document).ready(function () {
-        $("#example").DataTable({
+        $(".table-main").DataTable({
           aoColumnDefs: [
             {
               bSortable: false,
-              aTargets: [-1, -2, -3, -4, -6],
+              aTargets: [-1, -2, -3, -5, -6],
             },
           ],
-          // language: {
-          //   paginate: {
-          //     previous: "",
-          //     next: "",
-          //   },
-          // },
           oLanguage: { sSearch: "" },
+          drawCallback: function (settings) {
+            $(
+              ".dataTables_paginate .paginate_button.previous"
+            ).html($("#table-chevron-left").html());
+            $(
+              ".dataTables_paginate .paginate_button.next"
+            ).html($("#table-chevron-right").html());
+          },
         });
-        $("#example_wrapper .dataTables_filter input").attr(
+        $(".dataTables_filter input").attr(
           "placeholder",
           "Search Services"
         );
-         $("#example_wrapper .dataTables_paginate .paginate_button.previous").text('');
-         $("#example_wrapper .dataTables_paginate .paginate_button.next").text('');
+        $(
+          ".dataTables_paginate .paginate_button.previous"
+        ).html($("#table-chevron-left").html());
+        $(".dataTables_paginate .paginate_button.next").html(
+          $("#table-chevron-right").html()
+        );
+         $(".table-main").css({'opacity':1});
       });
     }, 1000);
   },

@@ -86,14 +86,14 @@ export default {
     confirm_password: "",
     valid: true,
     rules: {
-      required: value => !!value || "Password is equired.",
-      min: v => v.length >= 8 || "Password Min 8 characters"
+      required: value => !!value || "Password is required.",
+      min: v => v.length >= 8 || "Password must be minimum 8 characters."
     }
   }),
   computed: {
     passwordConfirmationRule() {
       return () =>
-        this.password === this.confirm_password || "Password must match";
+        this.password === this.confirm_password || "Password doesn't match.";
     },
   },
   methods: {

@@ -2,197 +2,346 @@
   <v-app>
     <v-container fluid>
       <v-row>
-        <h2>Edit Driver</h2>
-        <v-col cols="12" md="12">
-          <v-form ref="form" v-model="valid" lazy-validation @submit="save">
+        <div class="bread_crum">
+          <ul>
+            <li>
+              <h4 class="main-title text-left top_heading">
+                Edit Driver
+                <span class="right-bor"></span>
+              </h4>
+            </li>
+            <li>
+              <router-link to="/admin/dashboard" class="home_svg">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24px"
+                  height="24px"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="feather feather-home h-5 w-5 mb-1 stroke-current text-primary"
+                >
+                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                  <polyline points="9 22 9 12 15 12 15 22" />
+                </svg>
+                <span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16px"
+                    height="16px"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="feather feather-chevrons-right w-4 h-4"
+                  >
+                    <polyline points="13 17 18 12 13 7" />
+                    <polyline points="6 17 11 12 6 7" />
+                  </svg>
+                </span>
+              </router-link>
+            </li>
+            <li>
+              <router-link to="/admin/services">
+                List
+                <span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16px"
+                    height="16px"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="feather feather-chevrons-right w-4 h-4"
+                  >
+                    <polyline points="13 17 18 12 13 7" />
+                    <polyline points="6 17 11 12 6 7" />
+                  </svg>
+                </span>
+              </router-link>
+            </li>
+            <li>Edit</li>
+          </ul>
+        </div>
+
+        <div class="main_box">
+          <v-container fluid>
             <v-row>
-              <v-col cols="5" md="5">
-                <div
-                  class="v-avatar v-list-item__avatar"
-                  style="height: 80px; min-width: 80px; width: 80px;"
-                >
-            <button type="button" class="close AClass" style="margin-right: 13px; margin-top: -25px; font-size: 30px;" v-if="cross" @click="Remove()">
-               <span>&times;</span>
-             </button>
-                  <img :src="avatar" />
-                </div>
-
-                <v-col cols="12" md="12">
-                  <file-pond
-                    name="uploadImage"
-                    ref="pond"
-                    label-idle="Driver Image"
-                    v-bind:allow-multiple="false"
-                    v-bind:server="serverOptions"
-                    v-bind:files="user_image"
-                    v-on:addfilestart="setUploadIndex"
-                    allow-file-type-validation="true"
-                    accepted-file-types="image/jpeg, image/png"
-                    v-on:processfile="handleProcessFile"
-                    v-on:processfilerevert="handleRemoveFile"
-                  />
-                </v-col>
-                <v-col cols="12" md="12">
-                  <v-text-field
-                    v-model="addForm.driver_name"
-                    :rules="[v => !!v || 'Driver name is required']"
-                    label="Driver Name"
-                    required
-                  ></v-text-field>
-                </v-col>
-
-                <v-col cols="12" md="12">
-                  <v-text-field
-                    v-model="addForm.email"
-                    :rules="emailRules"
-                    name="email"
-                    label="Email Address"
-                    required
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12" md="12">
-                  <v-text-field
-                    v-model="addForm.driver_address"
-                    :rules="[v => !!v || 'Address is required']"
-                    label="Address"
-                    required
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12" md="12">
-                  <v-text-field
-                    v-model="addForm.driver_city"
-                    :rules="[v => !!v || 'City is required']"
-                    label="City"
-                    required
-                  ></v-text-field>
-                </v-col>
-
-                <v-col cols="12" md="12">
-                  <v-text-field
-                    v-model="addForm.driver_state"
-                    :rules="[v => !!v || 'State is required']"
-                    label="State"
-                    required
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12" md="12">
-                  <v-text-field
-                    v-model="addForm.driver_zipcode"
-                    :rules="[v => !!v || 'Zip code is required']"
-                    label="zipcode"
-                    required
-                  ></v-text-field>
-                </v-col>
-              </v-col>
-
-              <v-col cols="5" md="5">
-                <v-col cols="12" md="12">
-                  <v-text-field
-                    v-model="addForm.driver_phone"
-                    :rules="phoneRules"
-                    label="Mobile Number"
-                    required
-                    maxlength="10"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12" md="12">
-                  <v-text-field
-                    v-model="addForm.driver_licence"
-                    :rules="[v => !!v || 'driver licence number is required']"
-                    label="Driver Licence Number"
-                    required
-                  ></v-text-field>
-                </v-col>
-
-                <v-col cols="12" md="12">
-                  <v-menu
-                    v-model="menu2"
-                    :close-on-content-click="false"
-                    :nudge-right="40"
-                    transition="scale-transition"
-                    offset-y
-                    min-width="290px"
-                  >
-                    <template v-slot:activator="{ on }">
-                      <v-text-field
-                        v-model="date"
-                        label="Licence Expiry Date"
-                        prepend-icon="event"
-                        readonly
-                        v-on="on"
-                      ></v-text-field>
-                    </template>
-                    <v-date-picker v-model="date" @input="menu2 = false" :min="setDate"></v-date-picker>
-                  </v-menu>
-                </v-col>
-                <v-col cols="12" md="12">
-                  <v-radio-group
-                    v-model="addForm.salary_type"
-                    :rules="[v => !!v || 'Driver salary type is required']"
-                  >
-                    <v-radio label="Per Hour" value="per_hour"></v-radio>
-                    <v-radio label="Per Load" value="per_load"></v-radio>
-                  </v-radio-group>
-                </v-col>
-
-                <v-col cols="12" md="12">
-                  <v-text-field
-                    v-model="addForm.driver_salary"
-                    label="Driver Salary"
-                    required
-                    :rules="salaryRules"
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12" md="12">
-                  <file-pond
-                    name="uploadImage"
-                    ref="pond"
-                    label-idle="Upload Document"
-                    v-bind:allow-multiple="false"
-                    v-bind:server="serverOptions"
-                    v-bind:files="myFiles"
-                    v-on:addfilestart="setUploadIndex"
-                    v-on:processfile="handleProcessFile1"
-                    allow-file-type-validation="true"
-                    accepted-file-types="image/jpeg, image/png"
-                    :rules="[v => !!v || 'Document is required']"
-                    v-on:processfilerevert="handleRemoveFile1"
-                  />
-                  <div class="v-messages theme--light error--text" role="alert" v-if="docError">
-                    <div class="v-messages__wrapper">
-                      <div class="v-messages__message">Document upload is required</div>
-                    </div>
-                  </div>
-                </v-col>
-                <div v-if="document_img" style="height: 200px; min-width: 200px; width: 200px;">
-                  <img :src="document_img" alt="Doc" width="100%" />
-                </div>
-              </v-col>
               <v-col cols="12" md="12">
-                <v-radio-group
-                  row
-                  v-model="addForm.driver_type"
-                  :mandatory="false"
-                  required
-                  :rules="[v => !!v || 'Truck type is required']"
+                <v-form
+                  ref="form"
+                  v-model="valid"
+                  class="v-form custom_form_field divide-50"
+                  id="form_field"
+                  lazy-validation
+                  @submit="save"
                 >
-                  <v-radio label="Truck" value="Truck"></v-radio>
-                  <v-radio label="Skidsteer" value="Skidsteer"></v-radio>
-                </v-radio-group>
-              </v-col>
-              <v-col cols="12" md="12">
-                <v-btn
-                type="submit"
-                  :loading="loading"
-                  :disabled="loading"
-                  color="success"
-                  class="mr-4 custom-save-btn ml-4"
-                  @click="save"
-                >Submit</v-btn>
+                  <v-row>
+                    <v-col cols="6" md="6" class="pl-0 manager-cols">
+                      <div class="custom-col row custom-img-holder">
+                        <v-col sm="4" class="label-align pt-0 image-upload-label">
+                          <label>Profile Image</label>
+                        </v-col>
+                        <v-col sm="8" class="pt-0 pb-0">
+                          <file-pond
+                            name="uploadImage"
+                            ref="pond"
+                            label-idle="Drop or Browse your files"
+                            v-bind:allow-multiple="false"
+                            v-bind:server="serverOptions"
+                            v-bind:files="user_image"
+                            v-on:addfilestart="setUploadIndex"
+                            allow-file-type-validation="true"
+                            accepted-file-types="image/jpeg, image/png"
+                            v-on:processfile="handleProcessFile"
+                            v-on:processfilerevert="handleRemoveFile"
+                          />
+                        </v-col>
+                      </div>
+                      <div class="custom-col row">
+                        <v-col sm="4" class="label-align pt-0">
+                          <label>Name</label>
+                        </v-col>
+                        <v-col sm="8" class="pt-0 pb-0">
+                          <v-text-field
+                            v-model="addForm.driver_name"
+                            :rules="[v => !!v || 'Driver Name is required.']"
+                            label="Enter Name"
+                            required
+                          ></v-text-field>
+                        </v-col>
+                      </div>
+                      <div class="custom-col row">
+                        <v-col sm="4" class="label-align pt-0">
+                          <label>Email</label>
+                        </v-col>
+                        <v-col sm="8" class="pt-0 pb-0">
+                          <v-text-field
+                            v-model="addForm.email"
+                            :rules="emailRules"
+                            name="email"
+                            label="Enter Email"
+                            required
+                          ></v-text-field>
+                        </v-col>
+                      </div>
+                      <div class="custom-col row">
+                        <v-col sm="4" class="label-align pt-0">
+                          <label>Address</label>
+                        </v-col>
+                        <v-col sm="8" class="pt-0 pb-0">
+                          <v-text-field
+                            v-model="addForm.driver_address"
+                            :rules="[v => !!v || 'Address is required.']"
+                            label="Enter Address"
+                            required
+                          ></v-text-field>
+                        </v-col>
+                      </div>
+                      <div class="custom-col row">
+                        <v-col sm="4" class="label-align pt-0">
+                          <label>City</label>
+                        </v-col>
+                        <v-col sm="8" class="pt-0 pb-0">
+                          <v-text-field
+                            v-model="addForm.driver_city"
+                            :rules="[v => !!v || 'City is required.']"
+                            label="Enter City"
+                            required
+                          ></v-text-field>
+                        </v-col>
+                      </div>
+                      <div class="custom-col row">
+                        <v-col sm="4" class="label-align pt-0">
+                          <label>State</label>
+                        </v-col>
+                        <v-col sm="8" class="pt-0 pb-0">
+                          <v-text-field
+                            v-model="addForm.driver_state"
+                            :rules="[v => !!v || 'State is required.']"
+                            label="Enter State"
+                            required
+                          ></v-text-field>
+                        </v-col>
+                      </div>
+                      <div class="custom-col row">
+                        <v-col sm="4" class="label-align pt-0">
+                          <label>Zipcode</label>
+                        </v-col>
+                        <v-col sm="8" class="pt-0 pb-0">
+                          <v-text-field
+                            v-model="addForm.driver_zipcode"
+                            :rules="[v => !!v || 'Zipcode is required.']"
+                            label="Enter Zipcode"
+                            required
+                          ></v-text-field>
+                        </v-col>
+                      </div>
+                    </v-col>
+
+                    <v-col cols="6" md="6" class="pl-0 manager-cols">
+                      <div class="custom-col row">
+                        <v-col sm="4" class="label-align pt-0">
+                          <label>Mobile Number</label>
+                        </v-col>
+                        <v-col sm="8" class="pt-0 pb-0">
+                          <v-text-field
+                            v-model="addForm.driver_phone"
+                            :rules="phoneRules"
+                            label="Enter Mobile Number"
+                            required
+                            maxlength="10"
+                          ></v-text-field>
+                        </v-col>
+                      </div>
+                      <div class="custom-col row">
+                        <v-col sm="4" class="label-align pt-0">
+                          <label>Licence Number</label>
+                        </v-col>
+                        <v-col sm="8" class="pt-0 pb-0">
+                          <v-text-field
+                            v-model="addForm.driver_licence"
+                            :rules="[v => !!v || 'Licence Number is required.']"
+                            label="Enter Licence Number"
+                            required
+                          ></v-text-field>
+                        </v-col>
+                      </div>
+                      <div class="custom-col row">
+                        <v-col sm="4" class="label-align pt-0">
+                          <label>Licence Expiry Date</label>
+                        </v-col>
+                        <v-col sm="8" class="pt-0 pb-0">
+                          <v-menu
+                            v-model="menu2"
+                            :close-on-content-click="false"
+                            :nudge-right="40"
+                            transition="scale-transition"
+                            offset-y
+                            min-width="290px"
+                          >
+                            <template v-slot:activator="{ on }">
+                              <v-text-field
+                                v-model="date"
+                                label="Select Licence Expiry Date"
+                                prepend-icon="event"
+                                readonly
+                                v-on="on"
+                              ></v-text-field>
+                            </template>
+                            <v-date-picker v-model="date" @input="menu2 = false" :min="setDate"></v-date-picker>
+                          </v-menu>
+                        </v-col>
+                      </div>
+                      <div class="custom-col row">
+                        <v-col sm="4" class="label-align pt-0">
+                          <label class="label_text label-half">Salary Type</label>
+                        </v-col>
+                        <v-col sm="8" class="pt-0 pb-0">
+                          <v-radio-group
+                            row
+                            v-model="addForm.salary_type"
+                            :rules="[v => !!v || 'Salary Type is required.']"
+                          >
+                            <v-radio label="Per Hour" value="per_hour"></v-radio>
+                            <v-radio label="Per Load" value="per_load"></v-radio>
+                          </v-radio-group>
+                        </v-col>
+                      </div>
+                      <div class="custom-col row">
+                        <v-col sm="4" class="label-align pt-0">
+                          <label>Salary</label>
+                        </v-col>
+                        <v-col sm="8" class="pt-0 pb-0">
+                          <v-text-field
+                            v-model="addForm.driver_salary"
+                            label="Enter Salary"
+                            required
+                            :rules="salaryRules"
+                          ></v-text-field>
+                        </v-col>
+                      </div>
+                      <div class="custom-col row custom-img-holder">
+                        <v-col sm="4" class="label-align pt-0 image-upload-label">
+                          <label>Documents</label>
+                        </v-col>
+                        <v-col sm="8" class="pt-0 pb-0">
+                          <file-pond
+                            name="uploadImage"
+                            ref="pond"
+                            label-idle="Drop or Browse your files"
+                            v-bind:allow-multiple="false"
+                            v-bind:server="serverOptions"
+                            v-bind:files="myFiles"
+                            v-on:addfilestart="setUploadIndex"
+                            v-on:processfile="handleProcessFile1"
+                            allow-file-type-validation="true"
+                            accepted-file-types="image/jpeg, image/png"
+                            :rules="[v => !!v || 'Document is required']"
+                            v-on:processfilerevert="handleRemoveFile1"
+                          />
+                          <div
+                            class="v-messages theme--light error--text"
+                            role="alert"
+                            v-if="docError"
+                          >
+                            <div class="v-messages__wrapper">
+                              <div class="v-messages__message">Profile Image is required.</div>
+                            </div>
+                          </div>
+                        </v-col>
+                        <div
+                          v-if="document_img"
+                          style="height: 200px; min-width: 200px; width: 200px;"
+                        >
+                          <img :src="document_img" alt="Doc" width="100%" />
+                        </div>
+                      </div>
+                      <div class="custom-col row">
+                        <v-col sm="4" class="label-align pt-0">
+                          <label class="label_text label-half">Fleet</label>
+                        </v-col>
+                        <v-col sm="8" class="pt-0 pb-0">
+                          <v-radio-group
+                            row
+                            v-model="addForm.driver_type"
+                            :mandatory="false"
+                            required
+                            :rules="[v => !!v || 'Fleet is required.']"
+                          >
+                            <v-radio label="Truck" value="Truck"></v-radio>
+                            <v-radio label="Skidsteer" value="Skidsteer"></v-radio>
+                          </v-radio-group>
+                        </v-col>
+                      </div>
+                    </v-col>
+                    <v-col class="pt-0 pb-0" cols="12" md="12">
+                      <div class="p-0 float-right">
+                        <v-btn
+                          type="submit"
+                          :loading="loading"
+                          :disabled="loading"
+                          color="success"
+                          class="custom-save-btn"
+                          @click="save"
+                          id="submit_btn"
+                        >Update</v-btn>
+                      </div>
+                    </v-col>
+                  </v-row>
+                </v-form>
               </v-col>
             </v-row>
-          </v-form>
-        </v-col>
+          </v-container>
+        </div>
       </v-row>
     </v-container>
   </v-app>
@@ -221,7 +370,7 @@ export default {
       date: "",
       user_image: "",
       document_img: null,
-      cross:false,
+      cross: false,
       active: 0,
       setDate: new Date().toISOString().substr(0, 10),
       addForm: {
@@ -239,22 +388,22 @@ export default {
         driver_country: "",
         driver_zipcode: "",
         driver_phone: "",
-        driver_type: ""
+        driver_type: "",
       },
       emailRules: [
-        v => !!v || "E-mail is required",
-        v => /.+@.+/.test(v) || "E-mail must be valid"
+        (v) => !!v || "Email is required.",
+        (v) => /.+@.+/.test(v) || "Email must be valid.",
       ],
       phoneRules: [
-        v => !!v || "Phone number is required",
-        v => /^\d*$/.test(v) || "Enter valid number",
-        v => v.length >= 10 || "Enter valid number length"
+        (v) => !!v || "Phone number is required.",
+        (v) => /^\d*$/.test(v) || "Enter valid number.",
+        (v) => v.length >= 10 || "Enter valid number.",
       ],
       salaryRules: [
-        v => !!v || "Driver salary is required",
-        v => /^\d*$/.test(v) || "Enter valid number"
+        (v) => !!v || "Driver salary is required.",
+        (v) => /^\d*$/.test(v) || "Enter valid number.",
       ],
-      myFiles: []
+      myFiles: [],
     };
   },
   computed: {
@@ -266,15 +415,15 @@ export default {
         process: {
           url: "uploadImage",
           headers: {
-            Authorization: "Bearer " + currentUser.data.access_token
-          }
+            Authorization: "Bearer " + currentUser.data.access_token,
+          },
         },
-        revert:{
+        revert: {
           url: "deleteImage",
           headers: {
-            Authorization: "Bearer " + currentUser.data.access_token
-          }
-        }
+            Authorization: "Bearer " + currentUser.data.access_token,
+          },
+        },
       };
     },
     url() {
@@ -284,21 +433,21 @@ export default {
       } else {
         return null;
       }
-    }
+    },
   },
   created() {
-    driverService.getDriver(this.$route.params.id).then(response => {
+    driverService.getDriver(this.$route.params.id).then((response) => {
       if (response.status) {
         this.addForm.user_id = response.data.user.id;
         if (response.data.user.user_image) {
           this.addForm.user_image = response.data.user.user_image;
-          this.cross=true;
+          this.cross = true;
           this.avatar = environment.imgUrl + response.data.user.user_image;
         } else {
           this.avatar = environment.imgUrl + "images/avatar.png";
         }
         if (response.data.document) {
-        this.addForm.document = response.data.document;
+          this.addForm.document = response.data.document;
           this.document_img = environment.imgUrl + response.data.document;
         }
         this.addForm.driver_name = response.data.user.first_name;
@@ -331,43 +480,43 @@ export default {
         this.$toast.open({
           message: response.message,
           type: "error",
-          position: "top-right"
+          position: "top-right",
         });
       }
     });
   },
   methods: {
-  Remove(){
-    this.avatar = "/images/avatar.png";
-    this.cross=false;
-    this.addForm.user_image = '';
-  },
+    Remove() {
+      this.avatar = "/images/avatar.png";
+      this.cross = false;
+      this.addForm.user_image = "";
+    },
     setUploadIndex() {
       this.uploadInProgress = true;
     },
-    handleProcessFile: function(error, file) {
-      this.cross=false;
+    handleProcessFile: function (error, file) {
+      this.cross = false;
       this.addForm.user_image = file.serverId;
       this.avatar = environment.imgUrl + file.serverId;
       this.uploadInProgress = false;
     },
-    handleRemoveFile: function(file){
-      this.cross=false;
-      this.addForm.user_image = '';
+    handleRemoveFile: function (file) {
+      this.cross = false;
+      this.addForm.user_image = "";
       this.avatar = "/images/avatar.png";
     },
-    handleProcessFile1: function(error, file) {
+    handleProcessFile1: function (error, file) {
       this.addForm.document = file.serverId;
       this.docError = false;
       this.uploadInProgress = false;
       this.document_img = environment.imgUrl + file.serverId;
     },
-    handleRemoveFile1: function(file){
-      this.addForm.document = '';
+    handleRemoveFile1: function (file) {
+      this.addForm.document = "";
       this.docError = true;
-      this.document_img = '';
+      this.document_img = "";
     },
-    save: function(e) {
+    save: function (e) {
       //stop page to reload
       e.preventDefault();
 
@@ -375,13 +524,13 @@ export default {
         this.docError = true;
       }
 
-      if(this.uploadInProgress) {
+      if (this.uploadInProgress) {
         this.$toast.open({
-              message: "Image uploading is in progress!",
-              type: "error",
-              position: "top-right"
-            });
-            return false;
+          message: "Image uploading is in progress.",
+          type: "error",
+          position: "top-right",
+        });
+        return false;
       }
       this.addForm.expiry_date = this.date;
       if (this.addForm.salary_type == "per_hour") {
@@ -396,7 +545,7 @@ export default {
       }
 
       if (this.$refs.form.validate() && !this.docError) {
-        if(this.loading) {
+        if (this.loading) {
           return false;
         }
 
@@ -404,7 +553,7 @@ export default {
         this.loading = true;
         driverService
           .edit(this.addForm, this.$route.params.id)
-          .then(response => {
+          .then((response) => {
             //stop loader
             this.loading = false;
             //handle response
@@ -412,7 +561,7 @@ export default {
               this.$toast.open({
                 message: response.message,
                 type: "success",
-                position: "top-right"
+                position: "top-right",
               });
               //redirect to login
               const currentUser = JSON.parse(
@@ -429,12 +578,12 @@ export default {
               this.$toast.open({
                 message: response.message,
                 type: "error",
-                position: "top-right"
+                position: "top-right",
               });
             }
           });
       }
-    }
-  }
+    },
+  },
 };
 </script>

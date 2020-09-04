@@ -156,7 +156,7 @@
                   </v-col>
                 </v-col>
 
-                <v-col class="time-slots pt-0 pb-0" cols="12" md="12" v-if="morningSlots.length">
+                <v-col class="time-slots pt-0" cols="12" md="12" v-if="morningSlots.length">
                   <v-col sm="2" class="pt-0"></v-col>
                   <v-col sm="8" class="pt-0 pb-0">
                     <template v-for="timeSlot in morningSlots">
@@ -228,8 +228,6 @@
                   <v-textarea
                     rows="3"
                     auto-grow
-                    clearable
-                    clear-icon="cancel"
                     v-model="editForm.description"
                     :rules="descRules"
                     label="Enter description"
@@ -238,7 +236,7 @@
                 </v-col>
               </v-col>
               <v-col cols="12" md="12" class="pt-0 mb-4 pb-0">
-              <v-col sm="2" class="label-align pt-0 service-image1">
+              <v-col sm="2" class="label-align pt-0 image-upload-label">
                   <label class="label_text">Service Image</label>
                 </v-col>
                 <v-col sm="4" class="pt-0 pb-0">
@@ -266,16 +264,14 @@
                       v-if="editForm.service_image"
                     >
                       <button
-                        id="submit_btn"
                         type="button"
-                        class="close AClass"
-                        style="margin-right: 13px; margin-top: -25px; font-size: 30px;"
+                        class="close"
                         v-if="cross"
                         @click="Remove()"
                       >
                         <span>&times;</span>
                       </button>
-                      <img width="100%" :src="baseUrl+editForm.service_image" alt="John" />
+                      <img :src="baseUrl+editForm.service_image" alt="" />
                     </div>
                   </v-col>
                 </v-col>
@@ -284,7 +280,7 @@
               <v-col cols="12" md="12" class="pt-0 pb-0">
                 <div v-if="selectedType == 4">
                   <v-col sm="2" class="label-align pt-0">
-                    <header>Service Type</header>
+                     <label class="label_text">Service Type</label>
                   </v-col>
                   <v-col sm="8" class="label-align pt-0 pb-0 radio-group-outer">
                     <v-radio-group
@@ -360,9 +356,9 @@ export default {
       },
       morningSlots: [],
       eveningSlots: [],
-      nameRules: [(v) => !!v || "Service name is required"],
-      priceRules: [(v) => !!v || "Service price is invalid/required"],
-      descRules: [(v) => !!v || "Service description is required"],
+      nameRules: [(v) => !!v || "Service name is required."],
+      priceRules: [(v) => !!v || "Service price is invalid/required."],
+      descRules: [(v) => !!v || "Service description is required."],
       myFiles: [],
     };
   },
@@ -546,7 +542,7 @@ export default {
             //check if any morning selected
             if (checkMorning == 0) {
               this.$toast.open({
-                message: "Please select atleast one morning time slot",
+                message: "Please select at least one morning time slot.",
                 type: "error",
                 position: "top-right",
               });
@@ -565,7 +561,7 @@ export default {
             //check if any morning selected
             if (checkEvening == 0) {
               this.$toast.open({
-                message: "Please select atleast one evening time slot",
+                message: "Please select at least one evening time slot.",
                 type: "error",
                 position: "top-right",
               });
@@ -574,7 +570,7 @@ export default {
           }
         } else {
           this.$toast.open({
-            message: "Please select atleast one time slot",
+            message: "Please select at least one time slot.",
             type: "error",
             position: "top-right",
           });
@@ -627,9 +623,3 @@ export default {
   },
 };
 </script>
-<style>
-.AClass {
-  right: 0px;
-  position: absolute;
-}
-</style>
