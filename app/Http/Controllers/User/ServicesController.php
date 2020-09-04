@@ -14,6 +14,7 @@ use App\TimeSlots;
 use App\User;
 use App\Job;
 use Illuminate\Support\Str;
+use Mail;
 
 class ServicesController extends Controller
 {
@@ -37,6 +38,7 @@ class ServicesController extends Controller
     
     
     public function bookService(Request $request) {
+//        dd($request->all());
         $validator = Validator::make($request->all(), [
                     'service_id' => 'required',
                     'job_providing_date' => 'required',
@@ -52,7 +54,9 @@ class ServicesController extends Controller
                         'data' => $validator->errors()
                             ], 422);
         }
+        
         $checkService = Service::where('id', $request->service_id)->first();
+//        dump($checkService->toArray());
         if ($checkService->service_for == config('constant.roles.Customer')) {
             if ((isset($request->manager_id) && $request->manager_id == null && $request->manager_id == '') || (isset($request->farm_id) && $request->farm_id == null && $request->farm_id == '') || (isset($request->time_slots_id) && $request->time_slots_id == null && $request->time_slots_id == '')) {
                 return response()->json([
@@ -62,10 +66,13 @@ class ServicesController extends Controller
                                 ], 422);
             }
         }
+//        dd('here');
+        $checkUser = $request->user();
+        $customerId = ($checkUser->created_by == null) ? $checkUser->id: $checkUser->created_by;
         try {
             $job = new Job([
-                'job_created_by' => $request->user()->id,
-                'customer_id' => $request->user()->id,
+                'job_created_by' => $checkUser->id,
+                'customer_id' => $customerId,
                 'manager_id' => (isset($request->manager_id) && $request->manager_id != '' && $request->manager_id != null) ? $request->manager_id : null,
                 'farm_id' => (isset($request->farm_id) && $request->farm_id != '' && $request->farm_id != null) ? $request->farm_id : null,
                 'gate_no' => (isset($request->gate_no) && $request->gate_no != '' && $request->gate_no != null) ? $request->gate_no : null,
@@ -83,10 +90,10 @@ class ServicesController extends Controller
             if ($job->save()) {
                 $mailData = [
                     'job_id' => $job->id,
-                    'customer_id' => $request->customer_id,
+                    'customer_id' => $customerId,
                     'manager_id' => isset($request->manager_id) ? $request->manager_id : null
                 ];
-                $this->_sendPaymentEmail($mailData);
+//                $this->_sendPaymentEmail($mailData);
                 return response()->json([
                             'status' => true,
                             'message' => 'Job created successfully.',
@@ -147,6 +154,7 @@ class ServicesController extends Controller
     }
     
     public function updateBookedService(Request $request) {
+//        dd($request->all());
         $validator = Validator::make($request->all(), [
                     'job_id' => 'required',
                     'service_id' => 'required',
@@ -203,7 +211,7 @@ class ServicesController extends Controller
                     'customer_id' => $customerId,
                     'manager_id' => isset($managerId) ? $managerId : null
                 ];
-                $this->_sendPaymentEmail($mailData);
+//                $this->_sendPaymentEmail($mailData);
                 return response()->json([
                             'status' => true,
                             'message' => 'Job updated successfully.',
@@ -253,7 +261,7 @@ class ServicesController extends Controller
                     'customer_id' => $customerId,
                     'manager_id' => isset($managerId) ? $managerId : null
                 ];
-                $this->_sendPaymentEmail($mailData);
+//                $this->_sendPaymentEmail($mailData);
                 return response()->json([
                             'status' => true,
                             'message' => 'Job deleted successfully',

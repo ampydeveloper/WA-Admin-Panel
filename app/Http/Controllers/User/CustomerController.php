@@ -32,6 +32,11 @@ class CustomerController extends Controller
      * create customer farm
      */
     public function createFarm(Request $request) {
+//        dd($request->all());
+//        
+//        foreach ($request->manager_details as $manager) {
+//            
+//        }
         $validator = Validator::make($request->all(), [
                     'farm_address' => 'required',
                     'farm_city' => 'required',
@@ -43,7 +48,7 @@ class CustomerController extends Controller
             
                     'manager_details.*.manager_first_name' => 'required',
                     'manager_details.*.manager_last_name' => 'required',
-                    'manager_details.*.manager_email' => 'required|email|unique:users',
+                    'manager_details.*.email' => 'required|email|unique:users',
                     'manager_details.*.manager_phone' => 'required',
                     'manager_details.*.manager_address' => 'required',
                     'manager_details.*.manager_city' => 'required',
@@ -60,6 +65,7 @@ class CustomerController extends Controller
                         'data' => $validator->errors()
                             ], 422);
         }
+        
         try {
             $customer = $request->user();
             if ($customer->role_id == config('constant.roles.Customer')) {
@@ -85,7 +91,7 @@ class CustomerController extends Controller
                             'prefix' => (isset($manager['manager_prefix']) && $manager['manager_prefix'] != '' && $manager['manager_prefix'] != null) ? $manager['manager_prefix'] : null,
                             'first_name' => $manager['manager_first_name'],
                             'last_name' => $manager['manager_last_name'],
-                            'email' => $manager['manager_email'],
+                            'email' => $manager['email'],
                             'phone' => $manager['manager_phone'],
                             'address' => $manager['manager_address'],
                             'city' => $manager['manager_city'],
@@ -110,7 +116,7 @@ class CustomerController extends Controller
                                 'joining_date' => date('Y/m/d'),
                             ]);
                             if ($mangerDetails->save()) {
-                                $this->_confirmPassword($saveManger, $newPassword);
+//                                $this->_confirmPassword($saveManger, $newPassword);
                             }
                         }
                     }
@@ -118,7 +124,7 @@ class CustomerController extends Controller
                     return response()->json([
                                 'status' => true,
                                 'message' => 'Customer created successfully.',
-                                'data' => $user
+                                'data' => $saveManger
                                     ], 200);
                 }
             } else {
@@ -191,21 +197,21 @@ class CustomerController extends Controller
         return response()->json([
                     'status' => true,
                     'message' => 'Customer farms details',
-                    'data' => CustomerFarm::where('customer_id', $request->request->user()->id)->get()
+                    'data' => CustomerFarm::where('customer_id', $request->user()->id)->get()
                         ], 200);
     }
     
-    public function getSingleFarm(Request $request) {
+    public function getSingleFarm(Request $request, $farmId) {
         return response()->json([
                     'status' => true,
                     'message' => 'Customer farms details',
-                    'data' => CustomerFarm::where('id', $request->customer_id)->first()
+                    'data' => CustomerFarm::where('id', $farmId)->first()
                         ], 200);
     }
     
-    public function deleteFarm(Request $request) {
+    public function deleteFarm(Request $request, $farmId) {
         try {
-            CustomerFarm::whereId($request->farm_id)->delete();
+            CustomerFarm::whereId($farmId)->delete();
             return response()->json([
                         'status' => true,
                         'message' => 'Farm deleted Successfully',
@@ -225,11 +231,12 @@ class CustomerController extends Controller
      * create customer manager
      */
     public function createManager(Request $request) {
+//        dd($request->all());
         $validator = Validator::make($request->all(), [
                     'farm_id' => 'required',
                     'manager_first_name' => 'required',
                     'manager_last_name' => 'required',
-                    'manager_email' => 'required|email|unique:users',
+                    'email' => 'required|email|unique:users',
                     'manager_phone' => 'required',
                     'manager_address' => 'required',
                     'manager_city' => 'required',
@@ -254,7 +261,7 @@ class CustomerController extends Controller
                 'prefix' => (isset($request->manager_prefix) && $request->manager_prefix != '' && $request->manager_prefix != null) ? $request->manager_prefix : null,
                 'first_name' => $request->manager_first_name,
                 'last_name' => $request->manager_last_name,
-                'email' => $request->manager_email,
+                'email' => $request->email,
                 'phone' => $request->manager_phone,
                 'address' => $request->manager_address,
                 'city' => $request->manager_city,
@@ -279,7 +286,7 @@ class CustomerController extends Controller
                     'joining_date' => date('Y/m/d'),
                 ]);
                 if ($managerDetails->save()) {
-                    $this->_confirmPassword($saveManager, $newPassword);
+//                    $this->_confirmPassword($saveManager, $newPassword);
                     DB::commit();
                     return response()->json([
                                 'status' => true,
@@ -305,7 +312,6 @@ class CustomerController extends Controller
                     'farm_id' => 'required',
                     'manager_first_name' => 'required',
                     'manager_last_name' => 'required',
-                    'manager_email' => 'required|email|unique:users,email.' . $request->manager_id,
                     'manager_phone' => 'required',
                     'manager_address' => 'required',
                     'manager_city' => 'required',
@@ -324,16 +330,29 @@ class CustomerController extends Controller
                         'data' => $validator->errors()
                             ], 422);
         }
+        $manager = User::whereId($request->manager_id)->first();
+            if ($request->email != '' && $request->email != null) {
+                $checkEmail = User::where('email', $request->email)->first();
+                if($checkEmail !== null) {
+                    if($checkEmail->id !== $manager->id) {
+                        return response()->json([
+                        'status' => false,
+                        'message' => 'Email is already taken.',
+                        'data' => []
+                            ], 422);
+                    }
+                    
+                }
+            }
         try {
             DB::beginTransaction();
-            $manager = User::whereId($request->manager_id)->first();
             if ($request->password != '' && $request->password != null) {
                 $manager->password = bcrypt($request->password);
             }
             $manager->prefix = (isset($request->manager_prefix) && $request->manager_prefix != '' && $request->manager_prefix != null) ? $request->manager_prefix : null;
             $manager->first_name = $request->manager_first_name;
             $manager->last_name = $request->manager_last_name;
-            $manager->email = $request->manager_email;
+            $manager->email = $request->email;
             $manager->phone = $request->manager_phone;
             $manager->address = $request->manager_address;
             $manager->city = $request->manager_city;
@@ -379,19 +398,19 @@ class CustomerController extends Controller
                         ], 200);
     }
     
-    public function getSingleManager(Request $request) {
+    public function getSingleManager(Request $request, $managerId) {
         return response()->json([
                     'status' => true,
                     'message' => 'Customer manager details',
                     'data' => [
-                        'managerList' => User::whereId($request->manager_id)->first(),
+                        'managerList' => User::whereId($managerId)->first(),
                     ]
                         ], 200);
     }
     
-    public function deleteManager(Request $request) {
+    public function deleteManager(Request $request, $managerId) {
         try {
-            User::whereId($request->manager_id)->delete();
+            User::whereId($managerId)->delete();
             return response()->json([
                         'status' => true,
                         'message' => 'Manager deleted Successfully',
@@ -411,7 +430,6 @@ class CustomerController extends Controller
         $validator = Validator::make($request->all(), [
                     'customer_first_name' => 'required|string',
                     'customer_last_name' => 'required|string',
-                    'customer_email' => 'required|string|email|unique:users,email' . $request->user()->id,
                     'customer_phone' => 'required',
                     'customer_address' => 'required',
                     'customer_city' => 'required',
@@ -426,16 +444,29 @@ class CustomerController extends Controller
                         'data' => $validator->errors()
                             ], 422);
         }
+        $customerDetails = User::whereId($request->user()->id)->first();
+            if ($request->email != '' && $request->email != null) {
+                $checkEmail = User::where('email', $request->email)->first();
+                if($checkEmail !== null) {
+                    if($checkEmail->id !== $customerDetails->id) {
+                        return response()->json([
+                        'status' => false,
+                        'message' => 'Email is already taken.',
+                        'data' => []
+                            ], 422);
+                    }
+                    
+                }
+            }
         try {
             DB::beginTransaction();
-            $customerDetails = User::whereId($request->user()->id)->first();
             if ($request->password != '' && $request->password != null) {
                 $customerDetails->password = bcrypt($request->password);
             }
             $customerDetails->prefix = (isset($request->customer_prefix) && $request->customer_prefix != '' && $request->customer_prefix != null) ? $request->customer_prefix : null;
             $customerDetails->first_name = $request->customer_first_name;
             $customerDetails->last_name = $request->customer_last_name;
-            $customerDetails->email = $request->customer_email;
+            $customerDetails->email = $request->email;
             $customerDetails->phone = $request->customer_phone;
             $customerDetails->address = $request->customer_address;
             $customerDetails->city = $request->customer_city;
@@ -484,7 +515,7 @@ class CustomerController extends Controller
         } else {
             $customerId = $user->created_by;
         }
-        $customer = User::where('id', $customerId)->first();
+            $customer = User::where('id', $customerId)->first();
         $memberSince = $customer->created_at;
         $farms = CustomerFarm::where('customer_id', $customerId)->get();
         $totalFarms = $farms->count();
@@ -525,6 +556,12 @@ class CustomerController extends Controller
     
     public function addCard(Request $request) {
         $validator = Validator::make($request->all(), [
+            'card_id' => 'required|string',
+                    'card_number' => 'required|string',
+                    'card_exp_month' => 'required',
+                    'card_exp_year' => 'required',
+                    'card_status' => 'required',
+                    'card_primary' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -533,13 +570,50 @@ class CustomerController extends Controller
                         'data' => $validator->errors()
                             ], 422);
         }
-        $user = User::whereId($request->user()->id)->first();
+        $user = $request->user();
         if ($user->created_by == null) {
             $customerId = $user->id;
         } else {
             $customerId = $user->created_by;
         }
-        
+        $checkUserCards = CustomerCardDetail::where('customer_id', $customerId)->get();
+        If(count($checkUserCards) <= 0) {
+            $primaryCard = 1;
+        } else {
+            if($request->card_primary == 1) {
+                CustomerCardDetail::where('customer_id', $customerId)->where('card_primary', 1)->update(['card_primary' => 0]);
+                $primaryCard = 1;
+            }
+            $primaryCard = 0;
+        }
+        try {
+            DB::beginTransaction();
+            $saveCard = new CustomerCardDetail([
+                'customer_id' => $customerId,
+                'card_id' => $request->card_id,
+                'card_number' => $request->card_number,
+                'card_exp_month' => $request->card_exp_month,
+                'card_exp_year' => $request->card_exp_year,
+                'card_status' => $request->card_status,
+                'card_primary' => $request->card_primary,
+            ]);
+            if ($saveCard->save()) {
+                    DB::commit();
+                    return response()->json([
+                                'status' => true,
+                                'message' => 'Card added created successfully.',
+                                'data' => []
+                                    ], 200);
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error(json_encode($e->getMessage()));
+            return response()->json([
+                        'status' => false,
+                        'message' => $e->getMessage(),
+                        'data' => []
+                            ], 500);
+        }
     }
     
     public function changePrimaryCard(Request $request) {
@@ -561,10 +635,10 @@ class CustomerController extends Controller
         }
         if (CustomerCardDetail::where('customer_id', $customerId)->where('card_primary', 1)->update(['card_primary' => 0])) {
 
-            CustomerCardDetail::where('card_id', $request->card_id)->update(['card_primary' => 1]);
+            CustomerCardDetail::where('id', $request->card_id)->update(['card_primary' => 1]);
             return response()->json([
                         'status' => true,
-                        'message' => 'Card List successfully.',
+                        'message' => 'Primary card changed sucessfully.',
                         'data' => []
                             ], 200);
         }

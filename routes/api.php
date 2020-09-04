@@ -39,7 +39,7 @@ Route::group(['prefix' => 'auth'], function () {
     Route::group(['middleware' => 'auth:api'], function () {
         Route::get('logout', 'AuthController@logout');
 
-        Route::get('user', 'AuthController@user');
+        Route::get('user-details', 'AuthController@user');
 
         Route::group(['prefix' => 'admin'], function () {
             //update admin profile
@@ -160,19 +160,19 @@ Route::group(['prefix' => 'auth'], function () {
 //    dd('api');
             Route::get('dashboard', 'User\CustomerController@dashboard');
             
-            Route::get('edit-profile', 'User\CustomerController@editProfile');
+            Route::post('edit-profile', 'User\CustomerController@editProfile');
             
             Route::post('create-farm', 'User\CustomerController@createFarm');
             Route::post('update-farm', 'User\CustomerController@updateFarm');
-            Route::get('get-farms', 'CustomerController@getFarms');
-            Route::get('get-farm/{farm_id}', 'CustomerController@getSingleFarm');
+            Route::get('get-farms', 'User\CustomerController@getFarms');
+            Route::get('get-farm/{farm_id}', 'User\CustomerController@getSingleFarm');
             Route::delete('delete-farm/{farm_id}', 'User\CustomerController@deleteFarm');
 //            dd('user');
-//            Route::post('create-manager', 'User\CustomerController@createManager');
+            Route::post('create-manager', 'User\CustomerController@createManager');
             Route::post('update-manager', 'User\CustomerController@updateManager');
             Route::get('managers-list', 'User\CustomerController@managerLists');
-            Route::get('get-manager/{manager_id}', 'CustomerController@getSingleManager');
-            Route::post('delete-manager', 'User\CustomerController@deleteManager');
+            Route::get('get-manager/{manager_id}', 'User\CustomerController@getSingleManager');
+            Route::delete('delete-manager/{manager_id}', 'User\CustomerController@deleteManager');
             
             Route::get('services-list', 'User\ServicesController@listServices');
             Route::post('book-service', 'User\ServicesController@bookService');
