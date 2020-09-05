@@ -448,68 +448,55 @@ class AuthController extends Controller
             'data' => []
         ]);
     }
-    
-
-    
-    
-
     /**
-     * Edit Customer Profile
+     * Edit Admin Profile
      */
-//    public function editProfile(Request $request)
-//    {
-//        die('here');
-//        $validator = Validator::make($request->all(), [
-//            'first_name' => 'required|string',
-//            'last_name' => 'required|string',
-//            'email' => 'required|string|email|unique:users,email,' . $request->user()->id
-//        ]);
-//
-//        if ($validator->fails()) {
-//            return response()->json([
-//                'status' => false,
-//                'message' => 'The given data was invalid.',
-//                'data' => $validator->errors()
-//            ], 422);
-//        }
-//
-//        try {
-//            $loggedInUser = $request->user();
-//
-//            Log::info($request->user_image);
-//            $loggedInUser->first_name = $request->first_name;
-//            $loggedInUser->last_name = $request->last_name;
-//            // $loggedInUser->email = $request->email;
-//            $loggedInUser->phone = $request->phone;
-//            $loggedInUser->user_image = $request->user_image;
-//
-//            $loggedInUser->save();
-//            $checkemail =  User::where('email', $request->email)->first();
-//            if (empty($checkemail)) {
-//                $this->_updateEmail($loggedInUser, $request->email);
-//                $msg = "User Profile edit successfully. We have sent you an e-mail to confirm your email address.'";
-//            } else {
-//                $msg = "User Profile edit successfully.";
-//            }
-//
-//            Log::info($loggedInUser);
-//            //return success response
-//            return response()->json([
-//                'status' => true,
-//                'message' => $msg,
-//                'data' => $loggedInUser
-//            ]);
-//        } catch (\Exception $e) {
-//            //make log of errors
-//            Log::error(json_encode($e->getMessage()));
-//            //return with error
-//            return response()->json([
-//                'status' => false,
-//                'message' => 'Internal server error!',
-//                'data' => []
-//            ], 500);
-//        }
-//    }
+    public function editAdminProfile(Request $request) {
+        $validator = Validator::make($request->all(), [
+                    'admin_id' => 'required',
+                    'admin_first_name' => 'required|string',
+                    'admin_last_name' => 'required|string',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                        'status' => false,
+                        'message' => 'The given data was invalid.',
+                        'data' => $validator->errors()
+                            ], 422);
+        }
+        $admin = User::whereId($request->admin_id)->first();
+        if ($request->email != '' && $request->email != null) {
+            $checkEmail = User::where('email', $request->email)->first();
+            if ($checkEmail !== null) {
+                if ($checkEmail->id !== $admin->id) {
+                    return response()->json([
+                                'status' => false,
+                                'message' => 'Email is already taken.',
+                                'data' => []
+                                    ], 422);
+                }
+            }
+        }
+        try {
+            $admin->first_name = $request->admin_first_name;
+            $admin->last_name = $request->admin_last_name;
+            $admin->email = $request->email;
+            $admin->save();
+            return response()->json([
+                        'status' => true,
+                        'message' => 'Admin Profile updated sucessfully.',
+                        'data' => []
+            ]);
+        } catch (\Exception $e) {
+            Log::error(json_encode($e->getMessage()));
+            return response()->json([
+                        'status' => false,
+                        'message' => $e->getMessage(),
+                        'data' => []
+                            ], 500);
+        }
+    }
+
 //
 //    
 //

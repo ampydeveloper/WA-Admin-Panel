@@ -142,8 +142,9 @@ class ManagerController extends Controller {
     /**
      * update manager
      */
-    public function updateManager(Request $request, $manager_id) {
+    public function updateManager(Request $request) {
         $validator = Validator::make($request->all(), [
+                    'manager_id' => 'required',
                     'manager_first_name' => 'required',
                     'manager_last_name' => 'required',
                     'manager_phone' => 'required',
@@ -250,7 +251,7 @@ class ManagerController extends Controller {
 
             return response()->json([
                         'status' => true,
-                        'message' => 'User deleted Successfully',
+                        'message' => 'Manager deleted Successfully',
                         'data' => []
                             ], 200);
         } catch (\Exception $e) {

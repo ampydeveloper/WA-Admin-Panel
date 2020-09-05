@@ -43,7 +43,7 @@ Route::group(['prefix' => 'auth'], function () {
 
         Route::group(['prefix' => 'admin'], function () {
             //update admin profile
-            Route::post('edit-profile', 'AuthController@editProfile');
+            Route::post('edit-admin-profile', 'AuthController@editAdminProfile');
             Route::post('change-password', 'AuthController@changePassword');
             Route::post('create-admin', 'ManagerController@createAdmin');
 
