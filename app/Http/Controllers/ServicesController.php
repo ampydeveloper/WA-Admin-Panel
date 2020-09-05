@@ -67,9 +67,10 @@ class ServicesController extends Controller
     /**
      * edit service
      */
-    public function editService(Request $request, $serviceId)
+    public function editService(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'service_id' => 'required',
             'service_name' => 'required|string',
             'price' => 'required|numeric',
             'description' => 'required|string',
@@ -89,7 +90,7 @@ class ServicesController extends Controller
         }
 
         try {
-            Service::whereId($serviceId)->update([
+            Service::whereId($request->service_id)->update([
                 'service_name' => $request->service_name,
                 'price' => $request->price,
                 'description' => $request->description,
@@ -137,8 +138,8 @@ class ServicesController extends Controller
     /**
      * get service
      */
-    public function getService(Request $request) {
-        $fetchService = Service::whereId($request->service_id)->first();
+    public function getService(Request $request, $serviceId) {
+        $fetchService = Service::whereId($serviceId)->first();
         if($fetchService != null) {
             $status = true;
             $message = "Service Found.";
