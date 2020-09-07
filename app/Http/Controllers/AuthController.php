@@ -2,20 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\URL;
-use Carbon\Carbon;
-use Socialite;
 use Mail;
-use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\Client;
 use App\User;
+use Socialite;
+use Carbon\Carbon;
+use GuzzleHttp\Client;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
+use GuzzleHttp\Exception\GuzzleException;
 
 class AuthController extends Controller
 {
@@ -403,13 +402,29 @@ class AuthController extends Controller
                             ], 200);
         }
     }
+    public function confirmEmail(Request $request, $email) {
+        $userEmail = base64_decode($email);
+        $getUser = User::where('email', $userEmail)->first();
+        if($getUser->email == $userEmail && $getUser->is_confirmed == 0) {
+            $getUser->is_confirmed = 1;
+            $getUser->save();
+            $message = "Your email address has been successfully confirmed. Please login to proceed further.";
+            $status = true;
+            $errCode = 200;
+        } else {
+            $status = false;
+            $message = "Your confirmation link has been expired.";
+            $errCode = 400;
+        }
+        return redirect()->route('/');
+    }
     
-    public function confirmUpdateEmail(Request $request) {
-        $id = base64_decode($request->id);
-        $email = base64_decode($request->email);
-        $getUser = User::whereId($id)->first();
-        if ($getUser != null) {
-            $getUser->email = $email;
+    public function confirmUpdateEmail(Request $request, $email, $id) {
+        $userId = base64_decode($request->id);
+        $userEmail = base64_decode($email);
+        $getUser = User::whereId($userId)->first();
+        if($getUser->email == $userEmail && $getUser->is_confirmed == 0) {
+            $getUser->is_confirmed = 1;
             $getUser->save();
             $message = "Your email address has been successfully confirmed. Please login to proceed further.";
             $status = true;
@@ -451,51 +466,7 @@ class AuthController extends Controller
     /**
      * Edit Admin Profile
      */
-    public function editAdminProfile(Request $request) {
-        $validator = Validator::make($request->all(), [
-                    'admin_id' => 'required',
-                    'admin_first_name' => 'required|string',
-                    'admin_last_name' => 'required|string',
-        ]);
-        if ($validator->fails()) {
-            return response()->json([
-                        'status' => false,
-                        'message' => 'The given data was invalid.',
-                        'data' => $validator->errors()
-                            ], 422);
-        }
-        $admin = User::whereId($request->admin_id)->first();
-        if ($request->email != '' && $request->email != null) {
-            $checkEmail = User::where('email', $request->email)->first();
-            if ($checkEmail !== null) {
-                if ($checkEmail->id !== $admin->id) {
-                    return response()->json([
-                                'status' => false,
-                                'message' => 'Email is already taken.',
-                                'data' => []
-                                    ], 422);
-                }
-            }
-        }
-        try {
-            $admin->first_name = $request->admin_first_name;
-            $admin->last_name = $request->admin_last_name;
-            $admin->email = $request->email;
-            $admin->save();
-            return response()->json([
-                        'status' => true,
-                        'message' => 'Admin Profile updated sucessfully.',
-                        'data' => []
-            ]);
-        } catch (\Exception $e) {
-            Log::error(json_encode($e->getMessage()));
-            return response()->json([
-                        'status' => false,
-                        'message' => $e->getMessage(),
-                        'data' => []
-                            ], 500);
-        }
-    }
+    
 
 //
 //    
@@ -503,20 +474,7 @@ class AuthController extends Controller
 //    /**
 //     * email for email address confirmation
 //     */
-//    public function _updateEmail($user, $email)
-//    {
-//        $name = $user->first_name . ' ' . $user->last_name;
-//        $data = array(
-//            'name' => $name,
-//            'email' => $email,
-//            'verificationLink' => env('APP_URL') . 'confirm-update-email/' . base64_encode($email) . '/' . base64_encode($user->id)
-//        );
-//
-//        Mail::send('email_templates.welcome_email', $data, function ($message) use ($name, $email) {
-//            $message->to($email, $name)->subject('Email Address Confirmation');
-//            $message->from(env('MAIL_USERNAME'), env('MAIL_USERNAME'));
-//        });
-//    }
+//    
 
     
 

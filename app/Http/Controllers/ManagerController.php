@@ -2,27 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 use Mail;
-use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
-use Validator;
 use App\User;
+use Validator;
+use Carbon\Carbon;
 use App\ManagerDetail;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class ManagerController extends Controller {
 
     public function createAdmin(Request $request) {
-//        dd($request->admin_email);
         $validator = Validator::make($request->all(), [
                     'admin_first_name' => 'required',
                     'admin_last_name' => 'required',
                     'email' => 'required|email|unique:users',
         ]);
-//        dd($validator);
         if ($validator->fails()) {
             return response()->json([
                         'status' => false,
@@ -30,7 +28,6 @@ class ManagerController extends Controller {
                         'data' => $validator->errors()
                             ], 422);
         }
-//            dd('in');
         try {
             DB::beginTransaction();
             $newPassword = Str::random();
@@ -44,9 +41,8 @@ class ManagerController extends Controller {
                 'is_active' => 1,
                 'password' => bcrypt($newPassword)
             ]);
-//            dd($user);
             if ($user->save()) {
-//                $this->_confirmPassword($user, $newPassword);
+                $this->_confirmPassword($user, $newPassword);
                 DB::commit();
                 return response()->json([
                             'status' => true,
@@ -64,12 +60,76 @@ class ManagerController extends Controller {
                             ], 500);
         }
     }
+    
+    public function editAdminProfile(Request $request) {
+        $validator = Validator::make($request->all(), [
+                    'admin_id' => 'required',
+                    'admin_first_name' => 'required|string',
+                    'admin_last_name' => 'required|string',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                        'status' => false,
+                        'message' => 'The given data was invalid.',
+                        'data' => $validator->errors()
+                            ], 422);
+        }
+        $confirmed = 1;
+        $admin = User::whereId($request->admin_id)->first();
+        if ($request->email != '' && $request->email != null) {
+            $checkEmail = User::where('email', $request->email)->first();
+            if ($checkEmail !== null) {
+                if ($checkEmail->id !== $admin->id) {
+                    return response()->json([
+                                'status' => false,
+                                'message' => 'Email is already taken.',
+                                'data' => []
+                                    ], 422);
+                }
+            } 
+            if ($admin->email !== $request->email) {
+                $confirmed = 0;
+            }
+        }
+        try {
+            if ($request->password != '' && $request->password != null) {
+                $admin->password = bcrypt($request->password);
+            }
+            $admin->first_name = $request->admin_first_name;
+            $admin->last_name = $request->admin_last_name;
+            $admin->email = $request->email;
+            $admin->is_confirmed = $confirmed;
+            $admin->save();
+            if ($confirmed == 0) {
+                $this->_updateEmail($admin, $request->email);
+                if ($request->user()->id == $request->admin_id) {
+                    $request->user()->token()->revoke();
+                    return response()->json([
+                                'status' => true,
+                                'message' => 'Successfully logged out',
+                                'data' => []
+                    ]);
+                }
+            }
+            return response()->json([
+                        'status' => true,
+                        'message' => 'Admin Profile updated sucessfully.',
+                        'data' => []
+            ]);
+        } catch (\Exception $e) {
+            Log::error(json_encode($e->getMessage()));
+            return response()->json([
+                        'status' => false,
+                        'message' => $e->getMessage(),
+                        'data' => []
+                            ], 500);
+        }
+    }
 
     /**
      * create manager
      */
     public function createManager(Request $request) {
-//        dd($request->all());
         $validator = Validator::make($request->all(), [
                     'manager_first_name' => 'required',
                     'manager_last_name' => 'required',
@@ -90,7 +150,9 @@ class ManagerController extends Controller {
                         'data' => $validator->errors()
                             ], 422);
         }
-        
+        if($request->user()->role_id == config('constant.roles.Admin')) {
+        } else {
+        }
         try {
             DB::beginTransaction();
             $newPassword = Str::random();
@@ -120,7 +182,7 @@ class ManagerController extends Controller {
                     'joining_date' => date('Y/m/d'),
                 ]);
                 if ($managerDetails->save()) {
-//                    $this->_confirmPassword($user, $newPassword);
+                    $this->_confirmPassword($user, $newPassword);
                     DB::commit();
                     return response()->json([
                                 'status' => true,
@@ -165,20 +227,23 @@ class ManagerController extends Controller {
                         'data' => $validator->errors()
                             ], 422);
         }
-            $manager = User::whereId($request->manager_id)->first();
-            if ($request->email != '' && $request->email != null) {
-                $checkEmail = User::where('email', $request->email)->first();
-                if($checkEmail !== null) {
-                    if($checkEmail->id !== $manager->id) {
-                        return response()->json([
-                        'status' => false,
-                        'message' => 'Email is already taken.',
-                        'data' => []
-                            ], 422);
-                    }
-                    
+        $confirmed = 1;
+        $manager = User::whereId($request->manager_id)->first();
+        if ($request->email != '' && $request->email != null) {
+            $checkEmail = User::where('email', $request->email)->first();
+            if ($checkEmail !== null) {
+                if ($checkEmail->id !== $manager->id) {
+                    return response()->json([
+                                'status' => false,
+                                'message' => 'Email is already taken.',
+                                'data' => []
+                                    ], 422);
                 }
             }
+            if ($manager->email !== $request->email) {
+                $confirmed = 0;
+            }
+        }
         try {
             DB::beginTransaction();
             if ($request->password != '' && $request->password != null) {
@@ -195,6 +260,7 @@ class ManagerController extends Controller {
             $manager->zip_code = $request->manager_zipcode;
             $manager->user_image = (isset($request->manager_image) && $request->manager_image != '' && $request->manager_image != null) ? $request->manager_image : null;
             $manager->is_active = $request->manager_is_active;
+            $manager->is_confirmed = $confirmed;
             if ($manager->save()) {
                 if ($manager->role_id != config('constant.roles.Admin')) {
                     ManagerDetail::whereUserId($request->manager_id)->update([
@@ -206,6 +272,17 @@ class ManagerController extends Controller {
                     ]);
                 }
                 DB::commit();
+                if ($confirmed == 0) {
+                    $this->_updateEmail($manager, $request->email);
+                    if ($request->user()->id == $request->manager_id) {
+                        $request->user()->token()->revoke();
+                        return response()->json([
+                                    'status' => true,
+                                    'message' => 'Successfully logged out',
+                                    'data' => []
+                        ]);
+                    }
+                }
                 return response()->json([
                             'status' => true,
                             'message' => 'Manager details updated Successfully!',
@@ -248,7 +325,6 @@ class ManagerController extends Controller {
     public function deleteManager(Request $request, $managerId) {
         try {
             User::whereId($managerId)->delete();
-
             return response()->json([
                         'status' => true,
                         'message' => 'Manager deleted Successfully',
@@ -297,4 +373,19 @@ class ManagerController extends Controller {
             $message->from(env('MAIL_USERNAME'), env('MAIL_USERNAME'));
         });
     }
+    
+    public function _updateEmail($user, $email) {
+        $name = $user->first_name . ' ' . $user->last_name;
+        $data = array(
+            'name' => $name,
+            'email' => $email,
+            'verificationLink' => env('APP_URL') . 'confirm-update-email/' . base64_encode($email) . '/' . base64_encode($user->id)
+        );
+
+        Mail::send('email_templates.welcome_email', $data, function ($message) use ($name, $email) {
+            $message->to($email, $name)->subject('Email Address Confirmation');
+            $message->from(env('MAIL_USERNAME'), env('MAIL_USERNAME'));
+        });
+    }
+
 }

@@ -144,7 +144,7 @@ class CustomerController extends Controller {
                                 'joining_date' => date('Y/m/d'),
                             ]);
                             if ($mangerDetails->save()) {
-//                                $this->_confirmPassword($saveManger, $newPassword);
+                                $this->_confirmPassword($saveManger, $newPassword);
                             }
                         }
                         DB::commit();
@@ -202,7 +202,6 @@ class CustomerController extends Controller {
         }
         try {
             DB::beginTransaction();
-            $newPassword = Str::random();
             $farmDetails = new CustomerFarm([
                 'customer_id' => $request->customer_id,
                 'farm_address' => $request->farm_address,
@@ -248,7 +247,7 @@ class CustomerController extends Controller {
                             'joining_date' => date('Y/m/d'),
                         ]);
                         if ($mangerDetails->save()) {
-//                            $this->_confirmPassword($saveManger, $newPassword);
+                            $this->_confirmPassword($saveManger, $newPassword);
                         }
                     }
                 }
@@ -459,6 +458,7 @@ class CustomerController extends Controller {
                         'data' => $validator->errors()
                             ], 422);
         }
+        $confirmed = 1;
         $customerDetails = User::whereId($request->customer_id)->first();
         if ($request->email != '' && $request->email != null) {
             $checkEmail = User::where('email', $request->email)->first();
@@ -470,6 +470,9 @@ class CustomerController extends Controller {
                                 'data' => []
                                     ], 422);
                 }
+            }
+            if ($customerDetails->email !== $request->email) {
+                $confirmed = 0;
             }
         }
         try {
@@ -488,8 +491,12 @@ class CustomerController extends Controller {
             $customerDetails->zip_code = $request->customer_zipcode;
             $customerDetails->user_image = (isset($request->customer_image) && $request->customer_image != '' && $request->customer_image != null) ? $request->customer_image : null;
             $customerDetails->is_active = $request->customer_is_active;
+            $customerDetails->is_confirmed = $confirmed;
             if ($customerDetails->save()) {
                 DB::commit();
+                if ($confirmed == 0) {
+                    $this->_updateEmail($customerDetails, $request->email);
+                }
                 return response()->json([
                             'status' => true,
                             'message' => 'Customer updated successfully.',
@@ -578,20 +585,23 @@ class CustomerController extends Controller {
                         'data' => $validator->errors()
                             ], 422);
         }
+        $confirmed = 1;
         $manager = User::whereId($request->manager_id)->first();
-            if ($request->email != '' && $request->email != null) {
-                $checkEmail = User::where('email', $request->email)->first();
-                if($checkEmail !== null) {
-                    if($checkEmail->id !== $manager->id) {
-                        return response()->json([
-                        'status' => false,
-                        'message' => 'Email is already taken.',
-                        'data' => []
-                            ], 422);
-                    }
-                    
+        if ($request->email != '' && $request->email != null) {
+            $checkEmail = User::where('email', $request->email)->first();
+            if ($checkEmail !== null) {
+                if ($checkEmail->id !== $manager->id) {
+                    return response()->json([
+                                'status' => false,
+                                'message' => 'Email is already taken.',
+                                'data' => []
+                                    ], 422);
                 }
             }
+            if ($manager->email !== $request->email) {
+                $confirmed = 0;
+            }
+        }
         try {
             DB::beginTransaction();
             if ($request->password != '' && $request->password != null) {
@@ -618,6 +628,9 @@ class CustomerController extends Controller {
                 $managerDetail->document = $request->manager_card_image;
                 if ($managerDetail->save()) {
                     DB::commit();
+                    if ($confirmed == 0) {
+                        $this->_updateEmail($manager, $request->email);
+                    }
                     return response()->json([
                                 'status' => true,
                                 'message' => 'Manager updated successfully.',
@@ -650,168 +663,18 @@ class CustomerController extends Controller {
             $message->from(env('MAIL_USERNAME'), env('MAIL_USERNAME'));
         });
     }
+    
+    public function _updateEmail($user, $email) {
+        $name = $user->first_name . ' ' . $user->last_name;
+        $data = array(
+            'name' => $name,
+            'email' => $email,
+            'verificationLink' => env('APP_URL') . 'confirm-update-email/' . base64_encode($email) . '/' . base64_encode($user->id)
+        );
 
-    /**
-     * create customer farm
-     */
-//    public function createCustomerFarm(Request $request)
-//    {
-//        //validate request
-//        $validator = Validator::make($request->all(), [
-//            'customer_id' => 'required',
-//	    'farm_address' => 'required',
-//            'farm_city' => 'required',
-//            'farm_province' => 'required',
-//            'farm_unit' => 'required',
-//            'farm_zipcode' => 'required',
-//            'farm_active' => 'required',
-//            'latitude' => 'required',
-//            'longitude' => 'required',
-//        ]);
-//
-//        if ($validator->fails()) {
-//            return response()->json([
-//                'status' => false,
-//                'message' => 'The given data was invalid.',
-//                'data' => $validator->errors()
-//            ], 422);
-//        }
-//
-//        try {
-//
-//            //use of db transactions
-//            DB::beginTransaction();
-//
-//            //save customer farm details
-//            $farmDetails = new CustomerFarm([
-//                'customer_id' => $request->customer_id,
-//                'farm_address' => $request->farm_address,
-//                'farm_city' => $request->farm_city,
-//                'farm_image' => isset($request->farm_images) ? json_encode($request->farm_images) : null,
-//                'farm_province' => $request->farm_province,
-//                'farm_unit' => $request->farm_unit,
-//                'farm_zipcode' => $request->farm_zipcode,
-//                'farm_active' => $request->farm_active,
-//                'latitude' => $request->latitude,
-//                'longitude' => $request->longitude
-//            ]);
-//
-//            $farmDetails->save();
-//
-//            DB::commit();
-//
-//            //return success response
-//            return response()->json([
-//                'status' => true,
-//                'message' => 'Customer created successfully.',
-//                'data' => []
-//            ], 200);
-//        } catch (\Exception $e) {
-//            //rollback transactions
-//            DB::rollBack();
-//            //make log of errors
-//            Log::error(json_encode($e->getMessage()));
-//            //return with error
-//            return response()->json([
-//                'status' => false,
-//                'message' => $e->getMessage(),
-//                'data' => []
-//            ], 500);
-//        }
-//    }
-
-    /**
-     * list hauler
-     */
-//    public function listHauler() {
-//        $getCustomer = User::with(['customerManager' => function ($query) {
-//                                $query->with("manager", "farms");
-//                            }])
-//                        ->whereRoleId(config('constant.roles.Haulers'))->get();
-//
-//        return response()->json([
-//                    'status' => true,
-//                    'message' => 'Haulers Listing.',
-//                    'data' => $getCustomer
-//                        ], 200);
-//    }
-
-    /**
-     * create hauler
-     */
-//    public function createHauler(Request $request) {
-//        //validate request
-//        $validator = Validator::make($request->all(), [
-//                    'prefix' => 'required',
-//                    'customer_first_name' => 'required|string',
-//                    'customer_last_name' => 'required|string',
-//                    'customer_email' => 'required|string|email|unique:users',
-//                    'customer_phone' => 'required',
-//                    'customer_address' => 'required',
-//                    'customer_city' => 'required',
-//                    'customer_province' => 'required',
-//                    'customer_zipcode' => 'required',
-//                    'customer_role_id' => 'required',
-//                    'customer_is_active' => 'required',
-//        ]);
-//
-//        if ($validator->fails()) {
-//            return response()->json([
-//                        'status' => false,
-//                        'message' => 'The given data was invalid.',
-//                        'data' => $validator->errors()
-//                            ], 422);
-//        }
-//
-//        try {
-//
-//            //use of db transactions
-//            DB::beginTransaction();
-//
-//            //random string for new password
-//            $newPassword = Str::random();
-//
-//            //create new user
-//            $user = new User([
-//                'prefix' => $request->prefix,
-//                'first_name' => $request->customer_first_name,
-//                'last_name' => $request->customer_last_name,
-//                'email' => $request->customer_email,
-//                'phone' => $request->customer_phone,
-//                'address' => $request->customer_address,
-//                'city' => $request->customer_city,
-//                'state' => $request->customer_province,
-//                'zip_code' => $request->customer_zipcode,
-//                'user_image' => isset($request->user_image) ? $request->user_image : null,
-//                'role_id' => $request->customer_role_id,
-//                'is_confirmed' => 1,
-//                'is_active' => $request->customer_is_active,
-//                'password' => bcrypt($newPassword)
-//            ]);
-//            if ($user->save()) {
-//                //send email for new email and password
-//                $this->_confirmPassword($user, $newPassword);
-//            }
-//            DB::commit();
-//
-//            //return success response
-//            return response()->json([
-//                        'status' => true,
-//                        'message' => 'Customer created successfully.',
-//                        'data' => []
-//                            ], 200);
-//        } catch (\Exception $e) {
-//            //rollback transactions
-//            DB::rollBack();
-//            //make log of errors
-//            Log::error(json_encode($e->getMessage()));
-//            //return with error
-//            return response()->json([
-//                        'status' => false,
-//                        'message' => $e->getMessage(),
-//                        'data' => []
-//                            ], 500);
-//        }
-//    }
-
+        Mail::send('email_templates.welcome_email', $data, function ($message) use ($name, $email) {
+            $message->to($email, $name)->subject('Email Address Confirmation');
+            $message->from(env('MAIL_USERNAME'), env('MAIL_USERNAME'));
+        });
+    }
 }

@@ -43,23 +43,18 @@ Route::group(['prefix' => 'auth'], function () {
 
         Route::group(['prefix' => 'admin'], function () {
             //update admin profile
-            Route::post('edit-admin-profile', 'AuthController@editAdminProfile');
             Route::post('change-password', 'AuthController@changePassword');
             Route::post('create-admin', 'ManagerController@createAdmin');
+            Route::post('edit-admin-profile', 'ManagerController@editAdminProfile');
+            //admin
+            Route::get('list-admin', 'ManagerController@listAdmin');
+            Route::get('get-admin/{admin_id}', 'ManagerController@getAdmin');
 
-            //manager
-//            dd('here');
-//            Route::post('create-manager1', function() {
-//                    dd('here1');
-//            });
             Route::post('create-manager-admin', 'ManagerController@createManager');
             Route::post('update-manager/{manager_id}', 'ManagerController@updateManager');
             Route::get('get-manager/{manager_id}', 'ManagerController@getManager');
             Route::delete('delete-manager/{manager_id}', 'ManagerController@deleteManager');
             Route::get('list-manager', 'ManagerController@listManager');
-            //admin
-            Route::get('list-admin', 'ManagerController@listAdmin');
-            Route::get('get-admin/{admin_id}', 'ManagerController@getAdmin');
 
             //services
             Route::post('create-service', 'ServicesController@createService');
@@ -90,7 +85,7 @@ Route::group(['prefix' => 'auth'], function () {
             Route::get('list-hauler', 'CompanyController@listHauler');
             Route::post('create-hauler', 'CompanyController@createHauler');
             Route::get('get-hauler/{customer_id}', 'CompanyController@getHauler');
-            Route::post('update-hauler/{customer_id}', 'CompanyController@updateHauler');
+            Route::post('update-hauler', 'CompanyController@updateHauler');
             Route::delete('delete-hauler/{customer_id}', 'CompanyController@deleteHauler');
 
             //jobs

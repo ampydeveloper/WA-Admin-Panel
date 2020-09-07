@@ -29,15 +29,15 @@ class CompanyController extends Controller {
      */
     public function createHauler(Request $request) {
         $validator = Validator::make($request->all(), [
-                    'first_name' => 'required|string',
-                    'last_name' => 'required|string',
+                    'hauler_first_name' => 'required|string',
+                    'hauler_last_name' => 'required|string',
                     'email' => 'required|string|email|unique:users',
-                    'phone' => 'required',
-                    'address' => 'required',
-                    'city' => 'required',
-                    'state' => 'required',
-                    'zipcode' => 'required',
-                    'is_active' => 'required',
+                    'hauler_phone' => 'required',
+                    'hauler_address' => 'required',
+                    'hauler_city' => 'required',
+                    'hauler_province' => 'required',
+                    'hauler_zipcode' => 'required',
+                    'hauler_is_active' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -103,7 +103,6 @@ class CompanyController extends Controller {
                     'hauler_id' => 'required',
                     'hauler_first_name' => 'required|string',
                     'hauler_last_name' => 'required|string',
-                    'hauler_email' => 'required|string|email|unique:users,email' . $request->customer_id,
                     'hauler_phone' => 'required',
                     'hauler_address' => 'required',
                     'hauler_city' => 'required',
@@ -118,16 +117,33 @@ class CompanyController extends Controller {
                         'data' => $validator->errors()
                             ], 422);
         }
+        $confirmed = 1;
+        $haulerDetails = User::whereId($request->hauler_id)->first();
+        if ($request->email != '' && $request->email != null) {
+            $checkEmail = User::where('email', $request->email)->first();
+            if ($checkEmail !== null) {
+                if ($checkEmail->id !== $haulerDetails->id) {
+                    return response()->json([
+                                'status' => false,
+                                'message' => 'Email is already taken.',
+                                'data' => []
+                                    ], 422);
+                }
+            }
+            if ($haulerDetails->email !== $request->email) {
+                $confirmed = 0;
+            }
+        }
         try {
             DB::beginTransaction();
-            $haulerDetails = User::whereId($request->hauler_id)->first();
+            
             if ($request->password != '' && $request->password != null) {
                 $haulerDetails->password = bcrypt($request->password);
             }
             $haulerDetails->prefix = (isset($request->hauler_prefix) && $request->hauler_prefix != '' && $request->hauler_prefix != null) ? $request->hauler_prefix : null;
             $haulerDetails->first_name = $request->hauler_first_name;
             $haulerDetails->last_name = $request->hauler_last_name;
-            $haulerDetails->email = $request->hauler_email;
+            $haulerDetails->email = $request->email;
             $haulerDetails->phone = $request->hauler_phone;
             $haulerDetails->address = $request->hauler_address;
             $haulerDetails->city = $request->hauler_city;
@@ -135,11 +151,21 @@ class CompanyController extends Controller {
             $haulerDetails->zip_code = $request->hauler_zipcode;
             $haulerDetails->user_image = (isset($request->hauler_image) && $request->hauler_image != '' && $request->hauler_image != null) ? $request->hauler_image : null;
             $haulerDetails->is_active = $request->hauler_is_active;
+            $haulerDetails->is_confirmed = $confirmed;
             $haulerDetails->save();
             DB::commit();
+            if ($confirmed == 0) {
+                    $this->_updateEmail($haulerDetails, $request->email);
+                    $request->user()->token()->revoke();
+                    return response()->json([
+                                'status' => true,
+                                'message' => 'Successfully logged out',
+                                'data' => []
+                    ]);
+                }
             return response()->json([
                         'status' => true,
-                        'message' => 'Hauler Customer details updated Successfully!',
+                        'message' => 'Hauler details updated Successfully!',
                         'data' => []
                             ], 200);
         } catch (\Exception $e) {
@@ -155,12 +181,12 @@ class CompanyController extends Controller {
     /**
      * delete hauler
      */
-    public function deleteHauler(Request $request) {
+    public function deleteHauler(Request $request, $haulerId) {
         try {
-            User::whereId($request->customer_id)->delete();
+            User::whereId($haulerId)->delete();
             return response()->json([
                         'status' => true,
-                        'message' => 'Hauler customer deleted Successfully',
+                        'message' => 'Hauler deleted Successfully',
                         'data' => []
                             ], 200);
         } catch (\Exception $e) {
@@ -183,6 +209,20 @@ class CompanyController extends Controller {
         );
         Mail::send('email_templates.welcome_email_manager', $data, function ($message) use ($user, $name) {
             $message->to($user->email, $name)->subject('Login Details');
+            $message->from(env('MAIL_USERNAME'), env('MAIL_USERNAME'));
+        });
+    }
+    
+    public function _updateEmail($user, $email) {
+        $name = $user->first_name . ' ' . $user->last_name;
+        $data = array(
+            'name' => $name,
+            'email' => $email,
+            'verificationLink' => env('APP_URL') . 'confirm-update-email/' . base64_encode($email) . '/' . base64_encode($user->id)
+        );
+
+        Mail::send('email_templates.welcome_email', $data, function ($message) use ($name, $email) {
+            $message->to($email, $name)->subject('Email Address Confirmation');
             $message->from(env('MAIL_USERNAME'), env('MAIL_USERNAME'));
         });
     }
