@@ -40,7 +40,7 @@ class CustomerController extends Controller {
         $validator = Validator::make($request->all(), [
                     'customer_first_name' => 'required|string',
                     'customer_last_name' => 'required|string',
-                    'customer_email' => 'required|string|email|unique:users',
+                    'email' => 'required|string|email|unique:users',
                     'customer_phone' => 'required',
                     'customer_address' => 'required',
                     'customer_city' => 'required',
@@ -58,7 +58,7 @@ class CustomerController extends Controller {
             
                     'manager_details.*.manager_first_name' => 'required',
                     'manager_details.*.manager_last_name' => 'required',
-                    'manager_details.*.manager_email' => 'required|email|unique:users',
+                    'manager_details.*.email' => 'required|email|unique:users',
                     'manager_details.*.manager_phone' => 'required',
                     'manager_details.*.manager_address' => 'required',
                     'manager_details.*.manager_city' => 'required',
@@ -84,7 +84,7 @@ class CustomerController extends Controller {
                 'prefix' => (isset($request->customer_prefix) && $request->customer_prefix != '' && $request->customer_prefix != null) ? $request->customer_prefix : null,
                 'first_name' => $request->customer_first_name,
                 'last_name' => $request->customer_last_name,
-                'email' => $request->customer_email,
+                'email' => $request->email,
                 'phone' => $request->customer_phone,
                 'address' => $request->customer_address,
                 'city' => $request->customer_city,
@@ -119,7 +119,7 @@ class CustomerController extends Controller {
                             'prefix' => (isset($manager['manager_prefix']) && $manager['manager_prefix'] != '' && $manager['manager_prefix'] != null) ? $manager['manager_prefix'] : null,
                             'first_name' => $manager['manager_first_name'],
                             'last_name' => $manager['manager_last_name'],
-                            'email' => $manager['manager_email'],
+                            'email' => $manager['email'],
                             'phone' => $manager['manager_phone'],
                             'address' => $manager['manager_address'],
                             'city' => $manager['manager_city'],
@@ -144,7 +144,7 @@ class CustomerController extends Controller {
                                 'joining_date' => date('Y/m/d'),
                             ]);
                             if ($mangerDetails->save()) {
-                                $this->_confirmPassword($saveManger, $newPassword);
+//                                $this->_confirmPassword($saveManger, $newPassword);
                             }
                         }
                         DB::commit();
@@ -182,7 +182,7 @@ class CustomerController extends Controller {
             
                     'manager_details.*.manager_first_name' => 'required',
                     'manager_details.*.manager_last_name' => 'required',
-                    'manager_details.*.manager_email' => 'required|email|unique:users',
+                    'manager_details.*.email' => 'required|email|unique:users',
                     'manager_details.*.manager_phone' => 'required',
                     'manager_details.*.manager_address' => 'required',
                     'manager_details.*.manager_city' => 'required',
@@ -223,7 +223,7 @@ class CustomerController extends Controller {
                         'prefix' => (isset($manager['manager_prefix']) && $manager['manager_prefix'] != '' && $manager['manager_prefix'] != null) ? $manager['manager_prefix'] : null,
                         'first_name' => $manager['manager_first_name'],
                         'last_name' => $manager['manager_last_name'],
-                        'email' => $manager['manager_email'],
+                        'email' => $manager['email'],
                         'phone' => $manager['manager_phone'],
                         'address' => $manager['manager_address'],
                         'city' => $manager['manager_city'],
@@ -248,15 +248,15 @@ class CustomerController extends Controller {
                             'joining_date' => date('Y/m/d'),
                         ]);
                         if ($mangerDetails->save()) {
-                            $this->_confirmPassword($saveManger, $newPassword);
+//                            $this->_confirmPassword($saveManger, $newPassword);
                         }
                     }
                 }
                 DB::commit();
                 return response()->json([
                             'status' => true,
-                            'message' => 'Customer created successfully.',
-                            'data' => $user
+                            'message' => 'Customer farm created successfully.',
+                            'data' => $farmDetails
                                 ], 200);
             }
         } catch (\Exception $e) {
@@ -279,7 +279,7 @@ class CustomerController extends Controller {
                     'farm_id' => 'required',
                     'manager_first_name' => 'required',
                     'manager_last_name' => 'required',
-                    'manager_email' => 'required|email|unique:users',
+                    'email' => 'required|email|unique:users',
                     'manager_phone' => 'required',
                     'manager_address' => 'required',
                     'manager_city' => 'required',
@@ -304,7 +304,7 @@ class CustomerController extends Controller {
                 'prefix' => (isset($request->manager_prefix) && $request->manager_prefix != '' && $request->manager_prefix != null) ? $request->manager_prefix : null,
                 'first_name' => $request->manager_first_name,
                 'last_name' => $request->manager_last_name,
-                'email' => $request->manager_email,
+                'email' => $request->email,
                 'phone' => $request->manager_phone,
                 'address' => $request->manager_address,
                 'city' => $request->manager_city,
@@ -445,7 +445,6 @@ class CustomerController extends Controller {
                     'customer_id' => 'required',
                     'customer_first_name' => 'required|string',
                     'customer_last_name' => 'required|string',
-                    'customer_email' => 'required|string|email|unique:users,email' . $request->customer_id,
                     'customer_phone' => 'required',
                     'customer_address' => 'required',
                     'customer_city' => 'required',
@@ -460,16 +459,28 @@ class CustomerController extends Controller {
                         'data' => $validator->errors()
                             ], 422);
         }
+        $customerDetails = User::whereId($request->customer_id)->first();
+        if ($request->email != '' && $request->email != null) {
+            $checkEmail = User::where('email', $request->email)->first();
+            if ($checkEmail !== null) {
+                if ($checkEmail->id !== $customerDetails->id) {
+                    return response()->json([
+                                'status' => false,
+                                'message' => 'Email is already taken.',
+                                'data' => []
+                                    ], 422);
+                }
+            }
+        }
         try {
             DB::beginTransaction();
-            $customerDetails = User::whereId($request->customer_id)->first();
             if ($request->password != '' && $request->password != null) {
                 $customerDetails->password = bcrypt($request->password);
             }
             $customerDetails->prefix = (isset($request->customer_prefix) && $request->customer_prefix != '' && $request->customer_prefix != null) ? $request->customer_prefix : null;
             $customerDetails->first_name = $request->customer_first_name;
             $customerDetails->last_name = $request->customer_last_name;
-            $customerDetails->email = $request->customer_email;
+            $customerDetails->email = $request->email;
             $customerDetails->phone = $request->customer_phone;
             $customerDetails->address = $request->customer_address;
             $customerDetails->city = $request->customer_city;
@@ -549,7 +560,6 @@ class CustomerController extends Controller {
                     'farm_id' => 'required',
                     'manager_first_name' => 'required',
                     'manager_last_name' => 'required',
-                    'manager_email' => 'required|email|unique:users,email.' . $request->manager_id,
                     'manager_phone' => 'required',
                     'manager_address' => 'required',
                     'manager_city' => 'required',
@@ -568,16 +578,29 @@ class CustomerController extends Controller {
                         'data' => $validator->errors()
                             ], 422);
         }
+        $manager = User::whereId($request->manager_id)->first();
+            if ($request->email != '' && $request->email != null) {
+                $checkEmail = User::where('email', $request->email)->first();
+                if($checkEmail !== null) {
+                    if($checkEmail->id !== $manager->id) {
+                        return response()->json([
+                        'status' => false,
+                        'message' => 'Email is already taken.',
+                        'data' => []
+                            ], 422);
+                    }
+                    
+                }
+            }
         try {
             DB::beginTransaction();
-            $manager = User::whereId($request->manager_id)->first();
             if ($request->password != '' && $request->password != null) {
                 $manager->password = bcrypt($request->password);
             }
             $manager->prefix = (isset($request->manager_prefix) && $request->manager_prefix != '' && $request->manager_prefix != null) ? $request->manager_prefix : null;
             $manager->first_name = $request->manager_first_name;
             $manager->last_name = $request->manager_last_name;
-            $manager->email = $request->manager_email;
+            $manager->email = $request->email;
             $manager->phone = $request->manager_phone;
             $manager->address = $request->manager_address;
             $manager->city = $request->manager_city;
