@@ -41,8 +41,6 @@ class ServicesController extends Controller
 //        dd($request->all());
         $validator = Validator::make($request->all(), [
                     'service_id' => 'required',
-                    'farm_id' => 'required',
-                    'manager_id' => 'required',
                     'job_providing_date' => 'required',
                     'is_repeating_job' => 'required',
                     'payment_mode' => 'required',
@@ -75,8 +73,8 @@ class ServicesController extends Controller
             $job = new Job([
                 'job_created_by' => $checkUser->id,
                 'customer_id' => $customerId,
-                'manager_id' => $request->manager_id,
-                'farm_id' => $request->farm_id,
+                'manager_id' => (isset($request->manager_id) && $request->manager_id != '' && $request->manager_id != null) ? $request->manager_id : null,
+                'farm_id' => (isset($request->farm_id) && $request->farm_id != '' && $request->farm_id != null) ? $request->farm_id : null,
                 'gate_no' => (isset($request->gate_no) && $request->gate_no != '' && $request->gate_no != null) ? $request->gate_no : null,
                 'service_id' => $request->service_id,
                 'time_slots_id' => (isset($request->time_slots_id) && $request->time_slots_id != '' && $request->time_slots_id != null) ? $request->time_slots_id : null,
