@@ -55,7 +55,6 @@ class JobsController extends Controller {
      */
     public function createJob(Request $request) {
         $validator = Validator::make($request->all(), [
-//                    'job_created_by' => 'required',
                     'customer_id' => 'required',
                     'service_id' => 'required',
                     'job_providing_date' => 'required',
@@ -87,8 +86,8 @@ class JobsController extends Controller {
                 'customer_id' => $request->customer_id,
                 'manager_id' => (isset($request->manager_id) && $request->manager_id != '' && $request->manager_id != null) ? $request->manager_id : null,
                 'farm_id' => (isset($request->farm_id) && $request->farm_id != '' && $request->farm_id != null) ? $request->farm_id : null,
-                'gate_no' => (isset($request->gate_no) && $request->gate_no != '' && $request->gate_no != null) ? $request->gate_no : null,
                 'service_id' => $request->service_id,
+                'gate_no' => (isset($request->gate_no) && $request->gate_no != '' && $request->gate_no != null) ? $request->gate_no : null,
                 'time_slots_id' => (isset($request->time_slots_id) && $request->time_slots_id != '' && $request->time_slots_id != null) ? $request->time_slots_id : null,
                 'job_providing_date' => $request->job_providing_date,
                 'weight' => (isset($request->weight) && $request->weight != '' && $request->weight != null) ? $request->weight : null,
@@ -125,6 +124,7 @@ class JobsController extends Controller {
      * Job booking email
      */
     public function _sendPaymentEmail($mailData) {
+//        dd($mailData);
         $customerDetails = User::whereId($mailData['customer_id'])->first();
         $customerName = $customerDetails->first_name . ' ' . $customerDetails->last_name;
         $data = array(
@@ -156,40 +156,47 @@ class JobsController extends Controller {
     public function getCustomers() {
         return response()->json([
                     'status' => true,
-                    'message' => 'Manager Details',
-                    'data' => User::select('id', 'first_name', 'last_name', 'prefix')
-                            ->whereRoleId(config('constant.roles.Customer'))
-                            ->orWhere('role_id', config('constant.roles.Company'))
+                    'message' => 'Customers Details',
+                    'data' => User::whereRoleId(config('constant.roles.Customer'))
+                            ->orWhere('role_id', config('constant.roles.Haulers'))
                             ->get()
                         ], 200);
     }
     /**
      * get farms
      */
-    public function getJobFrams(Request $request) {
+    public function getJobFrams(Request $request, $customerId) {
         return response()->json([
                     'status' => true,
                     'message' => 'Customer Details',
-                    'data' => CustomerFarm::where('customer_id', $request->customer_id)->where('manager_id', $request->manager_id)->where('farm_active', '1')->first()
+                    'data' => CustomerFarm::where('customer_id', $customerId)->where('farm_active', '1')->with('farmManager')->get()
                         ], 200);
     }
     /**
      * get service time slots
      */
-    public function getServiceSlots(Request $request) {
-        $service = Service::whereId($request->service_id)->first();
-        $timeSlots = TimeSlots::whereIn('id', json_decode($service->slot_time))->get();
-        return response()->json([
-                    'status' => true,
-                    'message' => 'Manager Details',
-                    'data' => $timeSlots
-                        ], 200);
+    public function getServiceSlots(Request $request, $serviceId) {
+        $service = Service::whereId($serviceId)->first();
+        if ($service != null) {
+            $timeSlots = TimeSlots::whereIn('id', json_decode($service->slot_time))->get();
+            return response()->json([
+                        'status' => true,
+                        'message' => 'Service Slot Details',
+                        'data' => $timeSlots
+                            ], 200);
+        } else {
+            return response()->json([
+                        'status' => true,
+                        'message' => 'No time slot available',
+                        'data' => []
+                            ], 500);
+        }
     }
     /**
      * get single jobs
      */
-    public function getSingleJob(Request $request) {
-        $getSingleJobs = Job::whereId($request->job_id)->with("customer", "manager", "farm", "service", "timeslots", "truck", "skidsteer", "truck_driver", "skidsteer_driver")->first();
+    public function getSingleJob(Request $request, $jobId) {
+        $getSingleJobs = Job::whereId($jobId)->with("customer", "manager", "farm", "service", "timeslots", "truck", "skidsteer", "truck_driver", "skidsteer_driver")->first();
         return response()->json([
                     'status' => true,
                     'message' => 'single job Details',
@@ -219,7 +226,6 @@ class JobsController extends Controller {
     public function updateBookedJob(Request $request) {
         $validator = Validator::make($request->all(), [
                     'job_id' => 'required',
-                    'customer_id' => 'required',
                     'service_id' => 'required',
                     'job_providing_date' => 'required',
                     'is_repeating_job' => 'required',
@@ -245,6 +251,7 @@ class JobsController extends Controller {
             }
         }
         $checkIfEdittingAllowed = Job::where('id', $request->job_id)->first();
+//        dd($checkIfEdittingAllowed->toArray());
         if (round((strtotime($checkIfEdittingAllowed->job_providing_date) - strtotime(date('Y/m/d'))) / 3600, 1)) {
             try {
                 Job::whereId($request->job_id)->update([
@@ -264,7 +271,7 @@ class JobsController extends Controller {
                 ]);
                 $mailData = [
                     'job_id' => $request->job_id,
-                    'customer_id' => $request->customer_id,
+                    'customer_id' => $checkIfEdittingAllowed->customer_id,
                     'manager_id' => isset($request->manager_id) ? $request->manager_id : null
                 ];
                 $this->_sendPaymentEmail($mailData);

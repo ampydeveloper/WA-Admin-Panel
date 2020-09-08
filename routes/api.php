@@ -89,12 +89,16 @@ Route::group(['prefix' => 'auth'], function () {
             Route::delete('delete-hauler/{customer_id}', 'CompanyController@deleteHauler');
 
             //jobs
-            Route::post('job-list', 'JobsController@getAllJob');
+//            dd('jobs');
+//            Route::post('job-lists', function () {
+//             dd('in');   
+//            });
+            Route::get('job-list', 'JobsController@getAllJob');
             Route::post('job-filter', 'JobsController@jobFilter');
-            Route::get('job-customer', 'JobsController@getCustomers');
-            Route::get('job-farms/{customer_id}/{manager_id}', 'JobsController@getJobFrams');
-            Route::get('get-service-slots/{service_id}', 'JobsController@getServiceSlots');
             Route::post('create-job', 'JobsController@createJob');
+            Route::get('job-customer', 'JobsController@getCustomers');
+            Route::get('job-farms/{customer_id}', 'JobsController@getJobFrams');
+            Route::get('get-service-slots/{service_id}', 'JobsController@getServiceSlots');
             Route::get('single-job/{job_id}', 'JobsController@getSingleJob');
             Route::post('update-booked-job', 'JobsController@updateBookedJob');
             Route::post('cancel-booked-job', 'JobsController@cancelJob');
