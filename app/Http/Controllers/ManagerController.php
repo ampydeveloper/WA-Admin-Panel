@@ -302,29 +302,29 @@ class ManagerController extends Controller {
     /**
      * get manager details
      */
-    public function getManager(Request $request, $manager_id) {
+    public function getManager(Request $request) {
         return response()->json([
                     'status' => true,
                     'message' => 'Manager Details',
-                    'data' => ManagerDetail::whereUserId($manager_id)->with('user')->first()
+                    'data' => ManagerDetail::whereUserId($request->manager_id)->with('user')->first()
                         ], 200);
     }
     /**
      * get admin details
      */
-    public function getAdmin(Request $request, $adminId) {
+    public function getAdmin(Request $request) {
         return response()->json([
                     'status' => true,
                     'message' => 'Admin Details',
-                    'data' => User::whereId($adminId)->first()
+                    'data' => User::whereId($request->admin_id)->first()
                         ], 200);
     }
     /**
      * delete manager
      */
-    public function deleteManager(Request $request, $managerId) {
+    public function deleteManager(Request $request) {
         try {
-            User::whereId($managerId)->delete();
+            User::whereId($request->manager_id)->delete();
             return response()->json([
                         'status' => true,
                         'message' => 'Manager deleted Successfully',

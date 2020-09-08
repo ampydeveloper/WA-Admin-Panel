@@ -138,8 +138,8 @@ class ServicesController extends Controller
     /**
      * get service
      */
-    public function getService(Request $request, $serviceId) {
-        $fetchService = Service::whereId($serviceId)->first();
+    public function getService(Request $request) {
+        $fetchService = Service::whereId($request->service_id)->first();
         if($fetchService != null) {
             $status = true;
             $message = "Service Found.";
@@ -160,8 +160,8 @@ class ServicesController extends Controller
     /**
      * delete service
      */
-    public function deleteService(Request $request, $serviceId) {
-        if(Service::whereId($serviceId)->delete()) {
+    public function deleteService(Request $request) {
+        if(Service::whereId($request->service_id)->delete()) {
             $status = true;
             $message = "Service deleted successfully.";
             $statusCode = 200;

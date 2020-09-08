@@ -165,18 +165,18 @@ class JobsController extends Controller {
     /**
      * get farms
      */
-    public function getJobFrams(Request $request, $customerId) {
+    public function getJobFrams(Request $request) {
         return response()->json([
                     'status' => true,
                     'message' => 'Customer Details',
-                    'data' => CustomerFarm::where('customer_id', $customerId)->where('farm_active', '1')->with('farmManager')->get()
+                    'data' => CustomerFarm::where('customer_id', $request->customer_id)->where('farm_active', '1')->with('farmManager')->get()
                         ], 200);
     }
     /**
      * get service time slots
      */
-    public function getServiceSlots(Request $request, $serviceId) {
-        $service = Service::whereId($serviceId)->first();
+    public function getServiceSlots(Request $request) {
+        $service = Service::whereId($request->service_id)->first();
         if ($service != null) {
             $timeSlots = TimeSlots::whereIn('id', json_decode($service->slot_time))->get();
             return response()->json([
@@ -195,8 +195,8 @@ class JobsController extends Controller {
     /**
      * get single jobs
      */
-    public function getSingleJob(Request $request, $jobId) {
-        $getSingleJobs = Job::whereId($jobId)->with("customer", "manager", "farm", "service", "timeslots", "truck", "skidsteer", "truck_driver", "skidsteer_driver")->first();
+    public function getSingleJob(Request $request) {
+        $getSingleJobs = Job::whereId($request->job_id)->with("customer", "manager", "farm", "service", "timeslots", "truck", "skidsteer", "truck_driver", "skidsteer_driver")->first();
         return response()->json([
                     'status' => true,
                     'message' => 'single job Details',

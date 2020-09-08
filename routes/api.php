@@ -51,7 +51,7 @@ Route::group(['prefix' => 'auth'], function () {
             Route::get('get-admin/{admin_id}', 'ManagerController@getAdmin');
 
             Route::post('create-manager-admin', 'ManagerController@createManager');
-            Route::post('update-manager/{manager_id}', 'ManagerController@updateManager');
+            Route::post('update-manager-admin', 'ManagerController@updateManager');
             Route::get('get-manager/{manager_id}', 'ManagerController@getManager');
             Route::delete('delete-manager/{manager_id}', 'ManagerController@deleteManager');
             Route::get('list-manager', 'ManagerController@listManager');
@@ -79,7 +79,6 @@ Route::group(['prefix' => 'auth'], function () {
             Route::post('update-customer', 'CustomerController@updateCustomer');
             Route::post('update-farm', 'CustomerController@updateFarm');
             Route::post('update-manager', 'CustomerController@updateManager');
-            //Route::delete('delete-driver/{driver_id}', 'CustomerController@deleteDriver');
 
             //CompanyController
             Route::get('list-hauler', 'CompanyController@listHauler');
@@ -89,10 +88,6 @@ Route::group(['prefix' => 'auth'], function () {
             Route::delete('delete-hauler/{customer_id}', 'CompanyController@deleteHauler');
 
             //jobs
-//            dd('jobs');
-//            Route::post('job-lists', function () {
-//             dd('in');   
-//            });
             Route::get('job-list', 'JobsController@getAllJob');
             Route::post('job-filter', 'JobsController@jobFilter');
             Route::post('create-job', 'JobsController@createJob');
@@ -103,18 +98,10 @@ Route::group(['prefix' => 'auth'], function () {
             Route::post('update-booked-job', 'JobsController@updateBookedJob');
             Route::post('cancel-booked-job', 'JobsController@cancelJob');
             
-//            Route::get('fetch-job-details/{unique_job_id}', 'JobsController@fetchJobDetails');
-            // Route::get('assigned-job-list', 'JobsController@getAssignedJob');
-            // Route::get('complete-job-list', 'JobsController@getCompleteJob');
-            //  Route::get('open-job-list', 'JobsController@getOpenJob');
-            // Route::get('repeating-job-list', 'JobsController@getRepeatingJob');
-            //Route::get('unpaid-job-list', 'JobsController@getUnpaidJob');
-//            Route::get('dispatch-job-list', 'JobsController@getDispatchJob');
-
             //driver
             Route::get('list-drivers', 'DriverController@listDrivers');
             Route::post('create-driver', 'DriverController@createDriver');
-            Route::post('edit-driver/{driver_id}', 'DriverController@editDriver');
+            Route::post('edit-driver', 'DriverController@editDriver');
             Route::get('get-driver/{driver_id}', 'DriverController@getDriver');
             Route::delete('delete-driver/{driver_id}', 'DriverController@deleteDriver');
 

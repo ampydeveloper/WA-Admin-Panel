@@ -181,9 +181,9 @@ class CompanyController extends Controller {
     /**
      * delete hauler
      */
-    public function deleteHauler(Request $request, $haulerId) {
+    public function deleteHauler(Request $request) {
         try {
-            User::whereId($haulerId)->delete();
+            User::whereId($request->customer_id)->delete();
             return response()->json([
                         'status' => true,
                         'message' => 'Hauler deleted Successfully',

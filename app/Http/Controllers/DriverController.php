@@ -20,7 +20,7 @@ class DriverController extends Controller {
         return response()->json([
                     'status' => true,
                     'message' => 'Drivers Details',
-                    'data' => Driver::with("user")->get()
+                    'data' => User::where('role_id', config('constant.roles.Driver'))->with('driver')->get()
                         ], 200);
     }
 
@@ -31,7 +31,7 @@ class DriverController extends Controller {
         $validator = Validator::make($request->all(), [
                     'driver_first_name' => 'required',
                     'driver_last_name' => 'required',
-                    'driver_email' => 'required|email|unique:users',
+                    'email' => 'required|email|unique:users',
                     'driver_phone' => 'required',
                     'driver_address' => 'required',
                     'driver_city' => 'required',
@@ -40,9 +40,9 @@ class DriverController extends Controller {
                     'driver_type' => 'required',
                     'driver_licence' => 'required',
                     'expiry_date' => 'required',
-                    'driver_licence_image' => 'required',
                     'salary_type' => 'required',
                     'driver_salary' => 'required',
+                    'driver_licence_image' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -58,7 +58,7 @@ class DriverController extends Controller {
                 'prefix' => (isset($request->driver_prefix) && $request->driver_prefix != '' && $request->driver_prefix != null) ? $request->driver_prefix : null,
                 'first_name' => $request->driver_first_name,
                 'last_name' => $request->driver_last_name,
-                'email' => $request->driver_email,
+                'email' => $request->email,
                 'phone' => $request->driver_phone,
                 'address' => $request->driver_address,
                 'city' => $request->driver_city,
@@ -71,7 +71,6 @@ class DriverController extends Controller {
                 'is_active' => 1,
                 'password' => bcrypt($newPassword)
             ]);
-
             if ($user->save()) {
                 $driverDetails = new Driver([
                     'user_id' => $user->id,
@@ -108,12 +107,11 @@ class DriverController extends Controller {
      * edit driver
      */
     public function editDriver(Request $request) {
-        //validate request
         $validator = Validator::make($request->all(), [
                     'driver_id' => 'required',
                     'driver_first_name' => 'required',
                     'driver_last_name' => 'required',
-                    'driver_email' => 'required|string|email|unique:users,email,' . $request->driver_id,
+                    'email' => 'required',
                     'driver_phone' => 'required',
                     'driver_address' => 'required',
                     'driver_city' => 'required',
@@ -127,7 +125,6 @@ class DriverController extends Controller {
                     'driver_salary' => 'required',
                     'status' => 'required',
         ]);
-
         if ($validator->fails()) {
             return response()->json([
                         'status' => false,
@@ -135,16 +132,32 @@ class DriverController extends Controller {
                         'data' => $validator->errors()
                             ], 422);
         }
+        $confirmed = 1;
+        $driver = User::whereId($request->driver_id)->first();
+        if ($request->email != '' && $request->email != null) {
+            $checkEmail = User::where('email', $request->email)->first();
+            if ($checkEmail !== null) {
+                if ($checkEmail->id !== $driver->id) {
+                    return response()->json([
+                                'status' => false,
+                                'message' => 'Email is already taken.',
+                                'data' => []
+                                    ], 422);
+                }
+            }
+            if ($driver->email !== $request->email) {
+                $confirmed = 0;
+            }
+        }
         try {
             DB::beginTransaction();
-            $driver = User::whereId($request->driver_id)->first();
             if ($request->password != '' && $request->password != null) {
                 $driver->password = bcrypt($request->password);
             }
             $driver->prefix = (isset($request->driver_prefix) && $request->driver_prefix != '' && $request->driver_prefix != null) ? $request->driver_prefix : null;
             $driver->first_name = $request->driver_first_name;
             $driver->last_name = $request->driver_last_name;
-            $driver->email = $request->driver_email;
+            $driver->email = $request->email;
             $driver->phone = $request->driver_phone;
             $driver->address = $request->driver_address;
             $driver->city = $request->driver_city;
@@ -165,9 +178,12 @@ class DriverController extends Controller {
                     ]);
                 }
                 DB::commit();
+                if ($confirmed == 0) {
+                    $this->_updateEmail($driver, $request->email);
+                }
                 return response()->json([
                             'status' => true,
-                            'message' => 'Manager details updated Successfully!',
+                            'message' => 'Driver details updated Successfully!',
                             'data' => []
                                 ], 200);
             DB::commit();
@@ -194,7 +210,7 @@ class DriverController extends Controller {
         return response()->json([
                     'status' => true,
                     'message' => 'Driver Details',
-                    'data' => Driver::with("user")->whereUserId($request->driver_id)->first()
+                    'data' => User::whereId($request->driver_id)->with('driver')->first()
                         ], 200);
     }
     /**
@@ -230,6 +246,20 @@ class DriverController extends Controller {
 
         Mail::send('email_templates.welcome_email_manager', $data, function ($message) use ($user, $name) {
             $message->to($user->email, $name)->subject('Login Details');
+            $message->from(env('MAIL_USERNAME'), env('MAIL_USERNAME'));
+        });
+    }
+    
+    public function _updateEmail($user, $email) {
+        $name = $user->first_name . ' ' . $user->last_name;
+        $data = array(
+            'name' => $name,
+            'email' => $email,
+            'verificationLink' => env('APP_URL') . 'confirm-update-email/' . base64_encode($email) . '/' . base64_encode($user->id)
+        );
+
+        Mail::send('email_templates.welcome_email', $data, function ($message) use ($name, $email) {
+            $message->to($email, $name)->subject('Email Address Confirmation');
             $message->from(env('MAIL_USERNAME'), env('MAIL_USERNAME'));
         });
     }
