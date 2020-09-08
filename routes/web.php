@@ -32,7 +32,7 @@ Route::get('/send/email', 'AuthController@_welcomeEmail');
 // Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/', function () {
-    dd('welcome');
+//    dd('welcome');
     return view('welcome');
 })->name('/');
 

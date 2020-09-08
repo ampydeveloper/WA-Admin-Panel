@@ -22,10 +22,10 @@ class CreateJobsTable extends Migration
             $table->unsignedBigInteger('customer_id');
             $table->foreign('customer_id')->references('id')->on('users');
             
-            $table->unsignedBigInteger('manager_id')->nullable();
+            $table->unsignedBigInteger('manager_id');
             $table->foreign('manager_id')->references('id')->on('users');
             
-            $table->unsignedBigInteger('farm_id')->nullable();
+            $table->unsignedBigInteger('farm_id');
             $table->foreign('farm_id')->references('id')->on('customer_farms');
             
             $table->string("gate_no")->nullable();
