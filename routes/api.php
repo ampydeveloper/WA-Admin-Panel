@@ -40,6 +40,10 @@ Route::group(['prefix' => 'auth'], function () {
         Route::get('logout', 'AuthController@logout');
 
         Route::get('user-details', 'AuthController@user');
+        
+        //upload image
+        Route::post('uploadImage', 'ImageController@uploadImage');
+        Route::delete('deleteImage', 'ImageController@deleteImage');
 
         Route::group(['prefix' => 'admin'], function () {
             //update admin profile
@@ -108,19 +112,19 @@ Route::group(['prefix' => 'auth'], function () {
             //truck
             Route::get('list-vehicle', 'VehicleController@listVehicle');
             Route::post('create-vehicle', 'VehicleController@createVehicle');
-            Route::post('edit-vehicle/{vehicle_id}', 'VehicleController@editVehicle');
+            Route::post('edit-vehicle', 'VehicleController@editVehicle');
             Route::get('get-vehicle/{vehicle_id}', 'VehicleController@getVehicle');
             Route::delete('delete-vehicle/{vehicle_id}', 'VehicleController@deleteVehicle');
             
             Route::post('create-vehicleinsurance', 'VehicleController@createVehicleInsurance');
-            Route::post('edit-vehicle-insurance/{vehicle_insurance_id}', 'VehicleController@editVehicleInsurance');
+            Route::post('edit-vehicle-insurance', 'VehicleController@editVehicleInsurance');
             Route::get('get-insurance-details/{insurance_id}', 'VehicleController@getInsuranceDetails');
             Route::get('get-last-insurance/{vehicle_id}', 'VehicleController@getLastInsurance');
             Route::get('get-vehicleinsurance/{vehicle_id}', 'VehicleController@getVehicleInsurance');
             Route::delete('delete-insurance-details/{insurance_id}', 'VehicleController@deleteInsuranceDetails');
             
             Route::post('create-vehicleservice', 'VehicleController@createVehicleService');
-            Route::post('edit-vehicle-service/{vehicle_service_id}', 'VehicleController@editVehicleService');
+            Route::post('edit-vehicle-service', 'VehicleController@editVehicleService');
             Route::get('get-vehicleservice/{vehicle_id}', 'VehicleController@getVehicleService');
             Route::get('get-service-details/{service_id}', 'VehicleController@getServiceDetails');
             Route::delete('delete-service-details/{service_id}', 'VehicleController@deleteServiceDetails');
@@ -141,9 +145,7 @@ Route::group(['prefix' => 'auth'], function () {
             //stripe
             Route::post('stripe-charge', 'PaymentController@stripeCharge');
         });
-        
         Route::group(['prefix' => 'user'], function () {
-//    dd('api');
             Route::get('dashboard', 'User\CustomerController@dashboard');
             
             Route::post('edit-profile', 'User\CustomerController@editProfile');
@@ -174,7 +176,6 @@ Route::group(['prefix' => 'auth'], function () {
             Route::post('change-primary-card', 'User\CustomerController@changePrimaryCard');
 
         });
-        
         Route::group(['prefix' => 'driver'], function () {
             Route::get('dashboard', 'Driver\DriverController@dashboard');
             Route::post('edit-profile', 'Driver\DriverController@editProfile');
@@ -186,11 +187,6 @@ Route::group(['prefix' => 'auth'], function () {
             Route::get('end-job', 'Driver\DriverController@endJob');
             Route::post('job-filter', 'Driver\DriverController@jobFilter');
         });
-        
-
-        //upload image
-        Route::post('uploadImage', 'ImageController@uploadImage');
-        Route::delete('deleteImage', 'ImageController@deleteImage');
     });
 });
 

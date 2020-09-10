@@ -33,11 +33,11 @@ class VehicleController extends Controller {
                     'truck_number' => 'required',
                     'chaase_number' => 'required',
                     'killometer' => 'required',
-                    'document' => 'required',
+                    'rc_document' => 'required',
                     'insurance_date' => 'required',
                     'insurance_expiry' => 'required',
                     'insurance_number' => 'required',
-                    'document' => 'required',
+                    'insurance_document' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -56,16 +56,17 @@ class VehicleController extends Controller {
                 'chaase_number' => $request->chaase_number,
                 'killometer' => $request->killometer,
                 'capacity' => (isset($request->capacity) && $request->capacity != '' && $request->capacity != null) ? $request->capacity : null,
-                'document' => $request->document,
+                'document' => $request->rc_document,
                 'status' => config('constant.vehicle_status.available'),
             ]);
             if ($vechicle->save()) {
                 $vechicleInsurance = new VehicleInsurance([
                     'vehicle_id' => $vechicle->id,
+                    'created_by' => $request->user()->id,
                     'insurance_date' => $request->insurance_date,
                     'insurance_expiry' => $request->insurance_expiry,
                     'insurance_number' => $request->insurance_number,
-                    'document' => $request->document,
+                    'document' => $request->insurance_document,
                     'notes' => (isset($request->notes) && $request->notes != '' && $request->notes != null) ? $request->notes : null,
                 ]);
                 if ($vechicleInsurance->save()) {
@@ -93,11 +94,12 @@ class VehicleController extends Controller {
     public function editVehicle(Request $request) {
         $validator = Validator::make($request->all(), [
                     'vehicle_id' => 'required',
+                    'vehicle_type' => 'required',
                     'company_name' => 'required|string',
                     'truck_number' => 'required',
                     'chaase_number' => 'required',
                     'killometer' => 'required',
-                    'document' => 'required',
+                    'rc_document' => 'required',
                     'status' => 'required',
         ]);
         if ($validator->fails()) {
@@ -113,10 +115,9 @@ class VehicleController extends Controller {
                 'company_name' => $request->company_name,
                 'truck_number' => $request->truck_number,
                 'chaase_number' => $request->chaase_number,
-                'killometer' => $request->total_killometer,
+                'killometer' => $request->killometer,
                 'capacity' => (isset($request->capacity) && $request->capacity != '' && $request->capacity != null) ? $request->capacity : null,
-                'document' => $request->document,
-                'insurance_document' => $request->insurance_document,
+                'document' => $request->rc_document,
                 'status' => $request->status
             ]);
             DB::commit();
@@ -174,7 +175,7 @@ class VehicleController extends Controller {
                     'insurance_date' => 'required',
                     'insurance_expiry' => 'required',
                     'insurance_number' => 'required',
-                    'document' => 'required'
+                    'insurance_document' => 'required'
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -187,10 +188,11 @@ class VehicleController extends Controller {
             DB::beginTransaction();
             $vechicle = new VehicleInsurance([
                 'vehicle_id' => $request->vehicle_id,
+                'created_by' => $request->user()->id,
                 'insurance_date' => $request->insurance_date,
                 'insurance_expiry' => $request->insurance_expiry,
                 'insurance_number' => $request->insurance_number,
-                'document' => $request->document,
+                'document' => $request->insurance_document,
                 'notes' => (isset($request->notes) && $request->notes != '' && $request->notes != null) ? $request->notes : null,
             ]);
             if($vechicle->Save()) {
@@ -218,7 +220,7 @@ class VehicleController extends Controller {
                     'insurance_date' => 'required',
                     'insurance_expiry' => 'required',
                     'insurance_number' => 'required',
-                    'document' => 'required',
+                    'insurance_document' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -234,7 +236,7 @@ class VehicleController extends Controller {
                 'insurance_date' => $request->insurance_date,
                 'insurance_expiry' => $request->insurance_expiry,
                 'insurance_number' => $request->insurance_number,
-                'document' => $request->document,
+                'document' => $request->insurance_document,
                 'notes' => (isset($request->notes) && $request->notes != '' && $request->notes != null) ? $request->notes : null,
             ]);
             DB::commit();
@@ -260,7 +262,7 @@ class VehicleController extends Controller {
         return response()->json([
                     'status' => true,
                     'message' => 'Insurance Details',
-                    'data' => VehicleInsurance::whereId($request->vehicle_insurance_id)->with('vehicle')->first()
+                    'data' => VehicleInsurance::whereId($request->insurance_id)->with('vehicle')->first()
                         ], 200);
     }
 
@@ -282,7 +284,7 @@ class VehicleController extends Controller {
         return response()->json([
                     'status' => true,
                     'message' => 'Vehicle insurance with vehicle',
-                    'data' => VehicleInsurance::where('vehicle_id', $request->vehicle_id)->with('vehicle')->get()
+                    'data' => Vehicle::where('id', $request->vehicle_id)->with('vehicle_insurances')->get()
                         ], 200);
     }
 
@@ -291,17 +293,14 @@ class VehicleController extends Controller {
      */
     public function deleteInsuranceDetails(Request $request) {
         try {
-            VehicleInsurance::whereId($request->vehicle_insurance_id)->delete();
-
+            VehicleInsurance::whereId($request->insurance_id)->delete();
             return response()->json([
                         'status' => true,
                         'message' => 'Vehicle insurance deleted Successfully',
                         'data' => []
                             ], 200);
         } catch (\Exception $e) {
-            //make log of errors
             Log::error(json_encode($e->getMessage()));
-            //return with error
             return response()->json([
                         'status' => false,
                         'message' => $e->getMessage(),
@@ -316,7 +315,7 @@ class VehicleController extends Controller {
         $validator = Validator::make($request->all(), [
                     'vehicle_id' => 'required',
                     'service_date' => 'required',
-                    'total_killometer' => 'required',
+                    'service_killometer' => 'required',
                     'receipt' => 'required',
         ]);
         if ($validator->fails()) {
@@ -330,7 +329,8 @@ class VehicleController extends Controller {
             DB::beginTransaction();
             $vechicle = new VehicleService([
                 'vehicle_id' => $request->vehicle_id,
-                'service_killometer' => $request->total_killometer,
+                'created_by' => $request->user()->id,
+                'service_killometer' => $request->service_killometer,
                 'service_date' => $request->service_date,
                 'receipt' => $request->receipt,
                 'document' => (isset($request->document) && $request->document != '' && $request->document != null) ? $request->document : null,
@@ -372,8 +372,8 @@ class VehicleController extends Controller {
         }
         try {
             DB::beginTransaction();
-            $updateVehicleInsurance = VehicleInsurance::whereId($request->vehicle_service_id)->update([
-                'service_killometer' => $request->total_killometer,
+            $updateVehicleInsurance = VehicleService::whereId($request->vehicle_service_id)->update([
+                'service_killometer' => $request->service_killometer,
                 'service_date' => $request->service_date,
                 'receipt' => $request->receipt,
                 'document' => (isset($request->document) && $request->document != '' && $request->document != null) ? $request->document : null,
@@ -413,7 +413,7 @@ class VehicleController extends Controller {
         return response()->json([
                     'status' => true,
                     'message' => 'Service Details',
-                    'data' => VehicleService::whereId($request->vehicle_service_id)->first()
+                    'data' => VehicleService::whereId($request->service_id)->first()
                         ], 200);
     }
     /**
@@ -421,7 +421,7 @@ class VehicleController extends Controller {
      */
     public function deleteServiceDetails(Request $request) {
         try {
-            VehicleService::whereId($request->vehicle_service_id)->delete();
+            VehicleService::whereId($request->service_id)->delete();
             return response()->json([
                         'status' => true,
                         'message' => 'Vehicle service deleted successfully',

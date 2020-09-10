@@ -15,7 +15,7 @@ class Vehicle extends Model
      */
     protected $fillable = [
         'created_by', 'vehicle_type', 'company_name', 'truck_number', 'chaase_number', 'killometer', 'capacity', 'document',  'status',
-        'document', 'insurance_document'
+        'assigned_job_row_action_count'
     ];
 
     public function user()
@@ -31,5 +31,10 @@ class Vehicle extends Model
     public function vehicle_insurance()
     {
         return $this->hasOne('App\VehicleInsurance');
+    }
+    
+    public function vehicle_insurances()
+    {
+        return $this->hasMany('App\VehicleInsurance');
     }
 }
