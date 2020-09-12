@@ -346,7 +346,26 @@ class ManagerController extends Controller {
         return response()->json([
                     'status' => true,
                     'message' => 'Manager List',
-                    'data' => User::whereRoleId(config('constant.roles.Admin_Manager'))->with('managerDetails')->orderBy("created_at", 'DESC')->get()
+                    'data' => User::whereRoleId(config('constant.roles.Admin_Manager'))->with('managerDetails')->get()
+                        ], 200);
+    }
+    
+    public function listManagerMobile(Request $request) {
+        $validator = Validator::make($request->all(), [
+                    'offset' => 'required',
+                    'take' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                        'status' => false,
+                        'message' => 'The given data was invalid.',
+                        'data' => $validator->errors()
+                            ], 422);
+        }
+        return response()->json([
+                    'status' => true,
+                    'message' => 'Admin List',
+                    'data' => User::whereRoleId(config('constant.roles.Admin_Manager'))->with('managerDetails')->skip($request->offset)->take($request->take)->get()
                         ], 200);
     }
     /**
@@ -356,7 +375,26 @@ class ManagerController extends Controller {
         return response()->json([
                     'status' => true,
                     'message' => 'Admin List',
-                    'data' => User::whereRoleId(config('constant.roles.Admin'))->orderBy("created_at", 'DESC')->get()
+                    'data' => User::whereRoleId(config('constant.roles.Admin'))->get()
+                        ], 200);
+    }
+    
+    public function listAdminMobile(Request $request) {
+        $validator = Validator::make($request->all(), [
+                    'offset' => 'required',
+                    'take' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                        'status' => false,
+                        'message' => 'The given data was invalid.',
+                        'data' => $validator->errors()
+                            ], 422);
+        }
+        return response()->json([
+                    'status' => true,
+                    'message' => 'Admin List',
+                    'data' => User::whereRoleId(config('constant.roles.Admin'))->skip($request->offset)->take($request->take)->get()
                         ], 200);
     }
     /**

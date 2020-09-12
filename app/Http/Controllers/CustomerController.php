@@ -33,6 +33,27 @@ class CustomerController extends Controller {
                     'data' => $getCustomer
                         ], 200);
     }
+    
+    public function listCustomerMobile(Request $request) {
+        $validator = Validator::make($request->all(), [
+                    'offset' => 'required',
+                    'take' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                        'status' => false,
+                        'message' => 'The given data was invalid.',
+                        'data' => $validator->errors()
+                            ], 422);
+        }
+        $getCustomer = User::with('farmlist.farmManager')
+                        ->whereRoleId(config('constant.roles.Customer'))->skip($request->offset)->take($request->take)->get();
+        return response()->json([
+                    'status' => true,
+                    'message' => 'Customer Listing.',
+                    'data' => $getCustomer
+                        ], 200);
+    }
     /**
      * create customer
      */

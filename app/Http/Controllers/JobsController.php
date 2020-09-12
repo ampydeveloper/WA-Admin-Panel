@@ -29,6 +29,27 @@ class JobsController extends Controller {
                     ]
                         ], 200);
     }
+    public function getAllJobMobile(Request $request) {
+        $validator = Validator::make($request->all(), [
+                    'offset' => 'required',
+                    'take' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                        'status' => false,
+                        'message' => 'The given data was invalid.',
+                        'data' => $validator->errors()
+                            ], 422);
+        }
+        return response()->json([
+                    'status' => true,
+                    'message' => 'job Details',
+                    'data' => [
+                        'allJobs' => Job::with("customer", "manager", "farm", "service", "timeslots", "truck", "skidsteer", "truck_driver", "skidsteer_driver")->skip($request->offset)->take($request->take)->get(),
+                        'repeatingJobs' => Job::where('is_repeating_job', config('constant.repeating_job.yes'))->with("customer", "manager", "farm", "service", "timeslots", "truck", "skidsteer", "truck_driver", "skidsteer_driver")->skip($request->offset)->take($request->take)->get()
+                    ]
+                        ], 200);
+    }
     /**
      * filter jobs
      */

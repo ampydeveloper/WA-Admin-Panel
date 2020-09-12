@@ -21,7 +21,26 @@ class CompanyController extends Controller {
         return response()->json([
                     'status' => true,
                     'message' => 'Hauler List',
-                    'data' => User::whereRoleId(config('constant.roles.Haulers'))->orderBy("created_at", 'DESC')->get()
+                    'data' => User::whereRoleId(config('constant.roles.Haulers'))->get()
+                        ], 200);
+    }
+    
+    public function listHaulerMobile(Request $request) {
+        $validator = Validator::make($request->all(), [
+                    'offset' => 'required',
+                    'take' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                        'status' => false,
+                        'message' => 'The given data was invalid.',
+                        'data' => $validator->errors()
+                            ], 422);
+        }
+        return response()->json([
+                    'status' => true,
+                    'message' => 'Hauler List',
+                    'data' => User::whereRoleId(config('constant.roles.Haulers'))->skip($request->offset)->take($request->take)->get()
                         ], 200);
     }
     /**

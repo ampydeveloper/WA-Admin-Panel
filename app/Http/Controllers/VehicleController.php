@@ -23,6 +23,25 @@ class VehicleController extends Controller {
                     'data' => Vehicle::with("vehicle_service", "vehicle_insurance")->whereVehicleType(config("constant.vehicle_type.truck"))->get()
                         ], 200);
     }
+    
+    public function listVehicleMobile(Request $request) {
+        $validator = Validator::make($request->all(), [
+                    'offset' => 'required',
+                    'take' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                        'status' => false,
+                        'message' => 'The given data was invalid.',
+                        'data' => $validator->errors()
+                            ], 422);
+        }
+        return response()->json([
+                    'status' => true,
+                    'message' => 'Truck Details',
+                    'data' => Vehicle::with("vehicle_service", "vehicle_insurance")->whereVehicleType(config("constant.vehicle_type.truck"))->skip($request->offset)->take($request->take)->get()
+                        ], 200);
+    }
     /**
      * create vehicle
      */
@@ -284,10 +303,28 @@ class VehicleController extends Controller {
         return response()->json([
                     'status' => true,
                     'message' => 'Vehicle insurance with vehicle',
-                    'data' => Vehicle::where('id', $request->vehicle_id)->with('vehicle_insurances')->get()
+                    'data' => VehicleInsurance::where('vehicle_id', $request->vehicle_id)->get()
                         ], 200);
     }
 
+    public function getVehicleInsuranceMobile(Request $request) {
+        $validator = Validator::make($request->all(), [
+                    'offset' => 'required',
+                    'take' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                        'status' => false,
+                        'message' => 'The given data was invalid.',
+                        'data' => $validator->errors()
+                            ], 422);
+        }
+        return response()->json([
+                    'status' => true,
+                    'message' => 'Vehicle insurance with vehicle',
+                    'data' => VehicleInsurance::where('vehicle_id', $request->vehicle_id)->skip($request->offset)->take($request->take)->get()
+                        ], 200);
+    }
     /**
      * delete vehicle insurance details
      */
@@ -406,6 +443,25 @@ class VehicleController extends Controller {
                     'data' => VehicleService::where('vehicle_id', $request->vehicle_id)->get()
                         ], 200);
     }
+    
+    public function getVehicleServiceMobile(Request $request) {
+        $validator = Validator::make($request->all(), [
+                    'offset' => 'required',
+                    'take' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                        'status' => false,
+                        'message' => 'The given data was invalid.',
+                        'data' => $validator->errors()
+                            ], 422);
+        }
+        return response()->json([
+                    'status' => true,
+                    'message' => 'Vehicle Details',
+                    'data' => VehicleService::where('vehicle_id', $request->vehicle_id)->skip($request->offset)->take($request->take)->get()
+                        ], 200);
+    }
     /**
      * get service details
      */
@@ -414,6 +470,15 @@ class VehicleController extends Controller {
                     'status' => true,
                     'message' => 'Service Details',
                     'data' => VehicleService::whereId($request->service_id)->first()
+                        ], 200);
+    }
+    
+    public function getLastService(Request $request) {
+        $vehicleInsu = VehicleService::where('vehicle_id', $request->vehicle_id)->latest()->first();
+        return response()->json([
+                    'status' => true,
+                    'message' => 'Vehicle latest insurance.',
+                    'data' => $vehicleInsu
                         ], 200);
     }
     /**

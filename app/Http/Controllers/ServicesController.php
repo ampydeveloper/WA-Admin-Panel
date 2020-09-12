@@ -134,6 +134,35 @@ class ServicesController extends Controller
             'data' => $getAllServices
         ], 200);
     }
+    
+    public function listServicesMobile(Request $request) {
+        $validator = Validator::make($request->all(), [
+                    'offset' => 'required',
+                    'take' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                        'status' => false,
+                        'message' => 'The given data was invalid.',
+                        'data' => $validator->errors()
+                            ], 422);
+        }
+        
+        $getAllServices = Service::skip($request->offset)->take($request->take)->get();
+        if (count($getAllServices) > 0) {
+            foreach ($getAllServices as $key => $service) {
+                if ($service->service_for == config('constant.roles.Customer')) {
+                    $timeSlots = TimeSlots::whereIn('id', json_decode($service->slot_time))->get();
+                    $getAllServices[$key]["timeSlots"] = $timeSlots;
+                }
+            }
+        }
+        return response()->json([
+            'status' => true,
+            'message' => 'Service Listing.',
+            'data' => $getAllServices
+        ], 200);
+    }
 
     /**
      * get service

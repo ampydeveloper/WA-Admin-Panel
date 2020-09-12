@@ -53,24 +53,28 @@ Route::group(['prefix' => 'auth'], function () {
             //admin
             Route::get('list-admin', 'ManagerController@listAdmin');
             Route::get('get-admin/{admin_id}', 'ManagerController@getAdmin');
+            Route::post('list-admin-mobile', 'ManagerController@listAdminMobile');
 
             Route::post('create-manager-admin', 'ManagerController@createManager');
             Route::post('update-manager-admin', 'ManagerController@updateManager');
             Route::get('get-manager/{manager_id}', 'ManagerController@getManager');
             Route::delete('delete-manager/{manager_id}', 'ManagerController@deleteManager');
             Route::get('list-manager', 'ManagerController@listManager');
+            Route::post('list-manager-mobile', 'ManagerController@listManagerMobile');
 
             //services
             Route::post('create-service', 'ServicesController@createService');
             Route::post('edit-service', 'ServicesController@editService');
 //            Route::post('edit-service-time-slot/{time_slot_id}', 'ServicesController@editTimeSlot');
             Route::get('list-services', 'ServicesController@listServices');
+            Route::post('list-services-mobile', 'ServicesController@listServicesMobile');
             Route::get('get-service/{service_id}', 'ServicesController@getService');
             Route::delete('delete-service/{service_id}', 'ServicesController@deleteService');
             Route::post('get-timeslots', 'ServicesController@getTimeSlots');
 
             //customer
             Route::get('list-customer', 'CustomerController@listCustomer');
+            Route::post('list-customer-mobile', 'CustomerController@listCustomerMobile');
             Route::post('create-customer', 'CustomerController@createCustomer');
             Route::post('create-farm', 'CustomerController@createFarm');
             Route::post('create-manager', 'CustomerController@createCustomerManager');
@@ -86,6 +90,7 @@ Route::group(['prefix' => 'auth'], function () {
 
             //CompanyController
             Route::get('list-hauler', 'CompanyController@listHauler');
+            Route::post('list-hauler-mobile', 'CompanyController@listHaulerMobile');
             Route::post('create-hauler', 'CompanyController@createHauler');
             Route::get('get-hauler/{customer_id}', 'CompanyController@getHauler');
             Route::post('update-hauler', 'CompanyController@updateHauler');
@@ -93,6 +98,7 @@ Route::group(['prefix' => 'auth'], function () {
 
             //jobs
             Route::get('job-list', 'JobsController@getAllJob');
+            Route::post('job-list-mobile', 'JobsController@getAllJobMobile');
             Route::post('job-filter', 'JobsController@jobFilter');
             Route::post('create-job', 'JobsController@createJob');
             Route::get('job-customer', 'JobsController@getCustomers');
@@ -104,6 +110,7 @@ Route::group(['prefix' => 'auth'], function () {
             
             //driver
             Route::get('list-drivers', 'DriverController@listDrivers');
+            Route::post('list-drivers-mobile', 'DriverController@listDriversMobile');
             Route::post('create-driver', 'DriverController@createDriver');
             Route::post('edit-driver', 'DriverController@editDriver');
             Route::get('get-driver/{driver_id}', 'DriverController@getDriver');
@@ -111,6 +118,7 @@ Route::group(['prefix' => 'auth'], function () {
 
             //truck
             Route::get('list-vehicle', 'VehicleController@listVehicle');
+            Route::post('list-vehicle-mobile', 'VehicleController@listVehicleMobile');
             Route::post('create-vehicle', 'VehicleController@createVehicle');
             Route::post('edit-vehicle', 'VehicleController@editVehicle');
             Route::get('get-vehicle/{vehicle_id}', 'VehicleController@getVehicle');
@@ -121,12 +129,15 @@ Route::group(['prefix' => 'auth'], function () {
             Route::get('get-insurance-details/{insurance_id}', 'VehicleController@getInsuranceDetails');
             Route::get('get-last-insurance/{vehicle_id}', 'VehicleController@getLastInsurance');
             Route::get('get-vehicleinsurance/{vehicle_id}', 'VehicleController@getVehicleInsurance');
+            Route::post('get-vehicle-insurance-mobile/{vehicle_id}', 'VehicleController@getVehicleInsuranceMobile');
             Route::delete('delete-insurance-details/{insurance_id}', 'VehicleController@deleteInsuranceDetails');
             
             Route::post('create-vehicleservice', 'VehicleController@createVehicleService');
             Route::post('edit-vehicle-service', 'VehicleController@editVehicleService');
-            Route::get('get-vehicleservice/{vehicle_id}', 'VehicleController@getVehicleService');
             Route::get('get-service-details/{service_id}', 'VehicleController@getServiceDetails');
+            Route::get('get-last-service/{vehicle_id}', 'VehicleController@getLastService');
+            Route::get('get-vehicleservice/{vehicle_id}', 'VehicleController@getVehicleService');
+            Route::post('get-vehicle-service-mobile/{vehicle_id}', 'VehicleController@getVehicleServiceMobile');
             Route::delete('delete-service-details/{service_id}', 'VehicleController@deleteServiceDetails');
             
             Route::get('list-skidsteer', 'VehicleController@listSkidsteer');
