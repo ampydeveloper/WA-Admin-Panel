@@ -1,7 +1,7 @@
 export const planetChartData = {
     type: 'pie',
     data: {
-        labels: ['Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune'],
+        // labels: ['0', '1', '2', '3', '4', '5', '6', '7'],
         datasets: [
             // { // one line graph
             //     label: 'Number of Moons',
@@ -29,7 +29,7 @@ export const planetChartData = {
             //     borderWidth: 3
             // },
             { // another line graph
-                label: '',
+                label: 'Invoices',
                 data: [116.4, 50.7, 49.2],
                 backgroundColor: [
                     '#4DBF7B', // Green
@@ -44,6 +44,7 @@ export const planetChartData = {
         ]
     },
     options: {
+        maintainAspectRatio: false,
         responsive: true,
         lineTension: 1,
         legend: {
@@ -53,10 +54,19 @@ export const planetChartData = {
             yAxes: [{
                 ticks: {
                     beginAtZero: true,
-                    padding: 25,
+                    padding: 1,
+                },
+                gridLines: {
+                    display: false,
+                    drawBorder: false,
                 }
-            }]
-              
+            }],
+            xAxes: [{
+                gridLines: {
+                    display: false,
+                    drawBorder: false,
+                }
+            }],
         }
     }
 }

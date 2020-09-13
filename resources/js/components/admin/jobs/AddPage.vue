@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-container fluid>
+    <v-container fluid class="pt-0">
       <v-row>
         <div class="bread_crum">
           <ul>
@@ -71,7 +71,8 @@
             <li>Add</li>
           </ul>
         </div>
-        <v-col cols="12" md="12" class="new_driver" id="new_driver">
+
+        <div class="main_box jap-mb">
           <v-form
             ref="form"
             v-model="valid"
@@ -158,7 +159,6 @@
                 ></v-text-field>
               </v-col>
             </v-col>
-
             <v-col class="pt-0 pb-0" cols="12">
               <v-col sm="2" class="label-align pt-0">
                 <label>Service</label>
@@ -205,7 +205,7 @@
                     <template v-slot:activator="{ on }">
                       <v-text-field
                         v-model="date"
-                        label="Start Date"
+                        label="Select Start Date"
                         prepend-icon="event"
                         readonly
                         v-on="on"
@@ -218,26 +218,28 @@
                 </v-col>
               </v-col>
 
-              <v-col cols="12" md="12" class="input-max pt-0 pb-0">
-                <v-col sm="2" class="label-align pt-0">
-                  <label>Time Slots</label>
-                </v-col>
-                <v-col sm="10" class="pt-0">
-                  <v-radio-group
-                    row
-                    v-model="addForm.time_slots_id"
-                    :mandatory="false"
-                    required
-                    :rules="[v => !!v || 'Time slot is required.']"
-                  >
-                    <template v-for="(timeSlot, index) in servicetime">
-                      <v-radio
-                        :label="timeSlot.slot_start+'-'+timeSlot.slot_end"
-                        :value="timeSlot.id"
-                      ></v-radio>
-                    </template>
-                  </v-radio-group>
-                </v-col>
+              <v-col cols="12" md="12" class="t-s-inner pt-0 pb-0">
+                <div class="row">
+                  <v-col sm="2" class="label-align pt-0 label_text label-full">
+                    <label>Time Slots</label>
+                  </v-col>
+                  <v-col sm="10" class="pt-0">
+                    <v-radio-group
+                      row
+                      v-model="addForm.time_slots_id"
+                      :mandatory="false"
+                      required
+                      :rules="[v => !!v || 'Time slot is required.']"
+                    >
+                      <template v-for="(timeSlot, index) in servicetime">
+                        <v-radio
+                          :label="timeSlot.slot_start+'-'+timeSlot.slot_end"
+                          :value="timeSlot.id"
+                        ></v-radio>
+                      </template>
+                    </v-radio-group>
+                  </v-col>
+                </div>
               </v-col>
 
               <v-col cols="12" md="12" class="pt-0 pb-0">
@@ -273,7 +275,7 @@
               </v-col>
             </v-col>
           </v-form>
-        </v-col>
+        </div>
       </v-row>
     </v-container>
   </v-app>
@@ -318,7 +320,7 @@ export default {
         job_amount: "",
       },
       killometerRules: [
-        (v) => !!v || "Job weight is required",
+        (v) => !!v || "Job weight is required.",
         //v => /^\d*$/.test(v) || "Enter valid weight",
       ],
       myFiles: [],
@@ -483,55 +485,3 @@ export default {
   },
 };
 </script>
-
-<style>
-.v-select__selections input {
-  border: 0px !important;
-}
-.filepond--wrapper {
-  padding-left: 10px;
-}
-.new_driver {
-  background-color: #fff;
-  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.05);
-  border-radius: 7px;
-  padding: 20px 0px !important;
-}
-.v-text-field__slot input {
-  border: 0px !important;
-}
-.filepond--root {
-  margin-bottom: 0px !important;
-  padding-left: 0px !important;
-}
-.filepond--wrapper {
-  padding-left: 0px !important;
-}
-.new_driver .v-input input {
-  padding-left: 0px !important;
-  padding-right: 0px !important;
-}
-#new_driver.new_driver button {
-  background: #11b276 !important;
-  border-radius: 6px;
-  font-weight: 300;
-  height: 38px;
-}
-.v-menu__content .v-picker .v-picker__title.primary {
-  background-color: #11b276 !important;
-}
-label {
-  font-weight: 500;
-}
-#new_driver .custom_form_field label {
-  font-size: 14px;
-}
-.v-text-field.v-input--has-state > .v-input__control > .v-input__slot:before {
-  border: 1px solid !important;
-  border-top: 0px !important;
-}
-.v-input .v-label {
-  font-size: 14px;
-  font-weight: 400;
-}
-</style> 

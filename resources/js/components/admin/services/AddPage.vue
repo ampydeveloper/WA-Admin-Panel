@@ -83,14 +83,14 @@
             >
               <v-col cols="12" md="12" class="pt-0 pb-0">
                 <v-col sm="2" class="label-align pt-0">
-                  <label class="label_text">Service name</label>
+                  <label class="label_text">Service Name</label>
                 </v-col>
                 <v-col sm="4" class="pt-0 pb-0">
                   <v-text-field
                     v-model="addForm.service_name"
                     required
-                    :rules="[v => !!v || 'Service name is required.']"
-                    label="Enter service name"
+                    :rules="[v => !!v || 'Service Name is required.']"
+                    label="Enter Service Name"
                     placeholder
                   ></v-text-field>
                 </v-col>
@@ -108,9 +108,14 @@
                     v-model="addForm.service_for"
                     :mandatory="true"
                     required
-                    :rules="[v => !!v || 'Service for is required.']"
+                    :rules="[v => !!v || 'Service For is required.']"
                   >
-                    <v-radio label="Customer" @change="getSelectedType(4)" value="4" class="mor_eve"></v-radio>
+                    <v-radio
+                      label="Customer"
+                      @change="getSelectedType(4)"
+                      value="4"
+                      class="mor_eve"
+                    ></v-radio>
                     <v-radio label="Hauler" @change="getSelectedType(6)" value="6" class="mor_eve"></v-radio>
                   </v-radio-group>
                 </v-col>
@@ -147,9 +152,13 @@
                       <label for="eveningJob"></label>
                       <span class="checkbox-title mor_eve">Evening</span>
                     </div>
-                    <div class="v-messages theme--light error--text" role="alert" v-if="!timeSlotErr">
+                    <div
+                      class="v-messages theme--light error--text"
+                      role="alert"
+                      v-if="!timeSlotErr"
+                    >
                       <div class="v-messages__wrapper">
-                        <div class="v-messages__message">Service time is required.</div>
+                        <div class="v-messages__message">Service Time is required.</div>
                       </div>
                     </div>
                   </v-col>
@@ -169,7 +178,9 @@
                           :value="timeSlot.id"
                           :id="timeSlot.id"
                         />
-                        <label v-bind:for="timeSlot.id">{{timeSlot.slot_start+'-'+timeSlot.slot_end}}</label>
+                        <label
+                          v-bind:for="timeSlot.id"
+                        >{{timeSlot.slot_start+'-'+timeSlot.slot_end}}</label>
                       </span>
                     </template>
                   </v-col>
@@ -189,7 +200,9 @@
                           :value="timeSlot.id"
                           :id="timeSlot.id"
                         />
-                        <label v-bind:for="timeSlot.id">{{timeSlot.slot_start+'-'+timeSlot.slot_end}}</label>
+                        <label
+                          v-bind:for="timeSlot.id"
+                        >{{timeSlot.slot_start+'-'+timeSlot.slot_end}}</label>
                       </span>
                     </template>
                   </v-col>
@@ -202,7 +215,7 @@
                 </v-col>
                 <v-col sm="4" class="pt-0 pb-0">
                   <v-text-field
-                    label="Enter service price"
+                    label="Enter Service Price"
                     placeholder
                     type="number"
                     max="100"
@@ -220,7 +233,7 @@
                 </v-col>
                 <v-col sm="4" class="pt-0 pb-0">
                   <v-textarea
-                    label="Enter description"
+                    label="Enter Description"
                     placeholder
                     rows="3"
                     auto-grow
@@ -277,18 +290,22 @@
               </v-col>
 
               <v-col class="pt-0 pb-0" cols="12" md="12">
-                <v-col sm="2"></v-col>
-                <v-col sm="9" class="pt-0 pb-0">
-                  <v-btn
-                    type="submit"
-                    :loading="loading"
-                    :disabled="loading"
-                    color="success"
-                    class="custom-save-btn mt-4"
-                    @click="save"
-                    id="submit_btn"
-                  >Add Service</v-btn>
-                </v-col>
+                <v-row class="m-0">
+                  <v-col sm="2"></v-col>
+                  <v-col sm="10" class="pt-0 pb-0">
+                    <v-btn
+                      type="submit"
+                      :loading="loading"
+                      :disabled="loading"
+                      color="success"
+                      class="custom-save-btn mt-4"
+                      @click="save"
+                      id="submit_btn"
+                    >Add Service</v-btn>
+
+                    <router-link to="/admin/services" class="btn-custom-danger mt-4">Cancel</router-link>
+                  </v-col>
+                </v-row>
               </v-col>
             </v-form>
           </v-col>
@@ -333,8 +350,8 @@ export default {
       },
       morningSlots: [],
       eveningSlots: [],
-      priceRules: [(v) => !!v || "Service price is invalid/required."],
-      descriptionRules: [(v) => !!v || "Service description is required."],
+      priceRules: [(v) => !!v || "Service Price is invalid/required."],
+      descriptionRules: [(v) => !!v || "Service Description is required."],
       myFiles: [],
     };
   },
@@ -413,6 +430,7 @@ export default {
           this.$toast.open({
             message: response.message,
             type: "error",
+            timeout: 8000,
             position: "top-right",
           });
         }
@@ -443,7 +461,7 @@ export default {
       e.preventDefault();
 
       //time slot validation if customer service selected
-      if(this.selectedType == 4) {
+      if (this.selectedType == 4) {
         //time slots validation
         if (this.addForm.slot_time.length > 0) {
           //morning check
@@ -459,6 +477,7 @@ export default {
               this.$toast.open({
                 message: "Please select at least one morning time slot.",
                 type: "error",
+                timeout: 8000,
                 position: "top-right",
               });
               return false;
@@ -478,6 +497,7 @@ export default {
               this.$toast.open({
                 message: "Please select at least one evening time slot.",
                 type: "error",
+                timeout: 8000,
                 position: "top-right",
               });
               return false;
@@ -487,6 +507,7 @@ export default {
           this.$toast.open({
             message: "Please select at least one time slot.",
             type: "error",
+            timeout: 15000,
             position: "top-right",
           });
           return false;
@@ -513,6 +534,7 @@ export default {
             this.$toast.open({
               message: response.message,
               type: "success",
+              timeout: 8000,
               position: "bottom-right",
             });
             //redirect to login
@@ -526,7 +548,8 @@ export default {
             this.$toast.open({
               message: response.message,
               type: "error",
-              position: "bottom-right",
+              timeout: 8000,
+              position: "top-right",
             });
           }
         });

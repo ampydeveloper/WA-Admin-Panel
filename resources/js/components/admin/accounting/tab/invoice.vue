@@ -1,93 +1,110 @@
 <template>
-  <v-container
-    id="dashboard"
-    fluid
-    tag="section"
-    class="pt-0"
-  >
-    <v-row>
-        <v-col sm="12" cols="12">
-        <!-- all jobs -->
-            <table id="example" class="table table-striped table-bordered" style="width:100%">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Customer</th>
-                        <th>Job#</th>
-                        <th>Service</th>
-                        <th>Total</th>
-                        <th>In quick book</th>
-                        <th>Email</th>
-                        <th>Download</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="invoice in invoiceJobs">
-                        <td>{{invoice.updated_at | formatDate}}</td>
-                        <td><router-link v-if="isAdmin" :to="'/admin/customer/details/'+invoice.customer.id" class="nav-item nav-link">
-                     {{invoice.customer.first_name}}
-                    </router-link>
-                     <router-link v-if="!isAdmin" :to="'/manager/customer/details/'+invoice.customer.id" class="nav-item nav-link">
-                     {{invoice.customer.first_name}}
-                    </router-link>
-			</td>
-                        <td><router-link v-if="isAdmin" :to="'/admin/jobs'" class="nav-item nav-link">
-                      {{invoice.id}}
-                    </router-link>
-	<router-link v-if="!isAdmin" :to="'/manager/jobs'" class="nav-item nav-link">
-                      {{invoice.id}}
-                    </router-link>
-			</td>
-                       <td><router-link v-if="isAdmin" :to="'/admin/service/edit/'+invoice.service.id" class="nav-item nav-link">
-                      {{invoice.service.service_name}}
-                    </router-link>
-<router-link v-if="!isAdmin" :to="'/manager/service/edit/'+invoice.service.id" class="nav-item nav-link">
-                      {{invoice.service.service_name}}
-                    </router-link>
-		</td>
-                        <td>${{invoice.job_amount}}</td>
-                        <td>
-			    <template v-if="!invoice.quick_book">Not Sync</template>
-			    <template v-if="invoice.quick_book">Sync</template>
-			</td>
-                        <td>Email</td>
-                        <td>Download</td>
-                    </tr>
-                </tbody>
-            </table>
-        </v-col>
-    </v-row>
+  <v-container id="dashboard" fluid tag="section" class="pl-0">
+    <table id="invoice-table" class="table table-striped table-bordered table-main">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Customer</th>
+          <th>Job ID</th>
+          <th>Service</th>
+          <th>Total</th>
+          <th>In QuickBook</th>
+          <!-- <th>Email</th> -->
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="invoice in invoiceJobs">
+          <td>{{invoice.updated_at | formatDate}}</td>
+          <td>
+            <router-link
+              v-if="isAdmin"
+              :to="'/admin/customer/details/'+invoice.customer.id"
+              class="nav-item nav-link"
+            >{{invoice.customer.first_name}}</router-link>
+            <router-link
+              v-if="!isAdmin"
+              :to="'/manager/customer/details/'+invoice.customer.id"
+              class="nav-item nav-link"
+            >{{invoice.customer.first_name}}</router-link>
+          </td>
+          <td>
+            <router-link v-if="isAdmin" :to="'/admin/jobs'" class="nav-item nav-link">{{invoice.id}}</router-link>
+            <router-link
+              v-if="!isAdmin"
+              :to="'/manager/jobs'"
+              class="nav-item nav-link"
+            >{{invoice.id}}</router-link>
+          </td>
+          <td>
+            <router-link
+              v-if="isAdmin"
+              :to="'/admin/service/edit/'+invoice.service.id"
+              class="nav-item nav-link"
+            >{{invoice.service.service_name}}</router-link>
+            <router-link
+              v-if="!isAdmin"
+              :to="'/manager/service/edit/'+invoice.service.id"
+              class="nav-item nav-link"
+            >{{invoice.service.service_name}}</router-link>
+          </td>
+          <td>${{invoice.job_amount}}</td>
+          <td>
+            <template v-if="!invoice.quick_book">
+              <span class="badges-item">Not Sync</span>
+            </template>
+            <template v-if="invoice.quick_book">
+              <span class="badges-item">Sync</span>
+            </template>
+          </td>
+          <!-- <td>Email</td> -->
+          <td>Download</td>
+        </tr>
+      </tbody>
+    </table>
+    <span id="table-chevron-left" class="d-none">
+      <chevron-left-icon size="1.5x" class="custom-class"></chevron-left-icon>
+    </span>
+    <span id="table-chevron-right" class="d-none">
+      <chevron-right-icon size="1.5x" class="custom-class"></chevron-right-icon>
+    </span>
   </v-container>
 </template>
 
 <script>
 import { router } from "../../../../_helpers/router";
 import { environment } from "../../../../config/test.env";
-import { PlusCircleIcon } from "vue-feather-icons";
+import {
+  PlusCircleIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+} from "vue-feather-icons";
 import { accountingService } from "../../../../_services/accounting.service";
 import { authenticationService } from "../../../../_services/authentication.service";
 export default {
   components: {
-    PlusCircleIcon
+    PlusCircleIcon,
+    ChevronLeftIcon,
+    ChevronRightIcon,
   },
   data() {
     return {
-      invoiceJobs:'',
+      invoiceJobs: "",
       isAdmin: true,
-  };
+    };
   },
-  mounted: function() {
+  mounted: function () {
     const currentUser = authenticationService.currentUserValue;
-    if(currentUser.data.user.role_id == 1){
-    this.isAdmin = true;
-    }else{
-    this.isAdmin = false;
+    if (currentUser.data.user.role_id == 1) {
+      this.isAdmin = true;
+    } else {
+      this.isAdmin = false;
     }
     this.invoiceList();
   },
   methods: {
-	invoiceList(){
-        accountingService.jobInvoices().then(response => {
+    invoiceList() {
+      accountingService.jobInvoices().then((response) => {
         //handle response
         if (response.status) {
           this.invoiceJobs = response.data;
@@ -95,19 +112,47 @@ export default {
           this.$toast.open({
             message: response.message,
             type: "error",
-            position: "top-right"
+            position: "top-right",
           });
         }
       });
-	}
+    },
   },
-updated() {
-setTimeout(function() {
-     $(document).ready(function() {
-	    $('#example').DataTable();
-	} );
-  }, 1000);
-    }
-}
-
+  updated() {
+    setTimeout(function () {
+      $(document).ready(function () {
+        if (!$.fn.dataTable.isDataTable("#invoice-table")) {
+          $("#invoice-table").DataTable({
+            aoColumnDefs: [
+              {
+                bSortable: false,
+                aTargets: [-1, -2, -3, -4, -6],
+              },
+            ],
+            oLanguage: { sSearch: "" },
+            drawCallback: function (settings) {
+              $("#invoice-table_paginate .paginate_button.previous").html(
+                $("#table-chevron-left").html()
+              );
+              $("#invoice-table_paginate .paginate_button.next").html(
+                $("#table-chevron-right").html()
+              );
+            },
+          });
+          $("#invoice-table_filter input").attr(
+            "placeholder",
+            "Search Invoices"
+          );
+          $("#invoice-table_paginate .paginate_button.previous").html(
+            $("#table-chevron-left").html()
+          );
+          $("#invoice-table_paginate .paginate_button.next").html(
+            $("#table-chevron-right").html()
+          );
+        }
+        $(".table-main").css({ opacity: 1 });
+      });
+    }, 1000);
+  },
+};
 </script>

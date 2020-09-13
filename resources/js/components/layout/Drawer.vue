@@ -228,9 +228,10 @@
           },
           {
             action: 'local_activity',
-            title: 'Employee',
+            title: 'Users',
             active: true,
             items: [
+              { title: 'Admin', url: '/admin/admin', icon: "<img src='/images/user.svg' />" },
               { title: 'Managers', url: '/admin/manager', icon: "<img src='/images/user-check.svg' />" },
 	            { title: 'Drivers', url: '/admin/truckdrivers', icon: "<img src='/images/users.svg' />" }
             ]
@@ -249,8 +250,8 @@
             title: 'Accounts',
             active: true,
             items: [
-               { title: 'Accountings',url: '/admin/accounting', icon: "<img src='/images/book-open.svg' />" },
-              { title: 'Reports', url: '/admin/reports', icon: "<img src='/images/file-text.svg' />" }
+               { title: 'Accounting',url: '/admin/accounting', icon: "<img src='/images/book-open.svg' />" },
+              // { title: 'Reports', url: '/admin/reports', icon: "<img src='/images/file-text.svg' />" }
             ]
           }
         ],

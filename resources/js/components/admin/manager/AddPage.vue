@@ -349,7 +349,7 @@
                               v-if="docError"
                             >
                               <div class="v-messages__wrapper">
-                                <div class="v-messages__message">Document upload is required.</div>
+                                <div class="v-messages__message">Identification Document is required.</div>
                               </div>
                             </div>
                           </div>

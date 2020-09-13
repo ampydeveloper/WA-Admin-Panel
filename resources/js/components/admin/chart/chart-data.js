@@ -1,7 +1,7 @@
 export const planetChartData = {
     type: 'line',
     data: {
-        labels: ['Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune'],
+        labels: ['0', '1', '2', '3', '4', '5', '6', '7'],
         datasets: [
             // { // one line graph
             //     label: 'Number of Moons',
@@ -52,8 +52,16 @@ export const planetChartData = {
                 ticks: {
                     beginAtZero: true,
                     padding: 25,
+                },
+                gridLines: {
+                    display: false
                 }
-            }]
+            }],
+            xAxes: [{
+                gridLines: {
+                    display: false
+                }
+            }],
         }
     }
 }

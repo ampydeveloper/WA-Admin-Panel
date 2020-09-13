@@ -42,179 +42,414 @@
         </div>
       </div>
     </v-row>
+
     <v-row class="dashboard-graps">
       <v-col cols="12" md="7">
         <div class="grap">
-            <div class="customer-graph-headings">
-                <h4 class="active">Customer</h4>
-                <h4 class="inactive">Haulers</h4>
-                <h4 class="inactive">Jobs</h4>
+          <div class="customer-graph-headings">
+            <h4 class="active">Customer</h4>
+
+            <div class="graph-select">
+              <v-select :items="prefixs" v-model="prefixSelected" class="graph-select-sl" :menu-props="{ contentClass: 'graph-select-options' }"></v-select>
+            </div>
+          </div>
+          <div class="customer-graph-details-outer">
+            <div class="customer-graph-details">
+              <h5>New</h5>
+              <p>86,589</p>
+            </div>
+            <div class="customer-graph-details">
+              <h5>All</h5>
+              <p>86,589</p>
             </div>
 
-            <div class="graph-setting">
-                <user-icon size="1.5x" class="setting-icon"></user-icon>
-                <div class="setting-icon-drop-down">
-                    <p>Weekly</p>
-                    <p>Monthly</p>
-                    <p>Yearly</p>
-                </div>
+            <div class="customer-graph-para">
+              <p>
+                Your have
+                <span>20</span> new customers generating
+                <span>$2500</span> this week.
+              </p>
             </div>
-            
-            
-            <v-row class="user-image">
-            <v-col class="user-image-inner" cols="12" md="12">
-        <v-row class="float-right graph-setting" justify="space-around">
-          <v-menu bottom origin="center center" transition="scale-transition">
-            <template v-slot:activator="{ on }">
-              <user-icon size="1.5x" class="setting-icon"></user-icon>
-            </template>
-            <v-list class="header-right-menu">
-              <v-list-item>
-                <v-list-item-title>
-                  Weekly
-                </v-list-item-title>
-                <v-list-item-title>
-                  Monthly
-                </v-list-item-title>
-                <v-list-item-title>
-                  Yearly
-                </v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-        </v-row>
-
-        </v-col>
-          </v-row>
+          </div>
           <canvas id="planet-chart"></canvas>
         </div>
       </v-col>
       <v-col cols="12" md="5">
         <div class="grap">
-            <div class="customer-graph-headings">
+          <div class="customer-graph-headings">
             <h4 class="active">Invoices</h4>
-          </div>
-          <div class="graph-setting">
-                <user-icon size="1.5x" class="setting-icon"></user-icon>
-                <div class="setting-icon-drop-down">
-                    <p>Weekly</p>
-                    <p>Monthly</p>
-                    <p>Yearly</p>
-                </div>
+
+            <div class="graph-select">
+              <v-select :items="prefixs" v-model="prefixSelected" class="graph-select-sl" :menu-props="{ contentClass: 'graph-select-options' }"></v-select>
             </div>
-          <canvas id="pie-chart"></canvas>
+          </div>
+<div class="pie-chart-outer">
+  <canvas id="pie-chart"></canvas>
+</div>
+          
+
+          <div class="customer-graph-details-outer pie-data-outer row">
+            <div class="customer-graph-details col-sm-4">
+              <h5>Customers</h5>
+              <p>
+                <span>$</span> 86,589
+              </p>
+            </div>
+            <div class="customer-graph-details col-sm-4">
+              <h5>Haulers</h5>
+              <p>
+                <span>$</span>86,589
+              </p>
+            </div>
+            <div class="customer-graph-details col-sm-4">
+              <h5>Outstanding</h5>
+              <p>
+                <span>$</span>86,59
+              </p>
+            </div>
+          </div>
         </div>
       </v-col>
     </v-row>
 
     <v-row class="dashboard-graps">
-      <v-col cols="12" md="7">
+      <v-col cols="12" md="12">
         <div class="grap">
-            <div class="customer-graph-headings">
-                <h4 class="active">Customer</h4>
-                <h4 class="inactive">Haulers</h4>
-                <h4 class="inactive">Jobs</h4>
-            </div>
-
-            <div class="graph-setting">
-                <user-icon size="1.5x" class="setting-icon"></user-icon>
-                <div class="setting-icon-drop-down">
-                    <p>Weekly</p>
-                    <p>Monthly</p>
-                    <p>Yearly</p>
-                </div>
-            </div>
-            
-            
-            <v-row class="user-image">
-            <v-col class="user-image-inner" cols="12" md="12">
-        <v-row class="float-right graph-setting" justify="space-around">
-          <v-menu bottom origin="center center" transition="scale-transition">
-            <template v-slot:activator="{ on }">
-              <user-icon size="1.5x" class="setting-icon"></user-icon>
-            </template>
-            <v-list class="header-right-menu">
-              <v-list-item>
-                <v-list-item-title>
-                  Weekly
-                </v-list-item-title>
-                <v-list-item-title>
-                  Monthly
-                </v-list-item-title>
-                <v-list-item-title>
-                  Yearly
-                </v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-        </v-row>
-
-        </v-col>
-          </v-row>
-          <canvas id="planet-chart"></canvas>
-        </div>
-      </v-col>
-      <v-col cols="12" md="5">
-        <div class="grap">
-            <div class="customer-graph-headings">
-            <h4 class="active">Invoices</h4>
+          <div class="customer-graph-headings">
+            <h4 class="active">Dispatches</h4>
+            <mapbox
+              access-token="pk.eyJ1IjoibG9jb25lIiwiYSI6ImNrYmZkMzNzbDB1ZzUyenM3empmbXE3ODQifQ.SiBnr9-6jpC1Wa8OTAmgVA"
+              :map-options="{
+                style: 'mapbox://styles/mapbox/light-v9',
+                center: [-80.2853179, 26.6094155],
+                zoom: 7,
+              }"
+              :geolocate-control="{
+                show: true,
+                position: 'top-left',
+              }"
+              :scale-control="{
+                show: true,
+                position: 'top-left',
+              }"
+              :fullscreen-control="{
+                show: true,
+                position: 'top-left',
+              }"
+            />
           </div>
-          <div class="graph-setting">
-                <user-icon size="1.5x" class="setting-icon"></user-icon>
-                <div class="setting-icon-drop-down">
-                    <p>Weekly</p>
-                    <p>Monthly</p>
-                    <p>Yearly</p>
-                </div>
-            </div>
-          <canvas id="pie-chart"></canvas>
         </div>
       </v-col>
     </v-row>
+
     <v-row class="dashboard-graps">
-        <v-col cols="12" md="4">
-        <div class="grap">
-            <div class="customer-graph-headings">
-            <h4 class="active">Sessions By Device</h4>
-          </div>
-          <div class="graph-setting">
-                <user-icon size="1.5x" class="setting-icon"></user-icon>
-                <div class="setting-icon-drop-down">
-                    <p>Weekly</p>
-                    <p>Monthly</p>
-                    <p>Yearly</p>
+      <v-col cols="12" md="4">
+        <div class="grap temp-grap">
+          <div class="overlay"></div>
+          <div class="card-overlay text-white">
+            <div class="flex flex-col justify-between h-full">
+              <div class="text-center mt-8 w-full">
+                <h3 class="text-white mb-2 tracking-wide">Wellington</h3>
+                <p class="mb-6">Florida</p>
+                <div class="flex justify-around mb-12">
+                  <span class="feather-icon">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24px"
+                      height="24px"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="feather feather-cloud-snow w-24 h-24 text-white"
+                    >
+                      <path d="M20 17.58A5 5 0 0 0 18 8h-1.26A8 8 0 1 0 4 16.25" />
+                      <line x1="8" y1="16" x2="8" y2="16" />
+                      <line x1="8" y1="20" x2="8" y2="20" />
+                      <line x1="12" y1="18" x2="12" y2="18" />
+                      <line x1="12" y1="22" x2="12" y2="22" />
+                      <line x1="16" y1="16" x2="16" y2="16" />
+                      <line x1="16" y1="20" x2="16" y2="20" />
+                    </svg>
+                  </span>
+                  <h2 class="text-white text-big">
+                    -6
+                    <sup class="text-2xl">o</sup>
+                  </h2>
                 </div>
+              </div>
+              <div class="text-center w-full">
+                <div class="flex justify-between px-8 mb-8 text-xl">
+                  <span>Precipitation</span>
+                  <span>48%</span>
+                </div>
+                <div class="flex justify-between px-8 mb-8 text-xl">
+                  <span>Humidity</span>
+                  <span>60%</span>
+                </div>
+                <div class="flex justify-between px-8 mb-8 text-xl">
+                  <span>Wind</span>
+                  <span>4823 km/h</span>
+                </div>
+              </div>
             </div>
+          </div>
         </div>
       </v-col>
       <v-col cols="12" md="4">
-        <div class="grap">
-            <div class="customer-graph-headings">
-            <h4 class="active">Chats</h4>
+        <div class="grap timeline-grap">
+          <div class="customer-graph-headings">
+            <h4 class="active">Activity</h4>
           </div>
-          <div class="graph-setting">
-                <user-icon size="1.5x" class="setting-icon"></user-icon>
-                <div class="setting-icon-drop-down">
-                    <p>Weekly</p>
-                    <p>Monthly</p>
-                    <p>Yearly</p>
-                </div>
+          <div class="vx-card__collapsible-content">
+            <div class="vx-card__body">
+              <ul class="vx-timeline">
+                <li>
+                  <div class="timeline-icon">
+                    <span class>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24px"
+                        height="24px"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class=""
+                      >
+                        <line x1="12" y1="5" x2="12" y2="19" />
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                      </svg>
+                    </span>
+                  </div>
+                  <div class="timeline-info">
+                    <p class="font-semibold">Client Meeting</p>
+                    <span
+                      class="activity-desc"
+                    >Bonbon macaroon jelly beans gummi bears jelly lollipop apple</span>
+                  </div>
+                  <small class="text-grey activity-e-time">25 mins Ago</small>
+                </li>
+                <li>
+                  <div class="timeline-icon">
+                    <span class>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24px"
+                        height="24px"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class=""
+                      >
+                        <path
+                          d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                        />
+                        <polyline points="22,6 12,13 2,6" />
+                      </svg>
+                    </span>
+                  </div>
+                  <div class="timeline-info">
+                    <p class="font-semibold">Email Newsletter</p>
+                    <span class="activity-desc">Cupcake gummi bears soufflé caramels candy</span>
+                  </div>
+                  <small class="text-grey activity-e-time">15 Days Ago</small>
+                </li>
+                <li>
+                  <div class="timeline-icon">
+                    <span class>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24px"
+                        height="24px"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class=""
+                      >
+                        <path
+                          d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                        />
+                        <polyline points="22,6 12,13 2,6" />
+                      </svg>
+                    </span>
+                  </div>
+                  <div class="timeline-info">
+                    <p class="font-semibold">Plan Webinar</p>
+                    <span class="activity-desc">Candy ice cream cake. Halvah gummi bears</span>
+                  </div>
+                  <small class="text-grey activity-e-time">20 days ago</small>
+                </li>
+                <li>
+                  <div class="timeline-icon">
+                    <span class>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24px"
+                        height="24px"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class=""
+                      >
+                        <path
+                          d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                        />
+                        <polyline points="22,6 12,13 2,6" />
+                      </svg>
+                    </span>
+                  </div>
+                  <div class="timeline-info">
+                    <p class="font-semibold">Marketing</p>
+                    <span
+                      class="activity-desc"
+                    >Candy ice cream cake. Halvah gummi bears Cupcake gummi bears.</span>
+                  </div>
+                  <small class="text-grey activity-e-time">28 days ago</small>
+                </li>
+              </ul>
             </div>
+          </div>
         </div>
       </v-col>
       <v-col cols="12" md="4">
-        <div class="grap">
-            <div class="customer-graph-headings">
-            <h4 class="active">Customers</h4>
+        <div class="grap timeline-grap">
+          <div class="customer-graph-headings">
+            <h4 class="active">Dispatch Notifications</h4>
           </div>
-          <div class="graph-setting">
-                <user-icon size="1.5x" class="setting-icon"></user-icon>
-                <div class="setting-icon-drop-down">
-                    <p>Weekly</p>
-                    <p>Monthly</p>
-                    <p>Yearly</p>
-                </div>
+          <div class="vx-card__collapsible-content">
+            <div class="vx-card__body">
+              <ul class="vx-timeline">
+                <li>
+                  <div class="timeline-icon">
+                    <span class>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24px"
+                        height="24px"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class=""
+                      >
+                        <line x1="12" y1="5" x2="12" y2="19" />
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                      </svg>
+                    </span>
+                  </div>
+                  <div class="timeline-info">
+                    <p class="font-semibold">Client Meeting</p>
+                    <span
+                      class="activity-desc"
+                    >Bonbon macaroon jelly beans gummi bears jelly lollipop apple</span>
+                  </div>
+                  <small class="text-grey activity-e-time">25 mins Ago</small>
+                </li>
+                <li>
+                  <div class="timeline-icon">
+                    <span class>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24px"
+                        height="24px"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class=""
+                      >
+                        <path
+                          d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                        />
+                        <polyline points="22,6 12,13 2,6" />
+                      </svg>
+                    </span>
+                  </div>
+                  <div class="timeline-info">
+                    <p class="font-semibold">Email Newsletter</p>
+                    <span class="activity-desc">Cupcake gummi bears soufflé caramels candy</span>
+                  </div>
+                  <small class="text-grey activity-e-time">15 Days Ago</small>
+                </li>
+                <li>
+                  <div class="timeline-icon">
+                    <span class>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24px"
+                        height="24px"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class=""
+                      >
+                        <path
+                          d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                        />
+                        <polyline points="22,6 12,13 2,6" />
+                      </svg>
+                    </span>
+                  </div>
+                  <div class="timeline-info">
+                    <p class="font-semibold">Plan Webinar</p>
+                    <span class="activity-desc">Candy ice cream cake. Halvah gummi bears</span>
+                  </div>
+                  <small class="text-grey activity-e-time">20 days ago</small>
+                </li>
+                <li>
+                  <div class="timeline-icon">
+                    <span class>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24px"
+                        height="24px"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class=""
+                      >
+                        <path
+                          d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+                        />
+                        <polyline points="22,6 12,13 2,6" />
+                      </svg>
+                    </span>
+                  </div>
+                  <div class="timeline-info">
+                    <p class="font-semibold">Marketing</p>
+                    <span
+                      class="activity-desc"
+                    >Candy ice cream cake. Halvah gummi bears Cupcake gummi bears.</span>
+                  </div>
+                  <small class="text-grey activity-e-time">28 days ago</small>
+                </li>
+              </ul>
             </div>
+          </div>
         </div>
       </v-col>
     </v-row>
@@ -223,6 +458,7 @@
 
 <script>
 import Chart from "chart.js";
+import Mapbox from "mapbox-gl-vue";
 import planetChartData from "./chart/chart-data.js";
 import pieChartData from "./chart/pie-chart-data.js";
 import { UserIcon, LockIcon } from "vue-feather-icons";
@@ -231,9 +467,12 @@ export default {
   components: {
     UserIcon,
     LockIcon,
+    Mapbox,
   },
   data() {
     return {
+      prefixSelected: ["Last 7 Days"],
+      prefixs: ["Last 7 Days", "Last Month", "Last Year"],
       planetChartData: planetChartData,
       pieChartData: pieChartData,
     };
@@ -255,123 +494,3 @@ export default {
   created() {},
 };
 </script>
-
-
-
-
-<style>
-#dashboard {
-  padding-right: 0px !important;
-  padding-left: 24px;
-  margin: 0 !important;
-}
-#dashboard .dashboard-columns .services {
-  background-color: #fff;
-  border-radius: 7px;
-  padding: 25px 15px;
-  text-align: center;
-  /* box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.05); */
-  box-shadow: 0 4px 25px 0 rgba(0, 0, 0, 0.1);
-}
-.image-bg-color {
-  height: 45px;
-  border-radius: 24px;
-  position: absolute;
-  left: 50%;
-  margin-left: -23px;
-  width: 45px;
-}
-.image-bg-color.service-bg-color {
-  background: #dff7e9;
-}
-.image-bg-color.employee-bg-color {
-  background: #dff7e9;
-}
-.image-bg-color.driver-bg-color {
-  background: #dff7e9;
-}
-.image-bg-color.fleet-bg-color {
-  background: #dff7e9;
-}
-.image-bg-color.skid-bg-color {
-  background: #dff7e9;
-}
-.dashboard-icons {
-  position: relative;
-  top: 7px;
-}
-.dashboard-icons.service-icon {
-  color: #11b276;
-}
-.dashboard-icons.employee-icon {
-  color: #11b276;
-}
-.dashboard-icons.driver-icon {
-  color: #11b276;
-}
-.dashboard-icons.fleet-icon {
-  color: #11b276;
-}
-.dashboard-icons.skid-icon {
-  color: #11b276;
-}
-#dashboard .dashboard-columns .services h2 {
-  margin-top: 30px;
-  font-weight: bold;
-  margin-bottom: 3px;
-  color: #2c2c2c;
-}
-#dashboard .dashboard-columns .services .employees {
-  color: #626262;
-  font-weight: 300;
-}
-
-#dashboard .dashboard-graps .grap {
-  background-color: #fff;
-  border-radius: 7px;
-  box-shadow: 0 4px 25px 0 rgba(0, 0, 0, 0.1);
-  padding: 20px;
-    min-height: 370px;
-  
-}
-#dashboard .dashboard-graps .grap .customer-graph-headings {
-    display: inline-flex;
-}
-#dashboard .dashboard-graps .grap h4 {
-    font-size: 18.48px;
-    color: #2c2c2c;
-    margin-bottom: 30px;
-    margin-right: 20px;
-  }
-
-#dashboard .dashboard-graps .grap .inactive {
-    color: #626262;
-    font-size: 15.48px;
-    padding-top: 2px;
-  }
-
-#dashboard .dashboard-graps .graph-setting .setting-icon {
-  position: relative;
-  display: inline-block;
-    margin-right: 20px;
-}
-
-#dashboard .dashboard-graps .graph-setting .setting-icon-drop-down {
-    display: none;
-    position: absolute;
-    background-color: #fff;
-    box-shadow: 0 4px 25px 0 rgba(0, 0, 0, 0.1);
-    padding: 12px 16px 0px;
-    z-index: 1;
-    right: 20px;
-    top: 60px;
-    border-radius: 7px;
-}
-
-#dashboard .dashboard-graps .graph-setting:hover .setting-icon-drop-down {
-  display: block;
-}
-
-</style>
-
-

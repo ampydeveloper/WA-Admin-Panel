@@ -88,19 +88,6 @@
                       <label>Profile Image</label>
                     </v-col>
                     <v-col sm="8" class="pt-0 pb-0">
-                      <div
-                       class="service-image-outer"
-                      >
-                        <button
-                          type="submit"
-                          class="close"
-                          v-if="cross"
-                          @click="Remove()"
-                        >
-                          <span>&times;</span>
-                        </button>
-                        <img :src="avatar" />
-                      </div>
                       <file-pond
                         name="uploadImage"
                         ref="pond"
@@ -114,6 +101,19 @@
                         v-on:processfile="handleProcessFile"
                         v-on:processfilerevert="handleRemoveFile"
                       />
+                      <div
+                       class="service-image-outer"
+                      >
+                        <button
+                          type="submit"
+                          class="close"
+                          v-if="cross"
+                          @click="Remove()"
+                        >
+                          <span>&times;</span>
+                        </button>
+                        <img :src="avatar" />
+                      </div>
                     </v-col>
                   </div>
                   <div class="custom-col row">
@@ -149,7 +149,7 @@
                     <v-col sm="8" class="pt-0 pb-0">
                       <v-text-field
                         v-model="addForm.last_name"
-                        label="Enter Las Name"
+                        label="Enter Last Name"
                         required
                         :rules="[v => !!v || 'Customer Name is required.']"
                       ></v-text-field>
@@ -259,6 +259,7 @@
                       @click="update"
                       id="submit_btn"
                     >Update</v-btn>
+                    <router-link to="/admin/services" class="btn-custom-danger">Cancel</router-link>
                   </div>
                 </v-col>
               </v-row>

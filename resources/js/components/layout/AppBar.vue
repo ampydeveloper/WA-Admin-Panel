@@ -44,14 +44,6 @@ Profile</router-link>
                   <router-link to="/driver/changepassword" class="nav-item nav-link">  <edit-3-icon size="1.5x" class="custom-class"></edit-3-icon>
 Change Password</router-link>
                 </v-list-item-title>
-                <v-list-item-title v-if="isAdmin">
-                  <router-link to="/admin/admin/add" class="nav-item nav-link">  <user-plus-icon size="1.5x" class="custom-class"></user-plus-icon>
-Add Admin</router-link>
-                </v-list-item-title>
-                <v-list-item-title v-if="isAdmin">
-                  <router-link to="/admin/admin" class="nav-item nav-link">  <list-icon size="1.5x" class="custom-class"></list-icon>
-List Admin</router-link>
-                </v-list-item-title>
                 <v-list-item-title>
                   <button type="button" @click="logout" class="nav-item nav-link">  <log-out-icon size="1.5x" class="custom-class"></log-out-icon>
  Logout</button>

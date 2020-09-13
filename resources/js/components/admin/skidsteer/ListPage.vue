@@ -1,33 +1,87 @@
 <template>
   <v-app>
-    <v-container fluid>
-      <v-row>
-        <h2>Skidsteer List</h2>
-        <div class="add-icon">
-          <router-link v-if="isAdmin" to="/admin/skidsteer/add" class="nav-item nav-link">
-            <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon>
+    <div class="bread_crum">
+      <ul>
+        <li>
+          <h4 class="main-title top_heading">
+            SkidSteer
+            <span class="right-bor"></span>
+          </h4>
+        </li>
+        <li>
+          <router-link to="/admin/dashboard" class="home_svg">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24px"
+              height="24px"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="feather feather-home h-5 w-5 mb-1 stroke-current text-primary"
+            >
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+              <polyline points="9 22 9 12 15 12 15 22" />
+            </svg>
+            <span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16px"
+                height="16px"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="feather feather-chevrons-right w-4 h-4"
+              >
+                <polyline points="13 17 18 12 13 7" />
+                <polyline points="6 17 11 12 6 7" />
+              </svg>
+            </span>
           </router-link>
-          <router-link v-if="!isAdmin" to="/manager/skidsteer/add" class="nav-item nav-link">
-            <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon>
-          </router-link>
-        </div>
-        <v-col cols="12" md="12">
-          <v-simple-table>
-            <template v-slot:default>
+        </li>
+        <li>List</li>
+      </ul>
+    </div>
+
+    <div class="main_box">
+      <v-container fluid>
+        <v-row>
+          <div class="add-icon">
+            <router-link v-if="isAdmin" to="/admin/skidsteer/add" class="nav-item nav-link">
+              <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon>
+            </router-link>
+            <router-link v-if="!isAdmin" to="/manager/skidsteer/add" class="nav-item nav-link">
+              <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon>
+            </router-link>
+          </div>
+          <v-col cols="12" md="12" class="main-box-inner">
+            <table id="skidsteer-table" class="table table-striped table-bordered table-main">
               <thead>
                 <tr>
+                  <th class="text-left">#</th>
                   <th class="text-left">Company</th>
-                  <th class="text-left">Truck number</th>
-                  <th class="text-left">Chassis number</th>
-                  <th class="text-left">Total Km</th>
+                  <th class="text-left">Truck</th>
+                  <th class="text-left">Chassis</th>
+                  <th class="text-left">Distance</th>
                   <th class="text-left">Service Details</th>
                   <th class="text-left">Documents</th>
                   <th class="text-left">Status</th>
-                  <th class="text-left">Options</th>
+                  <th class="text-left">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(item, index) in trucks" :key="item.name" v-on:click="selectTr(index)" v-bind:class="{ 'selected' : isActive == index}">
+                <tr
+                  v-for="(item, index) in trucks"
+                  :key="item.name"
+                  v-on:click="selectTr(index)"
+                  v-bind:class="{ 'selected' : isActive == index}"
+                >
+                  <td>{{index+1}}</td>
                   <td>
                     <router-link
                       v-if="isAdmin"
@@ -68,37 +122,44 @@
                     >View Documents</router-link>
                   </td>
                   <td>
-                    <span v-if="item.status == 1">Available</span>
-                    <span v-else>Unavailable</span>
+                    <span v-if="item.status == 1" class="badges-item">Available</span>
+                    <span v-else class="badges-item">Unavailable</span>
                   </td>
                   <td class="action-col">
-                    <div class="dropdown" v-bind:class="{ 'show': triggerDropdown == index }">
-                      <more-vertical-icon size="1.5x" class="custom-class dropdown-trigger" v-on:click="dropdownToggle(index)"></more-vertical-icon>
-                      <span class="dropdown-menu">
-                        <router-link v-if="isAdmin" :to="'/admin/skidsteer/edit/' + item.id" class="dropdown-item">
-                          <button class="btn">Edit</button>
-                        </router-link>
-                        <router-link v-if="!isAdmin" :to="'/manager/skidsteer/edit/' + item.id" class="dropdown-item">
-                          <button class="btn">Edit</button>
-                        </router-link>
-                        <button class="btn dropdown-item" @click="Delete(item.id)">Delete</button>
-                      </span>
-                    </div>
+                    <router-link
+                      v-if="isAdmin"
+                      :to="'/admin/skidsteer/edit/' + item.id"
+                      class="dropdown-item"
+                    >
+                      <edit-3-icon size="1.2x" class="custom-class"></edit-3-icon>
+                    </router-link>
+                    <router-link
+                      v-if="!isAdmin"
+                      :to="'/manager/skidsteer/edit/' + item.id"
+                      class="dropdown-item"
+                    >
+                      <edit-3-icon size="1.2x" class="custom-class"></edit-3-icon>
+                    </router-link>
+                    <button class="btn dropdown-item" @click="Delete(item.id)">
+                      <trash-icon size="1.5x" class="custom-class"></trash-icon>
+                    </button>
                   </td>
                 </tr>
                 <tr class="no-data" v-if="trucks.length == 0">
-                  <td>
-                    <template>
-                      No skidsteer till now.
-                    </template>
-                  </td>
+                  <td colspan="9">No skidsteer till now.</td>
                 </tr>
               </tbody>
-            </template>
-          </v-simple-table>
-        </v-col>
-      </v-row>
-    </v-container>
+            </table>
+          </v-col>
+        </v-row>
+      </v-container>
+    </div>
+    <span id="table-chevron-left" class="d-none">
+      <chevron-left-icon size="1.5x" class="custom-class"></chevron-left-icon>
+    </span>
+    <span id="table-chevron-right" class="d-none">
+      <chevron-right-icon size="1.5x" class="custom-class"></chevron-right-icon>
+    </span>
   </v-app>
 </template>
 
@@ -108,19 +169,23 @@ import { skidsteerService } from "../../../_services/skidsteer.service";
 import { authenticationService } from "../../../_services/authentication.service";
 import {
   UserIcon,
-  EditIcon,
+  Edit3Icon,
   TrashIcon,
   PlusCircleIcon,
-  MoreVerticalIcon
+  MoreVerticalIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
 } from "vue-feather-icons";
 import { router } from "../../../_helpers/router";
 export default {
   components: {
     UserIcon,
-    EditIcon,
+    Edit3Icon,
     TrashIcon,
     PlusCircleIcon,
-    MoreVerticalIcon
+    MoreVerticalIcon,
+    ChevronLeftIcon,
+    ChevronRightIcon,
   },
   data() {
     return {
@@ -129,7 +194,7 @@ export default {
       isActive: null,
       on: false,
       trucks: [],
-      isAdmin: true
+      isAdmin: true,
     };
   },
   mounted() {
@@ -144,7 +209,7 @@ export default {
 
   methods: {
     getResults() {
-      skidsteerService.listSkidsteers().then(response => {
+      skidsteerService.listSkidsteers().then((response) => {
         //handle response
         if (response.status) {
           this.trucks = response.data;
@@ -152,20 +217,20 @@ export default {
           this.$toast.open({
             message: response.message,
             type: "error",
-            position: "top-right"
+            position: "top-right",
           });
         }
       });
     },
     Delete(e) {
       if (e) {
-        skidsteerService.Delete(e).then(response => {
+        skidsteerService.Delete(e).then((response) => {
           //handle response
           if (response.status) {
             this.$toast.open({
               message: response.message,
               type: "success",
-              position: "top-right"
+              position: "top-right",
             });
             //redirect to login
             this.getResults();
@@ -176,7 +241,7 @@ export default {
             this.$toast.open({
               message: response.message,
               type: "error",
-              position: "top-right"
+              position: "top-right",
             });
           }
         });
@@ -185,17 +250,48 @@ export default {
     Close() {
       this.dialog = false;
     },
-    dropdownToggle: function(setIndex) {
+    dropdownToggle: function (setIndex) {
       //if same index is called up again then close it
-      if(this.triggerDropdown == setIndex) {
+      if (this.triggerDropdown == setIndex) {
         this.triggerDropdown = null;
       } else {
         this.triggerDropdown = setIndex;
       }
     },
-    selectTr: function(rowIndex){
+    selectTr: function (rowIndex) {
       this.isActive = rowIndex;
     },
-  }
+  },
+  updated() {
+    setTimeout(function () {
+      $(document).ready(function () {
+        $(".table-main").DataTable({
+          aoColumnDefs: [
+            {
+              bSortable: false,
+              aTargets: [-1, -2, -3, -4, -6, -7],
+            },
+          ],
+          oLanguage: { sSearch: "" },
+          drawCallback: function (settings) {
+            $(".dataTables_paginate .paginate_button.previous").html(
+              $("#table-chevron-left").html()
+            );
+            $(".dataTables_paginate .paginate_button.next").html(
+              $("#table-chevron-right").html()
+            );
+          },
+        });
+        $(".dataTables_filter input").attr("placeholder", "Search SkidSteers");
+        $(".dataTables_paginate .paginate_button.previous").html(
+          $("#table-chevron-left").html()
+        );
+        $(".dataTables_paginate .paginate_button.next").html(
+          $("#table-chevron-right").html()
+        );
+        $(".table-main").css({ opacity: 1 });
+      });
+    }, 1000);
+  },
 };
 </script>

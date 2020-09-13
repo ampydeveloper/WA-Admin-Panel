@@ -1,65 +1,172 @@
 <template>
   <v-app>
-    <v-container>
+    <v-container fluid class="pt-0">
       <v-row>
-        <h4 class="main-title text-left">Add New Admin</h4>
-        <v-col cols="12" md="12">
-          <v-form ref="form" v-model="valid" lazy-validation @submit="update">
-            <v-col cols="12" md="12">
-              <file-pond
-                name="uploadImage"
-                ref="pond"
-                label-idle="Drop files here..."
-                v-bind:allow-multiple="false"
-                v-bind:server="serverOptions"
-                v-bind:files="myFiles"
-                v-on:addfilestart="setUploadIndex"
-                accepted-file-types="image/jpeg, image/png"
-                v-on:processfile="handleProcessFile"
-                v-on:processfilerevert="handleRemoveFile"
-              />
-            </v-col>
-            <v-col cols="12" md="12" class="pt-0">
-              <v-col sm="2" class="label-align pt-0">
-                <label>First name</label>
-              </v-col>
-              <v-col sm="4" class="pt-0">
-              <v-text-field
-                v-model="addForm.first_name"
-                :rules="FnameRules"
-                required
-              ></v-text-field>
-              </v-col>
-            </v-col>
-            <v-col cols="12" md="12" class="pt-0">
-              <v-col sm="2" class="label-align pt-0">
-                <label>Last name</label>
-              </v-col>
-              <v-col sm="4" class="pt-0">
-              <v-text-field
-                v-model="addForm.last_name"
-                :rules="LnameRules"
-                required
-              ></v-text-field>
-              </v-col>
-            </v-col>
+        <div class="bread_crum">
+          <ul>
+            <li>
+              <h4 class="main-title text-left top_heading">
+                Add Admin
+                <span class="right-bor"></span>
+              </h4>
+            </li>
+            <li>
+              <router-link to="/admin/dashboard" class="home_svg">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24px"
+                  height="24px"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="feather feather-home h-5 w-5 mb-1 stroke-current text-primary"
+                >
+                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                  <polyline points="9 22 9 12 15 12 15 22" />
+                </svg>
+                <span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16px"
+                    height="16px"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="feather feather-chevrons-right w-4 h-4"
+                  >
+                    <polyline points="13 17 18 12 13 7" />
+                    <polyline points="6 17 11 12 6 7" />
+                  </svg>
+                </span>
+              </router-link>
+            </li>
+            <li>
+              <router-link to="/admin/admin">
+                List
+                <span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16px"
+                    height="16px"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="feather feather-chevrons-right w-4 h-4"
+                  >
+                    <polyline points="13 17 18 12 13 7" />
+                    <polyline points="6 17 11 12 6 7" />
+                  </svg>
+                </span>
+              </router-link>
+            </li>
+            <li>Add</li>
+          </ul>
+        </div>
 
-            <v-col cols="12" md="12" class="pt-0">
-              <v-col sm="2" class="label-align pt-0">
-                <label>E-mail</label>
+        <div class="main_box">
+          <v-container fluid>
+            <v-row>
+              <v-col cols="12" md="12" class="pl-0 slide-left">
+                <v-form
+                  ref="form"
+                  v-model="valid"
+                  class="custom_form_field"
+                  id="form_field"
+                  lazy-validation
+                  @submit="update"
+                >
+                  <v-col cols="12" md="12" class="pb-0">
+                    <v-col sm="2" class="label-align pt-0 image-upload-label">
+                      <label class="label_text">Profile Photo</label>
+                    </v-col>
+                    <v-col sm="4" class="pt-0 pb-0">
+                      <file-pond
+                        name="uploadImage"
+                        ref="pond"
+                        label-idle="Drop or Browse your files"
+                        v-bind:allow-multiple="false"
+                        v-bind:server="serverOptions"
+                        v-bind:files="myFiles"
+                        v-on:addfilestart="setUploadIndex"
+                        accepted-file-types="image/jpeg, image/png"
+                        v-on:processfile="handleProcessFile"
+                        v-on:processfilerevert="handleRemoveFile"
+                      />
+                    </v-col>
+                  </v-col>
+                  <v-col cols="12" md="12" class="pt-0 pb-0">
+                    <v-col sm="2" class="label-align pt-0">
+                      <label>First Name</label>
+                    </v-col>
+                    <v-col sm="4" class="pt-0 pb-0">
+                      <v-text-field
+                        v-model="addForm.first_name"
+                        :rules="FnameRules"
+                        required
+                        label="Enter First Name"
+                        placeholder
+                      ></v-text-field>
+                    </v-col>
+                  </v-col>
+                  <v-col cols="12" md="12" class="pt-0 pb-0">
+                    <v-col sm="2" class="label-align pt-0">
+                      <label>Last Name</label>
+                    </v-col>
+                    <v-col sm="4" class="pt-0 pb-0">
+                      <v-text-field
+                        v-model="addForm.last_name"
+                        :rules="LnameRules"
+                        required
+                        label="Enter Last Name"
+                        placeholder
+                      ></v-text-field>
+                    </v-col>
+                  </v-col>
+
+                  <v-col cols="12" md="12" class="pt-0 pb-0">
+                    <v-col sm="2" class="label-align pt-0">
+                      <label>Email</label>
+                    </v-col>
+                    <v-col sm="4" class="pt-0 pb-0">
+                      <v-text-field
+                        v-model="addForm.email"
+                        :rules="emailRules"
+                        name="email"
+                        required
+                        label="Enter Email"
+                        placeholder
+                      ></v-text-field>
+                    </v-col>
+                  </v-col>
+
+                  <v-col class="pt-0 pb-0" cols="12" md="12">
+                    <v-col sm="2"></v-col>
+                    <v-col sm="9" class="pt-0 pb-0">
+                      <v-btn
+                        type="submit"
+                        :loading="loading"
+                        :disabled="loading"
+                        color="success"
+                        class="custom-save-btn mt-4"
+                        @click="update"
+                        id="submit_btn"
+                      >Add Admin</v-btn>
+                    </v-col>
+                  </v-col>
+                </v-form>
               </v-col>
-              <v-col sm="4" class="pt-0">
-              <v-text-field
-                v-model="addForm.email"
-                :rules="emailRules"
-                name="email"
-                required
-              ></v-text-field>
-              </v-col>
-            </v-col>
-            <v-btn type="submit" :loading="loading" :disabled="loading" color="success" class="mr-4 custom-save-btn" @click="update">Submit</v-btn>
-          </v-form>
-        </v-col>
+            </v-row>
+          </v-container>
+        </div>
       </v-row>
     </v-container>
   </v-app>
@@ -72,9 +179,7 @@ import { router } from "../../../_helpers/router";
 import { environment } from "../../../config/test.env";
 
 export default {
-  components: {
-    //      'image-component': imageVUE,
-  },
+  components: {},
   data() {
     return {
       loading: false,
@@ -88,21 +193,21 @@ export default {
         email: "",
         user_image: null,
         phone: "",
-        role_id: 1
+        role_id: 1,
       },
-      FnameRules: [v => !!v || "First name is required"],
-      LnameRules: [v => !!v || "Last name is required"],
+      FnameRules: [(v) => !!v || "First Name is required."],
+      LnameRules: [(v) => !!v || "Last Name is required."],
       emailRules: [
-        v => !!v || "E-mail is required",
-        v => /.+@.+/.test(v) || "E-mail must be valid"
+        (v) => !!v || "Email is required.",
+        (v) => /.+@.+/.test(v) || "Email must be valid.",
       ],
       rules: [
-        value =>
+        (value) =>
           !value ||
           value.size < 2000000 ||
-          "Avatar size should be less than 2 MB!"
+          "Photo size should be less than 2 MB.",
       ],
-      myFiles: []
+      myFiles: [],
     };
   },
   computed: {
@@ -114,15 +219,15 @@ export default {
         process: {
           url: "uploadImage",
           headers: {
-            Authorization: "Bearer " + currentUser.data.access_token
-          }
+            Authorization: "Bearer " + currentUser.data.access_token,
+          },
         },
         revert: {
           url: "deleteImage",
           headers: {
-            Authorization: "Bearer " + currentUser.data.access_token
-          }
-        }
+            Authorization: "Bearer " + currentUser.data.access_token,
+          },
+        },
       };
     },
     url() {
@@ -132,7 +237,7 @@ export default {
       } else {
         return null;
       }
-    }
+    },
   },
   created() {
     this.avatar = "/images/avatar.png";
@@ -141,42 +246,42 @@ export default {
     setUploadIndex() {
       this.uploadInProgress = true;
     },
-    handleProcessFile: function(error, file) {
+    handleProcessFile: function (error, file) {
       this.addForm.user_image = file.serverId;
       this.uploadInProgress = false;
     },
-    handleRemoveFile: function(file) {
+    handleRemoveFile: function (file) {
       this.addForm.user_image = "";
       this.avatar = "/images/avatar.png";
     },
-    update: function(e) {
+    update: function (e) {
       //stop page to reload
       e.preventDefault();
 
       if (this.uploadInProgress) {
         this.$toast.open({
-          message: "Profile image uploading is in progress!",
+          message: "Photo uploading is in progress.",
           type: "error",
-          position: "top-right"
+          position: "top-right",
         });
         return false;
       }
       if (this.$refs.form.validate()) {
-        if(this.loading) {
+        if (this.loading) {
           return false;
         }
         //start loading
         this.loading = true;
-        adminService.add(this.addForm).then(response => {
+        adminService.add(this.addForm).then((response) => {
           //stop loading
           this.loading = false;
-          
+
           //handle response
           if (response.status) {
             this.$toast.open({
               message: response.message,
               type: "success",
-              position: "top-right"
+              position: "top-right",
             });
             //redirect to login
             router.push("/admin/admin");
@@ -184,18 +289,13 @@ export default {
             this.$toast.open({
               message: response.message,
               type: "error",
-              position: "top-right"
+              position: "top-right",
             });
           }
           this.loading = false;
         });
       }
-    }
-  }
+    },
+  },
 };
 </script>
-<style>
-.wizard-footer-left {
-    display: none;
-}
-</style>

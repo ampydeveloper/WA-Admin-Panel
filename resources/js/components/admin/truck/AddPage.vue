@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-container fluid>
+    <v-container fluid class="pt-0">
       <v-row>
         <div class="bread_crum">
           <ul>
@@ -74,8 +74,7 @@
 
         <div class="main_box">
           <v-container fluid>
-            <v-row>
-              <v-col cols="12" md="12">
+       
                 <v-form
                   ref="form"
                   v-model="valid"
@@ -86,7 +85,7 @@
                 >
                   <input type="hidden" name="vehicle_type" value="1" />
                   <v-row>
-                    <v-col cols="6" md="6" class="pl-0 manager-cols">
+                    <v-col cols="6" md="6" class="pl-0 pt-0 manager-cols">
                       <div class="custom-col row">
                         <v-col sm="4" class="label-align pt-0">
                           <label>Company Name</label>
@@ -203,7 +202,7 @@
                       </div>
                     </v-col>
 
-                    <v-col cols="6" md="6" class="pl-0 manager-cols">
+                    <v-col cols="6" md="6" class="pl-0 pt-0 manager-cols">
                       <div class="custom-col row">
                         <v-col sm="4" class="label-align pt-0">
                           <label>Total Miles</label>
@@ -308,7 +307,7 @@
                       </div>
                       <div class="custom-col row">
                         <v-col sm="4" class="label-align pt-0">
-                          <label class="label_text label-check-half">Truck Status</label>
+                          <label class="label_text label-check-half">Availabilty</label>
                         </v-col>
                         <v-col sm="8" class="pt-0 pb-0">
                           <v-switch v-model="addForm.is_active"></v-switch>
@@ -331,8 +330,7 @@
                     </v-col>
                   </v-row>
                 </v-form>
-              </v-col>
-            </v-row>
+          
           </v-container>
         </div>
       </v-row>
