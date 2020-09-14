@@ -48,6 +48,8 @@ class CreateJobsTable extends Migration
             
             $table->longText('notes')->nullable();
             
+            $table->longText('payment_notes')->nullable();
+            
             $table->float("amount");
             
             $table->tinyInteger("payment_mode")->default(0)->comment("0: online, 1: cheque, 2: cash");

@@ -145,10 +145,11 @@ Route::group(['prefix' => 'auth'], function () {
 //            Route::post('save-insurance-details/{insurance_id}', 'VehicleController@saveInsuranceDetails');
             
             //accounting
-            Route::get('/job-invoices', 'AccountingController@getAllJobInvoices');
-            Route::get('/job-payment', 'AccountingController@getAllJobPayment');
-            Route::get('/job-salary', 'AccountingController@getAllJobSalary');
-            Route::get('/job-salary-details/{driver_id}', 'AccountingController@getSingleJobSalary');
+            Route::get('job-invoices', 'AccountingController@getAllJobInvoices');
+            Route::get('job-payment', 'AccountingController@getAllJobPayment');
+            Route::post('get-payment/{job_id}', 'AccountingController@getPayment');
+            Route::get('job-salary', 'AccountingController@getAllJobSalary');
+            Route::get('job-salary-details/{driver_id}', 'AccountingController@getSingleJobSalary');
 
             //message
             Route::post('chat-send', 'MessageController@send');

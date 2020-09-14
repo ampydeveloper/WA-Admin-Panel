@@ -90,6 +90,10 @@ class User extends Authenticatable
     {
         return $this->hasOne('App\EmployeeSalaries', 'user_id');
     }
+    
+    public function jobs() {
+        return $this->hasMany('App\Job', 'customer_id');
+    }
 
     
 }
