@@ -117,14 +117,28 @@
                       </div>
                       <div class="custom-col row">
                         <v-col sm="4" class="label-align pt-0">
-                          <label>Name</label>
+                          <label>First Name</label>
                         </v-col>
                         <v-col sm="8" class="pt-0 pb-0">
                           <v-text-field
                             v-model="addForm.first_name"
                             required
-                            :rules="[v => !!v || 'Manager name is required.']"
-                            label="Enter Name"
+                            :rules="[v => !!v || 'Manager First Name is required.']"
+                            label="Enter First Name"
+                            placeholder
+                          ></v-text-field>
+                        </v-col>
+                      </div>
+                      <div class="custom-col row">
+                        <v-col sm="4" class="label-align pt-0">
+                          <label>Last Name</label>
+                        </v-col>
+                        <v-col sm="8" class="pt-0 pb-0">
+                          <v-text-field
+                            v-model="addForm.last_name"
+                            required
+                            :rules="[v => !!v || 'Manager Last Name is required.']"
+                            label="Enter Last Name"
                             placeholder
                           ></v-text-field>
                         </v-col>
@@ -174,14 +188,14 @@
                       </div>
                       <div class="custom-col row">
                         <v-col sm="4" class="label-align pt-0">
-                          <label>State</label>
+                          <label>Province</label>
                         </v-col>
                         <v-col sm="8" class="pt-0 pb-0">
                           <v-text-field
-                            v-model="addForm.state"
+                            v-model="addForm.province"
                             required
-                            :rules="[v => !!v || 'State is required.']"
-                            label="Enter State"
+                            :rules="[v => !!v || 'Province is required.']"
+                            label="Enter Province"
                             placeholder
                           ></v-text-field>
                         </v-col>
@@ -349,7 +363,9 @@
                               v-if="docError"
                             >
                               <div class="v-messages__wrapper">
-                                <div class="v-messages__message">Identification Document is required.</div>
+                                <div
+                                  class="v-messages__message"
+                                >Identification Document is required.</div>
                               </div>
                             </div>
                           </div>
@@ -406,14 +422,14 @@ export default {
       apiUrl: environment.apiUrl,
       addForm: {
         first_name: "",
+        last_name: "",
         city: "",
         email: "",
-        state: "",
+        province: "",
         country: "",
         user_image: null,
-        phone: "",
         role_id: 2,
-        document: "",
+        id_photo: "",
         joining_date: "",
         releaving_date: "",
         identification_number: "",
@@ -489,21 +505,21 @@ export default {
     },
     handleRemoveFile: function (file) {
       this.addForm.user_image = "";
-      this.avatar = "/images/avatar.png";
+      this.avatar = "";
     },
     handleProcessFile1: function (error, file) {
       this.docError = false;
       this.uploadInProgress = false;
-      this.addForm.document = file.serverId;
+      this.addForm.id_photo = file.serverId;
     },
     handleRemoveFile1: function (file) {
-      this.addForm.document = "";
+      this.addForm.id_photo = "";
       this.docError = true;
     },
     update: function (e) {
       //stop page to reload
       e.preventDefault();
-      if (this.addForm.document == "") {
+      if (this.addForm.id_photo == "") {
         this.docError = true;
       }
 

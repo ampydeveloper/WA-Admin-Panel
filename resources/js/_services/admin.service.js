@@ -26,7 +26,7 @@ export const adminService = {
 function add(data) {
 
   return fetch(
-    this.apiUrl+`admin/create-manager`,
+    this.apiUrl+`admin/create-admin`,
     requestOptions.post(data)
   )
     .then(handleResponse)
@@ -39,7 +39,7 @@ function add(data) {
 
 function edit(data, managerId) {
   return fetch(
-    this.apiUrl+`admin/update-manager/`+managerId,
+    this.apiUrl+`admin/edit-admin-profile`,
     requestOptions.post(data)
   )
     .then(handleResponse)

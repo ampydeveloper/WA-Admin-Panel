@@ -26,7 +26,7 @@ export const managerService = {
 function add(data) {
 
   return fetch(
-    this.apiUrl+`admin/create-manager`,
+    this.apiUrl+`admin/create-manager-admin`,
     requestOptions.post(data)
   )
     .then(handleResponse)

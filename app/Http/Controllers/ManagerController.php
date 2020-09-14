@@ -46,7 +46,7 @@ class ManagerController extends Controller {
                 DB::commit();
                 return response()->json([
                             'status' => true,
-                            'message' => 'Successfully created Admin!',
+                            'message' => 'Admin created successfully.',
                             'data' => []
                                 ], 200);
             }
@@ -113,7 +113,7 @@ class ManagerController extends Controller {
             }
             return response()->json([
                         'status' => true,
-                        'message' => 'Admin Profile updated sucessfully.',
+                        'message' => 'Admin updated sucessfully.',
                         'data' => []
             ]);
         } catch (\Exception $e) {
@@ -131,16 +131,16 @@ class ManagerController extends Controller {
      */
     public function createManager(Request $request) {
         $validator = Validator::make($request->all(), [
-                    'manager_first_name' => 'required',
-                    'manager_last_name' => 'required',
+                    'first_name' => 'required',
+                    'last_name' => 'required',
                     'email' => 'required|email|unique:users',
                     'manager_phone' => 'required',
-                    'manager_address' => 'required',
-                    'manager_city' => 'required',
-                    'manager_province' => 'required',
+                    'address' => 'required',
+                    'city' => 'required',
+                    'province' => 'required',
                     'manager_zipcode' => 'required',
-                    'manager_card_image' => 'required',
-                    'manager_id_card' => 'required',
+//                    'card_image' => 'required',
+                    'id_photo' => 'required',
                     'salary' => 'required',
         ]);
         if ($validator->fails()) {
@@ -157,14 +157,14 @@ class ManagerController extends Controller {
             DB::beginTransaction();
             $newPassword = Str::random();
             $user = new User([
-                'prefix' => (isset($request->manager_prefix) && $request->manager_prefix != '' && $request->manager_prefix != null) ? $request->manager_prefix : null,
-                'first_name' => $request->manager_first_name,
-                'last_name' => $request->manager_last_name,
+                'prefix' => (isset($request->prefix) && $request->prefix != '' && $request->prefix != null) ? $request->prefix : null,
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
                 'email' => $request->email,
                 'phone' => $request->manager_phone,
-                'address' => $request->manager_address,
-                'city' => $request->manager_city,
-                'state' => $request->manager_province,
+                'address' => $request->address,
+                'city' => $request->city,
+                'state' => $request->province,
                 'zip_code' => $request->manager_zipcode,
                 'user_image' => (isset($request->user_image) && $request->user_image != '' && $request->user_image != null) ? $request->user_image : null,
                 'role_id' => config('constant.roles.Admin_Manager'),
@@ -176,8 +176,8 @@ class ManagerController extends Controller {
             if ($user->save()) {
                 $managerDetails = new ManagerDetail([
                     'user_id' => $user->id,
-                    'identification_number' => $request->manager_id_card,
-                    'document' => $request->manager_card_image,
+//                    'identification_number' => $request->id_photo,
+                    'document' => $request->id_photo,
                     'salary' => $request->salary,
                     'joining_date' => date('Y/m/d'),
                 ]);
@@ -186,7 +186,7 @@ class ManagerController extends Controller {
                     DB::commit();
                     return response()->json([
                                 'status' => true,
-                                'message' => 'Successfully created Manager!',
+                                'message' => 'Successfully created manager.',
                                 'data' => []
                                     ], 200);
                 }
@@ -285,7 +285,7 @@ class ManagerController extends Controller {
                 }
                 return response()->json([
                             'status' => true,
-                            'message' => 'Manager details updated Successfully!',
+                            'message' => 'Manager details updated successfully.',
                             'data' => []
                                 ], 200);
             }
@@ -327,7 +327,7 @@ class ManagerController extends Controller {
             User::whereId($request->manager_id)->delete();
             return response()->json([
                         'status' => true,
-                        'message' => 'Manager deleted Successfully',
+                        'message' => 'Manager deleted successfully.',
                         'data' => []
                             ], 200);
         } catch (\Exception $e) {

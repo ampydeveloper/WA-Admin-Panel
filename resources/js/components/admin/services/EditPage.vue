@@ -268,7 +268,7 @@
                   />
                   <div class="v-messages theme--light error--text" role="alert" v-if="docError">
                     <div class="v-messages__wrapper">
-                      <div class="v-messages__message">Document upload is required</div>
+                      <div class="v-messages__message">Document upload is required.</div>
                     </div>
                   </div>
                   <v-col sm="12" class="p-0">
@@ -609,7 +609,7 @@ export default {
             this.$toast.open({
               message: response.message,
               type: "success",
-              position: "bottom-right",
+              position: "top-right",
             });
             //redirect to login
             const currentUser = authenticationService.currentUserValue;
@@ -622,7 +622,7 @@ export default {
             this.$toast.open({
               message: response.message,
               type: "error",
-              position: "bottom-right",
+              position: "top-right",
             });
           }
         });

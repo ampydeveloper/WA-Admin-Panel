@@ -535,7 +535,7 @@ export default {
               message: response.message,
               type: "success",
               timeout: 8000,
-              position: "bottom-right",
+              position: "top-right",
             });
             //redirect to login
             const currentUser = authenticationService.currentUserValue;

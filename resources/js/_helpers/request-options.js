@@ -45,6 +45,8 @@ function headers() {
     headers: {
       ...authHeader,
       "Content-Type": "application/json",
+      'X-Requested-With': 'XMLHttpRequest',
+      'X-CSRF-TOKEN': Laravel.csrfToken
     }
   };
 }

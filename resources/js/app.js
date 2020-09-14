@@ -57,6 +57,11 @@ FilePondPluginFileValidateType
 import { configureFakeBackend } from "./_helpers/fake-backend";
 configureFakeBackend();
 
+// let token = document.head.querySelector('meta[name="csrf-token"]');
+// axios.defaults.headers.common = {
+//   'X-Requested-With': 'XMLHttpRequest',
+//   'X-CSRF-TOKEN': token.content
+// };
 Vue.use(VueAxios, axios);
 Vue.use(VueSocialauth, {
   providers: {

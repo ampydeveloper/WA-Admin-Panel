@@ -109,7 +109,7 @@
                     </v-col>
                     <v-col sm="4" class="pt-0 pb-0">
                       <v-text-field
-                        v-model="addForm.first_name"
+                        v-model="addForm.admin_first_name"
                         :rules="FnameRules"
                         required
                         label="Enter First Name"
@@ -123,7 +123,7 @@
                     </v-col>
                     <v-col sm="4" class="pt-0 pb-0">
                       <v-text-field
-                        v-model="addForm.last_name"
+                        v-model="addForm.admin_last_name"
                         :rules="LnameRules"
                         required
                         label="Enter Last Name"
@@ -188,8 +188,8 @@ export default {
       uploadInProgress: false,
       apiUrl: environment.apiUrl,
       addForm: {
-        first_name: "",
-        last_name: "",
+        admin_first_name: "",
+        admin_last_name: "",
         email: "",
         user_image: null,
         phone: "",

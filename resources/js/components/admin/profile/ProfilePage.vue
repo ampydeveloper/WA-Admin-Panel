@@ -88,7 +88,12 @@
                       <label class="label_text">First Name</label>
                     </v-col>
                     <v-col sm="4" class="pt-0 pb-0">
-                      <v-text-field v-model="updateForm.first_name" label="Enter First Name" :rules="FnameRules" required></v-text-field>
+                      <v-text-field
+                        v-model="updateForm.admin_first_name"
+                        label="Enter First Name"
+                        :rules="FnameRules"
+                        required
+                      ></v-text-field>
                     </v-col>
                   </v-col>
 
@@ -97,7 +102,12 @@
                       <label class="label_text">Last Name</label>
                     </v-col>
                     <v-col sm="4" class="pt-0 pb-0">
-                      <v-text-field v-model="updateForm.last_name" label="Enter Last Name" :rules="LnameRules" required></v-text-field>
+                      <v-text-field
+                        v-model="updateForm.admin_last_name"
+                        label="Enter Last Name"
+                        :rules="LnameRules"
+                        required
+                      ></v-text-field>
                     </v-col>
                   </v-col>
 
@@ -110,33 +120,34 @@
                         v-model="updateForm.email"
                         :rules="emailRules"
                         name="email"
-                        label="Enter Email" 
+                        label="Enter Email"
                         required
                       ></v-text-field>
                     </v-col>
                   </v-col>
 
                   <v-col class="pt-0 pb-0" cols="12" md="12">
-                    <v-col sm="2"></v-col>
-                    <v-col sm="9" class="pt-0 pb-0">
-                      <v-btn
-                        type="submit"
-                        :loading="loading"
-                        :disabled="isvalid"
-                        color="success"
-                        class="custom-save-btn mt-4"
-                        @click="update"
-                        id="submit_btn"
-                      >Update</v-btn>
-                    </v-col>
-                  </v-col>
+                    <v-row class="m-0">
+                      <v-col sm="2"></v-col>
+                      <v-col sm="10" class="pt-0 pb-0">
+                        <v-btn
+                          type="submit"
+                          :loading="loading"
+                          :disabled="isvalid"
+                          color="success"
+                          class="custom-save-btn mt-4"
+                          @click="update"
+                          id="submit_btn"
+                        >Update</v-btn>
 
-                  <v-btn
-                    color="success"
-                    v-if="updateForm.user_id != 1"
-                    class="mr-4"
-                    @click="Delete(updateForm.user_id)"
-                  >Delete Account</v-btn>
+                        <v-btn
+                          v-if="updateForm.admin_id != 1"
+                          class="btn-custom-danger mt-4"
+                          @click="Delete(updateForm.admin_id)"
+                        >Delete Account</v-btn>
+                      </v-col>
+                    </v-row>
+                  </v-col>
                 </v-form>
               </v-col>
             </v-row>
@@ -184,7 +195,7 @@ export default {
         (value) =>
           !value ||
           value.size < 2000000 ||
-          "Photo size should be less than 2 MB.",
+          "Image size should be less than 2 MB.",
       ],
       myFiles: [],
     };
@@ -220,16 +231,16 @@ export default {
   },
   created() {
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    this.updateForm.user_id = currentUser.data.user.id;
+    this.updateForm.admin_id = currentUser.data.user.id;
     this.updateForm.user_image = currentUser.data.user.user_image;
     if (currentUser.data.user.user_image) {
       this.cross = true;
       this.avatar = "../../" + currentUser.data.user.user_image;
     } else {
-      this.avatar = "/images/avatar.png";
+      this.avatar = "";
     }
-    this.updateForm.first_name = currentUser.data.user.first_name;
-    this.updateForm.last_name = currentUser.data.user.last_name;
+    this.updateForm.admin_first_name = currentUser.data.user.first_name;
+    this.updateForm.admin_last_name = currentUser.data.user.last_name;
     this.updateForm.email = currentUser.data.user.email;
   },
   methods: {
@@ -244,7 +255,7 @@ export default {
     },
     handleRemoveFile: function (file) {
       this.updateForm.user_image = "";
-      this.avatar = "/images/avatar.png";
+      this.avatar = "";
       this.cross = false;
     },
     update: function (e) {

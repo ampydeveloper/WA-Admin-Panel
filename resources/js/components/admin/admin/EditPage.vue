@@ -109,7 +109,7 @@
                     </v-col>
                     <v-col sm="4" class="pt-0 pb-0">
                       <v-text-field
-                        v-model="addForm.first_name"
+                        v-model="addForm.admin_first_name"
                         label="Enter First Name"
                         :rules="FnameRules"
                         required
@@ -122,7 +122,7 @@
                     </v-col>
                     <v-col sm="4" class="pt-0 pb-0">
                       <v-text-field
-                        v-model="addForm.last_name"
+                        v-model="addForm.admin_last_name"
                         label="Enter Last Name"
                         :rules="LnameRules"
                         required
@@ -187,8 +187,9 @@ export default {
       imgUrl: environment.imgUrl,
       cross: false,
       addForm: {
-        first_name: "",
-        last_name: "",
+        admin_id: "",
+        admin_first_name: "",
+        admin_last_name: "",
         email: "",
         user_image: null,
         phone: "",
@@ -241,16 +242,16 @@ export default {
     this.loading = true;
     adminService.getAdmin(this.$route.params.id).then((response) => {
       if (response.status) {
-        this.addForm.user_id = response.data.id;
+        this.addForm.admin_id = response.data.id;
         if (response.data.user_image) {
           this.cross = true;
           this.addForm.user_image = response.data.user_image;
           this.avatar = this.imgUrl + response.data.user_image;
         } else {
-          this.avatar = "/images/avatar.png";
+          this.avatar = "";
         }
-        this.addForm.first_name = response.data.first_name;
-        this.addForm.last_name = response.data.last_name;
+        this.addForm.admin_first_name = response.data.first_name;
+        this.addForm.admin_last_name = response.data.last_name;
         this.addForm.email = response.data.email;
         this.addForm.user_image = response.data.user_image;
       } else {
@@ -276,11 +277,11 @@ export default {
     },
     handleRemoveFile: function (file) {
       this.addForm.user_image = "";
-      this.avatar = "/images/avatar.png";
+      this.avatar = "";
       this.cross = false;
     },
     Remove() {
-      this.avatar = "/images/avatar.png";
+      this.avatar = "";
       this.cross = false;
       this.addForm.user_image = "";
     },
@@ -290,7 +291,7 @@ export default {
 
       if (this.uploadInProgress) {
         this.$toast.open({
-          message: "Photo uploading is in progress.",
+          message: "Image uploading is in progress.",
           type: "error",
           position: "top-right",
         });

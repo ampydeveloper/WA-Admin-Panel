@@ -122,7 +122,7 @@
                     </v-col>
                     <v-col sm="8" class="pt-0 pb-0">
                       <v-text-field
-                        v-model="addForm.hauler_first_name"
+                        v-model="addForm.first_name"
                         label="Enter First Name"
                         required
                         :rules="[v => !!v || 'Customer Name is required.']"
@@ -135,7 +135,7 @@
                     </v-col>
                     <v-col sm="8" class="pt-0 pb-0">
                       <v-text-field
-                        v-model="addForm.hauler_last_name"
+                        v-model="addForm.last_name"
                         label="Enter Last Name"
                         required
                         :rules="[v => !!v || 'Customer Name is required.']"
@@ -162,7 +162,7 @@
                     </v-col>
                     <v-col sm="8" class="pt-0 pb-0">
                       <v-text-field
-                        v-model="addForm.hauler_phone"
+                        v-model="addForm.phone"
                         :rules="phoneRules"
                         label="Enter Phone"
                         required
@@ -178,7 +178,7 @@
                     </v-col>
                     <v-col sm="8" class="pt-0 pb-0">
                       <v-text-field
-                        v-model="addForm.hauler_address"
+                        v-model="addForm.address"
                         label="Enter Address"
                         required
                         :rules="[v => !!v || 'Address is required.']"
@@ -191,7 +191,7 @@
                     </v-col>
                     <v-col sm="8" class="pt-0 pb-0">
                       <v-text-field
-                        v-model="addForm.hauler_city"
+                        v-model="addForm.city"
                         label="Enter City"
                         required
                         :rules="[v => !!v || 'City is required.']"
@@ -204,7 +204,7 @@
                     </v-col>
                     <v-col sm="8" class="pt-0 pb-0">
                       <v-text-field
-                        v-model="addForm.hauler_province"
+                        v-model="addForm.province"
                         label="Enter Province"
                         required
                         :rules="[v => !!v || 'Province is required.']"
@@ -217,7 +217,7 @@
                     </v-col>
                     <v-col sm="8" class="pt-0 pb-0">
                       <v-text-field
-                        v-model="addForm.hauler_zipcode"
+                        v-model="addForm.zipcode"
                         :rules="[v => !!v || 'Zipcode is required.']"
                         label="Enter Zipcode"
                         required
@@ -229,7 +229,7 @@
                       <label class="label_text label-check-half">Status</label>
                     </v-col>
                     <v-col sm="8" class="pt-0 pb-0">
-                      <v-switch v-model="addForm.hauler_is_active" class="mx-2"></v-switch>
+                      <v-switch v-model="addForm.is_active" class="mx-2"></v-switch>
                     </v-col>
                   </div>
                 </v-col>
@@ -282,16 +282,16 @@ export default {
       uberMapToken: environment.uberMapToken,
       addForm: {
         prefix: "",
-        hauler_first_name: "",
-        hauler_last_name: "",
+        first_name: "",
+        last_name: "",
         email: "",
-        hauler_phone: "",
-        hauler_address: "",
-        hauler_city: "",
-        hauler_province: "",
+        phone: "",
+        address: "",
+        city: "",
+        province: "",
         user_image: null,
-        hauler_zipcode: "",
-        hauler_is_active: true,
+        zipcode: "",
+        is_active: true,
         customer_role: 6,
       },
       emailRules: [
@@ -300,8 +300,8 @@ export default {
       ],
       phoneRules: [
         (v) => !!v || "Phone Number is required.",
-        (v) => /^\d*$/.test(v) || "Enter valid number.",
-        (v) => v.length >= 10 || "Enter valid number.",
+        (v) => /^\d*$/.test(v) || "Phone Number must be valid.",
+        (v) => v.length >= 10 || "Phone Number must be greater than 10 characters.",
       ],
       rules: [
         (value) =>

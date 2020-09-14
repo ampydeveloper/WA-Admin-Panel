@@ -48,15 +48,15 @@ class CompanyController extends Controller {
      */
     public function createHauler(Request $request) {
         $validator = Validator::make($request->all(), [
-                    'hauler_first_name' => 'required|string',
-                    'hauler_last_name' => 'required|string',
+                    'first_name' => 'required|string',
+                    'last_name' => 'required|string',
                     'email' => 'required|string|email|unique:users',
-                    'hauler_phone' => 'required',
-                    'hauler_address' => 'required',
-                    'hauler_city' => 'required',
-                    'hauler_province' => 'required',
-                    'hauler_zipcode' => 'required',
-                    'hauler_is_active' => 'required',
+                    'phone' => 'required',
+                    'address' => 'required',
+                    'city' => 'required',
+                    'province' => 'required',
+                    'zipcode' => 'required',
+                    'is_active' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -76,7 +76,7 @@ class CompanyController extends Controller {
                 'phone' => $request->phone,
                 'address' => $request->address,
                 'city' => $request->city,
-                'state' => $request->state,
+                'state' => $request->province,
                 'zip_code' => $request->zipcode,
                 'user_image' => (isset($request->user_image) && $request->user_image != '' && $request->user_image != null) ? $request->user_image : null,
                 'role_id' => config('constant.roles.Haulers'),
@@ -90,7 +90,7 @@ class CompanyController extends Controller {
                 DB::commit();
                 return response()->json([
                             'status' => true,
-                            'message' => 'Successfully created Hauler!',
+                            'message' => 'Successfully created hauler.',
                             'data' => []
                                 ], 200);
             }
@@ -120,14 +120,14 @@ class CompanyController extends Controller {
     public function updateHauler(Request $request) {
         $validator = Validator::make($request->all(), [
                     'hauler_id' => 'required',
-                    'hauler_first_name' => 'required|string',
-                    'hauler_last_name' => 'required|string',
-                    'hauler_phone' => 'required',
-                    'hauler_address' => 'required',
-                    'hauler_city' => 'required',
-                    'hauler_province' => 'required',
-                    'hauler_zipcode' => 'required',
-                    'hauler_is_active' => 'required',
+                    'first_name' => 'required|string',
+                    'last_name' => 'required|string',
+                    'phone' => 'required',
+                    'address' => 'required',
+                    'city' => 'required',
+                    'province' => 'required',
+                    'zipcode' => 'required',
+                    'is_active' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -159,32 +159,32 @@ class CompanyController extends Controller {
             if ($request->password != '' && $request->password != null) {
                 $haulerDetails->password = bcrypt($request->password);
             }
-            $haulerDetails->prefix = (isset($request->hauler_prefix) && $request->hauler_prefix != '' && $request->hauler_prefix != null) ? $request->hauler_prefix : null;
-            $haulerDetails->first_name = $request->hauler_first_name;
-            $haulerDetails->last_name = $request->hauler_last_name;
+            $haulerDetails->prefix = (isset($request->prefix) && $request->prefix != '' && $request->prefix != null) ? $request->prefix : null;
+            $haulerDetails->first_name = $request->first_name;
+            $haulerDetails->last_name = $request->last_name;
             $haulerDetails->email = $request->email;
-            $haulerDetails->phone = $request->hauler_phone;
-            $haulerDetails->address = $request->hauler_address;
-            $haulerDetails->city = $request->hauler_city;
-            $haulerDetails->state = $request->hauler_province;
-            $haulerDetails->zip_code = $request->hauler_zipcode;
-            $haulerDetails->user_image = (isset($request->hauler_image) && $request->hauler_image != '' && $request->hauler_image != null) ? $request->hauler_image : null;
-            $haulerDetails->is_active = $request->hauler_is_active;
+            $haulerDetails->phone = $request->phone;
+            $haulerDetails->address = $request->address;
+            $haulerDetails->city = $request->city;
+            $haulerDetails->state = $request->province;
+            $haulerDetails->zip_code = $request->zipcode;
+            $haulerDetails->user_image = (isset($request->user_image) && $request->user_image != '' && $request->user_image != null) ? $request->user_image : null;
+            $haulerDetails->is_active = $request->is_active;
             $haulerDetails->is_confirmed = $confirmed;
             $haulerDetails->save();
             DB::commit();
-            if ($confirmed == 0) {
-                    $this->_updateEmail($haulerDetails, $request->email);
-                    $request->user()->token()->revoke();
-                    return response()->json([
-                                'status' => true,
-                                'message' => 'Successfully logged out',
-                                'data' => []
-                    ]);
-                }
+//            if ($confirmed == 0) {
+//                    $this->_updateEmail($haulerDetails, $request->email);
+//                    $request->user()->token()->revoke();
+//                    return response()->json([
+//                                'status' => true,
+//                                'message' => 'Successfully logged out',
+//                                'data' => []
+//                    ]);
+//                }
             return response()->json([
                         'status' => true,
-                        'message' => 'Hauler details updated Successfully!',
+                        'message' => 'Hauler details updated successfully.',
                         'data' => []
                             ], 200);
         } catch (\Exception $e) {
@@ -205,7 +205,7 @@ class CompanyController extends Controller {
             User::whereId($request->customer_id)->delete();
             return response()->json([
                         'status' => true,
-                        'message' => 'Hauler deleted Successfully',
+                        'message' => 'Hauler deleted successfully.',
                         'data' => []
                             ], 200);
         } catch (\Exception $e) {

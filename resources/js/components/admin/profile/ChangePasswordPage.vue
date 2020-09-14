@@ -64,7 +64,7 @@
                 >
                   <v-col cols="12" sm="12" class="pt-0 pb-0">
                     <v-col sm="2" class="label-align pt-0">
-                      <label class="label_text">Password</label>
+                      <label class="label_text">Old Password</label>
                     </v-col>
                     <v-col sm="4" class="pt-0 pb-0">
                       <v-text-field
@@ -73,7 +73,7 @@
                         :rules="[rules.required, rules.min]"
                         :type="show1 ? 'text' : 'password'"
                         name="password"
-                        label="Enter Password"
+                        label="Enter Old Password"
                         hint="At least 8 characters."
                         counter
                         @click:append="show1 = !show1"
@@ -83,7 +83,7 @@
 
                   <v-col cols="12" sm="12" class="pt-0 pb-0">
                     <v-col sm="2" class="label-align pt-0">
-                      <label class="label_text">Change Password</label>
+                      <label class="label_text">New Password</label>
                     </v-col>
                     <v-col sm="4" class="pt-0 pb-0">
                       <v-text-field
@@ -92,7 +92,7 @@
                         :rules="[rules.required, rules.min, passwordConfirmationRule]"
                         :type="show2 ? 'text' : 'password'"
                         name="confirm_password"
-                        label="Enter Confirm Password"
+                        label="Enter New Password"
                         hint="At least 8 characters."
                         counter
                         @click:append="show2 = !show2"

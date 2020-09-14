@@ -43,7 +43,7 @@ function register(data) {
 function updateProfile(data) {
 
   return fetch(
-    this.apiUrl+`admin/edit-profile`,
+    this.apiUrl+`admin/edit-admin-profile`,
     requestOptions.post(data)
   )
     .then(handleResponse)

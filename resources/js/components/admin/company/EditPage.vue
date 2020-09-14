@@ -81,6 +81,7 @@
               lazy-validation
               id="form_field"
             >
+            <input type="hidden" name="hauler_id" value="">
               <v-row>
                 <v-col cols="6" md="6" class="pl-0 manager-cols">
                   <div class="custom-col row custom-img-holder">
@@ -217,7 +218,7 @@
                     </v-col>
                     <v-col sm="8" class="pt-0 pb-0">
                       <v-text-field
-                        v-model="addForm.state"
+                        v-model="addForm.province"
                         label="Enter Province"
                         required
                         :rules="[v => !!v || 'Province is required.']"
@@ -296,6 +297,7 @@ export default {
       uberMapToken: environment.uberMapToken,
       cross: false,
       addForm: {
+        hauler_id:"",
         prefix: "",
         first_name: "",
         last_name: "",
@@ -303,7 +305,7 @@ export default {
         phone: "",
         address: "",
         city: "",
-        state: "",
+        province: "",
         user_image: null,
         zipcode: "",
         is_active: true,
@@ -315,8 +317,8 @@ export default {
       ],
       phoneRules: [
         (v) => !!v || "Phone Number is required.",
-        (v) => /^\d*$/.test(v) || "Enter valid number.",
-        (v) => v.length >= 10 || "Enter valid number.",
+        (v) => /^\d*$/.test(v) || "Phone Number must be valid.",
+        (v) => v.length >= 10 || "Phone Number must be greater than 10 characters.",
       ],
       rules: [
         (value) =>
@@ -363,14 +365,14 @@ export default {
     companyService.getHauler(this.$route.params.id).then((response) => {
       //handle response
       if (response.status) {
-        console.log(response.data.joining_date);
         this.addForm = {
+           hauler_id: response.data.id,
           prefix: response.data.prefix,
           first_name: response.data.first_name,
           last_name: response.data.last_name,
           city: response.data.city,
           email: response.data.email,
-          state: response.data.state,
+          province: response.data.state,
           user_image: response.data.user_image,
           phone: response.data.phone,
           zipcode: response.data.zip_code,
@@ -381,7 +383,7 @@ export default {
           this.cross = true;
           this.avatar = this.imgUrl + response.data.user_image;
         } else {
-          this.avatar = "/images/avatar.png";
+          this.avatar = "";
         }
       } else {
         this.$toast.open({
@@ -394,7 +396,7 @@ export default {
   },
   methods: {
     Remove() {
-      this.avatar = "/images/avatar.png";
+      this.avatar = "";
       this.cross = false;
       this.addForm.user_image = "";
     },
@@ -408,7 +410,7 @@ export default {
     },
     handleRemoveFile: function (file) {
       this.addForm.user_image = "";
-      this.avatar = "/images/avatar.png";
+      this.avatar = "";
       this.cross = false;
     },
     update() {

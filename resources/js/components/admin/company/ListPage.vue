@@ -202,7 +202,7 @@ export default {
           this.$toast.open({
             message: response.message,
             type: "error",
-            position: "bottom-right",
+            position: "top-right",
           });
         }
       });
@@ -233,7 +233,7 @@ export default {
             this.$toast.open({
               message: response.message,
               type: "success",
-              position: "bottom-right",
+              position: "top-right",
             });
             //redirect to login
             this.dialog = false;
@@ -245,7 +245,7 @@ export default {
             this.$toast.open({
               message: response.message,
               type: "error",
-              position: "bottom-right",
+              position: "top-right",
             });
           }
         });

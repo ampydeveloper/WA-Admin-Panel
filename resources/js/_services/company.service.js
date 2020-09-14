@@ -41,7 +41,7 @@ function add(data) {
 
 function edit(data, id) {
   return fetch(
-    this.apiUrl+`admin/update-customer/`+id,
+    this.apiUrl+`admin/update-hauler`,
     requestOptions.post(data)
   )
     .then(handleResponse)
