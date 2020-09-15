@@ -176,7 +176,7 @@ class ManagerController extends Controller {
             if ($user->save()) {
                 $managerDetails = new ManagerDetail([
                     'user_id' => $user->id,
-//                    'identification_number' => $request->id_photo,
+                    'identification_number' => $request->identification_number,
                     'document' => $request->id_photo,
                     'salary' => $request->salary,
                     'joining_date' => date('Y/m/d'),
@@ -207,18 +207,19 @@ class ManagerController extends Controller {
     public function updateManager(Request $request) {
         $validator = Validator::make($request->all(), [
                     'manager_id' => 'required',
-                    'manager_first_name' => 'required',
-                    'manager_last_name' => 'required',
-                    'manager_phone' => 'required',
-                    'manager_address' => 'required',
-                    'manager_city' => 'required',
-                    'manager_province' => 'required',
-                    'manager_zipcode' => 'required',
-                    'manager_is_active' => 'required',
-                    'manager_card_image' => 'required',
-                    'manager_id_card' => 'required',
+                    'first_name' => 'required',
+                    'last_name' => 'required',
+                    'phone' => 'required',
+                    'address' => 'required',
+                    'city' => 'required',
+                    'province' => 'required',
+                    'zipcode' => 'required',
+                    'is_active' => 'required',
+//                    'card_image' => 'required',
+                    'id_photo' => 'required',
                     'salary' => 'required',
                     'joining_date' => 'required',
+             'releaving_date' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -249,26 +250,26 @@ class ManagerController extends Controller {
             if ($request->password != '' && $request->password != null) {
                 $manager->password = bcrypt($request->password);
             }
-            $manager->prefix = (isset($request->manager_prefix) && $request->manager_prefix != '' && $request->manager_prefix != null) ? $request->manager_prefix : null;
-            $manager->first_name = $request->manager_first_name;
-            $manager->last_name = $request->manager_last_name;
+            $manager->prefix = (isset($request->prefix) && $request->prefix != '' && $request->prefix != null) ? $request->prefix : null;
+            $manager->first_name = $request->first_name;
+            $manager->last_name = $request->last_name;
             $manager->email = $request->email;
-            $manager->phone = $request->manager_phone;
-            $manager->address = $request->manager_address;
-            $manager->city = $request->manager_city;
-            $manager->state = $request->manager_province;
-            $manager->zip_code = $request->manager_zipcode;
-            $manager->user_image = (isset($request->manager_image) && $request->manager_image != '' && $request->manager_image != null) ? $request->manager_image : null;
-            $manager->is_active = $request->manager_is_active;
+            $manager->phone = $request->phone;
+            $manager->address = $request->address;
+            $manager->city = $request->city;
+            $manager->state = $request->province;
+            $manager->zip_code = $request->zipcode;
+            $manager->user_image = (isset($request->user_image) && $request->user_image != '' && $request->user_image != null) ? $request->user_image : null;
+            $manager->is_active = $request->is_active;
             $manager->is_confirmed = $confirmed;
             if ($manager->save()) {
                 if ($manager->role_id != config('constant.roles.Admin')) {
                     ManagerDetail::whereUserId($request->manager_id)->update([
                         'salary' => $request->salary,
-                        'identification_number' => $request->manager_id_card,
+                        'identification_number' => $request->identification_number,
                         'joining_date' => $request->joining_date,
                         'releaving_date' => isset($request->releaving_date) ? $request->releaving_date : null,
-                        'document' => $request->manager_card_image,
+                        'document' => $request->id_photo,
                     ]);
                 }
                 DB::commit();

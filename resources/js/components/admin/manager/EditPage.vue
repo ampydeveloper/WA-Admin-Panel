@@ -113,18 +113,39 @@
                               <div class="v-messages__message">Profile image is required.</div>
                             </div>
                           </div>
+                          <v-col sm="12" class="p-0">
+                            <div class="service-image-outer" v-if="avatar">
+                              <button type="button" class="close" v-if="cross" @click="Remove()">
+                                <span>&times;</span>
+                              </button>
+                              <img :src="avatar" alt />
+                            </div>
+                          </v-col>
                         </v-col>
                       </div>
                       <div class="custom-col row">
                         <v-col sm="4" class="label-align pt-0">
-                          <label>Name</label>
+                          <label>First Name</label>
                         </v-col>
                         <v-col sm="8" class="pt-0">
                           <v-text-field
                             v-model="addForm.first_name"
-                            label="Name"
+                            label="Enter First Name"
                             required
-                            :rules="[v => !!v || 'Manager name is required.']"
+                            :rules="[v => !!v || 'Manager Fast name is required.']"
+                          ></v-text-field>
+                        </v-col>
+                      </div>
+                      <div class="custom-col row">
+                        <v-col sm="4" class="label-align pt-0">
+                          <label>Last Name</label>
+                        </v-col>
+                        <v-col sm="8" class="pt-0">
+                          <v-text-field
+                            v-model="addForm.last_name"
+                            label="Enter Last Name"
+                            required
+                            :rules="[v => !!v || 'Manager Last name is required.']"
                           ></v-text-field>
                         </v-col>
                       </div>
@@ -170,18 +191,18 @@
                       </div>
                       <div class="custom-col row">
                         <v-col sm="4" class="label-align pt-0">
-                          <label>State</label>
+                          <label>Province</label>
                         </v-col>
                         <v-col sm="8" class="pt-0">
                           <v-text-field
-                            v-model="addForm.state"
-                            label="Enter State"
+                            v-model="addForm.province"
+                            label="Enter Province"
                             required
-                            :rules="[v => !!v || 'State is required.']"
+                            :rules="[v => !!v || 'Province is required.']"
                           ></v-text-field>
                         </v-col>
                       </div>
-                      <div class="custom-col row">
+                      <!-- <div class="custom-col row">
                         <v-col sm="4" class="label-align pt-0">
                           <label>Country</label>
                         </v-col>
@@ -193,7 +214,7 @@
                             :rules="[v => !!v || 'Country is required.']"
                           ></v-text-field>
                         </v-col>
-                      </div>
+                      </div>-->
                     </v-col>
 
                     <v-col cols="6" md="6" class="pl-0 manager-cols">
@@ -203,7 +224,7 @@
                         </v-col>
                         <v-col sm="8" class="pt-0">
                           <v-text-field
-                            v-model="addForm.manager_zipcode"
+                            v-model="addForm.zipcode"
                             :rules="[v => !!v || 'Zipcode is required.']"
                             label="Enter Zipcode"
                             required
@@ -216,7 +237,7 @@
                         </v-col>
                         <v-col sm="8" class="pt-0">
                           <v-text-field
-                            v-model="addForm.manager_phone"
+                            v-model="addForm.phone"
                             :rules="phoneRules"
                             label="Enter Mobile Number"
                             required
@@ -267,11 +288,11 @@
                       </div>
                       <div class="custom-col row calendar-col">
                         <v-col sm="4" class="label-align pt-0">
-                          <label>Releaving date
-                           <br> <small>
-                            (if required)
-                            </small>
-                            </label>
+                          <label>
+                            Relieving Date
+                            <br />
+                            <small>(if required)</small>
+                          </label>
                         </v-col>
                         <v-col sm="8" class="pt-0">
                           <v-menu
@@ -285,7 +306,7 @@
                             <template v-slot:activator="{ on }">
                               <v-text-field
                                 v-model="date1"
-                                label="Enter Releaving date"
+                                label="Enter Relieving Date"
                                 prepend-icon="event"
                                 readonly
                                 v-on="on"
@@ -338,9 +359,20 @@
                               </div>
                             </div>
                           </div>
-                          <div class style="height: 200px; min-width: 200px; width: 200px;">
-                            <img style="width:100%" v-if="documentImg" :src="documentImg" alt="Doc" />
+                          <div class="service-image-outer" v-if="documentImg">
+                            <button type="button" class="close" v-if="cross" @click="Remove()">
+                              <span>&times;</span>
+                            </button>
+                            <img :src="documentImg" alt />
                           </div>
+                        </v-col>
+                      </div>
+                      <div class="custom-col row">
+                        <v-col sm="4" class="label-align pt-0">
+                          <label class="label_text label-check-half">Availabilty</label>
+                        </v-col>
+                        <v-col sm="8" class="pt-0 pb-0">
+                          <v-switch v-model="addForm.is_active"></v-switch>
                         </v-col>
                       </div>
                     </v-col>
@@ -358,7 +390,6 @@
                         >Update</v-btn>
                       </div>
                     </v-col>
-
                   </v-row>
                 </v-form>
               </v-col>
@@ -396,22 +427,24 @@ export default {
       apiUrl: environment.apiUrl,
       imgUrl: environment.imgUrl,
       addForm: {
+        manager_id: "",
         first_name: "",
+        last_name: "",
         city: "",
         email: "",
-        state: "",
-        country: "",
+        province: "",
+        // country: "",
         user_image: null,
         phone: "",
         role_id: 2,
-        document: "",
+        id_photo: "",
         joining_date: "",
         releaving_date: "",
         identification_number: "",
         salary: "",
-        manager_phone: "",
-        manager_zipcode: "",
+        zipcode: "",
         address: "",
+        is_active: "",
       },
       emailRules: [
         (v) => !!v || "Email is required.",
@@ -467,27 +500,29 @@ export default {
     managerService.getManager(this.$route.params.id).then((response) => {
       //handle response
       if (response.status) {
-        console.log(response.data.joining_date);
         this.addForm = {
+          manager_id: response.data.user.id,
           first_name: response.data.user.first_name,
+          last_name: response.data.user.last_name,
           city: response.data.user.city,
           email: response.data.user.email,
-          state: response.data.user.state,
-          country: response.data.user.country,
+          province: response.data.user.state,
+          // country: response.data.user.country,
           user_image: response.data.user.user_image,
           role_id: 2,
-          document: response.data.document,
+          id_photo: response.data.document,
           identification_number: response.data.identification_number,
           salary: response.data.salary,
-          manager_phone: response.data.user.phone,
-          manager_zipcode: response.data.user.zip_code,
+          phone: response.data.user.phone,
+          zipcode: response.data.user.zip_code,
           address: response.data.user.address,
+          is_active: response.data.user.is_active,
         };
         if (response.data.user.user_image) {
           this.cross = true;
           this.avatar = this.imgUrl + response.data.user.user_image;
         } else {
-          this.avatar = "/images/avatar.png";
+          this.avatar = "";
         }
         if (response.data.document) {
           this.documentImg = this.imgUrl + response.data.document;
@@ -505,7 +540,7 @@ export default {
   },
   methods: {
     Remove() {
-      this.avatar = "/images/avatar.png";
+      this.avatar = "";
       this.cross = false;
       this.addForm.user_image = "";
     },
@@ -521,16 +556,16 @@ export default {
     handleRemoveFile: function (file) {
       this.addForm.user_image = "";
       this.cross = false;
-      this.avatar = "/images/avatar.png";
+      this.avatar = "";
     },
     handleProcessFile1: function (error, file) {
       this.docError = false;
-      this.addForm.document = file.serverId;
+      this.addForm.id_photo = file.serverId;
       this.documentImg = this.imgUrl + file.serverId;
       this.uploadInProgress = false;
     },
     handleRemoveFile1: function (file) {
-      this.addForm.document = "";
+      this.addForm.id_photo = "";
       this.documentImg = "";
       this.docError = true;
     },
@@ -538,7 +573,7 @@ export default {
       //stop page to reload
       e.preventDefault();
 
-      if (this.addForm.document == "") {
+      if (this.addForm.id_photo == "") {
         this.docError = true;
       }
 

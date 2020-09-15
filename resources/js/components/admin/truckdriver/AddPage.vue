@@ -117,14 +117,28 @@
                       </div>
                       <div class="custom-col row">
                         <v-col sm="4" class="label-align pt-0">
-                          <label>Name</label>
+                          <label>First Name</label>
                         </v-col>
                         <v-col sm="8" class="pt-0 pb-0">
                           <v-text-field
-                            v-model="addForm.driver_name"
-                            :rules="[v => !!v || 'Driver name is required.']"
+                            v-model="addForm.driver_first_name"
+                            :rules="[v => !!v || 'Driver First Name is required.']"
                             required
-                            label="Enter Name"
+                            label="Enter First Name"
+                            placeholder
+                          ></v-text-field>
+                        </v-col>
+                      </div>
+                      <div class="custom-col row">
+                        <v-col sm="4" class="label-align pt-0">
+                          <label>Last Name</label>
+                        </v-col>
+                        <v-col sm="8" class="pt-0 pb-0">
+                          <v-text-field
+                            v-model="addForm.driver_last_name"
+                            :rules="[v => !!v || 'Driver Last Name is required.']"
+                            required
+                            label="Enter Last Name"
                             placeholder
                           ></v-text-field>
                         </v-col>
@@ -174,14 +188,14 @@
                       </div>
                       <div class="custom-col row">
                         <v-col sm="4" class="label-align pt-0">
-                          <label>State</label>
+                          <label>Province</label>
                         </v-col>
                         <v-col sm="8" class="pt-0 pb-0">
                           <v-text-field
-                            v-model="addForm.driver_state"
-                            :rules="[v => !!v || 'State is required.']"
+                            v-model="addForm.driver_province"
+                            :rules="[v => !!v || 'Province is required.']"
                             required
-                            label="Enter State"
+                            label="Enter Province"
                             placeholder
                           ></v-text-field>
                         </v-col>
@@ -230,6 +244,36 @@
                             label="Enter Licence Number"
                             placeholder
                           ></v-text-field>
+                        </v-col>
+                      </div>
+                      <div class="custom-col row custom-img-holder">
+                        <v-col sm="4" class="label-align pt-0 image-upload-label">
+                          <label>Licence Image</label>
+                        </v-col>
+                        <v-col sm="8" class="pt-0 pb-0">
+                          <file-pond
+                            name="uploadImage"
+                            ref="pond"
+                            label-idle="Drop or Browse your files"
+                            v-bind:allow-multiple="false"
+                            v-bind:server="serverOptions"
+                            v-bind:files="myFiles"
+                            v-on:addfilestart="setUploadIndex"
+                            v-on:processfile="handleProcessFile1"
+                            allow-file-type-validation="true"
+                            accepted-file-types="image/jpeg, image/png"
+                            :rules="[v => !!v || 'Licence Image is required']"
+                            v-on:processfilerevert="handleRemoveFile1"
+                          />
+                          <div
+                            class="v-messages theme--light error--text"
+                            role="alert"
+                            v-if="docError"
+                          >
+                            <div class="v-messages__wrapper">
+                              <div class="v-messages__message">Licence Image is required.</div>
+                            </div>
+                          </div>
                         </v-col>
                       </div>
                       <div class="custom-col row">
@@ -290,37 +334,8 @@
                           ></v-text-field>
                         </v-col>
                       </div>
-                      <div class="custom-col row custom-img-holder">
-                        <v-col sm="4" class="label-align pt-0 image-upload-label">
-                          <label>Documents</label>
-                        </v-col>
-                        <v-col sm="8" class="pt-0 pb-0">
-                          <file-pond
-                            name="uploadImage"
-                            ref="pond"
-                            label-idle="Drop or Browse your files"
-                            v-bind:allow-multiple="false"
-                            v-bind:server="serverOptions"
-                            v-bind:files="myFiles"
-                            v-on:addfilestart="setUploadIndex"
-                            v-on:processfile="handleProcessFile1"
-                            allow-file-type-validation="true"
-                            accepted-file-types="image/jpeg, image/png"
-                            :rules="[v => !!v || 'Document is required']"
-                            v-on:processfilerevert="handleRemoveFile1"
-                          />
-                          <div
-                            class="v-messages theme--light error--text"
-                            role="alert"
-                            v-if="docError"
-                          >
-                            <div class="v-messages__wrapper">
-                              <div class="v-messages__message">Documents are required.</div>
-                            </div>
-                          </div>
-                        </v-col>
-                      </div>
-                      <div class="custom-col row">
+                      
+                      <!-- <div class="custom-col row">
                         <v-col sm="4" class="label-align pt-0">
                           <label class="label_text label-half">Fleet Type</label>
                         </v-col>
@@ -336,7 +351,7 @@
                             <v-radio label="Skidsteer" value="0"></v-radio>
                           </v-radio-group>
                         </v-col>
-                      </div>
+                      </div> -->
                     </v-col>
 
                     <v-col class="pt-0 pb-0" cols="12" md="12">
@@ -388,16 +403,17 @@ export default {
       setDate: new Date().toISOString().substr(0, 10),
       role: 1,
       addForm: {
-        driver_name: "",
+        driver_first_name: "",
+        driver_last_name:"",
         email: "",
         driver_licence: "",
         expiry_date: "",
         salary_type: "",
-        document: "",
+        driver_licence_image: "",
         user_image: "",
         driver_address: "",
         driver_city: "",
-        driver_state: "",
+        driver_province: "",
         driver_country: "",
         driver_zipcode: "",
         driver_phone: "",
@@ -466,19 +482,19 @@ export default {
       this.avatar = "/images/avatar.png";
     },
     handleProcessFile1: function (error, file) {
-      this.addForm.document = file.serverId;
+      this.addForm.driver_licence_image = file.serverId;
       this.docError = false;
       this.uploadInProgress = false;
     },
     handleRemoveFile1: function (file) {
-      this.addForm.document = "";
+      this.addForm.driver_licence_image = "";
       this.docError = true;
     },
     save: function (e) {
       //stop page to reload
       e.preventDefault();
 
-      if (this.addForm.document == "") {
+      if (this.addForm.driver_licence_image == "") {
         this.docError = true;
       }
 

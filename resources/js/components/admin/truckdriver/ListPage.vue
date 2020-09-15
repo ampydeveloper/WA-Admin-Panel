@@ -106,36 +106,31 @@
                   <td>
                     <div class="v-avatar v-list-item__avatar">
                       <img
-                        v-if="item.user.user_image"
-                        :src="'../../'+item.user.user_image"
+                        v-if="item.user_image"
+                        :src="'../../'+item.user_image"
                         alt
                         class="small-img"
                       />
-                      <img
-                        v-if="!item.user.user_image"
-                        src="/images/avatar.png"
-                        alt
-                        class="small-img"
-                      />
+                      <img v-if="!item.user_image" src="/images/avatar.png" alt class="small-img" />
                     </div>
-                    {{ item.user.first_name }}
+                    {{ item.first_name }} {{ item.last_name }}
                   </td>
-                  <td>{{ item.user.phone }}</td>
-                  <td>{{ item.user.email }}</td>
+                  <td>{{ item.phone }}</td>
+                  <td>{{ item.email }}</td>
                   <td>0</td>
-                  <td v-if="item.salary_type  == 0">${{ item.driver_salary }}/hr</td>
-                  <td v-if="item.salary_type  == 1">${{ item.driver_salary }}/Per load</td>
+                  <td v-if="item.driver.salary_type  == 0">${{ item.driver.driver_salary }}/hr</td>
+                  <td v-if="item.driver.salary_type  == 1">${{ item.driver.driver_salary }}/Per load</td>
                   <td>0</td>
                   <td>
-                    <span v-if="!item.user.is_active" class="badges-item">No</span>
-                    <span v-if="item.user.is_active" class="badges-item">Yes</span>
+                    <span v-if="!item.is_active" class="badges-item">No</span>
+                    <span v-if="item.is_active" class="badges-item">Yes</span>
                   </td>
                   <td class="action-col">
                     <router-link v-if="!isAdmin" :to="'/manager/truckdriver/edit/' + item.id">
                       <edit-3-icon size="1.2x" class="custom-class"></edit-3-icon>
                     </router-link>
                     <router-link v-if="isAdmin" :to="'/admin/truckdriver/edit/' + item.id">
-                        <edit-3-icon size="1.2x" class="custom-class"></edit-3-icon>
+                      <edit-3-icon size="1.2x" class="custom-class"></edit-3-icon>
                     </router-link>
                     <a href="javascript:void(0);" text @click="Delete(item.id)">
                       <trash-icon size="1.5x" class="custom-class"></trash-icon>
@@ -143,7 +138,7 @@
                   </td>
                 </tr>
                 <tr v-if="drivers.length == 0">
-                  <template>No driver till now.</template>
+                  <td colspan="9">No driver till now.</td>
                 </tr>
               </tbody>
             </table>
@@ -177,12 +172,12 @@ import { router } from "../../../_helpers/router";
 export default {
   components: {
     UserIcon,
-     Edit3Icon,
+    Edit3Icon,
     TrashIcon,
     PlusCircleIcon,
     MoreVerticalIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
+    ChevronLeftIcon,
+    ChevronRightIcon,
   },
   data() {
     return {
@@ -261,29 +256,25 @@ export default {
   updated() {
     setTimeout(function () {
       $(document).ready(function () {
-        $(".table-main").DataTable({
-          aoColumnDefs: [
-            {
-              bSortable: false,
-              aTargets: [-1, -2, -3, -4, -5, -6, -7],
+        if (!$.fn.dataTable.isDataTable(".table-main")) {
+          $(".table-main").DataTable({
+            aoColumnDefs: [
+              {
+                bSortable: false,
+                aTargets: [-1, -2, -3, -4, -5, -6, -7],
+              },
+            ],
+            oLanguage: { sSearch: "" },
+            drawCallback: function (settings) {
+              $(".dataTables_paginate .paginate_button.previous").html(
+                $("#table-chevron-left").html()
+              );
+              $(".dataTables_paginate .paginate_button.next").html(
+                $("#table-chevron-right").html()
+              );
             },
-          ],
-          // language: {
-          //   paginate: {
-          //     previous: "",
-          //     next: "",
-          //   },
-          // },
-          oLanguage: { sSearch: "" },
-          drawCallback: function (settings) {
-            $(".dataTables_paginate .paginate_button.previous").html(
-              $("#table-chevron-left").html()
-            );
-            $(".dataTables_paginate .paginate_button.next").html(
-              $("#table-chevron-right").html()
-            );
-          },
-        });
+          });
+        }
         $(".dataTables_filter input").attr("placeholder", "Search Driver");
         $(".dataTables_paginate .paginate_button.previous").html(
           $("#table-chevron-left").html()

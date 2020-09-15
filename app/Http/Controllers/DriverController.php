@@ -56,7 +56,7 @@ class DriverController extends Controller {
                     'driver_city' => 'required',
                     'driver_province' => 'required',
                     'driver_zipcode' => 'required',
-                    'driver_type' => 'required',
+//                    'driver_type' => 'required',
                     'driver_licence' => 'required',
                     'expiry_date' => 'required',
                     'salary_type' => 'required',
@@ -93,7 +93,7 @@ class DriverController extends Controller {
             if ($user->save()) {
                 $driverDetails = new Driver([
                     'user_id' => $user->id,
-                    'driver_type' => $request->driver_type,
+                    'driver_type' => 1,
                     'driver_licence' => $request->driver_licence,
                     'expiry_date' => $request->expiry_date,
                     'document' => $request->driver_licence_image,
@@ -106,7 +106,7 @@ class DriverController extends Controller {
                     DB::commit();
                     return response()->json([
                                 'status' => true,
-                                'message' => 'Successfully created Driver!',
+                                'message' => 'Driver created successfully.',
                                 'data' => []
                                     ], 200);
                 }
@@ -136,7 +136,7 @@ class DriverController extends Controller {
                     'driver_city' => 'required',
                     'driver_province' => 'required',
                     'driver_zipcode' => 'required',
-                    'driver_type' => 'required',
+//                    'driver_type' => 'required',
                     'driver_licence' => 'required',
                     'expiry_date' => 'required',
                     'driver_licence_image' => 'required',
@@ -187,7 +187,7 @@ class DriverController extends Controller {
             if ($driver->save()) {
                 if ($driver->role_id != config('constant.roles.Admin')) {
                     Driver::whereUserId($request->driver_id)->update([
-                        'driver_type' => $request->driver_type,
+                        'driver_type' => 1,
                         'driver_licence' => $request->driver_licence,
                         'expiry_date' => $request->expiry_date,
                         'document' => $request->driver_licence_image,
@@ -202,13 +202,13 @@ class DriverController extends Controller {
                 }
                 return response()->json([
                             'status' => true,
-                            'message' => 'Driver details updated Successfully!',
+                            'message' => 'Driver details updated successfully.',
                             'data' => []
                                 ], 200);
             DB::commit();
             return response()->json([
                         'status' => true,
-                        'message' => 'Driver details edit successfully.',
+                        'message' => 'Driver details updated successfully.',
                         'data' => []
                             ], 200);
             }
@@ -240,7 +240,7 @@ class DriverController extends Controller {
             User::whereId($request->driver_id)->delete();
             return response()->json([
                         'status' => true,
-                        'message' => 'Driver deleted Successfully',
+                        'message' => 'Driver deleted successfully.',
                         'data' => []
                             ], 200);
         } catch (\Exception $e) {

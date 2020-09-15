@@ -201,7 +201,7 @@
                         </v-col>
                       </div>
 
-                      <div class="custom-col row">
+                      <!-- <div class="custom-col row">
                         <v-col sm="4" class="label-align pt-0">
                           <label>Country</label>
                         </v-col>
@@ -214,7 +214,7 @@
                             placeholder
                           ></v-text-field>
                         </v-col>
-                      </div>
+                      </div> -->
                     </v-col>
 
                     <v-col cols="6" md="6" class="pl-0 manager-cols">
@@ -294,7 +294,7 @@
                       <div class="custom-col row calendar-col">
                         <v-col sm="4" class="label-align pt-0">
                           <label>
-                            Releaving date
+                            Relieving Date
                             <br />
                             <small>(if required)</small>
                           </label>
@@ -313,7 +313,7 @@
                                 v-model="date1"
                                 prepend-icon="event"
                                 readonly
-                                label="Select Releaving Date"
+                                label="Select Relieving Date"
                                 placeholder
                                 v-on="on"
                               ></v-text-field>
@@ -371,6 +371,14 @@
                           </div>
                         </v-col>
                       </div>
+                      <div class="custom-col row">
+                        <v-col sm="4" class="label-align pt-0">
+                          <label class="label_text label-check-half">Availabilty</label>
+                        </v-col>
+                        <v-col sm="8" class="pt-0 pb-0">
+                          <v-switch v-model="addForm.is_active"></v-switch>
+                        </v-col>
+                      </div>
                     </v-col>
 
                     <v-col class="pt-0 pb-0" cols="12" md="12">
@@ -426,7 +434,7 @@ export default {
         city: "",
         email: "",
         province: "",
-        country: "",
+        // country: "",
         user_image: null,
         role_id: 2,
         id_photo: "",
@@ -437,6 +445,7 @@ export default {
         manager_phone: "",
         manager_zipcode: "",
         address: "",
+        is_active:""
       },
       emailRules: [
         (v) => !!v || "Email is required.",

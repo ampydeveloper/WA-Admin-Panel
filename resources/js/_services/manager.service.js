@@ -39,7 +39,7 @@ function add(data) {
 
 function edit(data, managerId) {
   return fetch(
-    this.apiUrl+`admin/update-manager/`+managerId,
+    this.apiUrl+`admin/update-manager-admin`,
     requestOptions.post(data)
   )
     .then(handleResponse)

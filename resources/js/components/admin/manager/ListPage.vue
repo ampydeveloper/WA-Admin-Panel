@@ -85,7 +85,7 @@
                   <th class="text-left">#</th>
                   <th class="text-left">Manager</th>
                   <th class="text-left mgr-add-col">Address</th>
-                  <th class="text-left">Contact Number</th>
+                  <th class="text-left">Mobile</th>
                   <th class="text-left">Email</th>
                   <th class="text-left">Salary</th>
                   <th class="text-left">Active</th>
@@ -113,10 +113,10 @@
                       </div>
                       {{ item.first_name }} {{ item.last_name }}
                     </td>
-                    <td>{{ item.address }} {{ item.city }} {{ item.state }} {{ item.country }} {{ item.zip_code }}</td>
+                    <td>{{ item.address }}, {{ item.city }}, {{ item.state }}, {{ item.country }} {{ item.zip_code }}</td>
                     <td>{{ item.phone }}</td>
                     <td>{{ item.email }}</td>
-                    <td>${{ item.manager.salary }}</td>
+                    <td>${{ item.manager_details.salary }}</td>
                     <td>
                       <span v-if="!item.is_active" class="badges-item">No</span>
                       <span v-if="item.is_active" class="badges-item">Yes</span>
@@ -216,6 +216,24 @@ export default {
       });
     },
     Delete(e) {
+      this.$swal({
+        title: "Are you sure?",
+        text: "Are you sure you want to delete this manager?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes Delete it!",
+        cancelButtonText: "No, Keep it!",
+        showCloseButton: true,
+        showLoaderOnConfirm: true,
+      }).then((result) => {
+        if (result.value) {
+          this.deleteManager(e);
+        }
+      });
+
+      return false;
+    },
+    deleteManager(e) {
       if (e) {
         managerService.Delete(e).then((response) => {
           //handle response
@@ -256,23 +274,25 @@ export default {
   updated() {
     setTimeout(function () {
       $(document).ready(function () {
-        $(".table-main").DataTable({
-          aoColumnDefs: [
-            {
-              bSortable: false,
-              aTargets: [-1, -2, -3, -4, -5, -6],
+        if (!$.fn.dataTable.isDataTable(".table-main")) {
+          $(".table-main").DataTable({
+            aoColumnDefs: [
+              {
+                bSortable: false,
+                aTargets: [-1, -2, -3, -4, -5, -6],
+              },
+            ],
+            oLanguage: { sSearch: "" },
+            drawCallback: function (settings) {
+              $(".dataTables_paginate .paginate_button.previous").html(
+                $("#table-chevron-left").html()
+              );
+              $(".dataTables_paginate .paginate_button.next").html(
+                $("#table-chevron-right").html()
+              );
             },
-          ],
-          oLanguage: { sSearch: "" },
-          drawCallback: function (settings) {
-            $(".dataTables_paginate .paginate_button.previous").html(
-              $("#table-chevron-left").html()
-            );
-            $(".dataTables_paginate .paginate_button.next").html(
-              $("#table-chevron-right").html()
-            );
-          },
-        });
+          });
+        }
         $(".dataTables_filter input").attr("placeholder", "Search Managers");
         $(".dataTables_paginate .paginate_button.previous").html(
           $("#table-chevron-left").html()
