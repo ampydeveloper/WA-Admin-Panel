@@ -35,6 +35,7 @@ class ManagerController extends Controller {
                 'first_name' => $request->admin_first_name,
                 'last_name' => $request->admin_last_name,
                 'email' => $request->email,
+                'user_image' => (isset($request->user_image) && $request->user_image != '' && $request->user_image != null) ? $request->user_image : null,
                 'role_id' => config('constant.roles.Admin'),
                 'created_from_id' => $request->user()->id,
                 'is_confirmed' => 1,
@@ -98,6 +99,7 @@ class ManagerController extends Controller {
             $admin->first_name = $request->admin_first_name;
             $admin->last_name = $request->admin_last_name;
             $admin->email = $request->email;
+            $admin->user_image = (isset($request->user_image) && $request->user_image != '' && $request->user_image != null) ? $request->user_image : null;
             $admin->is_confirmed = $confirmed;
             $admin->save();
             if ($confirmed == 0) {
