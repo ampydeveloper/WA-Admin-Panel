@@ -47,7 +47,7 @@
               </router-link>
             </li>
             <li>
-              <router-link to="/admin/services">
+              <router-link to="/admin/trucks">
                 List
                 <span>
                   <svg
@@ -248,7 +248,7 @@
                         </v-col>
                       </div>
                       <div class="custom-col row">
-                        <v-col sm="4" class="label-align pt-0">
+                        <v-col sm="4" class="label-align pt-0 image-upload-label">
                           <label>RC</label>
                         </v-col>
                         <v-col sm="8" class="pt-0 pb-0">
@@ -277,7 +277,7 @@
                         </v-col>
                       </div>
                       <div class="custom-col row">
-                        <v-col sm="4" class="label-align pt-0">
+                        <v-col sm="4" class="label-align pt-0 image-upload-label">
                           <label>Insurance</label>
                         </v-col>
                         <v-col sm="8" class="pt-0 pb-0">
@@ -371,7 +371,7 @@ export default {
         chaase_number: "",
         insurance_number: "",
         insurance_date: "",
-        document: "",
+        rc_document: "",
         insurance_document: "",
         killometer: "",
         capacity: "",
@@ -420,12 +420,12 @@ export default {
       this.uploadInProgress = true;
     },
     handleProcessFile1: function (error, file) {
-      this.addForm.document = file.serverId;
+      this.addForm.rc_document = file.serverId;
       this.docError = false;
       this.uploadInProgress = false;
     },
     handleRemoveFile1: function (file) {
-      this.addForm.document = "";
+      this.addForm.rc_document = "";
       this.docError = true;
     },
     handleProcessFile2: function (error, file) {
@@ -441,7 +441,7 @@ export default {
       //stop page to reload
       e.preventDefault();
 
-      if (this.addForm.document == "") {
+      if (this.addForm.rc_document == "") {
         this.docError = true;
       }
       if (this.addForm.insurance_document == "") {

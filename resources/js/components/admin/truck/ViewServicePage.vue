@@ -1,114 +1,240 @@
 <template>
   <v-app>
-    <v-container fluid>
-      <v-row>
-        <v-tabs v-model="tab" background-color="transparent" color="basil" grow>
-          <v-tab v-for="item in items" :key="item">{{ item }}</v-tab>
-        </v-tabs>
+    <div class="bread_crum">
+      <ul>
+        <li>
+          <h4 class="main-title top_heading">
+            Services Details
+            <span class="right-bor"></span>
+          </h4>
+        </li>
+        <li>
+          <router-link to="/admin/dashboard" class="home_svg">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24px"
+              height="24px"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="feather feather-home h-5 w-5 mb-1 stroke-current text-primary"
+            >
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+              <polyline points="9 22 9 12 15 12 15 22" />
+            </svg>
+            <span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16px"
+                height="16px"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="feather feather-chevrons-right w-4 h-4"
+              >
+                <polyline points="13 17 18 12 13 7" />
+                <polyline points="6 17 11 12 6 7" />
+              </svg>
+            </span>
+          </router-link>
+        </li>
+        <li>List</li>
+      </ul>
+    </div>
 
-        <v-tabs-items v-model="tab" >
-          <v-tab-item v-for="item in items" :key="item">
-            <v-card class="service-tab-content" color="basil" flat v-if="item == 'Service'">
-              <v-card-text>
-                <v-data-table
-                  :headers="headers"
-                  :items="truck"
-                  :sort-desc="[false, true]"
-                  multi-sort
-                  class="elevation-1"
+    <div class="main_box">
+      <v-container fluid>
+        <v-row>
+          <div class="add-icon">
+            <!-- <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon> -->
+
+            <router-link
+              v-if="isAdmin"
+              :to="'/admin/truck/addservice/' +vehicle_id"
+              class="nav-item nav-link"
+            >
+              <v-btn color="success" class="mr-4 custom-save-btn ml-4 mt-4">Add Service</v-btn>
+            </router-link>
+            <router-link
+              v-if="!isAdmin"
+              :to="'/manager/truck/addservice/' +vehicle_id"
+              class="nav-item nav-link"
+            >
+              <v-btn color="success" class="mr-4 custom-save-btn ml-4 mt-4">Add Service</v-btn>
+            </router-link>
+
+            <router-link
+              v-if="isAdmin"
+              :to="'/admin/truck/addinsurance/' +vehicle_id"
+              class="nav-item nav-link"
+            >
+              <v-btn color="success" class="mr-4 custom-save-btn ml-4 mt-4">Add Insurance</v-btn>
+            </router-link>
+            <router-link
+              v-if="!isAdmin"
+              :to="'/manager/truck/addinsurance/' +vehicle_id"
+              class="nav-item nav-link"
+            >
+              <v-btn color="success" class="mr-4 custom-save-btn ml-4 mt-4">Add Insurance</v-btn>
+            </router-link>
+          </div>
+
+          <v-tabs
+            v-model="tab"
+            class="custom-tabs-wdout-modif c-tabs-50"
+            background-color="transparent"
+            color="#56bf7a"
+            grow
+          >
+            <v-tab v-for="item in items" :key="item">{{ item }}</v-tab>
+          </v-tabs>
+
+          <v-tabs-items v-model="tab" class="custom-tab-content">
+            <v-tab-item v-for="item in items" :key="item">
+              <v-card class="service-tab-content" color="basil" flat v-if="item == 'Service'">
+                <table
+                  id="truck-service-table"
+                  class="table table-striped table-bordered table-main"
                 >
-                <template v-slot:item.document="{ item }"><img style="height: 60px; min-width: 60px; width: 60px;" :src="'/'+item.document" alt="John" /></template>
-		<template v-slot:item.receipt="{ item }"><img style="height: 60px; min-width: 60px; width: 60px;" :src="'/'+item.receipt"></template>
-                  <template v-slot:item.id="{ item }">
-                     <span class="custom-action-btn">
- <router-link v-if="isAdmin" :to="'/admin/truck/editservice/' +item.id">Edit</router-link>
- <router-link v-if="!isAdmin" :to="'/manager/truck/editservice/' +item.id">Edit</router-link>
-</span>
-                    <span class="custom-action-btn" @click="DeleteService(item.id)">Delete</span>
-                  </template>
-                </v-data-table>
-              </v-card-text>
-              <router-link  v-if="isAdmin" :to="'/admin/truck/addservice/' +vehicle_id" class="nav-item nav-link">
-                <v-btn color="success" class="mr-4 custom-save-btn ml-4 mt-4">Add Service</v-btn>
-              </router-link>
-              <router-link  v-if="!isAdmin" :to="'/manager/truck/addservice/' +vehicle_id" class="nav-item nav-link">
-                <v-btn color="success" class="mr-4 custom-save-btn ml-4 mt-4">Add Service</v-btn>
-              </router-link>
-            </v-card>
-            <v-card class="insurance-tab-content" color="basil" flat v-if="item == 'Insurance'">
-              <v-card-text>
-                <v-data-table
-                  :headers="headers1"
-                  :items="insurance"
-                  :sort-desc="[false, true]"
-                  multi-sort
-                  class="elevation-1"
+                  <thead>
+                    <tr>
+                      <th class="text-left">#</th>
+                      <th class="text-left">Service Date</th>
+                      <th class="text-left">Service Miles</th>
+                      <th class="text-left">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      v-for="(item, index) in truck"
+                      :key="item.name"
+                      v-bind:class="{ 'selected' : isActive == index}"
+                    >
+                      <td>{{index+1}}</td>
+                      <td>{{ item.service_date | formatDateLic}}</td>
+                      <td>{{ item.service_killometer }}</td>
+
+                      <td class="action-col">
+                        <router-link
+                          v-if="isAdmin"
+                          :to="'/admin/truck/editservice/' + item.id"
+                          class="nav-item nav-link"
+                        >
+                          <edit-3-icon size="1.2x" class="custom-class"></edit-3-icon>
+                        </router-link>
+                        <router-link
+                          v-if="!isAdmin"
+                          :to="'/manager/truck/editservice/' + item.id"
+                          class="nav-item nav-link"
+                        >
+                          <edit-3-icon size="1.2x" class="custom-class"></edit-3-icon>
+                        </router-link>
+                        <a href="javascript:void(0);" text @click="DeleteS(item.id)">
+                          <trash-icon size="1.5x" class="custom-class"></trash-icon>
+                        </a>
+                      </td>
+                    </tr>
+                    <tr v-if="truck.length == 0">
+                      <td colspan="4">No service till now.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </v-card>
+              <v-card class="insurance-tab-content" color="basil" flat v-if="item == 'Insurance'">
+                <table
+                  id="truck-insurance-table"
+                  class="table table-striped table-bordered table-main"
                 >
- <template v-slot:item.insurance_date="{ item }">
-{{item.insurance_date | formatDateLic}}
-</template>
- <template v-slot:item.insurance_expiry="{ item }">
-{{item.insurance_expiry | formatDateLic}}
-</template>
-                  <template v-slot:item.id="{ item }">
-                    <span class="custom-action-btn">
-		 <router-link v-if="isAdmin" :to="'/admin/truck/editinsurance/' +item.id">Edit </router-link>
-		 <router-link v-if="!isAdmin" :to="'/manager/truck/editinsurance/' +item.id">Edit </router-link>
-		</span>
-                    <span class="custom-action-btn" @click="Delete(item.id)">Delete</span>
-                  </template>
-                </v-data-table>
-              </v-card-text>
-              <router-link v-if="isAdmin" :to="'/admin/truck/addinsurance/' +vehicle_id" class="nav-item nav-link">
-                <v-btn color="success" class="mr-4 custom-save-btn ml-4 mt-4">Add Insurance</v-btn>
-              </router-link>
-              <router-link v-if="!isAdmin" :to="'/manager/truck/addinsurance/' +vehicle_id" class="nav-item nav-link">
-                <v-btn color="success" class="mr-4 custom-save-btn ml-4 mt-4">Add Insurance</v-btn>
-              </router-link>
-            </v-card>
-          </v-tab-item>
-        </v-tabs-items>
-      </v-row>
-    </v-container>
+                  <thead>
+                    <tr>
+                      <th class="text-left">#</th>
+                      <th class="text-left">Number</th>
+                      <th class="text-left">Insurance Date</th>
+                      <th class="text-left">Insurance Expiry Date</th>
+                      <th class="text-left">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      v-for="(item, index) in insurance"
+                      :key="item.insurance_number"
+                      v-bind:class="{ 'selected' : isActive == index}"
+                    >
+                      <td>{{index+1}}</td>
+                      <td>{{item.insurance_number}}</td>
+                      <td>{{item.insurance_date | formatDateLic}}</td>
+                      <td>{{item.insurance_expiry | formatDateLic}}</td>
+
+                      <td class="action-col">
+                        <router-link
+                          v-if="isAdmin"
+                          :to="'/admin/truck/editinsurance/' + item.id"
+                          class="nav-item nav-link"
+                        >
+                          <edit-3-icon size="1.2x" class="custom-class"></edit-3-icon>
+                        </router-link>
+                        <router-link
+                          v-if="!isAdmin"
+                          :to="'/manager/truck/editinsurance/' + item.id"
+                          class="nav-item nav-link"
+                        >
+                          <edit-3-icon size="1.2x" class="custom-class"></edit-3-icon>
+                        </router-link>
+                        <a href="javascript:void(0);" text @click="DeleteI(item.id)">
+                          <trash-icon size="1.5x" class="custom-class"></trash-icon>
+                        </a>
+                      </td>
+                    </tr>
+                    <tr v-if="insurance.length == 0">
+                      <td colspan="5">No insurance till now.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </v-card>
+            </v-tab-item>
+          </v-tabs-items>
+        </v-row>
+      </v-container>
+    </div>
+
+    <span id="table-chevron-left" class="d-none">
+      <chevron-left-icon size="1.5x" class="custom-class"></chevron-left-icon>
+    </span>
+    <span id="table-chevron-right" class="d-none">
+      <chevron-right-icon size="1.5x" class="custom-class"></chevron-right-icon>
+    </span>
   </v-app>
 </template>
 
 <script>
 import { truckService } from "../../../_services/truck.service";
-import { PlusCircleIcon } from "vue-feather-icons";
+import {
+  PlusCircleIcon,
+  Edit3Icon,
+  TrashIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+} from "vue-feather-icons";
 import { authenticationService } from "../../../_services/authentication.service";
 export default {
   components: {
-    PlusCircleIcon
+    PlusCircleIcon,
+    Edit3Icon,
+    TrashIcon,
+    ChevronLeftIcon,
+    ChevronRightIcon,
   },
   data() {
     return {
       tab: null,
+      isActive: null,
       items: ["Service", "Insurance"],
-      headers: [
-        { text: "Servicekm", value: "service_killometer" },
-        {
-          text: "Date",
-          align: "start",
-          sortable: false,
-          value: "service_date"
-        },
-	{ text: "Note", value: "note" },
-	{ text: "Doc", value: "document" },
-	{ text: "Receipt", value: "receipt" },
-        { text: "Action", value: "id" }
-      ],
-      headers1: [
-        {
-          text: "Insurance Name",
-          align: "start",
-          sortable: false,
-          value: "insurance_number"
-        },
-        { text: "Insurance Date", value: "insurance_date" },
-        { text: "Insurance Expiry Date", value: "insurance_expiry" },
-        { text: "Action", value: "id" }
-      ],
       avatar: null,
       truck: [],
       insurance: [],
@@ -116,67 +242,85 @@ export default {
       isAdmin: true,
     };
   },
- 
+
   mounted() {
     const currentUser = authenticationService.currentUserValue;
-    if(currentUser.data.user.role_id == 1){
-    this.isAdmin = true;
-    }else{
-    this.isAdmin = false;
+    if (currentUser.data.user.role_id == 1) {
+      this.isAdmin = true;
+    } else {
+      this.isAdmin = false;
     }
-  this.getResults();
+    this.getResults();
   },
   methods: {
-	getResults() {
-  this.vehicle_id = this.$route.params.id;
-    truckService.getTruckService(this.$route.params.id).then(response => {
-      //handle response
-      if (response.status) {
-        this.truck = response.data;
-      } else {
-	    const currentUser = authenticationService.currentUserValue;
-	    if(currentUser.data.user.role_id == 1){
-          	router.push("/admin/trucks");
-	    }else{
-          	router.push("/manager/trucks");
-	    }
-        this.$toast.open({
-          message: response.message,
-          type: "error",
-          position: "top-right"
-        });
-      }
-    });
+    getResults() {
+      this.vehicle_id = this.$route.params.id;
+      truckService.getTruckService(this.$route.params.id).then((response) => {
+        //handle response
+        if (response.status) {
+          this.truck = response.data;
+        } else {
+          const currentUser = authenticationService.currentUserValue;
+          if (currentUser.data.user.role_id == 1) {
+            router.push("/admin/trucks");
+          } else {
+            router.push("/manager/trucks");
+          }
+          this.$toast.open({
+            message: response.message,
+            type: "error",
+            position: "top-right",
+          });
+        }
+      });
 
-    truckService.getTruckInsurance(this.$route.params.id).then(response => {
-      //handle response
-      if (response.status) {
-        this.insurance = response.data;
-      } else {
-	    const currentUser = authenticationService.currentUserValue;
-	    if(currentUser.data.user.role_id == 1){
-          	router.push("/admin/trucks");
-	    }else{
-          	router.push("/manager/trucks");
-	    }
+      truckService.getTruckInsurance(this.$route.params.id).then((response) => {
+        //handle response
+        if (response.status) {
+          this.insurance = response.data;
+        } else {
+          const currentUser = authenticationService.currentUserValue;
+          if (currentUser.data.user.role_id == 1) {
+            router.push("/admin/trucks");
+          } else {
+            router.push("/manager/trucks");
+          }
 
-        this.$toast.open({
-          message: response.message,
-          type: "error",
-          position: "top-right"
-        });
-      }
-    });
-	},
-    DeleteService(e) {
+          this.$toast.open({
+            message: response.message,
+            type: "error",
+            position: "top-right",
+          });
+        }
+      });
+    },
+    DeleteS(e) {
+      this.$swal({
+        title: "Are you sure?",
+        text: "Are you sure you want to delete this service?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes Delete it!",
+        cancelButtonText: "No, Keep it!",
+        showCloseButton: true,
+        showLoaderOnConfirm: true,
+      }).then((result) => {
+        if (result.value) {
+          this.deleteService(e);
+        }
+      });
+
+      return false;
+    },
+    deleteService(e) {
       if (e) {
-        truckService.DeleteService(e).then(response => {
+        truckService.DeleteService(e).then((response) => {
           //handle response
           if (response.status) {
             this.$toast.open({
               message: response.message,
               type: "success",
-              position: "top-right"
+              position: "top-right",
             });
             //redirect to login
             this.dialog = false;
@@ -188,21 +332,39 @@ export default {
             this.$toast.open({
               message: response.message,
               type: "error",
-              position: "top-right"
+              position: "top-right",
             });
           }
         });
       }
     },
-  Delete(e) {
+    DeleteI(e) {
+      this.$swal({
+        title: "Are you sure?",
+        text: "Are you sure you want to delete this insurance?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes Delete it!",
+        cancelButtonText: "No, Keep it!",
+        showCloseButton: true,
+        showLoaderOnConfirm: true,
+      }).then((result) => {
+        if (result.value) {
+          this.deleteInsurance(e);
+        }
+      });
+
+      return false;
+    },
+    deleteInsurance(e) {
       if (e) {
-        truckService.DeleteInsurance(e).then(response => {
+        truckService.DeleteInsurance(e).then((response) => {
           //handle response
           if (response.status) {
             this.$toast.open({
               message: response.message,
               type: "success",
-              position: "top-right"
+              position: "top-right",
             });
             //redirect to login
             this.dialog = false;
@@ -214,12 +376,83 @@ export default {
             this.$toast.open({
               message: response.message,
               type: "error",
-              position: "top-right"
+              position: "top-right",
             });
           }
         });
       }
     },
-  }
+    selectTr: function (rowIndex) {
+      this.isActive = rowIndex;
+    },
+  },
+  updated() {
+    setTimeout(function () {
+      $(document).ready(function () {
+        if (!$.fn.dataTable.isDataTable("#truck-insurance-table")) {
+          $("#truck-insurance-table").DataTable({
+            aoColumnDefs: [
+              {
+                bSortable: false,
+                aTargets: [-1, -2, -3],
+              },
+            ],
+            oLanguage: { sSearch: "" },
+            drawCallback: function (settings) {
+              $(
+                "#truck-insurance-table_paginate .paginate_button.previous"
+              ).html($("#table-chevron-left").html());
+              $("#truck-insurance-table_paginate .paginate_button.next").html(
+                $("#table-chevron-right").html()
+              );
+            },
+          });
+
+          $("#truck-insurance-table_filter input").attr(
+            "placeholder",
+            "Search Insurance"
+          );
+          $("#truck-insurance-table_paginate .paginate_button.previous").html(
+            $("#table-chevron-left").html()
+          );
+          $("#truck-insurance-table_paginate .paginate_button.next").html(
+            $("#table-chevron-right").html()
+          );
+          $("#truck-insurance-table").css({ opacity: 1 });
+        }
+        if (!$.fn.dataTable.isDataTable("#truck-service-table")) {
+          $("#truck-service-table").DataTable({
+            aoColumnDefs: [
+              {
+                bSortable: false,
+                aTargets: [-1, -2],
+              },
+            ],
+            oLanguage: { sSearch: "" },
+            drawCallback: function (settings) {
+              $("#truck-service-table_paginate .paginate_button.previous").html(
+                $("#table-chevron-left").html()
+              );
+              $("#truck-service-table_paginate .paginate_button.next").html(
+                $("#table-chevron-right").html()
+              );
+            },
+          });
+
+          $("#truck-service-table_filter input").attr(
+            "placeholder",
+            "Search Service"
+          );
+          $("#truck-service-table_paginate .paginate_button.previous").html(
+            $("#table-chevron-left").html()
+          );
+          $("#truck-service-table_paginate .paginate_button.next").html(
+            $("#table-chevron-right").html()
+          );
+          $("#truck-service-table").css({ opacity: 1 });
+        }
+      });
+    }, 1000);
+  },
 };
 </script>

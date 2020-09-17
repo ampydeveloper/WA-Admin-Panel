@@ -1,16 +1,92 @@
 <template>
   <v-app>
-    <v-container fluid>
-      <v-row>
-        <v-col cols="12" md="12">
-          <h4 class="main-title mb-0">Edit Truck Service</h4>
-        </v-col>
+    <div class="bread_crum">
+      <ul>
+        <li>
+          <h4 class="main-title text-left top_heading">
+            Edit Service
+            <span class="right-bor"></span>
+          </h4>
+        </li>
+        <li>
+          <router-link to="/admin/dashboard" class="home_svg">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24px"
+              height="24px"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="feather feather-home h-5 w-5 mb-1 stroke-current text-primary"
+            >
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+              <polyline points="9 22 9 12 15 12 15 22" />
+            </svg>
+            <span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16px"
+                height="16px"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="feather feather-chevrons-right w-4 h-4"
+              >
+                <polyline points="13 17 18 12 13 7" />
+                <polyline points="6 17 11 12 6 7" />
+              </svg>
+            </span>
+          </router-link>
+        </li>
+        <li>
+          <router-link to="/admin/trucks">
+            List
+            <span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16px"
+                height="16px"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="feather feather-chevrons-right w-4 h-4"
+              >
+                <polyline points="13 17 18 12 13 7" />
+                <polyline points="6 17 11 12 6 7" />
+              </svg>
+            </span>
+          </router-link>
+        </li>
+        <li>Edit</li>
+      </ul>
+    </div>
 
-        <v-col cols="12" md="12">
-          <v-form ref="form" v-model="valid" lazy-validation @submit="save">
-            <v-row>
-              <v-col cols="12" md="12">
-                <v-col cols="12" md="12">
+    <div class="main_box">
+      <v-container fluid>
+        <v-row>
+          <v-col cols="12" md="12" class="pl-0 pt-0 slide-left">
+            <v-form
+              ref="form"
+              v-model="valid"
+              lazy-validation
+              @submit="save"
+              class="custom_form_field"
+              id="form_field"
+            >
+              <v-col cols="12" md="12" class="pt-0 pb-0">
+                <v-col sm="2" class="label-align pt-0">
+                  <label class="label_text">Service Date</label>
+                </v-col>
+                <v-col sm="4" class="pt-0 pb-0">
                   <v-menu
                     v-model="menu2"
                     :close-on-content-click="false"
@@ -22,39 +98,57 @@
                     <template v-slot:activator="{ on }">
                       <v-text-field
                         v-model="date"
-                        label="Service Date"
+                        label="Enter Service Date"
                         prepend-icon="event"
                         readonly
                         v-on="on"
                         required
-                        :rules="[v => !!v || 'Service date is required']"
+                        :rules="[v => !!v || 'Service Date is required.']"
                       ></v-text-field>
                     </template>
                     <v-date-picker v-model="date" @input="menu2 = false"></v-date-picker>
                   </v-menu>
                 </v-col>
-                <v-col cols="12" md="12">
+              </v-col>
+
+              <v-col cols="12" md="12" class="pt-0 pb-0">
+                <v-col sm="2" class="label-align pt-0">
+                  <label class="label_text">Total Miles</label>
+                </v-col>
+                <v-col sm="4" class="pt-0 pb-0">
                   <v-text-field
                     v-model="addForm.service_killometer"
-                    label="Total miles"
+                    label="Enter Total Miles"
                     required
                     :rules="killometerRules"
                   ></v-text-field>
                 </v-col>
-                <v-col cols="12" md="12">
+              </v-col>
+
+              <v-col cols="12" md="12" class="pt-0 pb-0">
+                <v-col sm="2" class="label-align pt-0">
+                  <label class="label_text">Note</label>
+                </v-col>
+                <v-col sm="4" class="pt-0 pb-0">
                   <v-textarea
                     rows="3"
-                    label="Service Note"
+                    label="Enter Note"
                     max-lenght="2000"
                     auto-grow
-                    v-model="addForm.note"
+                    v-model="addForm.notes"
                   ></v-textarea>
                 </v-col>
-                <v-col cols="12" md="12">
+              </v-col>
+
+              <v-col cols="12" md="12" class="pt-0 pb-0">
+                <v-col sm="2" class="label-align pt-0 image-upload-label">
+                  <label class="label_text">Document</label>
+                </v-col>
+                <v-col sm="4" class="pt-0 pb-0">
                   <file-pond
                     name="uploadImage"
                     ref="pond"
-                    label-idle="Upload Document"
+                    label-idle="Drop or Browse your files"
                     v-bind:allow-multiple="false"
                     v-bind:server="serverOptions"
                     v-bind:files="myFiles"
@@ -66,19 +160,32 @@
                   />
                   <div class="v-messages theme--light error--text" role="alert" v-if="docError">
                     <div class="v-messages__wrapper">
-                      <div class="v-messages__message">Service image upload is required</div>
+                      <div class="v-messages__message">Document upload is required.</div>
                     </div>
                   </div>
-                  <div v-if="documentImg" style="height:200px; width:200px">
-                    <img :src="documentImg" alt="John" style="height:200px;" />
+                  <div class="service-image-outer" v-if="documentImg">
+                    <button
+                      type="button"
+                      class="close"
+                      v-if="documentCross"
+                      @click="documentRemove()"
+                    >
+                      <span>&times;</span>
+                    </button>
+                    <img :src="documentImg" alt />
                   </div>
                 </v-col>
+              </v-col>
 
-                <v-col cols="12" md="12">
+              <v-col cols="12" md="12" class="pt-0 pb-0">
+                <v-col sm="2" class="label-align pt-0 image-upload-label">
+                  <label class="label_text">Receipt</label>
+                </v-col>
+                <v-col sm="4" class="pt-0 pb-0">
                   <file-pond
                     name="uploadImage"
                     ref="pond"
-                    label-idle="Upload Receipt"
+                    label-idle="Drop or Browse your files"
                     v-bind:allow-multiple="false"
                     v-bind:server="serverOptions"
                     v-bind:files="myFiles"
@@ -90,23 +197,57 @@
                   />
                   <div class="v-messages theme--light error--text" role="alert" v-if="insdocError">
                     <div class="v-messages__wrapper">
-                      <div class="v-messages__message">Receipt document upload is required</div>
+                      <div class="v-messages__message">Receipt upload is required.</div>
                     </div>
                   </div>
-                  <div v-if="receiptImg" style="height:200px; width:200px">
-                    <img :src="receiptImg" alt="John" style="height:200px;" />
+                  <div class="service-image-outer" v-if="receiptImg">
+                    <button
+                      type="button"
+                      class="close"
+                      v-if="receiptCross"
+                      @click="receiptRemove()"
+                    >
+                      <span>&times;</span>
+                    </button>
+                    <img :src="receiptImg" alt />
                   </div>
                 </v-col>
               </v-col>
 
-              <v-col cols="12" md="12">
-                <v-btn type="submit" :loading="loading" :disabled="loading" color="success" class="mr-4 custom-save-btn ml-4 mt-4" @click="save">Submit</v-btn>
+              <!-- <v-col cols="12" md="12">
+                <v-btn
+                  type="submit"
+                  :loading="loading"
+                  :disabled="loading"
+                  color="success"
+                  class="mr-4 custom-save-btn ml-4 mt-4"
+                  @click="save"
+                >Submit</v-btn>
+              </v-col>-->
+
+              <v-col class="pt-0 pb-0" cols="12" md="12">
+                <v-row class="m-0">
+                  <v-col sm="2"></v-col>
+                  <v-col sm="10" class="pt-0 pb-0">
+                    <v-btn
+                      type="submit"
+                      :loading="loading"
+                      :disabled="loading"
+                      color="success"
+                      class="custom-save-btn mt-4"
+                      @click="save"
+                      id="submit_btn"
+                    >Update</v-btn>
+
+                    <router-link to="/admin/trucks" class="btn-custom-danger mt-4">Cancel</router-link>
+                  </v-col>
+                </v-row>
               </v-col>
-            </v-row>
-          </v-form>
-        </v-col>
-      </v-row>
-    </v-container>
+            </v-form>
+          </v-col>
+        </v-row>
+      </v-container>
+    </div>
   </v-app>
 </template>
 
@@ -116,6 +257,7 @@ import { truckService } from "../../../_services/truck.service";
 import { router } from "../../../_helpers/router";
 import { environment } from "../../../config/test.env";
 import { authenticationService } from "../../../_services/authentication.service";
+import moment from "moment";
 export default {
   data() {
     return {
@@ -129,6 +271,8 @@ export default {
       imgUrl: environment.imgUrl,
       receiptImg: null,
       documentImg: null,
+      documentCross: false,
+      receiptCross: false,
       date: "",
       uploadInProgress: false,
       setDate: new Date().toISOString().substr(0, 10),
@@ -139,13 +283,13 @@ export default {
         service_killometer: "",
         receipt: "",
         document: "",
-        note: ""
+        notes: "",
       },
       killometerRules: [
-        v => !!v || "Truck miles is required",
-        v => /^\d*$/.test(v) || "Enter valid number"
+        (v) => !!v || "Truck miles is required.",
+        (v) => /^\d*$/.test(v) || "Enter valid number.",
       ],
-      myFiles: []
+      myFiles: [],
     };
   },
   computed: {
@@ -157,15 +301,15 @@ export default {
         process: {
           url: "uploadImage",
           headers: {
-            Authorization: "Bearer " + currentUser.data.access_token
-          }
+            Authorization: "Bearer " + currentUser.data.access_token,
+          },
         },
         revert: {
           url: "deleteImage",
           headers: {
-            Authorization: "Bearer " + currentUser.data.access_token
-          }
-        }
+            Authorization: "Bearer " + currentUser.data.access_token,
+          },
+        },
       };
     },
     url() {
@@ -175,61 +319,80 @@ export default {
       } else {
         return null;
       }
-    }
+    },
   },
-  mounted: function() {
-    truckService.getTruckSingleService(this.$route.params.id).then(response => {
-      //handle response
-      if (response.status) {
-        this.addForm.id = response.data.id;
-        this.addForm.receipt = response.data.receipt;
-        this.addForm.document = response.data.document;
-        this.addForm.note = response.data.note;
-        this.addForm.vehicle_id = response.data.vehicle_id;
-        this.date = new Date(response.data.service_date)
-          .toISOString()
-          .substr(0, 10);
-        this.addForm.service_killometer = response.data.service_killometer;
-        this.receiptImg = this.imgUrl + response.data.receipt;
-        this.documentImg = this.imgUrl + response.data.document;
-      }
-    });
+  mounted: function () {
+    truckService
+      .getTruckSingleService(this.$route.params.id)
+      .then((response) => {
+        //handle response
+        if (response.status) {
+          this.addForm.vehicle_service_id = response.data.id;
+          this.addForm.receipt = response.data.receipt;
+          this.addForm.document = response.data.document;
+          this.addForm.notes = response.data.notes;
+          this.addForm.vehicle_id = response.data.vehicle_id;
+          this.date =  moment(response.data.service_date)
+            .format("YYYY-MM-DD");
+          this.addForm.service_killometer = response.data.service_killometer;
+          if (response.data.receipt) {
+            this.receiptImg = this.imgUrl + response.data.receipt;
+            this.receiptCross = true;
+          }
+          if (response.data.document) {
+            this.documentImg = this.imgUrl + response.data.document;
+            this.documentCross = true;
+          }
+        }
+      });
   },
   methods: {
+    documentRemove() {
+      this.documentCross = false;
+      this.documentImg = "";
+      this.addForm.document = "";
+    },
+    receiptRemove() {
+      this.receiptCross = false;
+      this.receiptImg = "";
+      this.addForm.receipt = "";
+    },
     setUploadIndex() {
       this.uploadInProgress = true;
     },
-    handleProcessFile1: function(error, file) {
+    handleProcessFile1: function (error, file) {
       this.addForm.document = file.serverId;
       this.documentImg = this.imgUrl + file.serverId;
       this.docError = false;
       this.uploadInProgress = false;
+      this.documentCross = true;
     },
-    handleRemoveFile1: function(file) {
+    handleRemoveFile1: function (file) {
       this.addForm.document = "";
       this.docError = true;
       this.documentImg = "";
     },
-    handleProcessFile2: function(error, file) {
+    handleProcessFile2: function (error, file) {
       this.addForm.receipt = file.serverId;
       this.insdocError = false;
       this.receiptImg = this.imgUrl + file.serverId;
       this.uploadInProgress = false;
+      this.receiptCross = true;
     },
-    handleRemoveFile2: function(file) {
+    handleRemoveFile2: function (file) {
       this.addForm.receipt = "";
       this.insdocError = true;
       this.receiptImg = "";
     },
-    save: function(e) {
+    save: function (e) {
       //stop page to reload
       e.preventDefault();
 
       if (this.uploadInProgress) {
         this.$toast.open({
-          message: "Image uploading is in progress!",
+          message: "Image uploading is in progress.",
           type: "error",
-          position: "top-right"
+          position: "top-right",
         });
         return false;
       }
@@ -241,13 +404,13 @@ export default {
       }
       this.addForm.service_date = this.date;
       if (this.$refs.form.validate() && !this.insdocError && !this.docError) {
-        if(this.loading) {
+        if (this.loading) {
           return false;
         }
         //start loading
         this.loading = true;
 
-        truckService.updateTruckService(this.addForm).then(response => {
+        truckService.updateTruckService(this.addForm).then((response) => {
           //stop loading
           this.loading = false;
           //handle response
@@ -255,7 +418,7 @@ export default {
             this.$toast.open({
               message: response.message,
               type: "success",
-              position: "top-right"
+              position: "top-right",
             });
             //redirect to login
             const currentUser = authenticationService.currentUserValue;
@@ -270,12 +433,12 @@ export default {
             this.$toast.open({
               message: response.message,
               type: "error",
-              position: "top-right"
+              position: "top-right",
             });
           }
         });
       }
-    }
-  }
+    },
+  },
 };
 </script>

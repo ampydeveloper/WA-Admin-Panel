@@ -44,7 +44,7 @@
             </span>
           </router-link>
         </li>
-        <li>Truck</li>
+        <li>Trucks</li>
         <li>
           <span>
             <svg
@@ -85,11 +85,10 @@
                 <tr>
                   <th class="text-left">#</th>
                   <th class="text-left">Company</th>
-                  <th class="text-left">Truck Number</th>
-                  <th class="text-left">Chassis Number</th>
+                  <th class="text-left">Truck</th>
+                  <th class="text-left">Chassis</th>
                   <th class="text-left">Distance</th>
                   <th class="text-left">Service Details</th>
-                  <th class="text-left">Documents</th>
                   <th class="text-left">Status</th>
                   <th class="text-left">Actions</th>
                 </tr>
@@ -101,10 +100,8 @@
                   v-on:click="selectTr(index)"
                   v-bind:class="{ 'selected' : isActive == index}"
                 >
-                <td>{{index+1}}</td>
-                  <td>
-                    {{item.company_name}}
-                  </td>
+                  <td>{{index+1}}</td>
+                  <td>{{item.company_name}}</td>
                   <td>{{item.truck_number}}</td>
                   <td>{{item.chaase_number}}</td>
                   <td>{{item.killometer}}</td>
@@ -112,39 +109,26 @@
                     <router-link
                       v-if="isAdmin"
                       :to="'/admin/truck/service/' + item.id"
-                      class="nav-item nav-link"
-                    >View Service</router-link>
+                      class="custom-save-btn btn-table"
+                    >View</router-link>
                     <router-link
                       v-if="!isAdmin"
                       :to="'/manager/truck/service/' + item.id"
-                      class="nav-item nav-link"
-                    >View Service</router-link>
+                      class="custom-save-btn btn-table"
+                    >View</router-link>
                   </td>
-                  <td>
-                    <router-link
-                      v-if="isAdmin"
-                      :to="'/admin/truck/docview/' + item.id"
-                      class="nav-item nav-link"
-                    >View Documents</router-link>
-                    <router-link
-                      v-if="!isAdmin"
-                      :to="'/manager/truck/docview/' + item.id"
-                      class="nav-item nav-link"
-                    >View Documents</router-link>
+
+                  <td v-if="item.status == 1">
+                    <span class="badges-item">Available</span>
                   </td>
-                  <td v-if="item.status == 1">Available</td>
-                  <td v-if="item.status == 0">Unavailable</td>
+                  <td v-if="item.status == 0">
+                    <span class="badges-item">Unavailable</span>
+                  </td>
                   <td class="action-col">
-                    <router-link
-                      v-if="isAdmin"
-                      :to="'/admin/truck/edit/' + item.id"
-                    >
-                     <edit-3-icon size="1.2x" class="custom-class"></edit-3-icon>
+                    <router-link v-if="isAdmin" :to="'/admin/truck/edit/' + item.id">
+                      <edit-3-icon size="1.2x" class="custom-class"></edit-3-icon>
                     </router-link>
-                    <router-link
-                      v-if="!isAdmin"
-                      :to="'/manager/truck/edit/' + item.id"
-                    >
+                    <router-link v-if="!isAdmin" :to="'/manager/truck/edit/' + item.id">
                       <edit-3-icon size="1.2x" class="custom-class"></edit-3-icon>
                     </router-link>
                     <a href="javascript:void(0);" text @click="Delete(item.id)">
@@ -161,7 +145,7 @@
         </v-row>
       </v-container>
     </div>
-     <span id="table-chevron-left" class="d-none">
+    <span id="table-chevron-left" class="d-none">
       <chevron-left-icon size="1.5x" class="custom-class"></chevron-left-icon>
     </span>
     <span id="table-chevron-right" class="d-none">
@@ -179,6 +163,8 @@ import {
   PlusCircleIcon,
   Edit3Icon,
   MoreVerticalIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
 } from "vue-feather-icons";
 import { router } from "../../../_helpers/router";
 import { authenticationService } from "../../../_services/authentication.service";
@@ -189,6 +175,8 @@ export default {
     TrashIcon,
     PlusCircleIcon,
     MoreVerticalIcon,
+    ChevronLeftIcon,
+    ChevronRightIcon,
   },
   data() {
     return {
@@ -268,40 +256,33 @@ export default {
   updated() {
     setTimeout(function () {
       $(document).ready(function () {
-        $(".table-main").DataTable({
-          aoColumnDefs: [
-            {
-              bSortable: false,
-              aTargets: [-1, -2, -3, -4, -5, -6],
+        if (!$.fn.dataTable.isDataTable(".table-main")) {
+          $(".table-main").DataTable({
+            aoColumnDefs: [
+              {
+                bSortable: false,
+                aTargets: [-1, -2, -3, -4, -5, -6],
+              },
+            ],
+            oLanguage: { sSearch: "" },
+            drawCallback: function (settings) {
+              $(".dataTables_paginate .paginate_button.previous").html(
+                $("#table-chevron-left").html()
+              );
+              $(".dataTables_paginate .paginate_button.next").html(
+                $("#table-chevron-right").html()
+              );
             },
-          ],
-          // language: {
-          //   paginate: {
-          //     previous: "",
-          //     next: "",
-          //   },
-          // },
-          oLanguage: { sSearch: "" },
-           drawCallback: function (settings) {
-            $(
-              ".dataTables_paginate .paginate_button.previous"
-            ).html($("#table-chevron-left").html());
-            $(
-              ".dataTables_paginate .paginate_button.next"
-            ).html($("#table-chevron-right").html());
-          },
-        });
-        $(".dataTables_filter input").attr(
-          "placeholder",
-          "Search Trucks"
+          });
+        }
+        $(".dataTables_filter input").attr("placeholder", "Search Trucks");
+        $(".dataTables_paginate .paginate_button.previous").html(
+          $("#table-chevron-left").html()
         );
-        $(
-          ".dataTables_paginate .paginate_button.previous"
-        ).html($("#table-chevron-left").html());
         $(".dataTables_paginate .paginate_button.next").html(
           $("#table-chevron-right").html()
         );
-         $(".table-main").css({'opacity':1});
+        $(".table-main").css({ opacity: 1 });
       });
     }, 1000);
   },

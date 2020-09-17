@@ -124,41 +124,13 @@
                   :items="managerName"
                   label="Select Manager"
                   :rules="[v => !!v || 'Manager is required.']"
-                  item-text="first_name"
+                  item-text="farm_manager[0].first_name"
                   item-value="id"
                   @change="managerSelection"
                 ></v-select>
               </v-col>
             </v-col>
-            <v-col cols="12" class="textarea-parent pt-0 pb-0">
-              <v-col sm="2" class="label-align pt-0">
-                <label>Job Description</label>
-              </v-col>
-              <v-col sm="4" class="pt-0">
-                <v-text-field
-                  label="Enter Description"
-                  v-model="addForm.job_description"
-                  required
-                  :rules="[v => !!v || 'Job Description is required.']"
-                  placeholder
-                ></v-text-field>
-              </v-col>
-            </v-col>
 
-            <v-col cols="12" class="textarea-parent pt-0 pb-0">
-              <v-col sm="2" class="label-align pt-0">
-                <label>Gate Number</label>
-              </v-col>
-              <v-col sm="4" class="pt-0">
-                <v-text-field
-                  label="Enter Gate Number"
-                  v-model="addForm.gate_no"
-                  required
-                  :rules="[v => !!v || 'Gate number is required.']"
-                  placeholder
-                ></v-text-field>
-              </v-col>
-            </v-col>
             <v-col class="pt-0 pb-0" cols="12">
               <v-col sm="2" class="label-align pt-0">
                 <label>Service</label>
@@ -173,19 +145,6 @@
                   item-value="id"
                   @change="serviceSelection"
                 ></v-select>
-              </v-col>
-            </v-col>
-            <v-col class="pt-0 pb-0" cols="12" v-if="weightShow">
-              <v-col sm="2" class="label-align pt-0">
-                <label>Weight</label>
-              </v-col>
-              <v-col sm="4" class="pt-0">
-                <v-text-field
-                  v-model="addForm.job_weight"
-                  required
-                  type="number"
-                  :rules="killometerRules"
-                ></v-text-field>
               </v-col>
             </v-col>
             <div id="showTimingSection" v-if="servicetime">
@@ -242,8 +201,40 @@
                 </div>
               </v-col>
 
+              <v-col class="pt-0 pb-0" cols="12" v-if="weightShow">
+                <v-col sm="2" class="label-align pt-0">
+                  <label>Weight</label>
+                </v-col>
+                <v-col sm="4" class="pt-0">
+                  <v-text-field
+                    label="Enter Weight"
+                    v-model="addForm.weight"
+                    required
+                    type="number"
+                    :rules="killometerRules"
+                  ></v-text-field>
+                </v-col>
+              </v-col>
+
+              <v-col cols="12" class="textarea-parent pt-0 pb-0">
+                <v-col sm="2" class="label-align pt-0">
+                  <label>Gate Number</label>
+                </v-col>
+                <v-col sm="4" class="pt-0">
+                  <v-text-field
+                    label="Enter Gate Number"
+                    v-model="addForm.gate_no"
+                    required
+                    :rules="[v => !!v || 'Gate number is required.']"
+                    placeholder
+                  ></v-text-field>
+                </v-col>
+              </v-col>
+
               <v-col cols="12" md="12" class="pt-0 pb-0">
-                <v-col sm="2" class="label-align pt-0"></v-col>
+                <v-col sm="2" class="label-align pt-0 image-upload-label">
+                  <label class="label_text">Photos</label>
+                </v-col>
                 <v-col sm="4" class="pt-0">
                   <file-pond
                     name="uploadImage"
@@ -256,6 +247,40 @@
                     allow-file-type-validation="true"
                     accepted-file-types="image/jpeg, image/png"
                   />
+                </v-col>
+              </v-col>
+
+              <v-col cols="12" class="textarea-parent pt-0 pb-0">
+                <v-col sm="2" class="label-align pt-0">
+                  <label>Notes</label>
+                </v-col>
+                <v-col sm="4" class="pt-0">
+                  <!-- <v-text-field
+                    label="Enter Notes"
+                    v-model="addForm.notes"
+                    required
+                    :rules="[v => !!v || 'Notes is required.']"
+                    placeholder
+                  ></v-text-field>-->
+
+                  <v-textarea
+                    label="Enter Notes"
+                    placeholder
+                    rows="3"
+                    auto-grow
+                    v-model="addForm.notes"
+                    :rules="[v => !!v || 'Notes is required.']"
+                    required
+                  ></v-textarea>
+                </v-col>
+              </v-col>
+
+              <v-col class="pt-0 pb-0" cols="12">
+                <v-col sm="2" class="label-align pt-0">
+                  <label class="label_text label-check-half">Repeating</label>
+                </v-col>
+                <v-col sm="4" class="pt-0">
+                  <v-switch v-model="addForm.is_repeating_job"></v-switch>
                 </v-col>
               </v-col>
             </div>
@@ -297,7 +322,7 @@ export default {
       loading: false,
       weightShow: false,
       date: "",
-      start_date: "",
+      job_providing_date: "",
       apiUrl: environment.apiUrl,
       customerName: [],
       managerName: [],
@@ -309,15 +334,16 @@ export default {
         customer_id: "",
         manager_id: "",
         service_id: "",
-        job_description: "",
+        notes: "",
         gate_no: "",
         farm_add: "",
         farm_id: "",
-        job_images: [],
+        images: [],
         time_slots_id: "",
-        start_date: "",
-        job_weight: "",
-        job_amount: "",
+        job_providing_date: "",
+        weight: "",
+        amount: "",
+        is_repeating_job: false,
       },
       killometerRules: [
         (v) => !!v || "Job weight is required.",
@@ -355,7 +381,7 @@ export default {
   },
   methods: {
     handleProcessFile: function (error, file) {
-      this.addForm.job_images.push(file.serverId);
+      this.addForm.images.push(file.serverId);
     },
     getResults() {
       jobService.getCustomer().then((response) => {
@@ -423,11 +449,11 @@ export default {
       this.addForm.service_id = val;
       this.serviceName.find((file) => {
         if (file.id == val) {
-          this.addForm.job_amount = file.price;
-          if (file.service_rate == 1) {
+          this.addForm.amount = file.price;
+          if (file.service_type == 1) {
             this.weightShow = true;
           } else {
-            this.addForm.job_weight = "";
+            this.addForm.weight = "";
             this.weightShow = false;
           }
         }
@@ -449,7 +475,9 @@ export default {
     submit() {
       //start loading
       this.loading = true;
-      this.addForm.start_date = this.date;
+      this.addForm.job_providing_date = this.date;
+      this.addForm.payment_mode = 0;
+      // this.addForm.amount = 10;
 
       if (this.$refs.form.validate()) {
         jobService.createJob(this.addForm).then((response) => {

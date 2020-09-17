@@ -217,6 +217,24 @@ export default {
       });
     },
     Delete(e) {
+      this.$swal({
+        title: "Are you sure?",
+        text: "Are you sure you want to delete this driver?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes Delete it!",
+        cancelButtonText: "No, Keep it!",
+        showCloseButton: true,
+        showLoaderOnConfirm: true,
+      }).then((result) => {
+        if (result.value) {
+          this.deleteDriver(e);
+        }
+      });
+
+      return false;
+    },
+    deleteDriver(e) {
       if (e) {
         driverService.Delete(e).then((response) => {
           //handle response

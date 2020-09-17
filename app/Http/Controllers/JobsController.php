@@ -115,7 +115,7 @@ class JobsController extends Controller {
                 'is_repeating_job' => $request->is_repeating_job,
                 'repeating_days' => (isset($request->repeating_days) && $request->repeating_days != '' && $request->repeating_days != null) ? $request->repeating_days : null,
                 'payment_mode' => $request->payment_mode,
-                'images' => (isset($request->images) && $request->images != '' && $request->images != null) ? $request->images : null,
+                'images' => (isset($request->images) && $request->images != '' && $request->images != null) ? json_encode($request->images) : null,
                 'notes' => (isset($request->notes) && $request->notes != '' && $request->notes != null) ? $request->notes : null,
                 'amount' => $request->amount,
             ]);

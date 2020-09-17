@@ -104,17 +104,39 @@
                             v-on:processfile="handleProcessFile"
                             v-on:processfilerevert="handleRemoveFile"
                           />
+
+                          <v-col sm="12" class="p-0">
+                            <div class="service-image-outer" v-if="avatar">
+                              <button type="button" class="close" v-if="cross" @click="Remove()">
+                                <span>&times;</span>
+                              </button>
+                              <img :src="avatar" alt />
+                            </div>
+                          </v-col>
                         </v-col>
                       </div>
                       <div class="custom-col row">
                         <v-col sm="4" class="label-align pt-0">
-                          <label>Name</label>
+                          <label>First Name</label>
                         </v-col>
                         <v-col sm="8" class="pt-0 pb-0">
                           <v-text-field
-                            v-model="addForm.driver_name"
-                            :rules="[v => !!v || 'Driver Name is required.']"
-                            label="Enter Name"
+                            v-model="addForm.driver_first_name"
+                            :rules="[v => !!v || 'Driver First Name is required.']"
+                            label="Enter First Name"
+                            required
+                          ></v-text-field>
+                        </v-col>
+                      </div>
+                      <div class="custom-col row">
+                        <v-col sm="4" class="label-align pt-0">
+                          <label>Last Name</label>
+                        </v-col>
+                        <v-col sm="8" class="pt-0 pb-0">
+                          <v-text-field
+                            v-model="addForm.driver_last_name"
+                            :rules="[v => !!v || 'Driver Last Name is required.']"
+                            label="Enter Last Name"
                             required
                           ></v-text-field>
                         </v-col>
@@ -161,13 +183,13 @@
                       </div>
                       <div class="custom-col row">
                         <v-col sm="4" class="label-align pt-0">
-                          <label>State</label>
+                          <label>Province</label>
                         </v-col>
                         <v-col sm="8" class="pt-0 pb-0">
                           <v-text-field
-                            v-model="addForm.driver_state"
-                            :rules="[v => !!v || 'State is required.']"
-                            label="Enter State"
+                            v-model="addForm.driver_province"
+                            :rules="[v => !!v || 'Province is required.']"
+                            label="Enter Province"
                             required
                           ></v-text-field>
                         </v-col>
@@ -213,6 +235,42 @@
                             label="Enter Licence Number"
                             required
                           ></v-text-field>
+                        </v-col>
+                      </div>
+                      <div class="custom-col row custom-img-holder">
+                        <v-col sm="4" class="label-align pt-0 image-upload-label">
+                          <label>Licence Image</label>
+                        </v-col>
+                        <v-col sm="8" class="pt-0 pb-0">
+                          <file-pond
+                            name="uploadImage"
+                            ref="pond"
+                            label-idle="Drop or Browse your files"
+                            v-bind:allow-multiple="false"
+                            v-bind:server="serverOptions"
+                            v-bind:files="myFiles"
+                            v-on:addfilestart="setUploadIndex"
+                            v-on:processfile="handleProcessFile1"
+                            allow-file-type-validation="true"
+                            accepted-file-types="image/jpeg, image/png"
+                            :rules="[v => !!v || 'Licence Image is required.']"
+                            v-on:processfilerevert="handleRemoveFile1"
+                          />
+                          <div
+                            class="v-messages theme--light error--text"
+                            role="alert"
+                            v-if="docError"
+                          >
+                            <div class="v-messages__wrapper">
+                              <div class="v-messages__message">Licence Image is required.</div>
+                            </div>
+                          </div>
+                          <div class="service-image-outer" v-if="document_img">
+                            <button type="button" class="close" v-if="cross" @click="Remove()">
+                              <span>&times;</span>
+                            </button>
+                            <img :src="document_img" alt />
+                          </div>
                         </v-col>
                       </div>
                       <div class="custom-col row">
@@ -269,43 +327,15 @@
                           ></v-text-field>
                         </v-col>
                       </div>
-                      <div class="custom-col row custom-img-holder">
-                        <v-col sm="4" class="label-align pt-0 image-upload-label">
-                          <label>Documents</label>
+<div class="custom-col row">
+                        <v-col sm="4" class="label-align pt-0">
+                          <label class="label_text label-check-half">Availabilty</label>
                         </v-col>
                         <v-col sm="8" class="pt-0 pb-0">
-                          <file-pond
-                            name="uploadImage"
-                            ref="pond"
-                            label-idle="Drop or Browse your files"
-                            v-bind:allow-multiple="false"
-                            v-bind:server="serverOptions"
-                            v-bind:files="myFiles"
-                            v-on:addfilestart="setUploadIndex"
-                            v-on:processfile="handleProcessFile1"
-                            allow-file-type-validation="true"
-                            accepted-file-types="image/jpeg, image/png"
-                            :rules="[v => !!v || 'Document is required']"
-                            v-on:processfilerevert="handleRemoveFile1"
-                          />
-                          <div
-                            class="v-messages theme--light error--text"
-                            role="alert"
-                            v-if="docError"
-                          >
-                            <div class="v-messages__wrapper">
-                              <div class="v-messages__message">Profile Image is required.</div>
-                            </div>
-                          </div>
+                          <v-switch v-model="addForm.status"></v-switch>
                         </v-col>
-                        <div
-                          v-if="document_img"
-                          style="height: 200px; min-width: 200px; width: 200px;"
-                        >
-                          <img :src="document_img" alt="Doc" width="100%" />
-                        </div>
                       </div>
-                      <div class="custom-col row">
+                      <!-- <div class="custom-col row">
                         <v-col sm="4" class="label-align pt-0">
                           <label class="label_text label-half">Fleet</label>
                         </v-col>
@@ -321,7 +351,7 @@
                             <v-radio label="Skidsteer" value="Skidsteer"></v-radio>
                           </v-radio-group>
                         </v-col>
-                      </div>
+                      </div>-->
                     </v-col>
                     <v-col class="pt-0 pb-0" cols="12" md="12">
                       <div class="p-0 float-right">
@@ -374,21 +404,23 @@ export default {
       active: 0,
       setDate: new Date().toISOString().substr(0, 10),
       addForm: {
-        driver_name: "",
+        driver_first_name: "",
+        driver_last_name: "",
         email: "",
         driver_licence: "",
         expiry_date: "",
         salary_type: "",
-        driver_salary: "",
-        document: "",
+        driver_salary: null,
+        driver_licence_image: "",
         user_image: "",
         driver_address: "",
         driver_city: "",
-        driver_state: "",
+        driver_province: "",
         driver_country: "",
         driver_zipcode: "",
         driver_phone: "",
         driver_type: "",
+        status:""
       },
       emailRules: [
         (v) => !!v || "Email is required.",
@@ -438,30 +470,36 @@ export default {
   created() {
     driverService.getDriver(this.$route.params.id).then((response) => {
       if (response.status) {
-        this.addForm.user_id = response.data.user.id;
-        if (response.data.user.user_image) {
-          this.addForm.user_image = response.data.user.user_image;
+        this.addForm.driver_id = response.data.id;
+        if (response.data.user_image) {
+          this.addForm.user_image = response.data.user_image;
           this.cross = true;
-          this.avatar = environment.imgUrl + response.data.user.user_image;
+          this.avatar = environment.imgUrl + response.data.user_image;
         } else {
-          this.avatar = environment.imgUrl + "images/avatar.png";
+          this.avatar = environment.imgUrl + "";
         }
-        if (response.data.document) {
-          this.addForm.document = response.data.document;
-          this.document_img = environment.imgUrl + response.data.document;
+        if (response.data.driver.document) {
+          this.cross = true;
+          this.addForm.driver_licence_image = response.data.driver.document;
+          this.document_img =
+            environment.imgUrl + response.data.driver.document;
         }
-        this.addForm.driver_name = response.data.user.first_name;
-        this.addForm.email = response.data.user.email;
-        this.addForm.driver_phone = response.data.user.phone;
-        this.addForm.driver_address = response.data.user.address;
-        this.addForm.driver_city = response.data.user.city;
-        this.addForm.driver_state = response.data.user.state;
-        this.addForm.driver_country = response.data.user.country;
-        this.addForm.driver_zipcode = response.data.user.zip_code;
-        this.active = response.data.salary_type;
-        this.addForm.driver_type = response.data.driver_type;
-        this.addForm.driver_licence = response.data.driver_licence;
-        this.date = new Date(response.data.expiry_date)
+        this.addForm.driver_first_name = response.data.first_name;
+        this.addForm.driver_last_name = response.data.last_name;
+        this.addForm.email = response.data.email;
+        this.addForm.driver_phone = response.data.phone;
+        this.addForm.driver_address = response.data.address;
+        this.addForm.driver_city = response.data.city;
+        this.addForm.driver_province = response.data.state;
+        this.addForm.driver_country = response.data.country;
+        this.addForm.driver_zipcode = response.data.zip_code;
+        this.addForm.driver_salary = response.data.driver.driver_salary;
+        this.active = response.data.driver.salary_type;
+        this.addForm.driver_type = response.data.driver.driver_type;
+        this.addForm.driver_licence = response.data.driver.driver_licence;
+        this.addForm.status = response.data.driver.status;
+         
+        this.date = new Date(response.data.driver.expiry_date)
           .toISOString()
           .substr(0, 10);
         if (response.data.salary_type == 0) {
@@ -487,9 +525,10 @@ export default {
   },
   methods: {
     Remove() {
-      this.avatar = "/images/avatar.png";
+      this.avatar = "";
       this.cross = false;
       this.addForm.user_image = "";
+      this.document_img = "";
     },
     setUploadIndex() {
       this.uploadInProgress = true;
@@ -503,7 +542,7 @@ export default {
     handleRemoveFile: function (file) {
       this.cross = false;
       this.addForm.user_image = "";
-      this.avatar = "/images/avatar.png";
+      this.avatar = "";
     },
     handleProcessFile1: function (error, file) {
       this.addForm.document = file.serverId;

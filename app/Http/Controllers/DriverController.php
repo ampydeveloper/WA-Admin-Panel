@@ -126,6 +126,7 @@ class DriverController extends Controller {
      * edit driver
      */
     public function editDriver(Request $request) {
+//        die('red');
         $validator = Validator::make($request->all(), [
                     'driver_id' => 'required',
                     'driver_first_name' => 'required',

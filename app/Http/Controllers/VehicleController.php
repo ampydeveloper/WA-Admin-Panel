@@ -92,7 +92,7 @@ class VehicleController extends Controller {
                     DB::commit();
                     return response()->json([
                                 'status' => true,
-                                'message' => 'Vehicle has been successfully created.',
+                                'message' => 'Vehicle created successfully.',
                                 'data' => []
                                     ], 200);
                 }
@@ -173,7 +173,7 @@ class VehicleController extends Controller {
             Vehicle::whereId($request->vehicle_id)->delete();
             return response()->json([
                         'status' => true,
-                        'message' => 'Vehicle deleted Successfully',
+                        'message' => 'Vehicle deleted successfully.',
                         'data' => []
                             ], 200);
         } catch (\Exception $e) {
@@ -218,7 +218,7 @@ class VehicleController extends Controller {
                 DB::commit();
                 return response()->json([
                             'status' => true,
-                            'message' => 'Successfully created Vehicle insurance!',
+                            'message' => 'Successfully created vehicle insurance.',
                             'data' => []
                                 ], 200);
             }
@@ -333,7 +333,7 @@ class VehicleController extends Controller {
             VehicleInsurance::whereId($request->insurance_id)->delete();
             return response()->json([
                         'status' => true,
-                        'message' => 'Vehicle insurance deleted Successfully',
+                        'message' => 'Vehicle insurance deleted Successfully.',
                         'data' => []
                             ], 200);
         } catch (\Exception $e) {
@@ -377,7 +377,7 @@ class VehicleController extends Controller {
                 DB::commit();
                 return response()->json([
                             'status' => true,
-                            'message' => 'Successfully created Vehicle service!',
+                            'message' => 'Vehicle service created successfully.',
                             'data' => []
                                 ], 200);
             }
@@ -419,7 +419,7 @@ class VehicleController extends Controller {
             DB::commit();
             return response()->json([
                         'status' => true,
-                        'message' => 'Vehicle insurance details edit successfully.',
+                        'message' => 'Vehicle insurance details edited successfully.',
                         'data' => []
                             ], 200);
         } catch (Exception $ex) {
@@ -489,7 +489,7 @@ class VehicleController extends Controller {
             VehicleService::whereId($request->service_id)->delete();
             return response()->json([
                         'status' => true,
-                        'message' => 'Vehicle service deleted successfully',
+                        'message' => 'Vehicle service deleted successfully.',
                         'data' => []
                             ], 200);
         } catch (\Exception $e) {

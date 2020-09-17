@@ -180,7 +180,7 @@ function getTruckSingleInsurance(data){
 
 function updateTruckService(data) {
   return fetch(
-    this.apiUrl+`admin/save-service-details/`+data.id,
+    this.apiUrl+`admin/edit-vehicle-service`,
     requestOptions.post(data)
   )
     .then(handleResponse)
@@ -194,7 +194,7 @@ function updateTruckService(data) {
 
 function updateInsurance(data) {
   return fetch(
-    this.apiUrl+`admin/save-insurance-details/`+data.id,
+    this.apiUrl+`admin/edit-vehicle-insurance`,
     requestOptions.post(data)
   )
     .then(handleResponse)
