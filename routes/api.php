@@ -34,6 +34,9 @@ Route::group(['prefix' => 'auth'], function () {
     
     Route::get('set-task', 'SetTaskController@setTaskCronjob');
     Route::get('finish-job-from-farm/{id}', 'SetTaskController@finishJobFromFarm');
+    
+    Route::post('start-time', 'TrackDriverTimeController@startJobTimer');
+    Route::post('stop-time', 'TrackDriverTimeController@stopJobTimer');
 
     //Auth full routes
     Route::group(['middleware' => 'auth:api'], function () {

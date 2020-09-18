@@ -101,6 +101,11 @@ class JobsController extends Controller {
                                 ], 422);
             }
         }
+        if($checkService->service_type == config('constant.service_type.by_weight')) {
+            $amount = $checkService->price*$request->amount;
+        } else {
+            $amount = $checkService->price;
+        }
         try {
             $job = new Job([
                 'job_created_by' => $request->user()->id,
@@ -117,7 +122,7 @@ class JobsController extends Controller {
                 'payment_mode' => $request->payment_mode,
                 'images' => (isset($request->images) && $request->images != '' && $request->images != null) ? json_encode($request->images) : null,
                 'notes' => (isset($request->notes) && $request->notes != '' && $request->notes != null) ? $request->notes : null,
-                'amount' => $request->amount,
+                'amount' => $amount,
             ]);
             if ($job->save()) {
                 $mailData = [

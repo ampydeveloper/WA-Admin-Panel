@@ -116,7 +116,7 @@ function getFrams(data) {
 }
 function getFarmManager(data){
   return fetch(
-    this.apiUrl+`admin/get-farm-manager/`+data,
+    this.apiUrl+`admin/job-farms-manager/`+data,
     requestOptions.get()
   )
     .then(handleResponse)
@@ -127,10 +127,10 @@ function getFarmManager(data){
     });
 }
 
-function joblist(data) {
+function joblist() {
   return fetch(
     this.apiUrl+`admin/job-list`,
-    requestOptions.post(data)
+    requestOptions.get()
   )
     .then(handleResponse)
     .then(user => {

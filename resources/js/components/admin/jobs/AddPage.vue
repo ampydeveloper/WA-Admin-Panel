@@ -124,7 +124,7 @@
                   :items="managerName"
                   label="Select Manager"
                   :rules="[v => !!v || 'Manager is required.']"
-                  item-text="farm_manager[0].first_name"
+                  item-text="first_name"
                   item-value="id"
                   @change="managerSelection"
                 ></v-select>

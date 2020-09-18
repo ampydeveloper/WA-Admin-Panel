@@ -50,7 +50,7 @@ function add(data) {
 
 function edit(data) {
   return fetch(
-    this.apiUrl+`admin/edit-vehicle/`+data.id,
+    this.apiUrl+`admin/edit-vehicle`,
     requestOptions.post(data)
   )
     .then(handleResponse)

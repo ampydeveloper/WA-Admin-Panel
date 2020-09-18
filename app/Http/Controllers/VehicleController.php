@@ -119,7 +119,7 @@ class VehicleController extends Controller {
                     'chaase_number' => 'required',
                     'killometer' => 'required',
                     'rc_document' => 'required',
-                    'status' => 'required',
+                    'is_active' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -137,7 +137,7 @@ class VehicleController extends Controller {
                 'killometer' => $request->killometer,
                 'capacity' => (isset($request->capacity) && $request->capacity != '' && $request->capacity != null) ? $request->capacity : null,
                 'document' => $request->rc_document,
-                'status' => $request->status
+                'status' => $request->is_active
             ]);
             DB::commit();
             return response()->json([

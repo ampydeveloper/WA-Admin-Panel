@@ -310,7 +310,7 @@
                             :rules="[v => !!v || 'Salary Type is required.']"
                           >
                             <v-radio label="Per Hour" value="per_hour"></v-radio>
-                            <v-radio label="Per Load" value="per_load"></v-radio>
+                            <v-radio label="Per Month" value="per_load"></v-radio>
                           </v-radio-group>
                         </v-col>
                       </div>
@@ -512,7 +512,6 @@ export default {
         } else {
           this.addForm.driver_type = "Skidsteer";
         }
-        this.addForm.driver_salary = response.data.driver_salary;
       } else {
         router.push("/admin/drivers");
         this.$toast.open({

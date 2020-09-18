@@ -126,78 +126,6 @@
                   </div>
                   <div class="custom-col row">
                     <v-col sm="4" class="label-align pt-0">
-                      <label>Insurance Number</label>
-                    </v-col>
-                    <v-col sm="8" class="pt-0 pb-0">
-                      <v-text-field
-                        v-model="addForm.insurance_number"
-                        :rules="[v => !!v || 'Insurance Number is required.']"
-                        label="Enter Insurance Number"
-                        required
-                      ></v-text-field>
-                    </v-col>
-                  </div>
-                  <div class="custom-col row">
-                    <v-col sm="4" class="label-align pt-0">
-                      <label>Insurance Date</label>
-                    </v-col>
-                    <v-col sm="8" class="pt-0 pb-0">
-                      <v-menu
-                        v-model="menu2"
-                        :close-on-content-click="false"
-                        :nudge-right="40"
-                        transition="scale-transition"
-                        offset-y
-                        min-width="290px"
-                      >
-                        <template v-slot:activator="{ on }">
-                          <v-text-field
-                            v-model="date"
-                            label="Select Insurance Date"
-                            prepend-icon="event"
-                            readonly
-                            v-on="on"
-                            required
-                            :rules="[v => !!v || 'Insurance Date is required.']"
-                          ></v-text-field>
-                        </template>
-                        <v-date-picker v-model="date" @input="menu2 = false"></v-date-picker>
-                      </v-menu>
-                    </v-col>
-                  </div>
-                  <div class="custom-col row">
-                    <v-col sm="4" class="label-align pt-0">
-                      <label>Insurance Expiry Date</label>
-                    </v-col>
-                    <v-col sm="8" class="pt-0 pb-0">
-                      <v-menu
-                        v-model="menu1"
-                        :close-on-content-click="false"
-                        :nudge-right="40"
-                        transition="scale-transition"
-                        offset-y
-                        min-width="290px"
-                      >
-                        <template v-slot:activator="{ on }">
-                          <v-text-field
-                            v-model="date1"
-                            label="Select Insurance Expiry Date"
-                            prepend-icon="event"
-                            readonly
-                            v-on="on"
-                            required
-                            :rules="[v => !!v || 'Insurance Expiry Date is required.']"
-                          ></v-text-field>
-                        </template>
-                        <v-date-picker v-model="date1" @input="menu1 = false" :min="setDate"></v-date-picker>
-                      </v-menu>
-                    </v-col>
-                  </div>
-                </v-col>
-
-                <v-col cols="6" md="6" class="pl-0 pt-0 manager-cols">
-                  <div class="custom-col row">
-                    <v-col sm="4" class="label-align pt-0">
                       <label>Total Miles</label>
                     </v-col>
                     <v-col sm="8" class="pt-0 pb-0">
@@ -224,21 +152,10 @@
                       ></v-text-field>
                     </v-col>
                   </div>
-                  <div class="custom-col row">
-                    <v-col sm="4" class="label-align pt-0">
-                      <label class="label_text">Notes</label>
-                    </v-col>
-                    <v-col sm="8" class="pt-0 pb-0">
-                      <v-textarea
-                        label="Enter Notes"
-                        placeholder
-                        rows="3"
-                        auto-grow
-                        v-model="addForm.notes"
-                        required
-                      ></v-textarea>
-                    </v-col>
-                  </div>
+                  
+                </v-col>
+
+                <v-col cols="6" md="6" class="pl-0 pt-0 manager-cols">
                   <div class="custom-col row">
                     <v-col sm="4" class="label-align pt-0 image-upload-label">
                       <label>RC</label>
@@ -266,40 +183,6 @@
                           <span>&times;</span>
                         </button>
                         <img :src="rc" alt />
-                      </div>
-                    </v-col>
-                  </div>
-                  <div class="custom-col row">
-                    <v-col sm="4" class="label-align pt-0 image-upload-label">
-                      <label>Insurance</label>
-                    </v-col>
-                    <v-col sm="8" class="pt-0 pb-0">
-                      <file-pond
-                        name="uploadImage"
-                        ref="pond"
-                        label-idle="Drop or Browse your files"
-                        v-bind:allow-multiple="false"
-                        v-bind:server="serverOptions"
-                        v-bind:files="myFiles"
-                        v-on:processfile="handleProcessFile2"
-                        v-on:processfilerevert="handleRemoveFile2"
-                        allow-file-type-validation="true"
-                        accepted-file-types="image/jpeg, image/png"
-                      />
-                      <div
-                        class="v-messages theme--light error--text"
-                        role="alert"
-                        v-if="insdocError"
-                      >
-                        <div class="v-messages__wrapper">
-                          <div class="v-messages__message">Insurance document is required.</div>
-                        </div>
-                      </div>
-                      <div class="service-image-outer" v-if="insurancedocument">
-                        <button type="button" class="close" v-if="ins_cross" @click="RemoveIns()">
-                          <span>&times;</span>
-                        </button>
-                        <img :src="insurancedocument" alt />
                       </div>
                     </v-col>
                   </div>
@@ -369,13 +252,9 @@ export default {
         company_name: "",
         truck_number: "",
         chaase_number: "",
-        insurance_number: "",
-        insurance_date: "",
-        rc_document: "",
-        insurance_document: "",
-        total_killometer: "",
+        killometer: "",
         capacity: "",
-        insurance_expiry: "",
+        rc_document: "",
         is_active: "",
       },
       killometerRules: [
@@ -418,24 +297,16 @@ export default {
     truckService.getTruck(this.$route.params.id).then((response) => {
       //handle response
       if (response.status) {
-        this.addForm.id = response.data.id;
+        this.addForm.vehicle_id = response.data.id;
         this.addForm.company_name = response.data.company_name;
         this.addForm.truck_number = response.data.truck_number;
         this.addForm.chaase_number = response.data.chaase_number;
-        this.addForm.insurance_number =
-          response.data.vehicle_insurance.insurance_number;
-        this.addForm.total_killometer = response.data.killometer;
+        this.addForm.killometer = response.data.killometer;
         this.addForm.capacity = response.data.capacity;
         this.addForm.rc_document = response.data.document;
-        this.addForm.insurance_document =
-          response.data.vehicle_insurance.document;
         this.addForm.is_active = response.data.status;
-        this.date = new Date(response.data.vehicle_insurance.insurance_date)
-          .toISOString()
-          .substr(0, 10);
-        this.date1 = new Date(response.data.vehicle_insurance.insurance_expiry)
-          .toISOString()
-          .substr(0, 10);
+        
+        
         if (response.data.document) {
           this.rc_cross = true;
           this.rc = this.imgUrl + response.data.document;
@@ -461,11 +332,6 @@ export default {
       this.rc_cross = false;
       this.addForm.rc_document = "";
     },
-    RemoveIns() {
-      this.insurancedocument = "";
-      this.ins_cross = false;
-      this.addForm.insurance_document = "";
-    },
     handleProcessFile1: function (error, file) {
       this.addForm.document = file.serverId;
       this.rc = this.imgUrl + file.serverId;
@@ -476,16 +342,6 @@ export default {
       this.rc = "";
       this.docError = true;
     },
-    handleProcessFile2: function (error, file) {
-      this.addForm.insurance_document = file.serverId;
-      this.insurancedocument = this.imgUrl + file.serverId;
-      this.insdocError = false;
-    },
-    handleRemoveFile2: function (file) {
-      this.addForm.insurance_document = "";
-      this.insurancedocument = "";
-      this.insdocError = true;
-    },
     save: function (e) {
       //stop page to reload
       e.preventDefault();
@@ -493,11 +349,7 @@ export default {
       if (this.addForm.document == "") {
         this.docError = true;
       }
-      if (this.addForm.insurance_document == "") {
-        this.insdocError = true;
-      }
-      this.addForm.insurance_date = this.date;
-      this.addForm.insurance_expiry = this.date1;
+      
       if (this.$refs.form.validate() && !this.insdocError && !this.docError) {
         if (this.loading) {
           return false;
