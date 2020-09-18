@@ -75,13 +75,13 @@ class JobsController extends Controller {
      * create job
      */
     public function createJob(Request $request) {
+//        dd($request->all());
         $validator = Validator::make($request->all(), [
                     'customer_id' => 'required',
                     'service_id' => 'required',
                     'job_providing_date' => 'required',
                     'is_repeating_job' => 'required',
                     'payment_mode' => 'required',
-                    'amount' => 'required',
                     'repeating_days' => 'required_if:is_repeating_job,==,2',
         ]);
         if ($validator->fails()) {
@@ -112,7 +112,7 @@ class JobsController extends Controller {
                 'time_slots_id' => (isset($request->time_slots_id) && $request->time_slots_id != '' && $request->time_slots_id != null) ? $request->time_slots_id : null,
                 'job_providing_date' => $request->job_providing_date,
                 'weight' => (isset($request->weight) && $request->weight != '' && $request->weight != null) ? $request->weight : null,
-                'is_repeating_job' => $request->is_repeating_job,
+                'is_repeating_job' => ($request->is_repeating_job == false) ? 1 : 2,
                 'repeating_days' => (isset($request->repeating_days) && $request->repeating_days != '' && $request->repeating_days != null) ? $request->repeating_days : null,
                 'payment_mode' => $request->payment_mode,
                 'images' => (isset($request->images) && $request->images != '' && $request->images != null) ? json_encode($request->images) : null,
@@ -189,8 +189,16 @@ class JobsController extends Controller {
     public function getJobFrams(Request $request) {
         return response()->json([
                     'status' => true,
-                    'message' => 'Customer Details',
-                    'data' => CustomerFarm::where('customer_id', $request->customer_id)->where('farm_active', '1')->with('farmManager')->get()
+                    'message' => 'Farm details',
+                    'data' => CustomerFarm::where('customer_id', $request->customer_id)->where('farm_active', '1')->get()
+                        ], 200);
+    }
+    
+    public function getJobFramManagers(Request $request) {
+        return response()->json([
+                    'status' => true,
+                    'message' => 'Farm details',
+                    'data' => User::where('farm_id', $request->farm_id)->where('is_confirmed', '1')->get()
                         ], 200);
     }
     /**

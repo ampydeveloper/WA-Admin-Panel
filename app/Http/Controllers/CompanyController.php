@@ -173,15 +173,9 @@ class CompanyController extends Controller {
             $haulerDetails->is_confirmed = $confirmed;
             $haulerDetails->save();
             DB::commit();
-//            if ($confirmed == 0) {
-//                    $this->_updateEmail($haulerDetails, $request->email);
-//                    $request->user()->token()->revoke();
-//                    return response()->json([
-//                                'status' => true,
-//                                'message' => 'Successfully logged out',
-//                                'data' => []
-//                    ]);
-//                }
+            if ($confirmed == 0) {
+                $this->_updateEmail($haulerDetails, $request->email);
+            }
             return response()->json([
                         'status' => true,
                         'message' => 'Hauler details updated successfully.',

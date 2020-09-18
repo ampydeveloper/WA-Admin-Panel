@@ -46,6 +46,9 @@ Route::group(['prefix' => 'auth'], function () {
         Route::delete('deleteImage', 'ImageController@deleteImage');
 
         Route::group(['prefix' => 'admin'], function () {
+            Route::get('dashboard', 'ManagerController@dashboard');
+            Route::post('dashboard-filters', 'ManagerController@dashboardFilters');
+            
             //update admin profile
             Route::post('change-password', 'AuthController@changePassword');
             Route::post('create-admin', 'ManagerController@createAdmin');
@@ -103,6 +106,7 @@ Route::group(['prefix' => 'auth'], function () {
             Route::post('create-job', 'JobsController@createJob');
             Route::get('job-customer', 'JobsController@getCustomers');
             Route::get('job-farms/{customer_id}', 'JobsController@getJobFrams');
+            Route::get('job-farms-manager/{farm_id}', 'JobsController@getJobFramManagers');
             Route::get('get-service-slots/{service_id}', 'JobsController@getServiceSlots');
             Route::get('single-job/{job_id}', 'JobsController@getSingleJob');
             Route::post('update-booked-job', 'JobsController@updateBookedJob');

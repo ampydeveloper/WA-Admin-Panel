@@ -57,7 +57,7 @@ class DriverController extends Controller {
                     'driver_province' => 'required',
                     'driver_zipcode' => 'required',
 //                    'driver_type' => 'required',
-                    'driver_licence' => 'required',
+                    'driver_licence' => 'required|unique:drivers',
                     'expiry_date' => 'required',
                     'salary_type' => 'required',
                     'driver_salary' => 'required',
@@ -83,7 +83,7 @@ class DriverController extends Controller {
                 'city' => $request->driver_city,
                 'state' => $request->driver_province,
                 'zip_code' => $request->driver_zipcode,
-                'user_image' => (isset($request->driver_image) && $request->driver_image != '' && $request->driver_image != null) ? $request->driver_image : null,
+                'user_image' => (isset($request->user_image) && $request->user_image != '' && $request->user_image != null) ? $request->user_image : null,
                 'role_id' => config('constant.roles.Driver'),
                 'created_from_id' => $request->user()->id,
                 'is_confirmed' => 1,
@@ -126,7 +126,6 @@ class DriverController extends Controller {
      * edit driver
      */
     public function editDriver(Request $request) {
-//        die('red');
         $validator = Validator::make($request->all(), [
                     'driver_id' => 'required',
                     'driver_first_name' => 'required',
@@ -140,7 +139,7 @@ class DriverController extends Controller {
 //                    'driver_type' => 'required',
                     'driver_licence' => 'required',
                     'expiry_date' => 'required',
-                    'driver_licence_image' => 'required',
+                    'document' => 'required',
                     'salary_type' => 'required',
                     'driver_salary' => 'required',
                     'status' => 'required',
@@ -169,6 +168,17 @@ class DriverController extends Controller {
                 $confirmed = 0;
             }
         }
+        $checkDriverLicence = Driver::where('driver_licence', $request->driver_licence)->first();
+        $driverDetail = Driver::where('user_id', $request->driver_id)->first();
+        if ($checkDriverLicence !== null) {
+            if ($checkDriverLicence->id !== $driverDetail->id) {
+                return response()->json([
+                            'status' => false,
+                            'message' => 'Driver lecience is already taken.',
+                            'data' => []
+                                ], 422);
+            }
+        }
         try {
             DB::beginTransaction();
             if ($request->password != '' && $request->password != null) {
@@ -183,7 +193,7 @@ class DriverController extends Controller {
             $driver->city = $request->driver_city;
             $driver->state = $request->driver_province;
             $driver->zip_code = $request->driver_zipcode;
-            $driver->user_image = (isset($request->driver_image) && $request->driver_image != '' && $request->driver_image != null) ? $request->driver_image : null;
+            $driver->user_image = (isset($request->user_image) && $request->user_image != '' && $request->user_image != null) ? $request->user_image : null;
             $driver->is_active = $request->driver_is_active;
             if ($driver->save()) {
                 if ($driver->role_id != config('constant.roles.Admin')) {
@@ -191,7 +201,7 @@ class DriverController extends Controller {
                         'driver_type' => 1,
                         'driver_licence' => $request->driver_licence,
                         'expiry_date' => $request->expiry_date,
-                        'document' => $request->driver_licence_image,
+                        'document' => $request->document,
                         'salary_type' => $request->salary_type,
                         'driver_salary' => $request->driver_salary,
                         'status' => $request->status,

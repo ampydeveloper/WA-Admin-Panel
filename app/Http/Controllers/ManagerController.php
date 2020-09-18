@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use Mail;
+use App\Job;
 use App\User;
 use Validator;
+use App\Service;
+use App\Vehicle;
 use Carbon\Carbon;
 use App\ManagerDetail;
 use Illuminate\Support\Str;
@@ -14,6 +17,112 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
 class ManagerController extends Controller {
+    
+    
+    public function dashboard(Request $request) {
+        $data['count']['services'] = Service::get()->count();
+        $data['count']['managers'] = User::where('role_id', config('constant.roles.Admin_Manager'))->get()->count();
+        $data['count']['drivers'] = User::where('role_id', config('constant.roles.Driver'))->get()->count();
+        $data['count']['trucks'] = Vehicle::where('vehicle_type', config('constant.vehicle_type.truck'))->get()->count();
+        $data['count']['skidsteers'] = Vehicle::where('vehicle_type', config('constant.vehicle_type.skidsteer'))->get()->count();
+        
+        // Graphs
+        $data['graphs']['allCustomersCount'] = User::where('role_id', config('constant.roles.Customer'))->get()->count();
+        $data['graphs']['newCustomersCount'] = User::where('role_id', config('constant.roles.Customer'))->where('created_at', 'like', '%' . date('Y-m-d') . '%' )->get()->count();
+        $data['graphs']['revenueGeneratedByNewCustomers'] = Job::whereHas('customer', function($q) {
+            $q->where('role_id', config('constant.roles.Customer'))->where('created_at', 'like', '%' . date('Y-m-d') . '%' );
+        })->sum('amount');
+        
+        $data['graphs']['allHaulersCount'] = User::where('role_id', config('constant.roles.Haulers'))->get()->count();
+        $data['graphs']['newHaulersCount'] = User::where('role_id', config('constant.roles.Haulers'))->where('created_at', 'like', '%' . date('Y-m-d') . '%' )->get()->count();
+        $data['graphs']['revenueGeneratedByNewHaulers'] = Job::whereHas('customer', function($q) {
+            $q->where('role_id', config('constant.roles.Haulers'))->where('created_at', 'like', '%' . date('Y-m-d') . '%' );
+        })->sum('amount');
+        
+        $data['graphs']['allJobsCount'] = Job::get()->count();
+        $data['graphs']['newJobsCount'] = Job::where('created_at', 'like', '%' . date('Y-m-d') . '%' )->get()->count();
+        $data['graphs']['revenueGeneratedByNewJobs'] = Job::where('created_at', 'like', '%' . date('Y-m-d') . '%' )->sum('amount');
+        
+        //invoices
+        $data['invoiceGraphs']['customerInvoices'] = Job::whereHas('customer', function($q) {
+            $q->where('role_id', config('constant.roles.Customer'));
+        })->where('payment_status', config('constant.payment_status.paid'))->sum('amount');
+        
+        $data['invoiceGraphs']['haulerInvoices'] = Job::whereHas('customer', function($q) {
+            $q->where('role_id', config('constant.roles.Haulers'));
+        })->where('payment_status', config('constant.payment_status.paid'))->sum('amount');
+        
+        $data['invoiceGraphs']['outstandingInvoices'] = Job::whereHas('customer', function($q) {
+            $q->where('role_id', config('constant.roles.Haulers'));
+        })->where('payment_status', config('constant.payment_status.unpaid'))->where(function($q) {
+            $q->where('payment_mode', config('constant.payment_mode.cheque'))->orWhere('payment_mode', config('constant.payment_mode.cash'));
+        })->sum('amount');
+        return response()->json([
+                            'status' => true,
+                            'message' => 'Admin created successfully.',
+                            'data' => $data
+                                ], 200);
+    }
+    
+    public function dashboardFilters(Request $request) {
+        $validator = Validator::make($request->all(), [
+                    'filter_for' => 'required',
+                    'filter_time' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                        'status' => false,
+                        'message' => 'The given data was invalid.',
+                        'data' => $validator->errors()
+                            ], 422);
+        }
+        
+        if ($request->filter_time == '7 days') {
+            $startDate = date('Y-m-d', strtotime('-7 days'));
+        } elseif ($request->filter_time == '1 month') {
+            $startDate = date('Y-m-d', strtotime('-1 month'));
+        } else {
+            $startDate = date('Y-m-d', strtotime('-1 year'));
+        }
+
+
+        if ($request->filter_for == 'graphs') {
+            $data['graphs']['allCustomersCount'] = User::where('role_id', config('constant.roles.Customer'))->get()->count();
+            $data['graphs']['newCustomersCount'] = User::where('role_id', config('constant.roles.Customer'))->whereBetween('created_at',[$startDate,date('Y-m-d')])->get()->count();
+            $data['graphs']['revenueGeneratedByNewCustomers'] = Job::whereHas('customer', function($q) use($startDate) {
+                        $q->where('role_id', config('constant.roles.Customer'))->whereBetween('created_at',[$startDate,date('Y-m-d')]);
+                    })->sum('amount');
+
+            $data['graphs']['allHaulersCount'] = User::where('role_id', config('constant.roles.Haulers'))->get()->count();
+            $data['graphs']['newHaulersCount'] = User::where('role_id', config('constant.roles.Haulers'))->whereBetween('created_at',[$startDate,date('Y-m-d')])->get()->count();
+            $data['graphs']['revenueGeneratedByNewHaulers'] = Job::whereHas('customer', function($q) use($startDate) {
+                        $q->where('role_id', config('constant.roles.Haulers'))->whereBetween('created_at',[$startDate,date('Y-m-d')]);
+                    })->sum('amount');
+
+            $data['graphs']['allJobsCount'] = Job::get()->count();
+            $data['graphs']['newJobsCount'] = Job::whereBetween('created_at',[$startDate,date('Y-m-d')])->get()->count();
+            $data['graphs']['revenueGeneratedByNewJobs'] = Job::whereBetween('created_at',[$startDate,date('Y-m-d')])->sum('amount');
+        } else {
+            $data['invoiceGraphs']['customerInvoices'] = Job::whereHas('customer', function($q) {
+                        $q->where('role_id', config('constant.roles.Customer'));
+                    })->where('payment_status', config('constant.payment_status.paid'))->whereBetween('created_at',[$startDate,date('Y-m-d')])->sum('amount');
+
+            $data['invoiceGraphs']['haulerInvoices'] = Job::whereHas('customer', function($q) {
+                        $q->where('role_id', config('constant.roles.Haulers'));
+                    })->where('payment_status', config('constant.payment_status.paid'))->whereBetween('created_at',[$startDate,date('Y-m-d')])->sum('amount');
+
+            $data['invoiceGraphs']['outstandingInvoices'] = Job::whereHas('customer', function($q) {
+                        $q->where('role_id', config('constant.roles.Haulers'));
+                    })->where('payment_status', config('constant.payment_status.unpaid'))->where(function($q) {
+                        $q->where('payment_mode', config('constant.payment_mode.cheque'))->orWhere('payment_mode', config('constant.payment_mode.cash'));
+                    })->whereBetween('created_at',[$startDate,date('Y-m-d')])->sum('amount');
+        }
+        return response()->json([
+                            'status' => true,
+                            'message' => 'Admin created successfully.',
+                            'data' => $data
+                                ], 200);
+    }
 
     public function createAdmin(Request $request) {
         $validator = Validator::make($request->all(), [
@@ -141,7 +250,7 @@ class ManagerController extends Controller {
                     'city' => 'required',
                     'province' => 'required',
                     'manager_zipcode' => 'required',
-//                    'card_image' => 'required',
+                    'identification_number' => 'required',
                     'id_photo' => 'required',
                     'salary' => 'required',
         ]);
@@ -217,7 +326,7 @@ class ManagerController extends Controller {
                     'province' => 'required',
                     'zipcode' => 'required',
                     'is_active' => 'required',
-//                    'card_image' => 'required',
+                    'identification_number' => 'required',
                     'id_photo' => 'required',
                     'salary' => 'required',
                     'joining_date' => 'required',
