@@ -57,7 +57,7 @@ function addFarm(data) {
 
 function edit(data) {
   return fetch(
-    this.apiUrl+`admin/update-customer/`+data.id,
+    this.apiUrl+`admin/update-customer`,
     requestOptions.post(data)
   )
     .then(handleResponse)

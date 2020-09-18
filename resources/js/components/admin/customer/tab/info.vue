@@ -12,12 +12,6 @@
           >
             <v-row>
               <v-col cols="12" md="12" class="customer-edit-first pt-0 pb-0">
-                <div class="v-avatar v-list-item__avatar">
-                  <button type="button" class="close" v-if="cross" @click="Remove()">
-                    <span>&times;</span>
-                  </button>
-                  <img :src="avatar" />
-                </div>
                 <file-pond
                   name="uploadImage"
                   ref="pond"
@@ -32,6 +26,12 @@
                   v-on:processfilerevert="handleRemoveFile"
                   :disabled="disabled == 0"
                 />
+                <div class="service-image-outer" v-if="avatar">
+                  <button type="button" class="close" v-if="cross" @click="Remove()">
+                    <span>&times;</span>
+                  </button>
+                  <img :src="avatar" />
+                </div>
               </v-col>
               <v-col cols="4" md="4" class="pt-0 pb-0">
                 <v-select
@@ -45,12 +45,22 @@
               </v-col>
               <v-col cols="4" sm="4" class="pt-0 pb-0">
                 <v-text-field
-                  v-model="addForm.customer_name"
+                  v-model="addForm.customer_first_name"
                   required
                   :disabled="disabled == 0"
-                  label="Name"
+                  label="Enter First Name"
                   class="disabled-tag"
-                  :rules="[v => !!v || 'Customer name is required.']"
+                  :rules="[v => !!v || 'Customer First Name is required.']"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="4" sm="4" class="pt-0 pb-0">
+                <v-text-field
+                  v-model="addForm.customer_last_name"
+                  required
+                  :disabled="disabled == 0"
+                  label="Enter Last Name"
+                  class="disabled-tag"
+                  :rules="[v => !!v || 'Customer Last Name is required.']"
                 ></v-text-field>
               </v-col>
               <v-col cols="4" md="4" class="pt-0 pb-0">
@@ -66,7 +76,7 @@
               </v-col>
               <v-col cols="4" md="4" class="pt-0 pb-0">
                 <v-text-field
-                  v-model="addForm.phone"
+                  v-model="addForm.customer_phone"
                   :rules="phoneRules"
                   :disabled="disabled == 0"
                   label="Phone"
@@ -77,7 +87,7 @@
               </v-col>
               <v-col cols="4" md="4" class="pt-0 pb-0">
                 <v-text-field
-                  v-model="addForm.address"
+                  v-model="addForm.customer_address"
                   :disabled="disabled == 0"
                   class="disabled-tag"
                   label="Address"
@@ -87,7 +97,7 @@
               </v-col>
               <v-col cols="4" md="4" class="pt-0 pb-0">
                 <v-text-field
-                  v-model="addForm.city"
+                  v-model="addForm.customer_city"
                   :disabled="disabled == 0"
                   class="disabled-tag"
                   label="City"
@@ -97,7 +107,7 @@
               </v-col>
               <v-col cols="4" md="4" class="pt-0 pb-0">
                 <v-text-field
-                  v-model="addForm.province"
+                  v-model="addForm.customer_province"
                   :disabled="disabled == 0"
                   class="disabled-tag"
                   label="Province"
@@ -107,7 +117,7 @@
               </v-col>
               <v-col cols="4" md="4" class="pt-0 pb-0">
                 <v-text-field
-                  v-model="addForm.zipcode"
+                  v-model="addForm.customer_zipcode"
                   label="Zipcode"
                   :rules="[v => !!v || 'Zipcode is required.']"
                   :disabled="disabled == 0"
@@ -116,16 +126,16 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="2" md="2">
-                <v-switch v-model="addForm.is_active" class="mx-2" label="Status"></v-switch>
+                <v-switch v-model="addForm.customer_is_active" class="mx-2" label="Status"></v-switch>
               </v-col>
-              <v-col cols="2" md="2">
+              <!-- <v-col cols="2" md="2">
                 <v-switch
                   v-model="editSwitch"
                   class="mx-2"
                   label="Edit"
                   @click="disabled = (disabled + 1) % 2"
                 ></v-switch>
-              </v-col>
+              </v-col> -->
 
               <v-col class="pt-0 pb-0" cols="12" md="12">
                 <div class="p-0 float-right">
@@ -160,8 +170,8 @@ export default {
       loading: false,
       prefixs: ["Ms.", "Mr.", "Mrs."],
       isLoading: false,
-      editSwitch: false,
-      disabled: 0,
+      // editSwitch: false,
+      disabled: 1,
       items: [],
       model: null,
       valid: true,
@@ -174,15 +184,16 @@ export default {
       addForm: {
         id: "",
         prefix: "",
-        customer_name: "",
+        customer_first_name: "",
+        customer_last_name: "",
         email: "",
-        phone: "",
-        address: "",
-        city: "",
-        province: "",
+        customer_phone: "",
+        customer_address: "",
+        customer_city: "",
+        customer_province: "",
         user_image: null,
-        zipcode: "",
-        is_active: "",
+        customer_zipcode: "",
+        customer_is_active: "",
       },
       emailRules: [
         (v) => !!v || "Email is required.",
@@ -202,15 +213,15 @@ export default {
       myFiles: [],
     };
   },
-  watch: {
-    editSwitch(newValue) {
-      if (newValue == true) {
-        // console.log('yes');
-      } else {
-        // console.log('no');
-      }
-    },
-  },
+  // watch: {
+  //   editSwitch(newValue) {
+  //     if (newValue == true) {
+  //       // console.log('yes');
+  //     } else {
+  //       // console.log('no');
+  //     }
+  //   },
+  // },
   mounted: function () {
     const currentUser = authenticationService.currentUserValue;
     if (currentUser.data.user.role_id == 1) {
@@ -222,24 +233,25 @@ export default {
       //handle response
       if (response.status) {
         this.addForm = {
-          id: response.data.id,
+          customer_id: response.data.id,
           prefix: response.data.prefix,
-          customer_name: response.data.first_name,
-          phone: response.data.phone,
+          customer_first_name: response.data.first_name,
+          customer_last_name: response.data.last_name,
+          customer_phone: response.data.phone,
           email: response.data.email,
-          city: response.data.city,
-          province: response.data.state,
+          customer_city: response.data.city,
+          customer_province: response.data.state,
           country: response.data.country,
           user_image: response.data.user_image,
-          address: response.data.address,
-          zipcode: response.data.zip_code,
-          is_active: response.data.is_active,
+          customer_address: response.data.address,
+          customer_zipcode: response.data.zip_code,
+          customer_is_active: response.data.is_active,
         };
         if (response.data.user_image) {
           this.cross = true;
           this.avatar = this.imgUrl + response.data.user_image;
         } else {
-          this.avatar = "/images/avatar.png";
+          this.avatar = "";
         }
       } else {
         this.$toast.open({
@@ -281,7 +293,7 @@ export default {
   },
   methods: {
     Remove() {
-      this.avatar = "/images/avatar.png";
+      this.avatar = "";
       this.cross = false;
       this.addForm.user_image = "";
     },
@@ -291,11 +303,12 @@ export default {
     handleProcessFile: function (error, file) {
       this.avatar = this.imgUrl + file.serverId;
       this.addForm.user_image = file.serverId;
+       this.uploadInProgress = false;
     },
     handleRemoveFile: function (file) {
       this.addForm.user_image = "";
       this.cross = false;
-      this.avatar = "/images/avatar.png";
+      this.avatar = "";
     },
     update() {
       if (this.uploadInProgress) {

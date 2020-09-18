@@ -125,10 +125,18 @@
                     </v-col>
                     <v-col cols="4" md="4">
                       <v-text-field
-                        v-model="addForm.customer_name"
-                        label="Enter Name"
+                        v-model="addForm.customer_first_name"
+                        label="Enter First Name"
                         required
-                        :rules="[v => !!v || 'Customer Name is required.']"
+                        :rules="[v => !!v || 'Customer First Name is required.']"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="4" md="4">
+                      <v-text-field
+                        v-model="addForm.customer_last_name"
+                        label="Enter Last Name"
+                        required
+                        :rules="[v => !!v || 'Customer Last Name is required.']"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="4" md="4">
@@ -142,7 +150,7 @@
                     </v-col>
                     <v-col cols="4" md="4">
                       <v-text-field
-                        v-model="addForm.phone"
+                        v-model="addForm.customer_phone"
                         :rules="phoneRules"
                         label="Enter Phone"
                         required
@@ -151,7 +159,7 @@
                     </v-col>
                     <v-col cols="4" md="4">
                       <v-text-field
-                        v-model="addForm.address"
+                        v-model="addForm.customer_address"
                         label="Enter Address"
                         required
                         :rules="[v => !!v || 'Address is required.']"
@@ -159,7 +167,7 @@
                     </v-col>
                     <v-col cols="4" md="4">
                       <v-text-field
-                        v-model="addForm.city"
+                        v-model="addForm.customer_city"
                         label="Enter City"
                         required
                         :rules="[v => !!v || 'City is required.']"
@@ -167,7 +175,7 @@
                     </v-col>
                     <v-col cols="4" md="4">
                       <v-text-field
-                        v-model="addForm.province"
+                        v-model="addForm.customer_province"
                         label="Enter Province"
                         required
                         :rules="[v => !!v || 'Province is required.']"
@@ -175,14 +183,14 @@
                     </v-col>
                     <v-col cols="4" md="4">
                       <v-text-field
-                        v-model="addForm.zipcode"
+                        v-model="addForm.customer_zipcode"
                         :rules="[v => !!v || 'Zipcode is required.']"
                         label="Enter Zipcode"
                         required
                       ></v-text-field>
                     </v-col>
                     <v-col cols="4" md="4">
-                      <v-switch v-model="addForm.is_active" class="mx-2" label="Status"></v-switch>
+                      <v-switch v-model="addForm.customer_is_active" class="mx-2" label="Status"></v-switch>
                     </v-col>
                   </v-row>
                 </v-form>
@@ -316,15 +324,23 @@
                         </v-col>
                         <v-col cols="4" md="4">
                           <v-text-field
-                            v-model="input.manager_name"
-                            label="Enter Name"
+                            v-model="input.manager_first_name"
+                            label="Enter First Name"
                             required
-                            :rules="[v => !!v || 'Manager name is required.']"
+                            :rules="[v => !!v || 'Manager First  Name is required.']"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="4" md="4">
                           <v-text-field
-                            v-model="input.manager_email"
+                            v-model="input.manager_last_name"
+                            label="Enter Last Name"
+                            required
+                            :rules="[v => !!v || 'Manager Last  Name is required.']"
+                          ></v-text-field>
+                        </v-col>
+                        <v-col cols="4" md="4">
+                          <v-text-field
+                            v-model="input.email"
                             :rules="emailRules"
                             name="email"
                             label="Enter Email"
@@ -467,15 +483,16 @@ export default {
       uberMapToken: environment.uberMapToken,
       addForm: {
         prefix: "",
-        customer_name: "",
+        customer_first_name: "",
+        customer_last_name: "",
         email: "",
-        phone: "",
-        address: "",
-        city: "",
-        province: "",
+        customer_phone: "",
+        customer_address: "",
+        customer_city: "",
+        customer_province: "",
         user_image: null,
-        zipcode: "",
-        is_active: true,
+        customer_zipcode: "",
+        customer_is_active: true,
         farm_images: [],
         latitude: "",
         longitude: "",

@@ -87,7 +87,7 @@ class CustomerController extends Controller {
                     'manager_details.*.manager_zipcode' => 'required',
                     'manager_details.*.manager_card_image' => 'required',
                     'manager_details.*.manager_id_card' => 'required',
-                    'manager_details.*.salary' => 'required',
+//                    'manager_details.*.salary' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -161,7 +161,7 @@ class CustomerController extends Controller {
                                 'user_id' => $saveManger->id,
                                 'identification_number' => $manager['manager_id_card'],
                                 'document' => $manager['manager_card_image'],
-                                'salary' => $manager['salary'],
+//                                'salary' => $manager['salary'],
                                 'joining_date' => date('Y/m/d'),
                             ]);
                             if ($mangerDetails->save()) {
