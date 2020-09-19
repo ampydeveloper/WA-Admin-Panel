@@ -24,6 +24,14 @@ class VehicleController extends Controller {
                         ], 200);
     }
     
+    public function listVehicleSkidsteer() {
+        return response()->json([
+                    'status' => true,
+                    'message' => 'Skidsteer Details',
+                    'data' => Vehicle::with("vehicle_service", "vehicle_insurance")->whereVehicleType(config("constant.vehicle_type.skidsteer"))->get()
+                        ], 200);
+    }
+    
     public function listVehicleMobile(Request $request) {
         $validator = Validator::make($request->all(), [
                     'offset' => 'required',
@@ -40,6 +48,25 @@ class VehicleController extends Controller {
                     'status' => true,
                     'message' => 'Truck Details',
                     'data' => Vehicle::with("vehicle_service", "vehicle_insurance")->whereVehicleType(config("constant.vehicle_type.truck"))->skip($request->offset)->take($request->take)->get()
+                        ], 200);
+    }
+    
+    public function listVehicleMobileSkidsteer(Request $request) {
+        $validator = Validator::make($request->all(), [
+                    'offset' => 'required',
+                    'take' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                        'status' => false,
+                        'message' => 'The given data was invalid.',
+                        'data' => $validator->errors()
+                            ], 422);
+        }
+        return response()->json([
+                    'status' => true,
+                    'message' => 'Truck Details',
+                    'data' => Vehicle::with("vehicle_service", "vehicle_insurance")->whereVehicleType(config("constant.vehicle_type.skidsteer"))->skip($request->offset)->take($request->take)->get()
                         ], 200);
     }
     /**

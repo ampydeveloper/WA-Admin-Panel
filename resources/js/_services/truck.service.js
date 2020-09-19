@@ -10,11 +10,14 @@ const currentUserSubject = new BehaviorSubject(
 );
 
 export const truckService = {
+  
+  listTrucks,
+  listSkidsteers,
   add,
   edit,
   Delete,
+  
   getTruck,
-  listTrucks,
   addService,
   getTruckService,
   updateTruckService,
@@ -26,6 +29,8 @@ export const truckService = {
   addInsurance, 
   getTruckInsurance,
   getLastInsu,
+  
+  
   apiUrl: environment.apiUrl,
   currentUrl: '',
   currentUser: currentUserSubject.asObservable(),
@@ -33,6 +38,32 @@ export const truckService = {
     return currentUserSubject.value;
   }
 };
+
+function listTrucks() {
+  return fetch(
+    this.apiUrl+`admin/list-vehicle`,
+    requestOptions.get()
+  )
+    .then(handleResponse)
+    .then(user => {
+      // store user details and passport token in local storage to keep user logged in between page refreshes
+
+      return user;
+    });
+}
+
+function listSkidsteers() {
+  return fetch(
+    this.apiUrl+`admin/list-vehicle-skidsteer`,
+    requestOptions.get()
+  )
+    .then(handleResponse)
+    .then(user => {
+      // store user details and passport token in local storage to keep user logged in between page refreshes
+
+      return user;
+    });
+}
 
 function add(data) {
 
@@ -86,18 +117,7 @@ function getTruck(data) {
     });
 }
 
-function listTrucks() {
-  return fetch(
-    this.apiUrl+`admin/list-vehicle`,
-    requestOptions.get()
-  )
-    .then(handleResponse)
-    .then(user => {
-      // store user details and passport token in local storage to keep user logged in between page refreshes
 
-      return user;
-    });
-}
 
 function addService(data) {
 
@@ -244,3 +264,5 @@ function DeleteInsurance(data) {
       return user;
     });
 }
+
+

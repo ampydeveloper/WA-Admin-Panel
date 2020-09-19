@@ -16,7 +16,7 @@ export const skidsteerService = {
   getSkidsteer,
   listSkidsteers,
   addService,
-getTruckService,
+  getTruckService,
   apiUrl: environment.apiUrl,
   currentUrl: '',
   currentUser: currentUserSubject.asObservable(),
@@ -79,7 +79,7 @@ function getSkidsteer(data) {
 
 function listSkidsteers() {
   return fetch(
-    this.apiUrl+`admin/list-skidsteer`,
+    this.apiUrl+`admin/list-vehicle-skidsteer`,
     requestOptions.get()
   )
     .then(handleResponse)

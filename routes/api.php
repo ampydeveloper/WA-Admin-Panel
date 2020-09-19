@@ -126,6 +126,8 @@ Route::group(['prefix' => 'auth'], function () {
             //truck
             Route::get('list-vehicle', 'VehicleController@listVehicle');
             Route::post('list-vehicle-mobile', 'VehicleController@listVehicleMobile');
+            Route::get('list-vehicle-skidsteer', 'VehicleController@listVehicleSkidsteer');
+            Route::post('list-vehicle-mobile-skidsteer', 'VehicleController@listVehicleMobileSkidsteer');
             Route::post('create-vehicle', 'VehicleController@createVehicle');
             Route::post('edit-vehicle', 'VehicleController@editVehicle');
             Route::get('get-vehicle/{vehicle_id}', 'VehicleController@getVehicle');

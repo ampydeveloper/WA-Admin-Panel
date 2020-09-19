@@ -4,7 +4,7 @@
       <ul>
         <li>
           <h4 class="main-title top_heading">
-            All Trucks
+            All Skidsteers
             <span class="right-bor"></span>
           </h4>
         </li>
@@ -44,7 +44,7 @@
             </span>
           </router-link>
         </li>
-        <li>Trucks</li>
+        <li>Skidsteers</li>
         <li>
           <span>
             <svg
@@ -72,10 +72,10 @@
       <v-container fluid>
         <v-row>
           <div class="add-icon">
-            <router-link v-if="isAdmin" to="/admin/truck/add" class="nav-item nav-link">
+            <router-link v-if="isAdmin" to="/admin/skidsteer/add" class="nav-item nav-link">
               <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon>
             </router-link>
-            <router-link v-if="!isAdmin" to="/manager/truck/add" class="nav-item nav-link">
+            <router-link v-if="!isAdmin" to="/manager/skidsteer/add" class="nav-item nav-link">
               <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon>
             </router-link>
           </div>
@@ -85,7 +85,7 @@
                 <tr>
                   <th class="text-left">#</th>
                   <th class="text-left">Company</th>
-                  <th class="text-left">Truck</th>
+                  <th class="text-left">Skidsteer</th>
                   <th class="text-left">Chassis</th>
                   <th class="text-left">Distance</th>
                   <th class="text-left">Service Details</th>
@@ -108,12 +108,12 @@
                   <td>
                     <router-link
                       v-if="isAdmin"
-                      :to="'/admin/truck/service/' + item.id"
+                      :to="'/admin/skidsteer/service/' + item.id"
                       class="custom-save-btn btn-table"
                     >View</router-link>
                     <router-link
                       v-if="!isAdmin"
-                      :to="'/manager/truck/service/' + item.id"
+                      :to="'/manager/skidsteer/service/' + item.id"
                       class="custom-save-btn btn-table"
                     >View</router-link>
                   </td>
@@ -125,10 +125,10 @@
                     <span class="badges-item">Unavailable</span>
                   </td>
                   <td class="action-col">
-                    <router-link v-if="isAdmin" :to="'/admin/truck/edit/' + item.id">
+                    <router-link v-if="isAdmin" :to="'/admin/skidsteer/edit/' + item.id">
                       <edit-3-icon size="1.2x" class="custom-class"></edit-3-icon>
                     </router-link>
-                    <router-link v-if="!isAdmin" :to="'/manager/truck/edit/' + item.id">
+                    <router-link v-if="!isAdmin" :to="'/manager/skidsteer/edit/' + item.id">
                       <edit-3-icon size="1.2x" class="custom-class"></edit-3-icon>
                     </router-link>
                     <a href="javascript:void(0);" text @click="Delete(item.id)">
@@ -200,7 +200,7 @@ export default {
 
   methods: {
     getResults() {
-      truckService.listTrucks().then((response) => {
+      truckService.listSkidsteers().then((response) => {
         //handle response
         if (response.status) {
           this.trucks = response.data;
@@ -275,7 +275,7 @@ export default {
             },
           });
         }
-        $(".dataTables_filter input").attr("placeholder", "Search Trucks");
+        $(".dataTables_filter input").attr("placeholder", "Search Skidsteer");
         $(".dataTables_paginate .paginate_button.previous").html(
           $("#table-chevron-left").html()
         );
