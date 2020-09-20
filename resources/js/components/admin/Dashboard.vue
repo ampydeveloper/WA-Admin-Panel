@@ -50,7 +50,12 @@
             <h4 class="active">Customer</h4>
 
             <div class="graph-select">
-              <v-select :items="prefixs" v-model="prefixSelected" class="graph-select-sl" :menu-props="{ contentClass: 'graph-select-options' }"></v-select>
+              <v-select
+                :items="prefixs"
+                v-model="prefixSelected"
+                class="graph-select-sl"
+                :menu-props="{ contentClass: 'graph-select-options' }"
+              ></v-select>
             </div>
           </div>
           <div class="customer-graph-details-outer">
@@ -80,13 +85,17 @@
             <h4 class="active">Invoices</h4>
 
             <div class="graph-select">
-              <v-select :items="prefixs" v-model="prefixSelected" class="graph-select-sl" :menu-props="{ contentClass: 'graph-select-options' }"></v-select>
+              <v-select
+                :items="prefixs"
+                v-model="prefixSelected"
+                class="graph-select-sl"
+                :menu-props="{ contentClass: 'graph-select-options' }"
+              ></v-select>
             </div>
           </div>
-<div class="pie-chart-outer">
-  <canvas id="pie-chart"></canvas>
-</div>
-          
+          <div class="pie-chart-outer">
+            <canvas id="pie-chart"></canvas>
+          </div>
 
           <div class="customer-graph-details-outer pie-data-outer row">
             <div class="customer-graph-details col-sm-4">
@@ -219,7 +228,7 @@
                         stroke-width="2"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        class=""
+                        class
                       >
                         <line x1="12" y1="5" x2="12" y2="19" />
                         <line x1="5" y1="12" x2="19" y2="12" />
@@ -247,7 +256,7 @@
                         stroke-width="2"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        class=""
+                        class
                       >
                         <path
                           d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
@@ -275,7 +284,7 @@
                         stroke-width="2"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        class=""
+                        class
                       >
                         <path
                           d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
@@ -303,7 +312,7 @@
                         stroke-width="2"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        class=""
+                        class
                       >
                         <path
                           d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
@@ -346,7 +355,7 @@
                         stroke-width="2"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        class=""
+                        class
                       >
                         <line x1="12" y1="5" x2="12" y2="19" />
                         <line x1="5" y1="12" x2="19" y2="12" />
@@ -374,7 +383,7 @@
                         stroke-width="2"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        class=""
+                        class
                       >
                         <path
                           d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
@@ -402,7 +411,7 @@
                         stroke-width="2"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        class=""
+                        class
                       >
                         <path
                           d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
@@ -430,7 +439,7 @@
                         stroke-width="2"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        class=""
+                        class
                       >
                         <path
                           d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"

@@ -44,7 +44,7 @@
             <thead>
               <tr>
                 <th>Job ID</th>
-                <th>Farm Location</th>
+                <th>Farm</th>
                 <th>Start Date</th>
                 <th>Start Time</th>
                 <th>Tech</th>
@@ -129,7 +129,8 @@ export default {
   updated() {
     setTimeout(function () {
       $(document).ready(function () {
-        $(".table-main").DataTable({
+        if (!$.fn.dataTable.isDataTable("#c-records-table")) {
+        $("#c-records-table").DataTable({
           aoColumnDefs: [
             {
               bSortable: false,
@@ -138,22 +139,23 @@ export default {
           ],
           oLanguage: { sSearch: "" },
           drawCallback: function (settings) {
-            $(".dataTables_paginate .paginate_button.previous").html(
+            $("#c-records-table_paginate .paginate_button.previous").html(
               $("#table-chevron-left").html()
             );
-            $(".dataTables_paginate .paginate_button.next").html(
+            $("#c-records-table_paginate .paginate_button.next").html(
               $("#table-chevron-right").html()
             );
           },
         });
-        $(".dataTables_filter input").attr("placeholder", "Search");
-        $(".dataTables_paginate .paginate_button.previous").html(
+        $("#c-records-table_filter input").attr("placeholder", "Search Records");
+        $("#c-records-table_paginate .paginate_button.previous").html(
           $("#table-chevron-left").html()
         );
-        $(".dataTables_paginate .paginate_button.next").html(
+        $("#c-records-table_paginate .paginate_button.next").html(
           $("#table-chevron-right").html()
         );
-        $(".table-main").css({ opacity: 1 });
+        $("#c-records-table").css({ opacity: 1 });
+        }
       });
     }, 1000);
   },

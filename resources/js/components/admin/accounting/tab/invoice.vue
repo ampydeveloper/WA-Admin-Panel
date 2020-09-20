@@ -19,14 +19,14 @@
           <td>
             <router-link
               v-if="isAdmin"
-              :to="'/admin/customer/details/'+invoice.customer.id"
+              :to="'/admin/customer/details/'+invoice.id"
               class="nav-item nav-link"
-            >{{invoice.customer.first_name}}</router-link>
+            >{{invoice.first_name}}</router-link>
             <router-link
               v-if="!isAdmin"
-              :to="'/manager/customer/details/'+invoice.customer.id"
+              :to="'/manager/customer/details/'+invoice.id"
               class="nav-item nav-link"
-            >{{invoice.customer.first_name}}</router-link>
+            >{{invoice.first_name}}</router-link>
           </td>
           <td>
             <router-link v-if="isAdmin" :to="'/admin/jobs'" class="nav-item nav-link">{{invoice.id}}</router-link>
@@ -60,6 +60,9 @@
           <!-- <td>Email</td> -->
           <td>Download</td>
         </tr>
+        <!-- <tr v-if="invoiceJobs.length == 0">
+                      <td colspan="7">No jobs till now.</td>
+                    </tr> -->
       </tbody>
     </table>
     <span id="table-chevron-left" class="d-none">
@@ -150,7 +153,7 @@ export default {
             $("#table-chevron-right").html()
           );
         }
-        $(".table-main").css({ opacity: 1 });
+        $("#invoice-table").css({ opacity: 1 });
       });
     }, 1000);
   },

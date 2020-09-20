@@ -52,7 +52,7 @@ Change Password</router-link>
             </v-list>
           </v-menu>
         </v-row>
-              <span class="notification"><bell-icon size="1.5x" class="custom-class"></bell-icon><span class="count">5</span></span>
+              <!-- <span class="notification"><bell-icon size="1.5x" class="custom-class"></bell-icon><span class="count">5</span></span> -->
       </v-col>
     </v-row>
     <!-- <v-btn class="mr-3" elevation="1" fab small @click="setDrawer(!drawer)">

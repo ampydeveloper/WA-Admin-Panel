@@ -3,9 +3,9 @@
     <div class="login_form">
       <v-row>
         <v-col cols="6" md="7" class="img_bg_outside">
-<div class="sidebar-logo">
-   <img src="/images/logo-basic.png" class="" />
-</div>
+          <div class="sidebar-logo">
+            <img src="/images/logo-basic.png" class />
+          </div>
           <div class="green-overlay"></div>
           <div class="img_bg"></div>
           <div class="back-text">
@@ -241,8 +241,8 @@ export default {
   height: 100vh;
 }
 .login_form .img_bg {
-  background-image: url("/images/loginImage.jpg");
-  background-position: center left;
+  background-image: url("/images/login-back.jpg");
+  background-position: center center;
   background-size: cover;
   position: absolute;
   top: 0;
@@ -448,24 +448,26 @@ export default {
 .img_bg_outside .back-text {
   position: absolute;
   z-index: 1;
-  left: 40px;
+  bottom: 15px;
+  left: 50px;
   right: 0;
-  bottom: 30px;
   font-size: 26px;
   color: #fff;
   font-weight: 300;
 }
 .img_bg_outside .back-text h3 {
-  font-size: 70px;
-  font-weight: 400;
+  font-size: 59px;
+  font-weight: 500;
+  text-transform: uppercase;
+  margin: 0;
 }
-.img_bg_outside .sidebar-logo{
-    position: absolute;
-    z-index: 3;
-    margin-top: 25px;
-    margin-left: 25px;
+.img_bg_outside .sidebar-logo {
+  position: absolute;
+  z-index: 3;
+  margin-top: 25px;
+  margin-left: 25px;
 }
-.img_bg_outside .sidebar-logo img{
-    width: 100px;
+.img_bg_outside .sidebar-logo img {
+  width: 100px;
 }
 </style>

@@ -90,14 +90,14 @@
                     <tr>
                       <th>#</th>
                       <th class="job-summ">Job Summary</th>
-                      <th>Sort By</th>
+                      <th>Customer</th>
                       <th class="tech-col">Techs</th>
                       <th class="time-col">Time</th>
-                      <th>Distance</th>
+                      <!-- <th>Distance</th> -->
                       <th>Payment</th>
                       <!-- <th>Chat</th> -->
                       <th>Status</th>
-                      <th>Actions</th>
+                      <!-- <th>Actions</th> -->
                     </tr>
                   </thead>
                   <tbody>
@@ -106,7 +106,7 @@
                       <td>
                         {{job.start_date}}
                         <br />
-                        {{job.id}}
+                        #{{job.id}}
                         <br />
                         ${{job.job_amount}}
                         <br />
@@ -150,11 +150,13 @@
                         <span>Time Taken:</span>
                         <template>3</template>
                       </td>
-                      <td>3000 dummy</td>
+                      <!-- <td>3000</td> -->
                       <td>
-                        <template v-if="job.payment_status">Paid</template>
+                        <template v-if="job.payment_status">
+                          <span class="badges-item">Paid</span></template>
                         <template v-if="!job.payment_status">
-                          <span class="table-btn">Unpaid</span>
+                        
+                          <span class="badges-item">Unpaid</span>
                         </template>
                       </td>
                       <!-- <td>
@@ -171,13 +173,13 @@
                       </td>-->
                       <td>
                         <template v-if="!job.job_status">
-                          <span class="table-btn badges-item">Open</span>
+                          <span class="badges-item">Open</span>
                         </template>
                         <template v-if="job.job_status">
-                          <span class="table-btn badges-item">Close</span>
+                          <span class="badges-item">Close</span>
                         </template>
                       </td>
-                      <td>
+                      <!-- <td>
                         <div class="dropdown" v-bind:class="{ 'show': triggerDropdown }">
                           <more-vertical-icon
                             size="1.5x"
@@ -195,11 +197,14 @@
                               :to="'/manager/jobs/chat/' + job.id"
                               class="nav-item nav-link"
                             >View chat</router-link>
-                            <button class="btn dropdown-item">Edit</button>
+                           <button class="btn dropdown-item">Edit</button>
                             <button class="btn dropdown-item">Delete</button>
                           </span>
                         </div>
-                      </td>
+                      </td> -->
+                    </tr>
+                    <tr v-if="alljobs.length == 0">
+                      <td colspan="9">No jobs till now.</td>
                     </tr>
                   </tbody>
                 </table>
@@ -278,7 +283,7 @@ export default {
       jobService.joblist({ status: data }).then((response) => {
         //handle response
         if (response.status) {
-          this.alljobs = response.data;
+          this.alljobs = response.data.allJobs;
         } else {
           this.$toast.open({
             message: response.message,
@@ -290,7 +295,6 @@ export default {
     },
     onChange(event) {
       this.getResults(event);
-      console.log(event);
     },
     dropdownToggle: function () {
       this.triggerDropdown = !this.triggerDropdown;
@@ -304,27 +308,24 @@ export default {
             aoColumnDefs: [
               {
                 bSortable: false,
-                aTargets: [-1, -2, -3, -5, -6],
+                aTargets: [-1, -2, -3, -4, -5],
               },
             ],
             oLanguage: { sSearch: "" },
             drawCallback: function (settings) {
-              $(
-                "#all-jobs-table_paginate .paginate_button.previous"
-              ).html($("#table-chevron-left").html());
-              $(
-                "#all-jobs-table_paginate .paginate_button.next"
-              ).html($("#table-chevron-right").html());
+              $("#all-jobs-table_paginate .paginate_button.previous").html(
+                $("#table-chevron-left").html()
+              );
+              $("#all-jobs-table_paginate .paginate_button.next").html(
+                $("#table-chevron-right").html()
+              );
             },
           });
 
-          $("#all-jobs-table_filter input").attr(
-            "placeholder",
-            "Search Jobs"
+          $("#all-jobs-table_filter input").attr("placeholder", "Search Jobs");
+          $("#all-jobs-table_paginate .paginate_button.previous").html(
+            $("#table-chevron-left").html()
           );
-          $(
-            "#all-jobs-table_paginate .paginate_button.previous"
-          ).html($("#table-chevron-left").html());
           $("#all-jobs-table_paginate .paginate_button.next").html(
             $("#table-chevron-right").html()
           );

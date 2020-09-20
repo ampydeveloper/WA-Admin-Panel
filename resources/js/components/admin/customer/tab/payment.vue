@@ -3,15 +3,18 @@
     <v-container fluid>
       <v-row>
         <v-col sm="12" cols="12">
-          <table id="basic-table" class="table table-striped table-bordered table-main dataTable">
+          <table
+            id="cs-payment-table"
+            class="table table-striped table-bordered table-main dataTable"
+          >
             <thead>
               <tr>
                 <th class="text-left">#</th>
-                <th class="text-left">Card No</th>
+                <th class="text-left">Card</th>
                 <th class="text-left">Expiry</th>
                 <th class="text-left">Status</th>
                 <th class="text-left">Primary</th>
-                <th class="text-left">Add On</th>
+                <th class="text-left">Created</th>
               </tr>
             </thead>
             <tbody>
@@ -35,17 +38,29 @@
         </v-col>
       </v-row>
     </v-container>
+    <span id="table-chevron-left" class="d-none">
+      <chevron-left-icon size="1.5x" class="custom-class"></chevron-left-icon>
+    </span>
+    <span id="table-chevron-right" class="d-none">
+      <chevron-right-icon size="1.5x" class="custom-class"></chevron-right-icon>
+    </span>
   </v-app>
 </template>
 
 <script>
 import { required } from "vuelidate/lib/validators";
-import { PlusCircleIcon } from "vue-feather-icons";
+import {
+  PlusCircleIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+} from "vue-feather-icons";
 import { customerService } from "../../../../_services/customer.service";
 import { router } from "../../../../_helpers/router";
 export default {
   components: {
     PlusCircleIcon,
+    ChevronLeftIcon,
+    ChevronRightIcon,
   },
   data() {
     return {
@@ -66,6 +81,42 @@ export default {
         });
       }
     });
+  },
+  updated() {
+    setTimeout(function () {
+      $(document).ready(function () {
+        if (!$.fn.dataTable.isDataTable("#cs-payment-table")) {
+          $("#cs-payment-table").DataTable({
+            aoColumnDefs: [
+              {
+                bSortable: false,
+                aTargets: [-1, -2, -3, -4],
+              },
+            ],
+            oLanguage: { sSearch: "" },
+            drawCallback: function (settings) {
+              $("#cs-payment-table_paginate .paginate_button.previous").html(
+                $("#table-chevron-left").html()
+              );
+              $("#cs-payment-table_paginate .paginate_button.next").html(
+                $("#table-chevron-right").html()
+              );
+            },
+          });
+          $("#cs-payment-table_filter input").attr(
+            "placeholder",
+            "Search Payments"
+          );
+          $("#cs-payment-table_paginate .paginate_button.previous").html(
+            $("#table-chevron-left").html()
+          );
+          $("#cs-payment-table_paginate .paginate_button.next").html(
+            $("#table-chevron-right").html()
+          );
+          $("#cs-payment-table").css({ opacity: 1 });
+        }
+      });
+    }, 1000);
   },
 };
 </script>

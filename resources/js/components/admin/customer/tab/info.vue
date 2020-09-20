@@ -12,6 +12,8 @@
           >
             <v-row>
               <v-col cols="12" md="12" class="customer-edit-first pt-0 pb-0">
+                 <v-row>
+                <v-col cols="4" md="4" class="pt-0 pb-0">
                 <file-pond
                   name="uploadImage"
                   ref="pond"
@@ -33,10 +35,12 @@
                   <img :src="avatar" />
                 </div>
               </v-col>
+               </v-row>
+              </v-col>
               <v-col cols="4" md="4" class="pt-0 pb-0">
                 <v-select
                   v-model="addForm.prefix"
-                  class="disabled-tag"
+                
                   :items="prefixs"
                   label="Select Prefix"
                   :rules="[v => !!v || 'Prefix is required.']"
@@ -49,7 +53,7 @@
                   required
                   :disabled="disabled == 0"
                   label="Enter First Name"
-                  class="disabled-tag"
+                  
                   :rules="[v => !!v || 'Customer First Name is required.']"
                 ></v-text-field>
               </v-col>
@@ -59,7 +63,7 @@
                   required
                   :disabled="disabled == 0"
                   label="Enter Last Name"
-                  class="disabled-tag"
+                 
                   :rules="[v => !!v || 'Customer Last Name is required.']"
                 ></v-text-field>
               </v-col>
@@ -70,7 +74,7 @@
                   name="email"
                   label="Email"
                   :disabled="disabled == 0"
-                  class="disabled-tag"
+                 
                   required
                 ></v-text-field>
               </v-col>
@@ -80,7 +84,7 @@
                   :rules="phoneRules"
                   :disabled="disabled == 0"
                   label="Phone"
-                  class="disabled-tag"
+                 
                   required
                   maxlength="10"
                 ></v-text-field>
@@ -89,7 +93,7 @@
                 <v-text-field
                   v-model="addForm.customer_address"
                   :disabled="disabled == 0"
-                  class="disabled-tag"
+                
                   label="Address"
                   required
                   :rules="[v => !!v || 'Address is required.']"
@@ -99,7 +103,7 @@
                 <v-text-field
                   v-model="addForm.customer_city"
                   :disabled="disabled == 0"
-                  class="disabled-tag"
+                
                   label="City"
                   required
                   :rules="[v => !!v || 'City is required.']"
@@ -109,7 +113,7 @@
                 <v-text-field
                   v-model="addForm.customer_province"
                   :disabled="disabled == 0"
-                  class="disabled-tag"
+                
                   label="Province"
                   required
                   :rules="[v => !!v || 'Province is required.']"
@@ -121,7 +125,7 @@
                   label="Zipcode"
                   :rules="[v => !!v || 'Zipcode is required.']"
                   :disabled="disabled == 0"
-                  class="disabled-tag"
+              
                   required
                 ></v-text-field>
               </v-col>
@@ -144,10 +148,10 @@
                     :disabled="loading"
                     color="success"
                     type="submit"
-                    class="custom-save-btn mr-4"
+                    class="custom-save-btn"
                     @click="update"
                     id="submit_btn"
-                  >Save</v-btn>
+                  >Update</v-btn>
                 </div>
               </v-col>
             </v-row>

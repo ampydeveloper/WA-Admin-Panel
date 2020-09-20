@@ -1,16 +1,14 @@
 <template>
-  <v-container id="dashboard" fluid tag="section" class="pt-0">
-    <v-row>
-      <v-col sm="12" cols="12">
+  
         <!-- all jobs -->
         <table id="repeating-table" class="table table-striped table-bordered table-main">
           <thead>
             <tr>
               <th>#</th>
               <th>Job Summary</th>
-              <th>Sort By</th>
+              <th>Customer</th>
               <th>Payment</th>
-              <th>Actions</th>
+              <!-- <th>Actions</th> -->
             </tr>
           </thead>
           <tbody>
@@ -19,7 +17,7 @@
               <td>
                 {{job.start_date}}
                 <br />
-                {{job.id}}
+                #{{job.id}}
                 <br />
                 ${{job.job_amount}}
                 <br />
@@ -44,7 +42,7 @@
                   <span class="badges-item">Unpaid</span>
                 </template>
               </td>
-              <td>
+              <!-- <td>
                 <router-link
                   v-if="isAdmin"
                   :to="'/admin/jobs/chat/' + job.id"
@@ -55,13 +53,14 @@
                   :to="'/manager/jobs/chat/' + job.id"
                   class="nav-item nav-link"
                 >View chat</router-link>
-              </td>
+              </td> -->
+            </tr>
+            <tr v-if="alljobs.length == 0">
+              <td colspan="4">No jobs till now.</td>
             </tr>
           </tbody>
         </table>
-      </v-col>
-    </v-row>
-  </v-container>
+     
 </template>
 
 <script>
@@ -92,10 +91,10 @@ export default {
   },
   methods: {
     getResults() {
-      jobService.jobrepeating().then((response) => {
+      jobService.joblist().then((response) => {
         //handle response
         if (response.status) {
-          this.alljobs = response.data;
+          this.alljobs = response.data.repeatingJobs;
         } else {
           this.$toast.open({
             message: response.message,
@@ -110,30 +109,30 @@ export default {
     setTimeout(function () {
       $(document).ready(function () {
         if (!$.fn.dataTable.isDataTable("#repeating-table")) {
-        $("#repeating-table").DataTable({
-          aoColumnDefs: [
-            {
-              bSortable: false,
-              aTargets: [-1, -2, -3],
+          $("#repeating-table").DataTable({
+            aoColumnDefs: [
+              {
+                bSortable: false,
+                aTargets: [-1, -2, -3],
+              },
+            ],
+            oLanguage: { sSearch: "" },
+            drawCallback: function (settings) {
+              $("#repeating-table_paginate .paginate_button.previous").html(
+                $("#table-chevron-left").html()
+              );
+              $("#repeating-table_paginate .paginate_button.next").html(
+                $("#table-chevron-right").html()
+              );
             },
-          ],
-          oLanguage: { sSearch: "" },
-          drawCallback: function (settings) {
-            $("#repeating-table_paginate .paginate_button.previous").html(
-              $("#table-chevron-left").html()
-            );
-            $("#repeating-table_paginate .paginate_button.next").html(
-              $("#table-chevron-right").html()
-            );
-          },
-        });
-        $("#repeating-table_filter input").attr("placeholder", "Search Jobs");
-        $("#repeating-table_paginate .paginate_button.previous").html(
-          $("#table-chevron-left").html()
-        );
-        $("#repeating-table_paginate .paginate_button.next").html(
-          $("#table-chevron-right").html()
-        );
+          });
+          $("#repeating-table_filter input").attr("placeholder", "Search Jobs");
+          $("#repeating-table_paginate .paginate_button.previous").html(
+            $("#table-chevron-left").html()
+          );
+          $("#repeating-table_paginate .paginate_button.next").html(
+            $("#table-chevron-right").html()
+          );
         }
         $("#repeating-table").css({ opacity: 1 });
       });

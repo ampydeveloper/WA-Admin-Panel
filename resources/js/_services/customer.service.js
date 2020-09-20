@@ -134,7 +134,7 @@ function getCustomerRecord(data) {
 function updateFarmManager(data) {
 
   return fetch(
-    this.apiUrl+`admin/update-farm-manager`,
+    this.apiUrl+`admin/update-farm`,
     requestOptions.post(data)
   )
     .then(handleResponse)

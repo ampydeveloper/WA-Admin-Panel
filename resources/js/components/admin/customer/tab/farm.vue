@@ -13,25 +13,33 @@
             >
               <v-row>
                 <div class="basic-section">
+                  <h3>Farm Details</h3>
                   <v-col cols="12" md="12">
                     <v-row>
-                      <v-col cols="12" md="12">
-                        <file-pond
-                          name="uploadImage"
-                          ref="pond"
-                          label-idle="Farm Images"
-                          allow-multiple="true"
-                          v-bind:server="serverOptions"
-                          v-bind:files="myFiles"
-                          allow-file-type-validation="true"
-                          accepted-file-types="image/jpeg, image/png"
-                          v-on:addfilestart="setUploadIndex(parentIndex)"
-                          v-on:processfile="handleProcessFile1"
-                          v-on:processfilerevert="handleRemoveFile1(parentIndex)"
-                        />
+                      <v-col cols="12" md="12" class="pt-0">
+                        <v-row>
+                          <v-col cols="4" md="4" class="pt-0">
+                            <file-pond
+                              name="uploadImage"
+                              ref="pond"
+                              label-idle="Upload Farm Photos"
+                              allow-multiple="true"
+                              v-bind:server="serverOptions"
+                              v-bind:files="myFiles"
+                              allow-file-type-validation="true"
+                              accepted-file-types="image/jpeg, image/png"
+                              v-on:addfilestart="setUploadIndex(parentIndex)"
+                              v-on:processfile="handleProcessFile1"
+                              v-on:processfilerevert="handleRemoveFile1(parentIndex)"
+                            />
+                            <!-- <div class="service-image-outer" v-if="manager.manager_image">
+                            <img :src="'../../../'+manager.manager_image" /> farm_images
+                            </div>-->
+                          </v-col>
+                        </v-row>
                       </v-col>
 
-                      <v-col cols="4" md="4" class="pt-0 pb-0">
+                      <v-col cols="4" md="4" class="pb-0 basic-select2">
                         <v-text-field
                           type="text"
                           @input="onChange(updateForm.farm.farm_address)"
@@ -41,10 +49,7 @@
                           required
                           :rules="[v => !!v || 'Place is required.']"
                         ></v-text-field>
-                        <ul
-                          v-show="isOpen && !formDisable.includes(parentIndex)"
-                          class="autocomplete-results"
-                        >
+                        <ul v-show="isOpen" class="autocomplete-results">
                           <li
                             v-for="(result, i) in items"
                             :key="i"
@@ -60,7 +65,6 @@
                           v-model="updateForm.farm.farm_unit"
                           required
                           :rules="[v => !!v || 'Farm Apt/Unit is required.']"
-                          class="disabled-tag"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="4" md="4" class="pt-0 pb-0">
@@ -69,7 +73,6 @@
                           v-model="updateForm.farm.farm_city"
                           required
                           :rules="[v => !!v || 'Farm City is required.']"
-                          class="disabled-tag"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="4" md="4" class="pt-0 pb-0">
@@ -78,7 +81,6 @@
                           v-model="updateForm.farm.farm_province"
                           required
                           :rules="[v => !!v || 'Farm Province is required.']"
-                          class="disabled-tag"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="4" md="4" class="pt-0 pb-0">
@@ -87,51 +89,49 @@
                           v-model="updateForm.farm.farm_zipcode"
                           required
                           :rules="[v => !!v || 'Farm Zipcode is required.']"
-                          class="disabled-tag"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="4" md="4" class="pt-0 pb-0">
-                        <v-switch
-                          v-model="updateForm.farm.farm_active"
-                          class="mx-2"
-                          label="Is Active"
-                        ></v-switch>
+                        <v-switch v-model="updateForm.farm.farm_active" class="mx-2" label="Status"></v-switch>
                       </v-col>
                     </v-row>
                   </v-col>
                 </div>
-              
+
                 <template v-for="(manager, childIndex) in updateForm.managers">
-                 
                   <div class="basic-section">
-                     <h3>Manager Details</h3>
+                    <h3>Manager Details</h3>
                     <v-col cols="12" md="12">
                       <v-row>
-                        <v-col cols="12" md="12">
-                          <file-pond
-                            name="uploadImage"
-                            ref="pond"
-                            label-idle="Add Profile Pic"
-                            allow-multiple="false"
-                            v-bind:server="serverOptions"
-                            v-bind:files="myFiles"
-                            allow-file-type-validation="true"
-                            accepted-file-types="image/jpeg, image/png"
-                            v-on:addfilestart="setUploadIndex(parentIndex, childIndex)"
-                            v-on:processfile="handleProcessFile2"
-                            v-on:processfilerevert="handleRemoveFile2(parentIndex, childIndex)"
-                          />
-                          <div class="v-avatar v-list-item__avatar">
-                            <img :src="'../../../'+manager.manager_image" />
-                          </div>
+                        <v-col cols="12" md="12" class="pt-0">
+                          <v-row>
+                            <v-col cols="4" md="4" class="pt-0 pb-0">
+                              <file-pond
+                                name="uploadImage"
+                                ref="pond"
+                                label-idle="Upload Profile Photo"
+                                allow-multiple="false"
+                                v-bind:server="serverOptions"
+                                v-bind:files="myFiles"
+                                allow-file-type-validation="true"
+                                accepted-file-types="image/jpeg, image/png"
+                                v-on:addfilestart="setUploadIndex(parentIndex, childIndex)"
+                                v-on:processfile="handleProcessFile2"
+                                v-on:processfilerevert="handleRemoveFile2(parentIndex, childIndex)"
+                              />
+                              <div class="service-image-outer" v-if="manager.manager_image">
+                                <img :src="'../../../'+manager.manager_image" />
+                              </div>
+                            </v-col>
+                          </v-row>
                         </v-col>
+                        <div class="clearfix"></div>
                         <v-col cols="4" md="4" class="pt-0 pb-0">
                           <v-select
                             v-model="manager.manager_prefix"
                             :items="prefixs"
                             label="Select Prefix"
                             :rules="[v => !!v || 'Prefix is required.']"
-                            class="disabled-tag"
                           ></v-select>
                         </v-col>
                         <v-col cols="4" md="4" class="pt-0 pb-0">
@@ -140,7 +140,6 @@
                             required
                             label="Enter Manager Name"
                             :rules="[v => !!v || 'Manager Name is required.']"
-                            class="disabled-tag"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="4" md="4" class="pt-0 pb-0">
@@ -148,7 +147,6 @@
                             v-model="manager.manager_email"
                             :rules="emailRules"
                             label="Enter Email"
-                            class="disabled-tag"
                             name="email"
                             required
                           ></v-text-field>
@@ -158,7 +156,6 @@
                             v-model="manager.manager_phone"
                             :rules="phoneRules"
                             label="Enter Phone"
-                            class="disabled-tag"
                             required
                             maxlength="10"
                           ></v-text-field>
@@ -169,7 +166,6 @@
                             required
                             label="Enter Address"
                             :rules="[v => !!v || 'Address is required.']"
-                            class="disabled-tag"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="4" md="4" class="pt-0 pb-0">
@@ -178,7 +174,6 @@
                             required
                             label="Enter City"
                             :rules="[v => !!v || 'City is required.']"
-                            class="disabled-tag"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="4" md="4" class="pt-0 pb-0">
@@ -187,14 +182,12 @@
                             required
                             label="Enter Province"
                             :rules="[v => !!v || 'Province is required.']"
-                            class="disabled-tag"
                           ></v-text-field>
                         </v-col>
                         <v-col cols="4" md="4" class="pt-0 pb-0">
                           <v-text-field
                             v-model="manager.manager_zipcode"
                             :rules="[v => !!v || 'Zipcode is required.']"
-                            class="disabled-tag"
                             label="Enter Zipcode"
                             required
                           ></v-text-field>
@@ -204,7 +197,6 @@
                             label="Enter Card ID Number"
                             v-model="manager.manager_id_card"
                             :rules="[v => !!v || 'Card Id number is required.']"
-                            class="disabled-tag"
                             required
                           ></v-text-field>
                         </v-col>
@@ -222,6 +214,9 @@
                             v-on:processfile="handleProcessFile3"
                             v-on:processfilerevert="handleRemoveFile3(parentIndex, childIndex)"
                           />
+                          <!-- <div class="service-image-outer" v-if="manager.manager_image">
+                            <img :src="'../../../'+manager.manager_image" />
+                          </div>-->
                         </v-col>
                       </v-row>
                     </v-col>
@@ -230,13 +225,27 @@
                 <!-- <v-col cols="2" md="2">
                   <v-switch class="mx-2" label="Edit" @click="enableForm(parentIndex)"></v-switch>
                 </v-col>-->
-                <v-btn
+                <!-- <v-btn
                   :loading="loading == parentIndex ? true:false"
                   :disabled="loading == parentIndex ? true:false"
                   color="success"
                   class="mr-4 custom-save-btn ml-4"
                   @click="update(parentIndex)"
-                >Submit</v-btn>
+                >Submit</v-btn>-->
+
+                <v-col class="pt-0 pb-0" cols="12" md="12">
+                  <div class="p-0 float-right">
+                    <v-btn
+                      :loading="loading == parentIndex ? true:false"
+                      :disabled="loading == parentIndex ? true:false"
+                      color="success"
+                      type="submit"
+                      class="custom-save-btn mr-4"
+                      @click="update(parentIndex)"
+                      id="submit_btn"
+                    >Update</v-btn>
+                  </div>
+                </v-col>
               </v-row>
             </v-form>
           </v-col>
@@ -369,14 +378,13 @@ export default {
               manager_city: managerDetails[fm].city,
               manager_province: managerDetails[fm].state,
               manager_zipcode: managerDetails[fm].zip_code,
-              // manager_id_card:
-              //   managerDetails[fm].manager.identification_number,
+              // manager_id_card: managerDetails[fm].manager.identification_number,
               // manager_card_image: managerDetails[fm].manager.document,
             };
             //add to manager info
             this.farmAndManagerForm.managers.push(this.managerForm);
           }
-          console.log(this.farmAndManagerForm);
+          // console.log(this.farmAndManagerForm);
           //add into total forms
           this.totalForm.push(this.farmAndManagerForm);
           //add into disabled forms
@@ -469,8 +477,7 @@ export default {
     //manager image process
     handleRemoveFile2: function (parentIndex, childIndex) {
       this.totalForm[parentIndex].managers[childIndex].manager_image = "";
-      this.totalForm[parentIndex].managers[childIndex].manager_image =
-        "images/avatar.png";
+      this.totalForm[parentIndex].managers[childIndex].manager_image = "";
     },
     //manager id card image process
     handleProcessFile3: function (error, file) {

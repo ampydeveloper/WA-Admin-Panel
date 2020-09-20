@@ -69,7 +69,7 @@
         <li>Edit</li>
       </ul>
 
-      <div class="top-right-link add-icon">
+      <div class="top-right-link add-icon" style="display:none;">
         <router-link
           v-if="isAdmin"
           :to="'/admin/customer/addfarmmore/' + addForm.id"
@@ -98,7 +98,7 @@
           <v-tabs-items v-model="tab" class="custom-tab-content">
             <v-tab-item v-for="item in items" :key="item">
               <!-- customer info tabs -->
-              <v-card class color="basil" flat v-if="item == 'Customer'">
+              <v-card class="customer-details-tabs" color="basil" flat v-if="item == 'Customer'">
                 <customer-info />
               </v-card>
               <!-- Payments tab -->

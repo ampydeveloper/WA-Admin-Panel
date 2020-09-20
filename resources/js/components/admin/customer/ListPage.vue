@@ -3,8 +3,8 @@
     <div class="bread_crum">
       <ul>
         <li>
-          <h4 class="main-title top_heading">
-            Customer
+          <h4 class="main-title text-left top_heading">
+            All Customer
             <span class="right-bor"></span>
           </h4>
         </li>
@@ -44,7 +44,29 @@
             </span>
           </router-link>
         </li>
-        <li>List</li>
+        <li>
+          <router-link to="/admin/customer">
+            Customer
+            <span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16px"
+                height="16px"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="feather feather-chevrons-right w-4 h-4"
+              >
+                <polyline points="13 17 18 12 13 7" />
+                <polyline points="6 17 11 12 6 7" />
+              </svg>
+            </span>
+          </router-link>
+        </li>
+        <li>All</li>
       </ul>
     </div>
 
@@ -59,8 +81,8 @@
               <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon>
             </router-link>
           </div>
-          <v-col cols="12" md="12">
-            <table id="customer-table" class="table table-striped table-bordered table-main">
+          <v-col cols="12" md="12" class="main-box-inner">
+            <table id="customer-table" class="table table-bordered table-main">
               <thead>
                 <tr>
                   <th class="text-left"></th>
@@ -85,44 +107,33 @@
                       <thead>
                         <tr>
                           <th>#</th>
-                          <th>Manager</th>
-                          <th>Phone</th>
-                          <th>Email</th>
-                          <th>Fram</th>
-                          <th>City</th>
-                          <th>State/Province</th>
-                          <th>Zip/Postal</th>
-                          <th>Jobs Count</th>
-                          <th>Last Services</th>
+                          <th class="farm-th">Farm</th>
+                          <th class="manager-th">Manager</th>
+                          <th>Jobs</th>
+                          <th>Last Service</th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr v-for="(farm, index) in customer.farmlist">
                           <td>{{index+1}}</td>
                           <td>
+                            <span>
+                              <img src :src="baseUrl+farm.farm_image" />
+                              {{farm.farm_address}}, {{farm.farm_city}}, {{farm.farm_province}}, {{farm.farm_zipcode}}
+                            </span>
+                          </td>
+                          <td>
                             <span v-for="manager in farm.farm_manager">
                               {{manager.first_name}}
-                              <br />
-                            </span>
-                          </td>
-                          <td>
-                            <span v-for="manager in farm.farm_manager">
                               {{manager.phone}}
-                              <br />
-                            </span>
-                          </td>
-                          <td>
-                            <span v-for="manager in farm.farm_manager">
                               {{manager.email}}
-                              <br />
                             </span>
                           </td>
-                          <td>{{farm.farm_address}}</td>
-                          <td>{{farm.farm_city}}</td>
-                          <td>{{farm.farm_province}}</td>
-                          <td>{{farm.farm_zipcode}}</td>
+                          <td>0</td>
                           <td>N/A</td>
-                          <td>N/A</td>
+                        </tr>
+                        <tr v-if="customer.farmlist.length == 0">
+                          <td colspan="4">No farms till now.</td>
                         </tr>
                       </tbody>
                     </v-simple-table>
@@ -147,6 +158,7 @@
 import { required } from "vuelidate/lib/validators";
 import { customerService } from "../../../_services/customer.service";
 import { authenticationService } from "../../../_services/authentication.service";
+import { environment } from "../../../config/test.env";
 import {
   UserIcon,
   EditIcon,
@@ -169,7 +181,7 @@ export default {
   data() {
     return {
       search: "",
-
+      baseUrl: environment.baseUrl,
       headers: [
         {
           text: "Sno",

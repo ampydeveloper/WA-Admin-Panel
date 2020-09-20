@@ -1,9 +1,9 @@
 <template>
   <v-app>
-    <div class="bread_crum">
+  <div class="bread_crum">
       <ul>
         <li>
-          <h4 class="main-title top_heading">
+          <h4 class="main-title text-left top_heading">
             All Services
             <span class="right-bor"></span>
           </h4>
@@ -44,7 +44,29 @@
             </span>
           </router-link>
         </li>
-        <li>List</li>
+        <li>
+          <router-link to="/admin/services">
+            Service
+            <span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16px"
+                height="16px"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="feather feather-chevrons-right w-4 h-4"
+              >
+                <polyline points="13 17 18 12 13 7" />
+                <polyline points="6 17 11 12 6 7" />
+              </svg>
+            </span>
+          </router-link>
+        </li>
+        <li>All</li>
       </ul>
     </div>
     <div class="main_box">
