@@ -446,7 +446,7 @@ class AuthController extends Controller
     public function user(Request $request)
     {
         return response()->json([
-            'success' => true,
+            'status' => true,
             'message' => 'User details!',
             'data' => $request->user()
         ]);
