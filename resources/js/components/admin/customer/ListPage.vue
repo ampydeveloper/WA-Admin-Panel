@@ -91,46 +91,58 @@
               <tbody>
                 <tr class="multi-customers" v-for="customer in customers" :key="customer.name">
                   <td class="single-customer">
-                    <span>
-                      <router-link
-                        v-if="isAdmin"
-                        :to="'/admin/customer/details/' + customer.id"
-                        class="nav-item nav-link"
-                      >{{ customer.prefix }} {{ customer.first_name }} {{ customer.last_name }}</router-link>
-                      <router-link
-                        v-if="!isAdmin"
-                        :to="'/manager/customer/details/' + customer.id"
-                        class="nav-item nav-link"
-                      >{{ customer.prefix }} {{ customer.first_name }} {{ customer.last_name }}</router-link>
+                    <span class="c-title">
+                      <span class="c-title-label">Customer</span>
+                      <span class="c-title-name">                        
+                        {{ customer.prefix }} {{ customer.first_name }} {{ customer.last_name }}
+                      </span>
+                      <span class="c-title-edit">
+                        <router-link
+                          v-if="isAdmin"
+                          :to="'/admin/customer/details/' + customer.id"
+                          class="nav-item nav-link"
+                        >
+                          <edit-3-icon size="1.2x" class="custom-class"></edit-3-icon>
+                        </router-link>
+                        <router-link
+                          v-if="!isAdmin"
+                          :to="'/manager/customer/details/' + customer.id"
+                          class="nav-item nav-link"
+                        >
+                          <edit-3-icon size="1.2x" class="custom-class"></edit-3-icon>
+                        </router-link>
+                      </span>
                     </span>
+
                     <v-simple-table>
                       <thead>
                         <tr>
-                          <th>#</th>
-                          <th class="farm-th">Farm</th>
-                          <th class="manager-th">Manager</th>
-                          <th>Jobs</th>
-                          <th>Last Service</th>
+                          <th class="farm-th">Farm Location</th>
+                          <th class="manager-th">Primary Manager / Phone / Email</th>
+                          <th>Est. Jobs</th>
+                          <th>Last Serviced</th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr v-for="(farm, index) in customer.farmlist">
-                          <td>{{index+1}}</td>
                           <td>
                             <span>
-                              <img src :src="baseUrl+farm.farm_image" />
-                              {{farm.farm_address}}, {{farm.farm_city}}, {{farm.farm_province}}, {{farm.farm_zipcode}}
+                              <!-- <img src :src="baseUrl+farm.farm_image" /> -->
+                              <span class="basic-grey">{{farm.farm_address}} {{farm.farm_city}}</span>
+                              <span class="basic-grey">{{farm.farm_province}} {{farm.farm_zipcode}}</span>
                             </span>
                           </td>
                           <td>
                             <span v-for="manager in farm.farm_manager">
-                              {{manager.first_name}}
-                              {{manager.phone}}
-                              {{manager.email}}
+                              <span class="basic-big">{{manager.first_name}}</span>
+                              <span class="basic-grey">{{manager.phone}}</span>
+                              <span class="basic-grey">{{manager.email}}</span>
                             </span>
                           </td>
-                          <td>0</td>
-                          <td>N/A</td>
+                          <td>
+                            <span class="badges-item">0</span>
+                          </td>
+                          <td>{{'2020-06-23' | formatDateLic}}</td>
                         </tr>
                         <tr v-if="customer.farmlist.length == 0">
                           <td colspan="4">No farms till now.</td>
@@ -161,22 +173,23 @@ import { authenticationService } from "../../../_services/authentication.service
 import { environment } from "../../../config/test.env";
 import {
   UserIcon,
-  EditIcon,
+
   TrashIcon,
   PlusCircleIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+   Edit3Icon,
 } from "vue-feather-icons";
 import { router } from "../../../_helpers/router";
 
 export default {
   components: {
     UserIcon,
-    EditIcon,
     TrashIcon,
     PlusCircleIcon,
     ChevronLeftIcon,
     ChevronRightIcon,
+     Edit3Icon,
   },
   data() {
     return {

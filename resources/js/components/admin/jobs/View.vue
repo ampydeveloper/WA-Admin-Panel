@@ -4,7 +4,7 @@
       <ul>
         <li>
           <h4 class="main-title top_heading">
-            All Jobs
+            Jobs
             <span class="right-bor"></span>
           </h4>
         </li>
@@ -44,7 +44,29 @@
             </span>
           </router-link>
         </li>
-        <li>List</li>
+        <li>
+          <router-link to="/admin/jobs">
+            Jobs
+            <span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16px"
+                height="16px"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="feather feather-chevrons-right w-4 h-4"
+              >
+                <polyline points="13 17 18 12 13 7" />
+                <polyline points="6 17 11 12 6 7" />
+              </svg>
+            </span>
+          </router-link>
+        </li>
+        <li>All</li>
       </ul>
     </div>
 
@@ -61,12 +83,16 @@
             class="custom-sel-box"
           ></v-select>
           </v-col>-->
-          <div class="add-icon">
-            <router-link v-if="isAdmin" to="/admin/jobs/add" class="nav-item nav-link">
-              <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon>
+          <div class="add-icon top-buttons">
+            <router-link v-if="isAdmin" to="/admin/jobs/add" class>
+              <v-btn color="success" class="btn-outline-green-top">
+                <plus-icon size="1.5x" class="custom-class"></plus-icon>Add New
+              </v-btn>
             </router-link>
-            <router-link v-if="!isAdmin" to="/manager/jobs/add" class="nav-item nav-link">
-              <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon>
+            <router-link v-if="!isAdmin" to="/manager/jobs/add" class>
+              <v-btn color="success" class="btn-outline-green-top">
+                <plus-icon size="1.5x" class="custom-class"></plus-icon>Add New
+              </v-btn>
             </router-link>
           </div>
           <v-tabs
@@ -88,74 +114,74 @@
                 >
                   <thead>
                     <tr>
-                      <th>#</th>
                       <th class="job-summ">Job Summary</th>
-                      <th>Customer</th>
-                      <th class="tech-col">Techs</th>
-                      <th class="time-col">Time</th>
+                      <th>Customer / Manager / Farm Location</th>
+                      <th class="tech-col">Techs / Vehicles</th>
+                      <th class="time-col">Est. Time</th>
                       <!-- <th>Distance</th> -->
-                      <th>Payment</th>
+                      <th>Payment Status</th>
                       <!-- <th>Chat</th> -->
-                      <th>Status</th>
-                      <!-- <th>Actions</th> -->
+                      <th>Job Status</th>
+                      <th>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr v-for="(job, index) in alljobs">
-                      <td>{{index+1}}</td>
                       <td>
-                        {{job.start_date}}
-                        <br />
-                        #{{job.id}}
-                        <br />
-                        ${{job.job_amount}}
-                        <br />
-                        {{job.service.service_name}}
+                        <span class="basic-info">{{job.start_date | formatDateLic}}</span>
+                        <span class="basic-big">#JOB100{{job.id}}</span>
+                        <span class="basic-grey">${{(job.job_amount)?job.job_amount:0}}</span>
+                        <span class="basic-grey">{{job.service.service_name}}</span>
                       </td>
                       <td>
-                        {{job.customer.first_name}}
-                        <br />
-                        {{job.manager.first_name}}
-                        <br />
-                        {{job.manager.phone}}
-                        <br />
-                        {{job.manager.email}}
-                        <br />
-                        {{job.manager.address}} {{job.manager.city}} {{job.manager.state}} {{job.manager.country}} {{job.manager.zip_code}}
+                        <span class="basic-big">{{job.customer.first_name}}</span>
+                        <span class="basic-grey">{{job.manager.first_name}} ({{job.manager.email}})</span>
+                        <span
+                          class="basic-grey"
+                        >{{job.manager.address}} {{job.manager.city}} {{job.manager.state}} {{job.manager.country}} {{job.manager.zip_code}}</span>
                       </td>
                       <td class="job-col-body">
-                        <span>Truck Driver Name:</span>
-                        <template v-if="job.truck_driver">{{job.truck_driver.first_name}}</template>
-                        <template v-if="!job.truck_driver">Not Assigned Yet</template>
-                        <br />
-                        <span>Truck Number:</span>
-                        <template v-if="job.truck">{{job.truck.truck_number}}</template>
-                        <template v-if="!job.truck">Not Assigned Yet</template>
-                        <br />
-                        <span>skidsteer Driver Name:</span>
-                        <template v-if="job.skidsteer_driver">{{job.skidsteer_driver.first_name}}</template>
-                        <template v-if="!job.skidsteer_driver">Not Assigned Yet</template>
-                        <br />
-                        <span>skidsteer Number:</span>
-                        <template v-if="job.skidsteer">{{job.skidsteer.truck_number}}</template>
-                        <template v-if="!job.skidsteer">Not Assigned Yet</template>
+                        <span class="basic-grey-label-half">Truck Driver</span>
+                        <span
+                          class="basic-info-half"
+                          v-if="job.truck_driver"
+                        >{{job.truck_driver.first_name}}</span>
+                        <span class="basic-info-half" v-if="!job.truck_driver">Not Assigned</span>
+                        <div class="clearfix"></div>
+                        <span class="basic-grey-label-half">Truck</span>
+                        <span class="basic-info-half" v-if="job.truck">{{job.truck.truck_number}}</span>
+                        <span class="basic-info-half" v-if="!job.truck">Not Assigned</span>
+                        <div class="clearfix"></div>
+                        <span class="basic-grey-label-half">Skidsteer Driver</span>
+                        <span
+                          class="basic-info-half"
+                          v-if="job.skidsteer_driver"
+                        >{{job.skidsteer_driver.first_name}}</span>
+                        <span class="basic-info-half" v-if="!job.skidsteer_driver">Not Assigned</span>
+                        <div class="clearfix"></div>
+                        <span class="basic-grey-label-half">Skidsteer</span>
+                        <span
+                          class="basic-info-half"
+                          v-if="job.skidsteer"
+                        >{{job.skidsteer.truck_number}}</span>
+                        <span class="basic-info-half" v-if="!job.skidsteer">Not Assigned</span>
                       </td>
                       <td class="job-col-body">
-                        <span>Start Time:</span>
-                        <template>9:30 pm</template>
-                        <br />
-                        <span>End Time:</span>
+                        <span class="basic-grey-label-full">Start Time</span>
+                        <span class="basic-info-full">9:30 pm</span>
+
+                        <!-- <span class="basic-grey-label">End Time:</span>
                         <template>12:30 Pm</template>
-                        <br />
-                        <span>Time Taken:</span>
-                        <template>3</template>
+                      
+                        <span class="basic-grey-label">Time Taken:</span>
+                        <template>3</template>-->
                       </td>
                       <!-- <td>3000</td> -->
                       <td>
                         <template v-if="job.payment_status">
-                          <span class="badges-item">Paid</span></template>
+                          <span class="badges-item">Paid</span>
+                        </template>
                         <template v-if="!job.payment_status">
-                        
                           <span class="badges-item">Unpaid</span>
                         </template>
                       </td>
@@ -179,6 +205,14 @@
                           <span class="badges-item">Close</span>
                         </template>
                       </td>
+                      <td>
+                        <router-link v-if="isAdmin" :to="'/admin/jobs/chat/' + job.id" class>
+                          <v-btn color="success" class="btn-outline-green">View chat</v-btn>
+                        </router-link>
+                        <router-link v-if="!isAdmin" :to="'/manager/jobs/chat/' + job.id" class>
+                          <v-btn color="success" class="btn-outline-green">View chat</v-btn>
+                        </router-link>
+                      </td>
                       <!-- <td>
                         <div class="dropdown" v-bind:class="{ 'show': triggerDropdown }">
                           <more-vertical-icon
@@ -201,7 +235,7 @@
                             <button class="btn dropdown-item">Delete</button>
                           </span>
                         </div>
-                      </td> -->
+                      </td>-->
                     </tr>
                     <tr v-if="alljobs.length == 0">
                       <td colspan="9">No jobs till now.</td>
@@ -223,25 +257,32 @@
     <span id="table-chevron-right" class="d-none">
       <chevron-right-icon size="1.5x" class="custom-class"></chevron-right-icon>
     </span>
+    <span id="search-input-icon" class="d-none">
+      <span class="search-input-outer">
+        <search-icon size="1.5x" class="custom-class"></search-icon>
+      </span>
+    </span>
   </v-app>
 </template>
 
 <script>
 import {
-  PlusCircleIcon,
+  PlusIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
   MoreVerticalIcon,
+  SearchIcon,
 } from "vue-feather-icons";
 import { jobService } from "../../../_services/job.service";
 import { environment } from "../../../config/test.env";
 import { authenticationService } from "../../../_services/authentication.service";
 export default {
   components: {
-    PlusCircleIcon,
+    PlusIcon,
     MoreVerticalIcon,
     ChevronLeftIcon,
     ChevronRightIcon,
+    SearchIcon,
     AllJobs: () => import("./tab/AllJobs"),
     AssignedJobs: () => import("./tab/AssignedJobs"),
     CompletedJobs: () => import("./tab/CompletedJobs"),
@@ -322,7 +363,11 @@ export default {
             },
           });
 
-          $("#all-jobs-table_filter input").attr("placeholder", "Search Jobs");
+          $("#all-jobs-table_filter").append($("#search-input-icon").html());
+          $("#all-jobs-table_filter input").attr(
+            "placeholder",
+            "Search Jobs by Job ID / Customer / Service"
+          );
           $("#all-jobs-table_paginate .paginate_button.previous").html(
             $("#table-chevron-left").html()
           );
