@@ -3,7 +3,7 @@
     <div class="bread_crum">
       <ul>
         <li>
-          <h4 class="main-title text-left top_heading">Edit Service |</h4>
+          <h4 class="main-title text-left top_heading">Update Service  <span class="right-bor"></span></h4>
         </li>
         <li>
           <router-link to="/admin/dashboard" class="home_svg">
@@ -43,7 +43,7 @@
         </li>
         <li>
           <router-link to="/admin/services">
-            List
+            Services
             <span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -64,7 +64,7 @@
           </router-link>
         </li>
         <li>
-          <router-link to="/admin/service/add">Edit</router-link>
+          Update
         </li>
       </ul>
     </div>

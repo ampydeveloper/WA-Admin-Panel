@@ -4,7 +4,7 @@
       <ul>
         <li>
           <h4 class="main-title text-left top_heading">
-            All Hauler
+            Hauler
             <span class="right-bor"></span>
           </h4>
         </li>
@@ -74,11 +74,15 @@
       <v-container fluid>
         <v-row>
           <div class="add-icon">
-            <router-link v-if="isAdmin" to="/admin/hauler/add" class="nav-item nav-link">
-              <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon>
+            <router-link v-if="isAdmin" to="/admin/hauler/add" class="">
+               <v-btn color="success" class="btn-outline-green-top">
+                <plus-icon size="1.5x" class="custom-class"></plus-icon>Add New
+              </v-btn>
             </router-link>
-            <router-link v-if="!isAdmin" to="/manager/hauler/add" class="nav-item nav-link">
-              <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon>
+            <router-link v-if="!isAdmin" to="/manager/hauler/add" class="">
+               <v-btn color="success" class="btn-outline-green-top">
+                <plus-icon size="1.5x" class="custom-class"></plus-icon>Add New
+              </v-btn>
             </router-link>
           </div>
           <v-col cols="12" md="12" id="manager_wrap" class="main-box-inner">
@@ -86,7 +90,7 @@
               <thead>
                 <tr>
                   <th class="text-left">#</th>
-                  <th class="text-left">Name</th>
+                  <th class="text-left">Hauler Name</th>
                   <th class="text-left">Email</th>
                   <th class="text-left">Phone</th>
                   <th class="text-left">Address</th>
@@ -147,6 +151,11 @@
     <span id="table-chevron-right" class="d-none">
       <chevron-right-icon size="1.5x" class="custom-class"></chevron-right-icon>
     </span>
+     <span id="search-input-icon" class="d-none">
+      <span class="search-input-outer">
+        <search-icon size="1.5x" class="custom-class"></search-icon>
+      </span>
+    </span>
   </v-app>
 </template>
 
@@ -158,9 +167,10 @@ import {
   UserIcon,
   Edit3Icon,
   TrashIcon,
-  PlusCircleIcon,
+  PlusIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  SearchIcon,
 } from "vue-feather-icons";
 import { router } from "../../../_helpers/router";
 
@@ -169,9 +179,10 @@ export default {
     UserIcon,
     Edit3Icon,
     TrashIcon,
-    PlusCircleIcon,
+     PlusIcon,
     ChevronLeftIcon,
     ChevronRightIcon,
+    SearchIcon,
   },
   data() {
     return {
@@ -275,7 +286,8 @@ export default {
             );
           },
         });
-        $(".dataTables_filter input").attr("placeholder", "Search Haulers");
+               $(".dataTables_filter").append($("#search-input-icon").html());
+        $(".dataTables_filter input").attr("placeholder", "Search Haulers by Name / Email / Phone");
         $(".dataTables_paginate .paginate_button.previous").html(
           $("#table-chevron-left").html()
         );

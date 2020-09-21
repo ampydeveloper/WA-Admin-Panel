@@ -4,7 +4,7 @@
       <ul>
         <li>
           <h4 class="main-title text-left top_heading">
-            Add Customer
+            Create Customer
             <span class="right-bor"></span>
           </h4>
         </li>
@@ -46,7 +46,7 @@
         </li>
         <li>
           <router-link to="/admin/customer">
-            List
+            Customer
             <span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -66,7 +66,7 @@
             </span>
           </router-link>
         </li>
-        <li>Add</li>
+        <li>Create</li>
       </ul>
     </div>
 

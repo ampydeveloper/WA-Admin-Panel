@@ -4,7 +4,7 @@
       <ul>
         <li>
           <h4 class="main-title top_heading">
-            All Admin
+            Admin
             <span class="right-bor"></span>
           </h4>
         </li>
@@ -44,7 +44,29 @@
             </span>
           </router-link>
         </li>
-        <li>List</li>
+        <li>
+          <router-link to="/admin/admin">
+            Admin
+            <span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16px"
+                height="16px"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="feather feather-chevrons-right w-4 h-4"
+              >
+                <polyline points="13 17 18 12 13 7" />
+                <polyline points="6 17 11 12 6 7" />
+              </svg>
+            </span>
+          </router-link>
+        </li>
+        <li>All</li>
       </ul>
     </div>
 
@@ -53,7 +75,9 @@
         <v-row>
           <div class="add-icon">
             <router-link to="/admin/admin/add" class="nav-item nav-link">
-              <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon>
+              <v-btn color="success" class="btn-outline-green-top">
+                <plus-icon size="1.5x" class="custom-class"></plus-icon>Add New
+              </v-btn>
             </router-link>
           </div>
           <v-col cols="12" md="12" class="main-box-inner">
@@ -99,10 +123,7 @@
                     >Activate</v-chip>
                     </td>-->
                     <td class="action-col">
-                      <router-link
-                        :to="'/admin/admin/edit/' + item.id"
-                        class="nav-item nav-link"
-                      >
+                      <router-link :to="'/admin/admin/edit/' + item.id" class="nav-item nav-link">
                         <edit-3-icon size="1.2x" class="custom-class"></edit-3-icon>
                       </router-link>
                       <a href="javascript:void(0);" text @click="Delete(item.id)">
@@ -123,6 +144,11 @@
     <span id="table-chevron-right" class="d-none">
       <chevron-right-icon size="1.5x" class="custom-class"></chevron-right-icon>
     </span>
+    <span id="search-input-icon" class="d-none">
+      <span class="search-input-outer">
+        <search-icon size="1.5x" class="custom-class"></search-icon>
+      </span>
+    </span>
   </v-app>
 </template>
 
@@ -135,10 +161,11 @@ import {
   UserIcon,
   Edit3Icon,
   TrashIcon,
-  PlusCircleIcon,
+  PlusIcon,
   MoreVerticalIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  SearchIcon,
 } from "vue-feather-icons";
 import { router } from "../../../_helpers/router";
 export default {
@@ -146,10 +173,11 @@ export default {
     UserIcon,
     Edit3Icon,
     TrashIcon,
-    PlusCircleIcon,
+    PlusIcon,
     MoreVerticalIcon,
     ChevronLeftIcon,
     ChevronRightIcon,
+    SearchIcon,
   },
   data() {
     return {
@@ -234,31 +262,29 @@ export default {
   updated() {
     setTimeout(function () {
       $(document).ready(function () {
-        $(".table-main").DataTable({
-          // aoColumnDefs: [
-          //   {
-          //     bSortable: false,
-          //     // aTargets: [-1, -2, -3],
-          //   },
-          // ],
-          oLanguage: { sSearch: "" },
-          drawCallback: function (settings) {
-            $(".dataTables_paginate .paginate_button.previous").html(
-              $("#table-chevron-left").html()
-            );
-            $(".dataTables_paginate .paginate_button.next").html(
-              $("#table-chevron-right").html()
-            );
-          },
-        });
-        $(".dataTables_filter input").attr("placeholder", "Search Driver");
-        $(".dataTables_paginate .paginate_button.previous").html(
-          $("#table-chevron-left").html()
-        );
-        $(".dataTables_paginate .paginate_button.next").html(
-          $("#table-chevron-right").html()
-        );
-        $(".table-main").css({ opacity: 1 });
+        // $("#admin-table").DataTable({
+        //   oLanguage: { sSearch: "" },
+        //   drawCallback: function (settings) {
+        //     $(".dataTables_paginate .paginate_button.previous").html(
+        //       $("#table-chevron-left").html()
+        //     );
+        //     $(".dataTables_paginate .paginate_button.next").html(
+        //       $("#table-chevron-right").html()
+        //     );
+        //   },
+        // });
+        // $(".dataTables_filter").append($("#search-input-icon").html());
+        // $(".dataTables_filter input").attr(
+        //   "placeholder",
+        //   "Search Admin by Name / Email"
+        // );
+        // $(".dataTables_paginate .paginate_button.previous").html(
+        //   $("#table-chevron-left").html()
+        // );
+        // $(".dataTables_paginate .paginate_button.next").html(
+        //   $("#table-chevron-right").html()
+        // );
+        $("#admin-table").css({ opacity: 1 });
       });
     }, 1000);
   },

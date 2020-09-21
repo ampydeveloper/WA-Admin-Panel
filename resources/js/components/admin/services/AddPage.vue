@@ -4,7 +4,7 @@
       <ul>
         <li>
           <h4 class="main-title text-left top_heading">
-            Add Services
+            Create Service
             <span class="right-bor"></span>
           </h4>
         </li>
@@ -46,7 +46,7 @@
         </li>
         <li>
           <router-link to="/admin/services">
-            List
+            Services
             <span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -66,7 +66,7 @@
             </span>
           </router-link>
         </li>
-        <li>Add</li>
+        <li>Create</li>
       </ul>
     </div>
     <div class="main_box">
@@ -301,7 +301,7 @@
                       class="custom-save-btn mt-4"
                       @click="save"
                       id="submit_btn"
-                    >Add Service</v-btn>
+                    >Create Service</v-btn>
 
                     <router-link to="/admin/services" class="btn-custom-danger mt-4">Cancel</router-link>
                   </v-col>

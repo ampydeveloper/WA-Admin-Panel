@@ -4,7 +4,7 @@
       <ul>
         <li>
           <h4 class="main-title text-left top_heading">
-            All Customer
+            Customers
             <span class="right-bor"></span>
           </h4>
         </li>
@@ -74,11 +74,15 @@
       <v-container fluid>
         <v-row>
           <div class="add-icon">
-            <router-link v-if="isAdmin" to="/admin/customer/add" class="nav-item nav-link">
-              <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon>
+            <router-link v-if="isAdmin" to="/admin/customer/add" class>
+              <v-btn color="success" class="btn-outline-green-top">
+                <plus-icon size="1.5x" class="custom-class"></plus-icon>Add New
+              </v-btn>
             </router-link>
-            <router-link v-if="!isAdmin" to="/manager/customer/add" class="nav-item nav-link">
-              <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon>
+            <router-link v-if="!isAdmin" to="/manager/customer/add" class>
+              <v-btn color="success" class="btn-outline-green-top">
+                <plus-icon size="1.5x" class="custom-class"></plus-icon>Add New
+              </v-btn>
             </router-link>
           </div>
           <v-col cols="12" md="12" class="main-box-inner">
@@ -93,9 +97,9 @@
                   <td class="single-customer">
                     <span class="c-title">
                       <span class="c-title-label">Customer</span>
-                      <span class="c-title-name">                        
-                        {{ customer.prefix }} {{ customer.first_name }} {{ customer.last_name }}
-                      </span>
+                      <span
+                        class="c-title-name"
+                      >{{ customer.prefix }} {{ customer.first_name }} {{ customer.last_name }}</span>
                       <span class="c-title-edit">
                         <router-link
                           v-if="isAdmin"
@@ -163,6 +167,11 @@
     <span id="table-chevron-right" class="d-none">
       <chevron-right-icon size="1.5x" class="custom-class"></chevron-right-icon>
     </span>
+    <span id="search-input-icon" class="d-none">
+      <span class="search-input-outer">
+        <search-icon size="1.5x" class="custom-class"></search-icon>
+      </span>
+    </span>
   </v-app>
 </template>
 
@@ -173,12 +182,12 @@ import { authenticationService } from "../../../_services/authentication.service
 import { environment } from "../../../config/test.env";
 import {
   UserIcon,
-
   TrashIcon,
-  PlusCircleIcon,
+  PlusIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
-   Edit3Icon,
+  Edit3Icon,
+  SearchIcon,
 } from "vue-feather-icons";
 import { router } from "../../../_helpers/router";
 
@@ -186,10 +195,11 @@ export default {
   components: {
     UserIcon,
     TrashIcon,
-    PlusCircleIcon,
+    PlusIcon,
     ChevronLeftIcon,
     ChevronRightIcon,
-     Edit3Icon,
+    Edit3Icon,
+    SearchIcon,
   },
   data() {
     return {
@@ -289,7 +299,8 @@ export default {
             );
           },
         });
-        $(".dataTables_filter input").attr("placeholder", "Search Customers");
+         $(".dataTables_filter").append($("#search-input-icon").html());
+        $(".dataTables_filter input").attr("placeholder", "Search Customers by Name / Farm");
         $(".dataTables_paginate .paginate_button.previous").html(
           $("#table-chevron-left").html()
         );

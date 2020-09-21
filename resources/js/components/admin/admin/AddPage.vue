@@ -6,7 +6,7 @@
           <ul>
             <li>
               <h4 class="main-title text-left top_heading">
-                Add Admin
+                Create Admin
                 <span class="right-bor"></span>
               </h4>
             </li>
@@ -48,7 +48,7 @@
             </li>
             <li>
               <router-link to="/admin/admin">
-                List
+                Admin
                 <span>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -68,7 +68,7 @@
                 </span>
               </router-link>
             </li>
-            <li>Add</li>
+            <li>Create</li>
           </ul>
         </div>
 
@@ -149,18 +149,22 @@
                   </v-col>
 
                   <v-col class="pt-0 pb-0" cols="12" md="12">
-                    <v-col sm="2"></v-col>
-                    <v-col sm="9" class="pt-0 pb-0">
-                      <v-btn
-                        type="submit"
-                        :loading="loading"
-                        :disabled="loading"
-                        color="success"
-                        class="custom-save-btn mt-4"
-                        @click="update"
-                        id="submit_btn"
-                      >Add Admin</v-btn>
-                    </v-col>
+                    <v-row class="m-0">
+                      <v-col sm="2"></v-col>
+                      <v-col sm="10" class="pt-0 pb-0">
+                        <v-btn
+                          type="submit"
+                          :loading="loading"
+                          :disabled="loading"
+                          color="success"
+                          class="custom-save-btn mt-4"
+                          @click="update"
+                          id="submit_btn"
+                        >Create Admin</v-btn>
+
+                        <router-link to="/admin/admin" class="btn-custom-danger mt-4">Cancel</router-link>
+                      </v-col>
+                    </v-row>
                   </v-col>
                 </v-form>
               </v-col>

@@ -1,10 +1,10 @@
 <template>
   <v-app>
-  <div class="bread_crum">
+    <div class="bread_crum">
       <ul>
         <li>
           <h4 class="main-title text-left top_heading">
-            All Services
+            Services
             <span class="right-bor"></span>
           </h4>
         </li>
@@ -73,11 +73,15 @@
       <v-container fluid>
         <v-row>
           <div class="add-icon">
-            <router-link v-if="isAdmin" to="/admin/service/add" class="nav-item nav-link">
-              <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon>
+            <router-link v-if="isAdmin" to="/admin/service/add" class>
+              <v-btn color="success" class="btn-outline-green-top">
+                <plus-icon size="1.5x" class="custom-class"></plus-icon>Add New
+              </v-btn>
             </router-link>
-            <router-link v-if="!isAdmin" to="/manager/service/add" class="nav-item nav-link">
-              <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon>
+            <router-link v-if="!isAdmin" to="/manager/service/add" class>
+              <v-btn color="success" class="btn-outline-green-top">
+                <plus-icon size="1.5x" class="custom-class"></plus-icon>Add New
+              </v-btn>
             </router-link>
           </div>
           <v-col cols="12" md="12" class="main-box-inner">
@@ -91,8 +95,8 @@
                   <th class="text-left">Service Name</th>
                   <th class="text-left">Service Rate</th>
                   <th class="text-left">Price</th>
-                  <th class="text-left">Type</th>
-                  <th class="text-left">Time</th>
+                  <th class="text-left">Day Time</th>
+                  <th class="text-left">Time Slot</th>
                   <th class="text-left">Actions</th>
                 </tr>
               </thead>
@@ -154,6 +158,11 @@
     <span id="table-chevron-right" class="d-none">
       <chevron-right-icon size="1.5x" class="custom-class"></chevron-right-icon>
     </span>
+    <span id="search-input-icon" class="d-none">
+      <span class="search-input-outer">
+        <search-icon size="1.5x" class="custom-class"></search-icon>
+      </span>
+    </span>
   </v-app>
 </template>
 
@@ -165,22 +174,24 @@ import { environment } from "../../../config/test.env";
 import {
   UserIcon,
   TrashIcon,
-  PlusCircleIcon,
+  PlusIcon,
   MoreVerticalIcon,
   Edit3Icon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  SearchIcon,
 } from "vue-feather-icons";
 import { router } from "../../../_helpers/router";
 export default {
   components: {
     UserIcon,
     TrashIcon,
-    PlusCircleIcon,
+    PlusIcon,
     MoreVerticalIcon,
     Edit3Icon,
     ChevronLeftIcon,
     ChevronRightIcon,
+    SearchIcon,
   },
   data() {
     return {
@@ -280,25 +291,26 @@ export default {
           ],
           oLanguage: { sSearch: "" },
           drawCallback: function (settings) {
-            $(
-              ".dataTables_paginate .paginate_button.previous"
-            ).html($("#table-chevron-left").html());
-            $(
-              ".dataTables_paginate .paginate_button.next"
-            ).html($("#table-chevron-right").html());
+            $(".dataTables_paginate .paginate_button.previous").html(
+              $("#table-chevron-left").html()
+            );
+            $(".dataTables_paginate .paginate_button.next").html(
+              $("#table-chevron-right").html()
+            );
           },
         });
+        $(".dataTables_filter").append($("#search-input-icon").html());
         $(".dataTables_filter input").attr(
           "placeholder",
-          "Search Services"
+          "Search Services by Name / Price"
         );
-        $(
-          ".dataTables_paginate .paginate_button.previous"
-        ).html($("#table-chevron-left").html());
+        $(".dataTables_paginate .paginate_button.previous").html(
+          $("#table-chevron-left").html()
+        );
         $(".dataTables_paginate .paginate_button.next").html(
           $("#table-chevron-right").html()
         );
-         $(".table-main").css({'opacity':1});
+        $(".table-main").css({ opacity: 1 });
       });
     }, 1000);
   },

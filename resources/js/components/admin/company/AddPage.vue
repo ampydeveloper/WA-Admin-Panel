@@ -4,7 +4,7 @@
       <ul>
         <li>
           <h4 class="main-title text-left top_heading">
-            Add Hauler
+            Create Hauler
             <span class="right-bor"></span>
           </h4>
         </li>
@@ -46,7 +46,7 @@
         </li>
         <li>
           <router-link to="/admin/hauler">
-            List
+            Hauler
             <span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -66,7 +66,7 @@
             </span>
           </router-link>
         </li>
-        <li>Add</li>
+        <li>Create</li>
       </ul>
     </div>
 
@@ -244,8 +244,8 @@
                       class="custom-save-btn"
                       @click="update"
                       id="submit_btn"
-                    >Add Hauler</v-btn>
-                    <router-link to="/admin/services" class="btn-custom-danger">Cancel</router-link>
+                    >Create Hauler</v-btn>
+                    <router-link to="/admin/hauler" class="btn-custom-danger">Cancel</router-link>
                   </div>
                 </v-col>
               </v-row>

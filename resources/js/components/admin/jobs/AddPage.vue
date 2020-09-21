@@ -6,7 +6,7 @@
           <ul>
             <li>
               <h4 class="main-title text-left top_heading">
-                Jobs
+                Create Job
                 <span class="right-bor"></span>
               </h4>
             </li>
@@ -48,7 +48,7 @@
             </li>
             <li>
               <router-link to="/admin/jobs">
-                Job
+                Jobs
                 <span>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -68,7 +68,7 @@
                 </span>
               </router-link>
             </li>
-            <li>Add</li>
+            <li>Create </li>
           </ul>
         </div>
 
@@ -296,7 +296,7 @@
                   class="custom-save-btn mt-4"
                   @click="submit"
                   id="submit_btn"
-                >Add Job</v-btn>
+                >Create Job</v-btn>
               </v-col>
             </v-col>
           </v-form>
