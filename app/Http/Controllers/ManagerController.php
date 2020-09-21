@@ -123,6 +123,100 @@ class ManagerController extends Controller {
                             'data' => $data
                                 ], 200);
     }
+    
+    public function editProfile(Request $request) {
+        $validator = Validator::make($request->all(), [
+                    'first_name' => 'required',
+                    'last_name' => 'required',
+                    'email' => 'required',
+                    'role_id' => 'required',
+                    'phone' => 'required_if:role_id,==,config("constant.roles.Admin_Manager")',
+                    'address' => 'required_if:role_id,==,config("constant.roles.Admin_Manager")',
+                    'city' => 'required_if:role_id,==,config("constant.roles.Admin_Manager")',
+                    'province' => 'required_if:role_id,==,config("constant.roles.Admin_Manager")',
+                    'zipcode' => 'required_if:role_id,==,config("constant.roles.Admin_Manager")',
+                    'is_active' => 'required_if:role_id,==,config("constant.roles.Admin_Manager")',
+                    'identification_number' => 'required_if:role_id,==,config("constant.roles.Admin_Manager")',
+                    'id_photo' => 'required_if:role_id,==,config("constant.roles.Admin_Manager")',
+                    'joining_date' => 'required_if:role_id,==,config("constant.roles.Admin_Manager")',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                        'status' => false,
+                        'message' => 'The given data was invalid.',
+                        'data' => $validator->errors()
+                            ], 422);
+        }
+        $confirmed = 1;
+        $manager = User::whereId($request->user()->id)->first();
+        if ($request->email != '' && $request->email != null) {
+            $checkEmail = User::where('email', $request->email)->first();
+            if ($checkEmail !== null) {
+                if ($checkEmail->id !== $manager->id) {
+                    return response()->json([
+                                'status' => false,
+                                'message' => 'Email is already taken.',
+                                'data' => []
+                                    ], 422);
+                }
+            }
+            if ($manager->email !== $request->email) {
+                $confirmed = 0;
+            }
+        }
+        try {
+            DB::beginTransaction();
+            if ($request->password != '' && $request->password != null) {
+                $manager->password = bcrypt($request->password);
+            }
+            $manager->prefix = (isset($request->prefix) && $request->prefix != '' && $request->prefix != null) ? $request->prefix : null;
+            $manager->first_name = $request->first_name;
+            $manager->last_name = $request->last_name;
+            $manager->email = $request->email;
+            $manager->phone = (isset($request->phone) && $request->phone != '' && $request->phone != null) ? $request->phone : null;
+            $manager->address = (isset($request->address) && $request->address != '' && $request->address != null) ? $request->address : null;
+            $manager->city = (isset($request->city) && $request->city != '' && $request->city != null) ? $request->city : null;
+            $manager->state = (isset($request->province) && $request->province != '' && $request->province != null) ? $request->province : null;
+            $manager->zip_code = (isset($request->zipcode) && $request->zipcode != '' && $request->zipcode != null) ? $request->zipcode : null;
+            $manager->user_image = (isset($request->user_image) && $request->user_image != '' && $request->user_image != null) ? $request->user_image : null;
+            $manager->is_active = (isset($request->is_active) && $request->is_active != '' && $request->is_active != null) ? $request->is_active : null;
+            $manager->is_confirmed = $confirmed;
+            if ($manager->save()) {
+                if ($manager->role_id != config('constant.roles.Admin')) {
+                    ManagerDetail::whereUserId($request->user()->id)->update([
+                        'identification_number' => (isset($request->identification_number) && $request->identification_number != '' && $request->identification_number != null) ? $request->identification_number : null,
+                        'joining_date' => (isset($request->joining_date) && $request->joining_date != '' && $request->joining_date != null) ? $request->joining_date : null,
+                        'document' => (isset($request->id_photo) && $request->id_photo != '' && $request->id_photo != null) ? $request->id_photo : null,
+                    ]);
+                }
+                DB::commit();
+                if ($confirmed == 0) {
+                    $this->_updateEmail($manager, $request->email);
+                    if ($request->user()->id == $request->manager_id) {
+                        $request->user()->token()->revoke();
+                        return response()->json([
+                                    'status' => true,
+                                    'message' => 'Successfully logged out',
+                                    'data' => []
+                        ]);
+                    }
+                }
+                return response()->json([
+                            'status' => true,
+                            'message' => 'Manager details updated successfully.',
+                            'data' => []
+                                ], 200);
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error(json_encode($e->getMessage()));
+            return response()->json([
+                        'status' => false,
+                        'message' => $e->getMessage(),
+                        'data' => []
+                            ], 500);
+        }
+    }
 
     public function createAdmin(Request $request) {
         $validator = Validator::make($request->all(), [
@@ -176,6 +270,7 @@ class ManagerController extends Controller {
                     'admin_id' => 'required',
                     'admin_first_name' => 'required|string',
                     'admin_last_name' => 'required|string',
+                    'email' => 'required'
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -320,6 +415,7 @@ class ManagerController extends Controller {
                     'manager_id' => 'required',
                     'first_name' => 'required',
                     'last_name' => 'required',
+                    'email' => 'required',
                     'phone' => 'required',
                     'address' => 'required',
                     'city' => 'required',
@@ -330,7 +426,7 @@ class ManagerController extends Controller {
                     'id_photo' => 'required',
                     'salary' => 'required',
                     'joining_date' => 'required',
-             'releaving_date' => 'required',
+//             'releaving_date' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json([

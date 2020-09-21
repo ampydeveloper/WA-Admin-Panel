@@ -5,28 +5,28 @@
         <tr>
           <th>Date</th>
           <th>Customer</th>
-          <th>Job ID</th>
+          <th>Invoice Number</th>
           <th>Service</th>
-          <th>Total</th>
+          <th>Amount</th>
           <th>In QuickBook</th>
-          <!-- <th>Email</th> -->
+          <th>Email</th>
           <th>Actions</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="invoice in invoiceJobs">
-          <td>{{invoice.updated_at | formatDate}}</td>
+          <td>{{invoice.created_at}}</td>
           <td>
             <router-link
               v-if="isAdmin"
               :to="'/admin/customer/details/'+invoice.id"
               class="nav-item nav-link"
-            >{{invoice.first_name}}</router-link>
+            >{{invoice.customer.first_name}}</router-link>
             <router-link
               v-if="!isAdmin"
               :to="'/manager/customer/details/'+invoice.id"
               class="nav-item nav-link"
-            >{{invoice.first_name}}</router-link>
+            >{{invoice.customer.first_name}}</router-link>
           </td>
           <td>
             <router-link v-if="isAdmin" :to="'/admin/jobs'" class="nav-item nav-link">{{invoice.id}}</router-link>
@@ -48,7 +48,7 @@
               class="nav-item nav-link"
             >{{invoice.service.service_name}}</router-link>
           </td>
-          <td>${{invoice.job_amount}}</td>
+          <td>${{invoice.amount}}</td>
           <td>
             <template v-if="!invoice.quick_book">
               <span class="badges-item">Not Sync</span>
@@ -57,12 +57,12 @@
               <span class="badges-item">Sync</span>
             </template>
           </td>
-          <!-- <td>Email</td> -->
+          <td>{{invoice.customer.email}}</td>
           <td>Download</td>
         </tr>
-        <!-- <tr v-if="invoiceJobs.length == 0">
+        <tr v-if="invoiceJobs.length == 0">
                       <td colspan="7">No jobs till now.</td>
-                    </tr> -->
+                    </tr>
       </tbody>
     </table>
     <span id="table-chevron-left" class="d-none">
@@ -92,7 +92,7 @@ export default {
   },
   data() {
     return {
-      invoiceJobs: "",
+      invoiceJobs: [],
       isAdmin: true,
     };
   },

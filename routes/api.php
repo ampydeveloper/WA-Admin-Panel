@@ -51,6 +51,7 @@ Route::group(['prefix' => 'auth'], function () {
         Route::group(['prefix' => 'admin'], function () {
             Route::get('dashboard', 'ManagerController@dashboard');
             Route::post('dashboard-filters', 'ManagerController@dashboardFilters');
+            Route::post('edit-profile', 'ManagerController@editProfile');
             
             //update admin profile
             Route::post('change-password', 'AuthController@changePassword');

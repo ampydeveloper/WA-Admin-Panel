@@ -4,7 +4,7 @@
         <table id="payment-table" class="table table-striped table-bordered table-main">
           <thead>
             <tr>
-              <th>Payment Date</th>
+              <th>Date</th>
               <th>Customer</th>
               <th>Invoice Number</th>
               <th>Payment</th>
@@ -16,7 +16,7 @@
           </thead>
           <tbody>
             <tr v-for="payment in paymentJobs">
-              <td>{{payment.jobpayment.updated_at | formatDate}}</td>
+              <td>{{payment.created_at}}</td>
               <td>
                 <router-link
                   v-if="isAdmin"
@@ -29,9 +29,10 @@
                   class="nav-item nav-link"
                 >{{payment.customer.first_name}}</router-link>
               </td>
-              <td>{{payment.invoice_number}}</td>
-              <td>${{payment.job_amount}}</td>
-              <td>{{payment.jobpayment.payment_mode}}</td>
+              <td>{{payment.id}}</td>
+              <td>${{payment.amount}}</td>
+              <td v-if="payment.payment_mode === 1">Cheque</td>
+              <td v-if="payment.payment_mode === 2">Cash</td>
               <td>
                 <template v-if="!payment.quick_book">
                   <span class="badges-item">Not Sync</span>
@@ -61,7 +62,7 @@ export default {
   },
   data() {
     return {
-      paymentJobs: "",
+      paymentJobs: [],
       isAdmin: true,
     };
   },

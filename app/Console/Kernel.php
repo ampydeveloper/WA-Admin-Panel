@@ -13,7 +13,9 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+       \Laravelista\LumenVendorPublish\VendorPublishCommand::class,
+        Commands\AssignTask::class,
+        Commands\CalculateSalary::class,
     ];
 
     /**
@@ -26,6 +28,8 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
 //        $schedule->call('App\Http\Controllers\CronController@assignTecs')->everyMinute();
+        $schedule->command('assign:task')->daily();
+        $schedule->command('calculate:salary')->monthly();
     }
 
     /**

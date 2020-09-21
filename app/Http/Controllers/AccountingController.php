@@ -23,11 +23,11 @@ class AccountingController extends Controller
         return response()->json([
                     'status' => true,
                     'message' => 'job invoice Details',
-                    'data' => User::whereHas('jobs', function($q) {
-                        $q->where('payment_status', config('constant.payment_status.paid'));
-                    })->where(function($q) {
-                                $q->where('role_id', config('constant.roles.Customer'))->orWhere('role_id', config('constant.roles.Haulers'));
-                            })->with('jobs.service')->get()
+                    'data' => Job::where('payment_status', config('constant.payment_status.paid'))->select('id', 'customer_id', 'service_id', 'amount', 'created_at')->with(['customer' => function($q) {
+                            $q->select('id', 'first_name', 'last_name', 'email');
+                        }])->with(['service' => function($q) {
+                            $q->select('id', 'service_name');
+                        }])->orderBy('created_at', 'DESC')->get()
                         ], 200);
     }
 
@@ -38,9 +38,11 @@ class AccountingController extends Controller
         return response()->json([
                     'status' => true,
                     'message' => 'job payment Details',
-                    'data' => User::whereHas('jobs', function($q) {
-                                $q->where('payment_status', config('constant.payment_status.unpaid'));
-                            })->where('role_id', config('constant.roles.Haulers'))->with('jobs.service')->get()
+                    'data' => Job::whereHas('customer', function($q) {
+                                $q->where('role_id', 6);
+                            })->where('payment_status', config('constant.payment_status.unpaid'))->select('id', 'customer_id', 'service_id', 'amount','payment_mode', 'created_at')->with(['customer' => function($q) {
+                            $q->select('id', 'first_name', 'last_name', 'email');
+                        }])->orderBy('created_at', 'DESC')->get()
                         ], 200);
     }
     
@@ -73,6 +75,24 @@ class AccountingController extends Controller
                             ], 500);
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /**
      * get all jobs salary
      */
