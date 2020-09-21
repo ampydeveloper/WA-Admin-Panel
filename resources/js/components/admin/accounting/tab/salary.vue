@@ -3,9 +3,8 @@
     <table id="salary-table" class="table table-striped table-bordered table-main">
       <thead>
         <tr>
-          <!-- <th>Image</th> -->
           <th>Employee</th>
-          <th>Contact</th>
+          <th>Contact Number</th>
           <th>Designation</th>
           <th>Month</th>
           <th>Year</th>
@@ -14,39 +13,30 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(salary, index ) in salaryJobs">
-          <!-- <td>{{index+1}}</td> -->
+        <tr v-for="(salaryJob, index ) in salaryJobs">
           <td>
             <router-link
               v-if="isAdmin"
-              :to="'/admin/truckdriver/edit/' + salary.user.id"
+              :to="'/admin/truckdriver/edit/' + salaryJob.id"
               class="nav-item nav-link"
-            >{{salary.user.first_name}}</router-link>
+            >{{salaryJob.first_name}}</router-link>
             <router-link
               v-if="!isAdmin"
-              :to="'/manager/truckdriver/edit/' + salary.user.id"
+              :to="'/manager/truckdriver/edit/' + salaryJob.id"
               class="nav-item nav-link"
-            >{{salary.user.first_name}}</router-link>
+            >{{salaryJob.first_name}}</router-link>
           </td>
-          <td>{{salary.user.phone}}</td>
-          <td>
-            <template v-if="salary.user.driver.driver_type">Truck Driver</template>
-            <template v-if="!salary.user.driver.driver_type">Skidsteer Driver</template>
-          </td>
-          <td>{{salary.month}}</td>
-          <td>{{salary.year}}</td>
-          <td>${{salary.salary}}</td>
+          <td>{{salaryJob.phone}}</td>
+          <td>Truck Driver</td>
+          <td>{{salaryJob.driver.salary.monthly_income}}</td>
+          <td>{{salaryJob.driver.salary.year_yyyy}}</td>
+          <td>${{salaryJob.driver.salary.monthly_income}}</td>
           <td>
             <router-link
-              v-if="isAdmin"
-              :to="'/admin/accounting/details/' + salary.user.id"
+              v-if="salaryJob.driver.salary.is_settled === 0"
+              :to="'/admin/accounting/details/' + salaryJob.driver.salary.id"
               class="nav-item nav-link"
-            >View Details</router-link>
-            <router-link
-              v-if="!isAdmin"
-              :to="'/manager/accounting/details/' + salary.user.id"
-              class="nav-item nav-link"
-            >View Details</router-link>
+            >Pay Now</router-link>
           </td>
         </tr>
       </tbody>
@@ -66,7 +56,7 @@ export default {
   },
   data() {
     return {
-      salaryJobs: "",
+      salaryJobs: [],
       isAdmin: true,
     };
   },

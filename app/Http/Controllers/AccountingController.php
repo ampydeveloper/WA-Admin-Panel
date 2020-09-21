@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Validator;
 use Mail;
-use Illuminate\Support\Facades\DB;
+use App\Job;
 use App\User;
+use Validator;
+use App\Salary;
 use App\Service;
 use App\TimeSlots;
-use App\Job;
 use App\CustomerFarm;
 use App\EmployeeSalaries;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AccountingController extends Controller
 {
@@ -74,42 +75,53 @@ class AccountingController extends Controller
                         'data' => []
                             ], 500);
     }
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     /**
      * get all jobs salary
      */
-    public function getAllJobSalary()
-    {
-        $getAllJobs = EmployeeSalaries::with("user.driver")
-            ->selectRaw('year(created_at) year, monthname(created_at) month, sum(salary) salary, user_id')
-            ->groupBy('year', 'month', 'user_id')
-            ->orderBy('year', 'desc')->get();
-
+    public function getAllJobSalary() {
+        $month = date('m');
         return response()->json([
-            'status' => true,
-            'message' => 'job salary Details',
-            'data' => $getAllJobs
-        ], 200);
+                    'status' => true,
+                    'message' => 'job salary Details',
+                    'data' => User::where('id',28)->where('role_id', config('constant.roles.Driver'))->select('id', 'first_name', 'last_name', 'phone', 'role_id')->with(['driver' => function($q) use($month) {
+                            $q->select('id', 'user_id')->with(['salary' => function($q) use($month) {
+                                    $q->where('month_number', $month - 1);
+                                }]);
+                        }])->get()
+                        ], 200);
+    }
+    
+    public function paySalary(Request $request) {
+        if(Salary::where('id', $request->driver_id)->where('is_settled', 0)->update(['is_settled' => 1])) {
+            return response()->json([
+                        'status' => false,
+                        'message' => 'Salary paid sucessfully.',
+                        'data' => []
+                            ], 200);
+        }
+        return response()->json([
+                        'status' => false,
+                        'message' => 'Salary paid unsucessfull.',
+                        'data' => []
+                            ], 500);
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /**
      * get all single jobs salary
      */

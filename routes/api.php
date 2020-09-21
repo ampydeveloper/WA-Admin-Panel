@@ -157,9 +157,9 @@ Route::group(['prefix' => 'auth'], function () {
             //accounting
             Route::get('job-invoices', 'AccountingController@getAllJobInvoices');
             Route::get('job-payment', 'AccountingController@getAllJobPayment');
-            Route::post('get-payment/{job_id}', 'AccountingController@getPayment');
+            Route::post('get-payment', 'AccountingController@getPayment');
             Route::get('job-salary', 'AccountingController@getAllJobSalary');
-            Route::get('job-salary-details/{driver_id}', 'AccountingController@getSingleJobSalary');
+            Route::get('pay-salary/{driver_id}', 'AccountingController@paySalary');
 
             //message
             Route::post('chat-send', 'MessageController@send');
