@@ -315,8 +315,8 @@
                             v-model="addForm.salary_type"
                             :rules="[v => !!v || 'Field is required']"
                           >
-                            <v-radio label="Per Hours" value="0"></v-radio>
-                            <v-radio label="Per Load" value="1"></v-radio>
+                            <v-radio label="Per Hour" value="0"></v-radio>
+                            <v-radio label="Per Month" value="1"></v-radio>
                           </v-radio-group>
                         </v-col>
                       </div>

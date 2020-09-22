@@ -284,7 +284,8 @@
                     :rules="[v => !!v || 'Service type is required.']"
                   >
                     <v-radio label="Per Load" value="1" class="mor_eve"></v-radio>
-                    <v-radio label="Round" value="2" class="mor_eve"></v-radio>
+                    <v-radio label="Trip" value="2" class="mor_eve"></v-radio>
+                    <v-radio label="Bucket" value="3" class="mor_eve"></v-radio>
                   </v-radio-group>
                 </v-col>
               </v-col>
@@ -341,8 +342,8 @@ export default {
         price: "",
         description: "",
         service_image: "",
-        service_type: "1",
-        slot_type: ["1"],
+        service_type: "2",
+        slot_type: [],
         slot_time: [],
       },
       checkedSlot: {

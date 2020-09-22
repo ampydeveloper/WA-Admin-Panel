@@ -58,6 +58,7 @@ class CustomerController extends Controller {
      * create customer
      */
     public function createCustomer(Request $request) {
+//        dd($request->all());
         $validator = Validator::make($request->all(), [
                     'customer_first_name' => 'required|string',
                     'customer_last_name' => 'required|string',
@@ -102,7 +103,7 @@ class CustomerController extends Controller {
             DB::beginTransaction();
             $newPassword = Str::random();
             $user = new User([
-                'prefix' => (isset($request->customer_prefix) && $request->customer_prefix != '' && $request->customer_prefix != null) ? $request->customer_prefix : null,
+                'prefix' => (isset($request->prefix) && $request->prefix != '' && $request->prefix != null) ? $request->prefix : null,
                 'first_name' => $request->customer_first_name,
                 'last_name' => $request->customer_last_name,
                 'email' => $request->email,
@@ -134,7 +135,9 @@ class CustomerController extends Controller {
                     'created_by' => $request->user()->id,
                 ]);
                 if ($farmDetails->save()) {
+//                    dump('1');
                     foreach ($request->manager_details as $manager) {
+//                        dump('in');
                         $newPassword = Str::random();
                         $saveManger = new User([
                             'prefix' => (isset($manager['manager_prefix']) && $manager['manager_prefix'] != '' && $manager['manager_prefix'] != null) ? $manager['manager_prefix'] : null,
@@ -168,13 +171,13 @@ class CustomerController extends Controller {
                                 $this->_confirmPassword($saveManger, $newPassword);
                             }
                         }
-                        DB::commit();
-                        return response()->json([
-                                    'status' => true,
-                                    'message' => 'Customer created successfully.',
-                                    'data' => $user
-                                        ], 200);
                     }
+                    DB::commit();
+                    return response()->json([
+                                'status' => true,
+                                'message' => 'Customer created successfully.',
+                                'data' => $user
+                                    ], 200);
                 }
             }
         } catch (\Exception $e) {

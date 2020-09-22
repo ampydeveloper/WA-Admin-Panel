@@ -88,9 +88,8 @@
                   <th class="text-left">Driver</th>
                   <th class="text-left">Phone</th>
                   <th class="text-left">Email</th>
-                  <th class="text-left">Distance</th>
+                  <th class="text-left">Distance Traveled</th>
                   <th class="text-left">Salary</th>
-                  <th class="text-left">Amount</th>
                   <th class="text-left">Active</th>
                   <th class="text-left">Actions</th>
                 </tr>
@@ -119,8 +118,7 @@
                   <td>{{ item.email }}</td>
                   <td>0</td>
                   <td v-if="item.driver.salary_type  == 0">${{ item.driver.driver_salary }}/hr</td>
-                  <td v-if="item.driver.salary_type  == 1">${{ item.driver.driver_salary }}/Per load</td>
-                  <td>0</td>
+                  <td v-if="item.driver.salary_type  == 1">${{ item.driver.driver_salary }}/month</td>
                   <td>
                     <span v-if="!item.is_active" class="badges-item">No</span>
                     <span v-if="item.is_active" class="badges-item">Yes</span>

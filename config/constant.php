@@ -45,7 +45,8 @@ return [
     ],
     'service_type' => [
         'by_weight' => 1,
-        'by_round' => 2,
+        'by_trip' => 2,
+        'by_bucket' => 3
     ],
     'service_for' => [
         'customer' => 4,

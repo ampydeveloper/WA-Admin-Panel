@@ -133,7 +133,7 @@ class CronController extends Controller
                 foreach ($cIntervalJobs as $job)
                 {
                     //job = round one truck dedicated for that job
-                    if(($job->service['service_type'] == config('constant.service_type.by_round')) 
+                    if(($job->service['service_type'] == config('constant.service_type.by_trip')) 
                             &&  ($bIsPreviousJobAssigned == FALSE)
                             && (in_array($job->id, $arrAssignedJobId) == FALSE)
                             && (in_array($truck->id, $iArrDriverTruckIdMapping) == TRUE))

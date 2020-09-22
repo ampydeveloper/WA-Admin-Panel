@@ -348,6 +348,7 @@ class ManagerController extends Controller {
                     'identification_number' => 'required',
                     'id_photo' => 'required',
                     'salary' => 'required',
+                    'is_active' => 'required'
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -376,7 +377,7 @@ class ManagerController extends Controller {
                 'role_id' => config('constant.roles.Admin_Manager'),
                 'created_from_id' => $request->user()->id,
                 'is_confirmed' => 1,
-                'is_active' => 1,
+                'is_active' => $request->is_active,
                 'password' => bcrypt($newPassword)
             ]);
             if ($user->save()) {
@@ -385,7 +386,7 @@ class ManagerController extends Controller {
                     'identification_number' => $request->identification_number,
                     'document' => $request->id_photo,
                     'salary' => $request->salary,
-                    'joining_date' => date('Y/m/d'),
+                    'joining_date' => (isset($request->joining_date) && $request->joining_date != '' && $request->joining_date != null) ? $request->joining_date : date('Y/m/d'),
                 ]);
                 if ($managerDetails->save()) {
                     $this->_confirmPassword($user, $newPassword);

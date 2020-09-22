@@ -139,7 +139,7 @@ class DriverController extends Controller {
 //                    'driver_type' => 'required',
                     'driver_licence' => 'required',
                     'expiry_date' => 'required',
-                    'document' => 'required',
+                    'driver_licence_image' => 'required',
                     'salary_type' => 'required',
                     'driver_salary' => 'required',
                     'status' => 'required',
@@ -194,14 +194,14 @@ class DriverController extends Controller {
             $driver->state = $request->driver_province;
             $driver->zip_code = $request->driver_zipcode;
             $driver->user_image = (isset($request->user_image) && $request->user_image != '' && $request->user_image != null) ? $request->user_image : null;
-            $driver->is_active = $request->driver_is_active;
+            $driver->is_active = $request->status;
             if ($driver->save()) {
                 if ($driver->role_id != config('constant.roles.Admin')) {
                     Driver::whereUserId($request->driver_id)->update([
                         'driver_type' => 1,
                         'driver_licence' => $request->driver_licence,
                         'expiry_date' => $request->expiry_date,
-                        'document' => $request->document,
+                        'document' => $request->driver_licence_image,
                         'salary_type' => $request->salary_type,
                         'driver_salary' => $request->driver_salary,
                         'status' => $request->status,

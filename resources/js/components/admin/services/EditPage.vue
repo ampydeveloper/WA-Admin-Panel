@@ -296,7 +296,8 @@
                       :rules="[v => !!v || 'Service type is required.']"
                     >
                       <v-radio label="Per Load" value="perload" class="mor_eve"></v-radio>
-                      <v-radio label="Round" value="round" class="mor_eve"></v-radio>
+                      <v-radio label="Round" value="trip" class="mor_eve"></v-radio>
+                      <v-radio label="Bucket" value="bucket" class="mor_eve"></v-radio>
                     </v-radio-group>
                   </v-col>
                 </div>
@@ -356,7 +357,7 @@ export default {
         description: "",
         service_image: "",
         service_type: "",
-        slot_type: [1, 2],
+        slot_type: [],
         slot_time: [],
       },
       checkedSlot: {
@@ -421,8 +422,10 @@ export default {
         }
         if (response.data.service_type == 1) {
           this.editForm.service_type = "perload";
+        } else if(response.data.service_type == 2) {
+          this.editForm.service_type = "trip";
         } else {
-          this.editForm.service_type = "round";
+          this.editForm.service_type = "bucket";
         }
 
         if (this.editForm.slot_type.includes("1")) {
@@ -531,8 +534,10 @@ export default {
       }
       if (this.editForm.service_type == "perload") {
         this.editForm.service_type = 1;
-      } else {
+      } else if (this.editForm.service_type == "trip") {
         this.editForm.service_type = 2;
+      } else {
+        this.editForm.service_type = 3;
       }
 
       //time slot validation if customer service selected
