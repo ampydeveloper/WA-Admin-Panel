@@ -1,7 +1,7 @@
 export const planetChartData = {
     type: 'line',
     data: {
-        labels: ['0', '1', '2', '3', '4', '5', '6', '7'],
+        labels: ['01', '15', '09', '13', '17', '21', '26', '34'],
         datasets: [
             // { // one line graph
             //     label: 'Number of Moons',
@@ -28,9 +28,22 @@ export const planetChartData = {
             //     ],
             //     borderWidth: 3
             // },
-            { // another line graph
+            { 
                 label: '',
-                data: [4.8, 12.1, 12.7, 6.7, 139.8, 116.4, 50.7, 49.2],
+                data: [4.8, 60, 120, 50, 130, 80, 140, 70],
+                fill: false,
+                backgroundColor: [
+                    '#11b276', // Green
+                ],
+                borderColor: [
+                    '#11b276',
+                ],
+                borderWidth: 3
+            },
+            { 
+                label: '',
+                data: [21, 40, 60, 25, 85, 45, 130, 25],
+                fill: false,
                 backgroundColor: [
                     '#11b276', // Green
                 ],
@@ -43,19 +56,26 @@ export const planetChartData = {
     },
     options: {
         responsive: true,
-        lineTension: 0,
+        // lineTension: 0,
         legend: {
             display: false
         },
+        elements: {
+            point:{
+                radius: 0
+            }
+        },
         scales: {
             yAxes: [{
+                
                 ticks: {
                     beginAtZero: true,
                     padding: 25,
+                    display: false,
                 },
-                gridLines: {
-                    display: false
-                }
+                // gridLines: {
+                //     display: false
+                // }
             }],
             xAxes: [{
                 gridLines: {

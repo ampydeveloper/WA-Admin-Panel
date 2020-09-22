@@ -320,7 +320,7 @@ $hover-white: #fff;
 
                     .v-list-item__title {
                         font-weight: 500;
-                        font-size: 12px;
+                        font-size: 13px;
                         text-transform: uppercase;
                         color: #999;
                         letter-spacing: .01rem;
@@ -1293,6 +1293,7 @@ $hover-white: #fff;
             float: left;
             position: relative;
             margin: 10px 0 35px 0;
+
             label {
                 width: 100%;
             }
@@ -2067,7 +2068,7 @@ table.table-main {
         text-align: right;
         min-width: unset;
         padding-right: 15px !important;
-        padding-top: 11px;
+        padding-top: 5px;
         font-family: 'Montserrat', sans-serif;
 
         span {
@@ -2076,9 +2077,10 @@ table.table-main {
         }
 
         span.log-name {
-            font-weight: 500;
+            font-weight: 600;
             font-size: 15px !important;
             color: #2c2c2c;
+            line-height: 16px;
         }
     }
 
@@ -2225,7 +2227,7 @@ div#example_info {
                 color: #2c2c2c !important;
                 font-family: 'Montserrat', sans-serif;
                 font-size: 14px;
-                font-weight: 300;
+                // font-weight: 300;
                 border: none;
                 vertical-align: middle;
                 padding: 9px 10px;
@@ -2251,7 +2253,7 @@ div#example_info {
             color: #2c2c2c !important;
             font-family: 'Montserrat', sans-serif;
             font-size: 14px;
-            font-weight: 300;
+            // font-weight: 300;
             margin-top: 0px;
 
             svg {
@@ -2517,18 +2519,26 @@ div#example_info {
 #dashboard .dashboard-columns .services {
     background-color: #fff;
     border-radius: 7px;
-    padding: 25px 15px;
-    text-align: center;
+    padding: 20px 20px;
+    // text-align: center;
     /* box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.05); */
     box-shadow: 0 4px 25px 0 rgba(0, 0, 0, 0.1);
+
+    svg {
+        margin-left: 11px;
+        width: 24px;
+        height: 24px;
+        margin-top: 4px;
+
+    }
 }
 
 .image-bg-color {
     height: 45px;
     border-radius: 24px;
     position: absolute;
-    left: 50%;
-    margin-left: -23px;
+    // left: 50%;
+    // margin-left: -23px;
     width: 45px;
 }
 
@@ -2586,7 +2596,7 @@ div#example_info {
 
 #dashboard .dashboard-columns .services .employees {
     color: #626262;
-    font-weight: 300;
+    // font-weight: 300;
 }
 
 #dashboard .dashboard-graps .grap {
@@ -2704,7 +2714,9 @@ div#example_info {
             font-weight: 600 !important;
             font-size: 14px;
         }
-
+p.green-text{
+    color: #11b276;
+}
         p {
             font-size: 24px;
 
@@ -2752,9 +2764,10 @@ div#example_info {
 .temp-grap {
     position: relative;
     font-size: 16px;
-    background-image: url('/images/florida-beach.jpg');
+    background-image: url('/images/card-image-back.jpg');
     background-size: cover;
     background-position: center center;
+    height: 100%;
 
     .overlay {
         position: absolute;
@@ -2817,6 +2830,8 @@ div#example_info {
 }
 
 .timeline-grap {
+    height: 100%;
+
     .vx-card__collapsible-content {
         position: relative;
         padding-left: 15px;
@@ -2869,7 +2884,19 @@ div#example_info {
 
 .pie-chart-outer {
     width: 100%;
-    height: 290px;
+    height: 73.8%;
+    height: 67.5%;
+}
+
+.services-chart-outer {
+    margin-left: -20px;
+    margin-right: -20px;
+    margin-bottom: -20px;
+    margin-top: -75px;
+
+    canvas {
+        border-radius: 7px;
+    }
 }
 
 // dashboard END
@@ -3164,4 +3191,10 @@ div#example_info {
             }
         }
     }
+}
+
+.invoice-outer {
+    height: 100%;
+    min-height: 200px !important;
+
 }

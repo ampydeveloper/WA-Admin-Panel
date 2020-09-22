@@ -62,8 +62,8 @@ Change Password</router-link>
     </v-btn>-->
 
     <div class="header-right">
-      <menu-icon v-if="!drawer" @click="setDrawer(!drawer)" size="1.5x" class="custom-class"></menu-icon>
-      <menu-icon v-if="drawer" @click="setDrawer(!drawer)" size="1.5x" class="custom-class"></menu-icon>
+      <align-left-icon v-if="!drawer" @click="setDrawer(!drawer)" size="1.5x" class="custom-class"></align-left-icon>
+      <align-left-icon v-if="drawer" @click="setDrawer(!drawer)" size="1.5x" class="custom-class"></align-left-icon>
       
       <!-- <v-icon v-if="!drawer" @click="setDrawer(!drawer)">mdi-format-indent-increase</v-icon> -->
       <!-- <v-icon v-if="drawer" @click="setDrawer(!drawer)">mdi-format-indent-decrease</v-icon> -->
@@ -87,7 +87,7 @@ import { VHover, VListItem } from "vuetify/lib";
 
 // Utilities
 import { mapState, mapMutations } from "vuex";
-import { UserIcon, LogOutIcon, UserPlusIcon, ListIcon, Edit3Icon, BellIcon, MenuIcon  } from 'vue-feather-icons'
+import { UserIcon, LogOutIcon, UserPlusIcon, ListIcon, Edit3Icon, BellIcon, AlignLeftIcon  } from 'vue-feather-icons'
 
 export default {
   name: "DashboardCoreAppBar",
@@ -99,7 +99,7 @@ export default {
 	ListIcon,
 	Edit3Icon,
   BellIcon,
-  MenuIcon,
+  AlignLeftIcon ,
     AppBarItem: {
       render(h) {
         return h(VHover, {

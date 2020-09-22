@@ -1,46 +1,70 @@
 <template>
   <v-container id="dashboard" fluid tag="section">
     <v-row class="dashboard-columns">
-      <div class="col">
+      <div class="col-3">
         <div class="services">
           <div class="image-bg-color service-bg-color"></div>
-          <user-icon size="2x" class="custom-class icons_custom dashboard-icons service-icon"></user-icon>
+          <!-- <user-icon size="2x" class="custom-class icons_custom dashboard-icons service-icon"></user-icon> -->
+         
+         <grid-icon size="2x" class="custom-class icons_custom dashboard-icons service-icon"></grid-icon>
           <h2>92.6k</h2>
           <span class="employees">Services</span>
+          <div class="services-chart-outer">
+            <canvas id="services-chart"></canvas>
+          </div>
         </div>
       </div>
-      <div class="col">
+      <div class="col-3">
         <div class="services">
           <div class="image-bg-color employee-bg-color"></div>
-          <user-icon size="2x" class="custom-class icons_custom dashboard-icons employee-icon"></user-icon>
+          <!-- <user-icon size="2x" class="custom-class icons_custom dashboard-icons employee-icon"></user-icon> -->
+       
+         <user-check-icon size="2x" class="custom-class icons_custom dashboard-icons employee-icon"></user-check-icon>
           <h2>352</h2>
-          <span class="employees">Employees</span>
+          <span class="employees">Managers</span>
+          <div class="services-chart-outer">
+            <canvas id="services-chart2"></canvas>
+          </div>
         </div>
       </div>
-      <div class="col">
+      <div class="col-3">
         <div class="services">
           <div class="image-bg-color driver-bg-color"></div>
-          <user-icon size="2x" class="custom-class icons_custom dashboard-icons driver-icon"></user-icon>
+          <!-- <user-icon size="2x" class="custom-class icons_custom dashboard-icons driver-icon"></user-icon> -->
+         
+         <users-icon size="2x" class="custom-class icons_custom dashboard-icons driver-icon"></users-icon>
           <h2>400</h2>
           <span class="employees">Drivers</span>
+          <div class="services-chart-outer">
+            <canvas id="services-chart3"></canvas>
+          </div>
         </div>
       </div>
-      <div class="col">
+      <div class="col-3">
         <div class="services">
           <div class="image-bg-color fleet-bg-color"></div>
-          <user-icon size="2x" class="custom-class icons_custom dashboard-icons fleet-icon"></user-icon>
+          <!-- <user-icon size="2x" class="custom-class icons_custom dashboard-icons fleet-icon"></user-icon> -->
+
+           <truck-icon size="2x" class="custom-class icons_custom dashboard-icons fleet-icon"></truck-icon>
+   
           <h2>150</h2>
-          <span class="employees">Fleets</span>
+          <span class="employees">Fleet</span>
+          <div class="services-chart-outer">
+            <canvas id="services-chart4"></canvas>
+          </div>
         </div>
       </div>
-      <div class="col">
+      <!-- <div class="col">
         <div class="services">
           <div class="image-bg-color skid-bg-color"></div>
           <user-icon size="2x" class="custom-class icons_custom dashboard-icons skid-icon"></user-icon>
           <h2>100</h2>
-          <span class="employees">Skid steers</span>
+          <span class="employees">SkidSteers</span>
+          <div class="services-chart-outer">
+            <canvas id="services-chart5"></canvas>
+          </div>
         </div>
-      </div>
+      </div> -->
     </v-row>
 
     <v-row class="dashboard-graps">
@@ -61,7 +85,7 @@
           <div class="customer-graph-details-outer">
             <div class="customer-graph-details">
               <h5>New</h5>
-              <p>86,589</p>
+              <p class="green-text">86,589</p>
             </div>
             <div class="customer-graph-details">
               <h5>All</h5>
@@ -80,7 +104,7 @@
         </div>
       </v-col>
       <v-col cols="12" md="5">
-        <div class="grap">
+        <div class="grap invoice-outer">
           <div class="customer-graph-headings">
             <h4 class="active">Invoices</h4>
 
@@ -112,7 +136,7 @@
             </div>
             <div class="customer-graph-details col-sm-4">
               <h5>Outstanding</h5>
-              <p>
+              <p class="green-text">
                 <span>$</span>86,59
               </p>
             </div>
@@ -334,7 +358,7 @@
           </div>
         </div>
       </v-col>
-      <v-col cols="12" md="4">
+      <!-- <v-col cols="12" md="4">
         <div class="grap timeline-grap">
           <div class="customer-graph-headings">
             <h4 class="active">Dispatch Notifications</h4>
@@ -460,7 +484,7 @@
             </div>
           </div>
         </div>
-      </v-col>
+      </v-col>-->
     </v-row>
   </v-container>
 </template>
@@ -470,13 +494,18 @@ import Chart from "chart.js";
 import Mapbox from "mapbox-gl-vue";
 import planetChartData from "./chart/chart-data.js";
 import pieChartData from "./chart/pie-chart-data.js";
-import { UserIcon, LockIcon } from "vue-feather-icons";
+import servicesData from "./chart/services-data.js";
+import { UserIcon, LockIcon, GridIcon, UserCheckIcon, TruckIcon, UsersIcon } from "vue-feather-icons";
 
 export default {
   components: {
     UserIcon,
     LockIcon,
     Mapbox,
+    GridIcon,
+    UserCheckIcon,
+    TruckIcon,
+    UsersIcon
   },
   data() {
     return {
@@ -484,11 +513,17 @@ export default {
       prefixs: ["Last 7 Days", "Last Month", "Last Year"],
       planetChartData: planetChartData,
       pieChartData: pieChartData,
+      servicesData: servicesData,
     };
   },
   mounted() {
     this.createChart("planet-chart", this.planetChartData);
     this.createChart("pie-chart", this.pieChartData);
+    this.createChart("services-chart", this.servicesData);
+    this.createChart("services-chart2", this.servicesData);
+    this.createChart("services-chart3", this.servicesData);
+    this.createChart("services-chart4", this.servicesData);
+    this.createChart("services-chart5", this.servicesData);
   },
   methods: {
     createChart(chartId, chartData) {

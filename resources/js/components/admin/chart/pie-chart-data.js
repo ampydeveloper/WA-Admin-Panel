@@ -52,9 +52,11 @@ export const planetChartData = {
         },
         scales: {
             yAxes: [{
+                display: false,
                 ticks: {
                     beginAtZero: true,
                     padding: 1,
+                    display: false
                 },
                 gridLines: {
                     display: false,
@@ -62,6 +64,7 @@ export const planetChartData = {
                 }
             }],
             xAxes: [{
+                display: false,
                 gridLines: {
                     display: false,
                     drawBorder: false,
