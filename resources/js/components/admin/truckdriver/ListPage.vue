@@ -4,7 +4,7 @@
       <ul>
         <li>
           <h4 class="main-title top_heading">
-            All Drivers
+            Drivers
             <span class="right-bor"></span>
           </h4>
         </li>

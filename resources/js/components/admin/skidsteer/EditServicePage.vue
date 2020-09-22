@@ -4,7 +4,7 @@
       <ul>
         <li>
           <h4 class="main-title text-left top_heading">
-            Edit Service
+            Update Service
             <span class="right-bor"></span>
           </h4>
         </li>
@@ -66,7 +66,7 @@
             </span>
           </router-link>
         </li>
-        <li>Edit</li>
+        <li>Update</li>
       </ul>
     </div>
 
