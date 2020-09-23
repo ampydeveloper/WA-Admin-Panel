@@ -68,7 +68,7 @@
                 </span>
               </router-link>
             </li>
-            <li>Create </li>
+            <li>Create</li>
           </ul>
         </div>
 
@@ -97,7 +97,7 @@
               </v-col>
             </v-col>
 
-            <v-col class="pt-0 pb-0" cols="12">
+            <v-col class="pt-0 pb-0" cols="12" v-if="!customerNotHauler">
               <v-col sm="2" class="label-align pt-0">
                 <label>Farm</label>
               </v-col>
@@ -114,7 +114,7 @@
               </v-col>
             </v-col>
 
-            <v-col class="pt-0 pb-0" cols="12">
+            <v-col class="pt-0 pb-0" cols="12" v-if="!customerNotHauler">
               <v-col sm="2" class="label-align pt-0">
                 <label>Manager</label>
               </v-col>
@@ -321,6 +321,7 @@ export default {
       menu1: false,
       loading: false,
       weightShow: false,
+      customerNotHauler: true,
       date: "",
       job_providing_date: "",
       apiUrl: environment.apiUrl,
@@ -412,6 +413,23 @@ export default {
       });
     },
     getCustomerFarm(val) {
+      //checking is customer is Hauler
+      var i;
+      for (i = 0; i < this.customerName.length; i++) {
+        if (
+          val == this.customerName[i].id &&
+          this.customerName[i].role_id == 6
+        ) {
+          this.customerNotHauler = true;
+         
+          return false;
+         
+        }else{
+          this.customerNotHauler = false;
+          
+        }
+      }
+
       this.customer_id = val;
       jobService.getFarm(val).then((response) => {
         //handle response

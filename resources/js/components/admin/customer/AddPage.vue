@@ -91,29 +91,33 @@
                   id="form_field"
                 >
                   <v-row>
-                    <v-col cols="4" md="4">
-                      <file-pond
-                        name="uploadImage"
-                        ref="pond"
-                        label-idle="Upload Profile Photo"
-                        v-bind:allow-multiple="false"
-                        v-bind:server="serverOptions"
-                        v-bind:files="myFiles"
-                        v-on:addfilestart="CustomerUploadIndex"
-                        allow-file-type-validation="true"
-                        accepted-file-types="image/jpeg, image/png"
-                        v-on:processfile="handleProcessFile"
-                        v-on:processfilerevert="handleRemoveFile"
-                      />
-                      <div
-                        class="v-messages theme--light error--text"
-                        role="alert"
-                        v-if="profileImgError"
-                      >
-                        <div class="v-messages__wrapper">
-                          <div class="v-messages__message">Profile image is required.</div>
-                        </div>
-                      </div>
+                    <v-col cols="12" md="12">
+                      <v-row>
+                        <v-col cols="4" md="4">
+                          <file-pond
+                            name="uploadImage"
+                            ref="pond"
+                            label-idle="Upload Profile Photo"
+                            v-bind:allow-multiple="false"
+                            v-bind:server="serverOptions"
+                            v-bind:files="myFiles"
+                            v-on:addfilestart="CustomerUploadIndex"
+                            allow-file-type-validation="true"
+                            accepted-file-types="image/jpeg, image/png"
+                            v-on:processfile="handleProcessFile"
+                            v-on:processfilerevert="handleRemoveFile"
+                          />
+                          <div
+                            class="v-messages theme--light error--text"
+                            role="alert"
+                            v-if="profileImgError"
+                          >
+                            <div class="v-messages__wrapper">
+                              <div class="v-messages__message">Profile image is required.</div>
+                            </div>
+                          </div>
+                        </v-col>
+                      </v-row>
                     </v-col>
                     <v-col cols="4" md="4">
                       <v-select
@@ -204,29 +208,33 @@
                   id="form_field"
                 >
                   <v-row>
-                    <v-col cols="4" md="4">
-                      <file-pond
-                        name="uploadImage"
-                        ref="pond"
-                        label-idle="Upload Farm Photos"
-                        allow-multiple="true"
-                        v-bind:server="serverOptions"
-                        v-bind:files="myFiles"
-                        v-on:addfilestart="CustomerUploadIndex"
-                        allow-file-type-validation="true"
-                        accepted-file-types="image/jpeg, image/png"
-                        v-on:processfile="handleProcessFile1"
-                        v-on:processfilerevert="handleRemoveFile1"
-                      />
-                      <div
-                        class="v-messages theme--light error--text"
-                        role="alert"
-                        v-if="farmImgError"
-                      >
-                        <div class="v-messages__wrapper">
-                          <div class="v-messages__message">Farm photos are required.</div>
-                        </div>
-                      </div>
+                    <v-col cols="12" md="12">
+                      <v-row>
+                        <v-col cols="4" md="4">
+                          <file-pond
+                            name="uploadImage"
+                            ref="pond"
+                            label-idle="Upload Farm Photos"
+                            allow-multiple="true"
+                            v-bind:server="serverOptions"
+                            v-bind:files="myFiles"
+                            v-on:addfilestart="CustomerUploadIndex"
+                            allow-file-type-validation="true"
+                            accepted-file-types="image/jpeg, image/png"
+                            v-on:processfile="handleProcessFile1"
+                            v-on:processfilerevert="handleRemoveFile1"
+                          />
+                          <div
+                            class="v-messages theme--light error--text"
+                            role="alert"
+                            v-if="farmImgError"
+                          >
+                            <div class="v-messages__wrapper">
+                              <div class="v-messages__message">Farm photos are required.</div>
+                            </div>
+                          </div>
+                        </v-col>
+                      </v-row>
                     </v-col>
                     <v-col cols="4" md="4" class="basic-select2">
                       <v-text-field
@@ -299,20 +307,24 @@
                           <span>&times;</span>
                         </v-btn>
 
-                        <v-col cols="4" md="4">
-                          <file-pond
-                            name="uploadImage"
-                            ref="pond"
-                            label-idle="Upload Profile Photo"
-                            v-bind:allow-multiple="false"
-                            v-bind:server="serverOptions"
-                            v-bind:files="myFiles"
-                            v-on:addfilestart="setUploadIndex(index)"
-                            allow-file-type-validation="true"
-                            accepted-file-types="image/jpeg, image/png"
-                            v-on:processfile="handleProcessFile2"
-                            v-on:processfilerevert="handleRemoveFile2(index)"
-                          />
+                        <v-col cols="12" md="12">
+                          <v-row>
+                            <v-col cols="4" md="4">
+                              <file-pond
+                                name="uploadImage"
+                                ref="pond"
+                                label-idle="Upload Profile Photo"
+                                v-bind:allow-multiple="false"
+                                v-bind:server="serverOptions"
+                                v-bind:files="myFiles"
+                                v-on:addfilestart="setUploadIndex(index)"
+                                allow-file-type-validation="true"
+                                accepted-file-types="image/jpeg, image/png"
+                                v-on:processfile="handleProcessFile2"
+                                v-on:processfilerevert="handleRemoveFile2(index)"
+                              />
+                            </v-col>
+                          </v-row>
                         </v-col>
                         <v-col cols="4" md="4">
                           <v-select
@@ -415,10 +427,7 @@
                     </div>
                   </template>
 
-                  <v-btn
-                    class="mr-4 custom-save-btn ml-4 mt-4"
-                    @click="addRow"
-                  >Add New Manager</v-btn>
+                  <v-btn class="mr-4 custom-save-btn mt-4" @click="addRow">Add New Manager</v-btn>
 
                   <!-- <v-btn
                     type="button"
