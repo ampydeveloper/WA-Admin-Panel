@@ -52,7 +52,7 @@ function edit(data, managerId) {
 function Delete(data) {
   return fetch(
     this.apiUrl+`admin/delete-manager/`+data,
-    requestOptions.get()
+    requestOptions.delete()
   )
     .then(handleResponse)
     .then(user => {

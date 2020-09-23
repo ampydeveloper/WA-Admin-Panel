@@ -276,7 +276,7 @@ export default {
               aTargets: [-1, -2, -3, -4, -5, -6],
             },
           ],
-          oLanguage: { sSearch: "" },
+          oLanguage: { sSearch: "", "sEmptyTable": "No company till now.", "infoEmpty": "No company found.", },
           drawCallback: function (settings) {
             $(".dataTables_paginate .paginate_button.previous").html(
               $("#table-chevron-left").html()

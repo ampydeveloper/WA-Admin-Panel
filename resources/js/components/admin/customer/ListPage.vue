@@ -104,16 +104,16 @@
                         <router-link
                           v-if="isAdmin"
                           :to="'/admin/customer/details/' + customer.id"
-                          class="nav-item nav-link"
+                          class="btn-outline-green-top btn-o-sm"
                         >
-                          <edit-3-icon size="1.2x" class="custom-class"></edit-3-icon>
+                          <edit-3-icon size="1.2x" class="custom-class"></edit-3-icon> Edit
                         </router-link>
                         <router-link
                           v-if="!isAdmin"
                           :to="'/manager/customer/details/' + customer.id"
-                          class="nav-item nav-link"
+                          class="btn-outline-green-top btn-o-sm"
                         >
-                          <edit-3-icon size="1.2x" class="custom-class"></edit-3-icon>
+                          <edit-3-icon size="1.2x" class="custom-class"></edit-3-icon> Edit
                         </router-link>
                       </span>
                     </span>
@@ -148,9 +148,9 @@
                           </td>
                           <td>{{'2020-06-23' | formatDateLic}}</td>
                         </tr>
-                        <tr v-if="customer.farmlist.length == 0">
+                        <!-- <tr v-if="customer.farmlist.length == 0">
                           <td colspan="4">No farms till now.</td>
-                        </tr>
+                        </tr> -->
                       </tbody>
                     </v-simple-table>
                   </td>
@@ -289,7 +289,7 @@ export default {
     setTimeout(function () {
       $(document).ready(function () {
         $(".table-main").DataTable({
-          oLanguage: { sSearch: "" },
+          oLanguage: { sSearch: "", "sEmptyTable": "No customer till now.", "infoEmpty": "No customer found.", },
           drawCallback: function (settings) {
             $(".dataTables_paginate .paginate_button.previous").html(
               $("#table-chevron-left").html()
@@ -300,7 +300,7 @@ export default {
           },
         });
          $(".dataTables_filter").append($("#search-input-icon").html());
-        $(".dataTables_filter input").attr("placeholder", "Search Customers by Name / Farm");
+        $(".dataTables_filter input").attr("placeholder", "Search Customers by Name / Farm Location / Manager");
         $(".dataTables_paginate .paginate_button.previous").html(
           $("#table-chevron-left").html()
         );

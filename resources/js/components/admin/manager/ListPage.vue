@@ -72,10 +72,14 @@
         <v-row>
           <div class="add-icon">
             <router-link v-if="isAdmin" to="/admin/manager/add" class="nav-item nav-link">
-              <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon>
+               <v-btn color="success" class="btn-outline-green-top">
+                <plus-icon size="1.5x" class="custom-class"></plus-icon>Add New
+              </v-btn>
             </router-link>
             <router-link v-if="!isAdmin" to="/manager/manager/add" class="nav-item nav-link">
-              <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon>
+               <v-btn color="success" class="btn-outline-green-top">
+                <plus-icon size="1.5x" class="custom-class"></plus-icon>Add New
+              </v-btn>
             </router-link>
           </div>
           <v-col cols="12" md="12" id="manager_wrap" class="main-box-inner">
@@ -83,7 +87,7 @@
               <thead>
                 <tr>
                   <th class="text-left">#</th>
-                  <th class="text-left">Manager</th>
+                  <th class="text-left">Manager Name</th>
                   <th class="text-left mgr-add-col">Address</th>
                   <th class="text-left">Mobile</th>
                   <th class="text-left">Email</th>
@@ -134,9 +138,9 @@
                     </td>
                   </template>
                 </tr>
-                <tr v-if="managers.length == 0">
+                <!-- <tr v-if="managers.length == 0">
                   <td colspan="8">No manager till now.</td>
-                </tr>
+                </tr> -->
               </tbody>
             </table>
           </v-col>
@@ -149,6 +153,11 @@
     <span id="table-chevron-right" class="d-none">
       <chevron-right-icon size="1.5x" class="custom-class"></chevron-right-icon>
     </span>
+     <span id="search-input-icon" class="d-none">
+      <span class="search-input-outer">
+        <search-icon size="1.5x" class="custom-class"></search-icon>
+      </span>
+    </span>
   </v-app>
 </template>
 
@@ -160,10 +169,11 @@ import {
   UserIcon,
   Edit3Icon,
   TrashIcon,
-  PlusCircleIcon,
+  PlusIcon,
   MoreVerticalIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+   SearchIcon,
 } from "vue-feather-icons";
 import { router } from "../../../_helpers/router";
 export default {
@@ -171,10 +181,11 @@ export default {
     UserIcon,
     Edit3Icon,
     TrashIcon,
-    PlusCircleIcon,
+    PlusIcon,
     MoreVerticalIcon,
     ChevronLeftIcon,
     ChevronRightIcon,
+     SearchIcon,
   },
   data() {
     return {
@@ -282,7 +293,7 @@ export default {
                 aTargets: [-1, -2, -3, -4, -5, -6],
               },
             ],
-            oLanguage: { sSearch: "" },
+            oLanguage: { sSearch: "", "sEmptyTable": "No manager till now.", "infoEmpty": "No manager found.", },
             drawCallback: function (settings) {
               $(".dataTables_paginate .paginate_button.previous").html(
                 $("#table-chevron-left").html()
@@ -293,7 +304,8 @@ export default {
             },
           });
         }
-        $(".dataTables_filter input").attr("placeholder", "Search Managers");
+         $(".dataTables_filter").append($("#search-input-icon").html());
+        $(".dataTables_filter input").attr("placeholder", "Search Managers by Name / Mobile / Email");
         $(".dataTables_paginate .paginate_button.previous").html(
           $("#table-chevron-left").html()
         );

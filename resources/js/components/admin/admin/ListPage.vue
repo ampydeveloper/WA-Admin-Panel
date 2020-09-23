@@ -85,7 +85,7 @@
               <thead>
                 <tr>
                   <th class="text-left">#</th>
-                  <th class="text-left">Name</th>
+                  <th class="text-left">Admin Name</th>
                   <th class="text-left">Email</th>
                   <!-- <th class="text-left">Active</th> -->
                   <th class="text-left">Actions</th>
@@ -204,7 +204,16 @@ export default {
       adminService.listAdmin().then((response) => {
         //handle response
         if (response.status) {
-          this.managers = response.data;
+          var i,
+            managersData = [],
+            currentUser = authenticationService.currentUserValue.data.user;
+          for (i = 0; i < response.data.length; i++) {
+            if (currentUser.id != response.data[i].id) {
+              managersData.push(response.data[i]);
+            }
+          }
+
+          this.managers = managersData;
         } else {
           this.$toast.open({
             message: response.message,
@@ -215,15 +224,32 @@ export default {
         this.loading = false;
       });
     },
-
     Delete(e) {
+      this.$swal({
+        title: "Are you sure?",
+        text: "Are you sure you want to delete this admin?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes Delete it!",
+        cancelButtonText: "No, Keep it!",
+        showCloseButton: true,
+        showLoaderOnConfirm: true,
+      }).then((result) => {
+        if (result.value) {
+          this.deleteAdmin(e);
+        }
+      });
+
+      return false;
+    },
+    deleteAdmin(e) {
       if (e) {
         this.loading = true;
         adminService.Delete(e).then((response) => {
           //handle response
           if (response.status) {
             this.$toast.open({
-              message: response.message,
+              message: 'Admin deleted successfully.',
               type: "success",
               position: "top-right",
             });
@@ -262,28 +288,34 @@ export default {
   updated() {
     setTimeout(function () {
       $(document).ready(function () {
-        // $("#admin-table").DataTable({
-        //   oLanguage: { sSearch: "" },
-        //   drawCallback: function (settings) {
-        //     $(".dataTables_paginate .paginate_button.previous").html(
-        //       $("#table-chevron-left").html()
-        //     );
-        //     $(".dataTables_paginate .paginate_button.next").html(
-        //       $("#table-chevron-right").html()
-        //     );
-        //   },
-        // });
-        // $(".dataTables_filter").append($("#search-input-icon").html());
-        // $(".dataTables_filter input").attr(
-        //   "placeholder",
-        //   "Search Admin by Name / Email"
-        // );
-        // $(".dataTables_paginate .paginate_button.previous").html(
-        //   $("#table-chevron-left").html()
-        // );
-        // $(".dataTables_paginate .paginate_button.next").html(
-        //   $("#table-chevron-right").html()
-        // );
+        if (!$.fn.dataTable.isDataTable("#admin-table")) {
+          $("#admin-table").DataTable({
+            oLanguage: {
+              sSearch: "",
+              sEmptyTable: "No admin till now.",
+              sInfoEmpty: "No admin found.",
+            },
+            drawCallback: function (settings) {
+              $(".dataTables_paginate .paginate_button.previous").html(
+                $("#table-chevron-left").html()
+              );
+              $(".dataTables_paginate .paginate_button.next").html(
+                $("#table-chevron-right").html()
+              );
+            },
+          });
+        }
+        $(".dataTables_filter").append($("#search-input-icon").html());
+        $(".dataTables_filter input").attr(
+          "placeholder",
+          "Search Admin by Name / Email"
+        );
+        $(".dataTables_paginate .paginate_button.previous").html(
+          $("#table-chevron-left").html()
+        );
+        $(".dataTables_paginate .paginate_button.next").html(
+          $("#table-chevron-right").html()
+        );
         $("#admin-table").css({ opacity: 1 });
       });
     }, 1000);

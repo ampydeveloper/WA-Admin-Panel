@@ -237,9 +237,9 @@
                         </div>
                       </td>-->
                     </tr>
-                    <tr v-if="alljobs.length == 0">
+                    <!-- <tr v-if="alljobs.length == 0">
                       <td colspan="9">No jobs till now.</td>
-                    </tr>
+                    </tr>-->
                   </tbody>
                 </table>
               </v-card>
@@ -258,6 +258,11 @@
       <chevron-right-icon size="1.5x" class="custom-class"></chevron-right-icon>
     </span>
     <span id="search-input-icon" class="d-none">
+      <span class="search-input-outer">
+        <search-icon size="1.5x" class="custom-class"></search-icon>
+      </span>
+    </span>
+    <span id="search-input-icon2" class="d-none">
       <span class="search-input-outer">
         <search-icon size="1.5x" class="custom-class"></search-icon>
       </span>
@@ -352,7 +357,11 @@ export default {
                 aTargets: [-1, -2, -3, -4, -5],
               },
             ],
-            oLanguage: { sSearch: "" },
+            oLanguage: {
+              sSearch: "",
+              sEmptyTable: "No jobs till now.",
+              infoEmpty: "No jobs found.",
+            },
             drawCallback: function (settings) {
               $("#all-jobs-table_paginate .paginate_button.previous").html(
                 $("#table-chevron-left").html()

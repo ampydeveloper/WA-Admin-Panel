@@ -73,10 +73,14 @@
         <v-row>
           <div class="add-icon">
             <router-link v-if="isAdmin" to="/admin/truckdriver/add" class="nav-item nav-link">
-              <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon>
+               <v-btn color="success" class="btn-outline-green-top">
+                <plus-icon size="1.5x" class="custom-class"></plus-icon>Add New
+              </v-btn>
             </router-link>
             <router-link v-if="!isAdmin" to="/manager/truckdriver/add" class="nav-item nav-link">
-              <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon>
+              <v-btn color="success" class="btn-outline-green-top">
+                <plus-icon size="1.5x" class="custom-class"></plus-icon>Add New
+              </v-btn>
             </router-link>
           </div>
 
@@ -85,7 +89,7 @@
               <thead>
                 <tr>
                   <th class="text-left">#</th>
-                  <th class="text-left">Driver</th>
+                  <th class="text-left">Driver Name</th>
                   <th class="text-left">Phone</th>
                   <th class="text-left">Email</th>
                   <th class="text-left">Distance Traveled</th>
@@ -135,9 +139,9 @@
                     </a>
                   </td>
                 </tr>
-                <tr v-if="drivers.length == 0">
+                <!-- <tr v-if="drivers.length == 0">
                   <td colspan="9">No driver till now.</td>
-                </tr>
+                </tr> -->
               </tbody>
             </table>
           </v-col>
@@ -150,6 +154,11 @@
     <span id="table-chevron-right" class="d-none">
       <chevron-right-icon size="1.5x" class="custom-class"></chevron-right-icon>
     </span>
+     <span id="search-input-icon" class="d-none">
+      <span class="search-input-outer">
+        <search-icon size="1.5x" class="custom-class"></search-icon>
+      </span>
+    </span>
   </v-app>
 </template>
 
@@ -161,10 +170,11 @@ import {
   UserIcon,
   Edit3Icon,
   TrashIcon,
-  PlusCircleIcon,
+  PlusIcon,
   MoreVerticalIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+   SearchIcon,
 } from "vue-feather-icons";
 import { router } from "../../../_helpers/router";
 export default {
@@ -172,10 +182,11 @@ export default {
     UserIcon,
     Edit3Icon,
     TrashIcon,
-    PlusCircleIcon,
+    PlusIcon,
     MoreVerticalIcon,
     ChevronLeftIcon,
     ChevronRightIcon,
+     SearchIcon,
   },
   data() {
     return {
@@ -280,7 +291,7 @@ export default {
                 aTargets: [-1, -2, -3, -4, -5, -6, -7],
               },
             ],
-            oLanguage: { sSearch: "" },
+            oLanguage: { sSearch: "", "sEmptyTable": "No driver till now.", "infoEmpty": "No driver found.", },
             drawCallback: function (settings) {
               $(".dataTables_paginate .paginate_button.previous").html(
                 $("#table-chevron-left").html()
@@ -291,7 +302,8 @@ export default {
             },
           });
         }
-        $(".dataTables_filter input").attr("placeholder", "Search Driver");
+         $(".dataTables_filter").append($("#search-input-icon").html());
+        $(".dataTables_filter input").attr("placeholder", "Search Driver by Name / Phone / Email");
         $(".dataTables_paginate .paginate_button.previous").html(
           $("#table-chevron-left").html()
         );

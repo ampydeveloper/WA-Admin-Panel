@@ -60,9 +60,9 @@
           <td>{{invoice.customer.email}}</td>
           <td>Download</td>
         </tr>
-        <tr v-if="invoiceJobs.length == 0">
+        <!-- <tr v-if="invoiceJobs.length == 0">
                       <td colspan="7">No jobs till now.</td>
-                    </tr>
+        </tr>-->
       </tbody>
     </table>
     <span id="table-chevron-left" class="d-none">
@@ -70,6 +70,11 @@
     </span>
     <span id="table-chevron-right" class="d-none">
       <chevron-right-icon size="1.5x" class="custom-class"></chevron-right-icon>
+    </span>
+    <span id="search-input-icon" class="d-none">
+      <span class="search-input-outer">
+        <search-icon size="1.5x" class="custom-class"></search-icon>
+      </span>
     </span>
   </v-container>
 </template>
@@ -81,6 +86,7 @@ import {
   PlusCircleIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  SearchIcon,
 } from "vue-feather-icons";
 import { accountingService } from "../../../../_services/accounting.service";
 import { authenticationService } from "../../../../_services/authentication.service";
@@ -89,6 +95,7 @@ export default {
     PlusCircleIcon,
     ChevronLeftIcon,
     ChevronRightIcon,
+    SearchIcon,
   },
   data() {
     return {
@@ -132,7 +139,7 @@ export default {
                 aTargets: [-1, -2, -3, -4, -6],
               },
             ],
-            oLanguage: { sSearch: "" },
+            oLanguage: { sSearch: "", "sEmptyTable": "No invoice till now.", "infoEmpty": "No invoice found.", },
             drawCallback: function (settings) {
               $("#invoice-table_paginate .paginate_button.previous").html(
                 $("#table-chevron-left").html()
@@ -142,9 +149,10 @@ export default {
               );
             },
           });
+          $("#invoice-table_filter").append($("#search-input-icon").html());
           $("#invoice-table_filter input").attr(
             "placeholder",
-            "Search Invoices"
+            "Search Invoices by Customer / Invoice Number / Service"
           );
           $("#invoice-table_paginate .paginate_button.previous").html(
             $("#table-chevron-left").html()

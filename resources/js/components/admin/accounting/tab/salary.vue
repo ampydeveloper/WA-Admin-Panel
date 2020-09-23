@@ -96,7 +96,7 @@ export default {
                 aTargets: [-1, -5, -6],
               },
             ],
-            oLanguage: { sSearch: "" },
+            oLanguage: { sSearch: "", "sEmptyTable": "No salary till now.", "sInfoEmpty": "No salary found.", },
             drawCallback: function (settings) {
               $("#salary-table_paginate .paginate_button.previous").html(
                 $("#table-chevron-left").html()
@@ -106,9 +106,10 @@ export default {
               );
             },
           });
+          $("#salary-table_filter").append($("#search-input-icon").html());
           $("#salary-table_filter input").attr(
             "placeholder",
-            "Search Salaries"
+            "Search Salaries  by Employee Name"
           );
           $("#salary-table_paginate .paginate_button.previous").html(
             $("#table-chevron-left").html()

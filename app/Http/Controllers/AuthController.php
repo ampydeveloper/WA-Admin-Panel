@@ -342,7 +342,7 @@ class AuthController extends Controller
     }
     
     public function changePassword(Request $request) {
-        dd($request->all());
+//        dd($request->all());
         $validator = Validator::make($request->all(), [
                     'password' => 'required|confirmed'
         ]);
@@ -365,7 +365,7 @@ class AuthController extends Controller
             $message = "Something went wrong.";
             $errCode = 400;
         }
-        dd('sdcsd');
+//        dd('sdcsd');
         return response()->json([
                     'status' => $status,
                     'message' => $message,

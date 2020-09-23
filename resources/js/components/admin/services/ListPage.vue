@@ -290,7 +290,7 @@ export default {
               aTargets: [-1, -2, -3, -5, -6],
             },
           ],
-          oLanguage: { sSearch: "" },
+          oLanguage: { sSearch: "", "sEmptyTable": "No service till now.", "sInfoEmpty": "No service found.", },
           drawCallback: function (settings) {
             $(".dataTables_paginate .paginate_button.previous").html(
               $("#table-chevron-left").html()

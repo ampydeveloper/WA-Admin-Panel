@@ -73,10 +73,14 @@
         <v-row>
           <div class="add-icon">
             <router-link v-if="isAdmin" to="/admin/skidsteer/add" class="nav-item nav-link">
-              <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon>
+               <v-btn color="success" class="btn-outline-green-top">
+                <plus-icon size="1.5x" class="custom-class"></plus-icon>Add New
+              </v-btn>
             </router-link>
             <router-link v-if="!isAdmin" to="/manager/skidsteer/add" class="nav-item nav-link">
-              <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon>
+               <v-btn color="success" class="btn-outline-green-top">
+                <plus-icon size="1.5x" class="custom-class"></plus-icon>Add New
+              </v-btn>
             </router-link>
           </div>
           <v-col cols="12" md="12" class="main-box-inner">
@@ -84,11 +88,11 @@
               <thead>
                 <tr>
                   <th class="text-left">#</th>
-                  <th class="text-left">Company</th>
-                  <th class="text-left">Skidsteer</th>
-                  <th class="text-left">Chassis</th>
+                  <th class="text-left">Company Name</th>
+                  <th class="text-left">Skidsteer Number</th>
+                  <th class="text-left">Chassis Number</th>
                   <th class="text-left">Distance</th>
-                  <th class="text-left">Service Details</th>
+                  <!-- <th class="text-left">Service Details</th> -->
                   <th class="text-left">Status</th>
                   <th class="text-left">Actions</th>
                 </tr>
@@ -105,7 +109,7 @@
                   <td>{{item.truck_number}}</td>
                   <td>{{item.chaase_number}}</td>
                   <td>{{item.killometer}}</td>
-                  <td>
+                  <!-- <td>
                     <router-link
                       v-if="isAdmin"
                       :to="'/admin/skidsteer/service/' + item.id"
@@ -116,7 +120,7 @@
                       :to="'/manager/skidsteer/service/' + item.id"
                       class="custom-save-btn btn-table"
                     >View</router-link>
-                  </td>
+                  </td> -->
 
                   <td v-if="item.status == 1">
                     <span class="badges-item">Available</span>
@@ -125,6 +129,16 @@
                     <span class="badges-item">Unavailable</span>
                   </td>
                   <td class="action-col">
+                    <router-link
+                      v-if="isAdmin"
+                      :to="'/admin/skidsteer/service/' + item.id"
+                      class="btn-outline-green-top"
+                    >View Service Details</router-link>
+                    <router-link
+                      v-if="!isAdmin"
+                      :to="'/manager/skidsteer/service/' + item.id"
+                      class="btn-outline-green-top"
+                    >View Service Details</router-link>
                     <router-link v-if="isAdmin" :to="'/admin/skidsteer/edit/' + item.id">
                       <edit-3-icon size="1.2x" class="custom-class"></edit-3-icon>
                     </router-link>
@@ -136,9 +150,9 @@
                     </a>
                   </td>
                 </tr>
-                <tr v-if="trucks.length == 0">
+                <!-- <tr v-if="trucks.length == 0">
                   <td colspan="9">No trucks till now.</td>
-                </tr>
+                </tr> -->
               </tbody>
             </table>
           </v-col>
@@ -151,6 +165,11 @@
     <span id="table-chevron-right" class="d-none">
       <chevron-right-icon size="1.5x" class="custom-class"></chevron-right-icon>
     </span>
+     <span id="search-input-icon" class="d-none">
+      <span class="search-input-outer">
+        <search-icon size="1.5x" class="custom-class"></search-icon>
+      </span>
+    </span>
   </v-app>
 </template>
 
@@ -160,11 +179,12 @@ import { truckService } from "../../../_services/truck.service";
 import {
   UserIcon,
   TrashIcon,
-  PlusCircleIcon,
+  PlusIcon,
   Edit3Icon,
   MoreVerticalIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+   SearchIcon,
 } from "vue-feather-icons";
 import { router } from "../../../_helpers/router";
 import { authenticationService } from "../../../_services/authentication.service";
@@ -173,10 +193,11 @@ export default {
     UserIcon,
     Edit3Icon,
     TrashIcon,
-    PlusCircleIcon,
+    PlusIcon,
     MoreVerticalIcon,
     ChevronLeftIcon,
     ChevronRightIcon,
+     SearchIcon,
   },
   data() {
     return {
@@ -264,7 +285,7 @@ export default {
                 aTargets: [-1, -2, -3, -4, -5, -6],
               },
             ],
-            oLanguage: { sSearch: "" },
+            oLanguage: { sSearch: "", "sEmptyTable": "No skidsteer till now.", "infoEmpty": "No skidsteer found.", },
             drawCallback: function (settings) {
               $(".dataTables_paginate .paginate_button.previous").html(
                 $("#table-chevron-left").html()
@@ -275,7 +296,8 @@ export default {
             },
           });
         }
-        $(".dataTables_filter input").attr("placeholder", "Search Skidsteer");
+         $(".dataTables_filter").append($("#search-input-icon").html());
+        $(".dataTables_filter input").attr("placeholder", "Search Skidsteer by Company / Skidsteer / Chassis");
         $(".dataTables_paginate .paginate_button.previous").html(
           $("#table-chevron-left").html()
         );

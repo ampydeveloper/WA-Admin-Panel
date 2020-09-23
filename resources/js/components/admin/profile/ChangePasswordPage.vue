@@ -124,6 +124,7 @@
 
 <script>
 import { required } from "vuelidate/lib/validators";
+import { router } from "../../../_helpers/router";
 import { authenticationService } from "../../../_services/authentication.service";
 export default {
   data: () => ({
@@ -144,7 +145,9 @@ export default {
     },
   },
   methods: {
-    validate() {
+    validate(e) {
+      //stop page to reload
+      e.preventDefault();
       if (this.$refs.form.validate()) {
         authenticationService
           .changePassword({
@@ -159,7 +162,8 @@ export default {
                 type: "success",
                 position: "top-right",
               });
-              //redirect to login
+
+              router.push("/admin/dashboard");
             } else {
               this.$toast.open({
                 message: response.message,

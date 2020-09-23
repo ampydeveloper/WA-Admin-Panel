@@ -102,7 +102,7 @@ export default {
               aTargets: [-1, -2, -3, -5, -6],
             },
           ],
-          oLanguage: { sSearch: "" },
+          oLanguage: { sSearch: "", "sEmptyTable": "No payment till now.", "sInfoEmpty": "No payment found.", },
           drawCallback: function (settings) {
             $(
               "#payment-table_paginate .paginate_button.previous"
@@ -112,9 +112,10 @@ export default {
             ).html($("#table-chevron-right").html());
           },
         });
+        $("#payment-table_filter").append($("#search-input-icon").html());
         $("#payment-table_filter input").attr(
           "placeholder",
-          "Search Payments"
+          "Search Payments by Customer / Invoice Number"
         );
         $(
           "#payment-table_paginate .paginate_button.previous"

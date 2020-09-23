@@ -269,6 +269,11 @@ $hover-white: #fff;
         line-height: 29px;
         font-size: 12px;
         display: inline-block;
+        &.btn-o-sm{
+            text-align: center;
+    font-weight: 600 !important;
+    line-height: 25px !important;
+        }
     }
 
     .sidebar-nav {
@@ -616,6 +621,7 @@ $hover-white: #fff;
                                     line-height: 20px;
                                 }
                             }
+                            
                         }
 
                         span {
@@ -1821,6 +1827,13 @@ h4.top_heading {
                     color: rgba(0, 0, 0, 0.87);
                     stroke-width: 2;
                 }
+
+                .btn-outline-green-top {
+                    width: 160px;
+                    text-align: center;
+                    font-weight: 600 !important;
+                    line-height: 25px !important;
+                }
             }
 
             &:hover {
@@ -2037,6 +2050,10 @@ table.table-main {
     tr.odd {
         background: #fff !important;
     }
+     tbody tr.selected, tbody tr:nth-of-type(odd){
+        background: #fff !important;
+    }
+    
 }
 
 .user-image-inner {
@@ -2714,9 +2731,11 @@ div#example_info {
             font-weight: 600 !important;
             font-size: 14px;
         }
-p.green-text{
-    color: #11b276;
-}
+
+        p.green-text {
+            color: #11b276;
+        }
+
         p {
             font-size: 24px;
 
