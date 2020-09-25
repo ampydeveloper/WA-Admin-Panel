@@ -65,9 +65,8 @@ class CronController extends Controller
         }
          */
         
-        dd('here');
         
-        //select driver
+        //select driver 
         $cDrivers = Driver::where([
                 ['driver_type', '=', config('constant.driver_type.truck_driver')],
                 ['status', '=', config('constant.driver_status.available')]
@@ -78,11 +77,11 @@ class CronController extends Controller
         {
             array_push($iArrDriversId, $driver->id);
         }
-        
+       
         $cAllTrucks = Vehicle::where([
                 ['vehicle_type', '=', config('constant.vehicle_type.truck')],
                 ['status', '=', config('constant.vehicle_status.available')],
-            ])->get();
+            ])->orderBy('assigned_job_row_action_count', 'desc')->get();
         
         $iArrTrucksId = [];
         foreach($cAllTrucks as $truck)
@@ -108,7 +107,7 @@ class CronController extends Controller
                 ['job_status', '=', config('constant.job_status.open')]
             ])->with(['farm' => function($farmQuery){
                 $farmQuery->select('id', 'latitude', 'longitude', 'distance')
-                    ->sortBy('distance')
+                    ->orderBy('distance', 'asc')
                     ->get();
             }])->with(['service'=>function($serviceQuery){
                 $serviceQuery->where('service_for', '=', config('constant.service_for.customer'))
@@ -120,16 +119,15 @@ class CronController extends Controller
             $cTrucks = Vehicle::where([
                 ['vehicle_type', '=', config('constant.vehicle_type.truck')],
                 ['status', '=', config('constant.vehicle_status.available')],
-            ])->get();
+            ])->orderBy('assigned_job_row_action_count', 'asc')->get();
             
-            
-            $bIsPreviousJobAssigned = FALSE; //Flag to track previous job assigned to Truck
-            $iPreviousJobAssignedWeight = 0; //previous assigned job weight
-            $iPreviousJobAssignedDistance = 0; //previous assigned job location to track the location of Truck
             $arrAssignedJobId = []; //all assigned job in particular interval
             
             foreach ($cTrucks as $truck)
             {
+                $bIsPreviousJobAssigned = FALSE; //Flag to track previous job assigned to Truck
+                $iPreviousJobAssignedWeight = 0; //previous assigned job weight
+                $iPreviousJobAssignedDistance = 0; //previous assigned job location to track the location of Truck
                 foreach ($cIntervalJobs as $job)
                 {
                     //job = round one truck dedicated for that job
@@ -139,52 +137,59 @@ class CronController extends Controller
                             && (in_array($truck->id, $iArrDriverTruckIdMapping) == TRUE))
                     {
                         //Assigned job to truck here 
-                              //code here to save job with truck id
-                        //a[t][j] = job[j][id]
-                        $jobs->truck_id = $truck->id;
+                        //code here to save job with truck id
+                        $job->truck_id = $truck->id;
                         $job->truck_driver_id = array_search($truck->id, $iArrDriverTruckIdMapping);
+                        $job->job_status = config('constant.job_status.assigned');
                         $job->save();
                         
+                        $truck->assigned_job_row_action_count += 1;
+                        $truck->save();
+                         
                         //Assigned job push to track array
                         array_push($arrAssignedJobId, $job->id);
                         break; //cz now current truck is not eligible for taking next task
                     }
                     else 
                     {
-                        if($truck->capacity >= $job->weight && (in_array($truck->id, $iArrDriverTruckIdMapping) == TRUE))
+                        if($truck->capacity >= $job->weight && (in_array($truck->id, $iArrDriverTruckIdMapping) == TRUE)
+                            && (in_array($job->id, $arrAssignedJobId) == FALSE))
                         {
-                            if($iPreviousJobAssignedWeight > 0 && $bIsPreviousJobAssigned == TRUE && (in_array($job->id, $arrAssignedJobId) == FALSE)) // next job for current truck
+                            
+                            if($iPreviousJobAssignedWeight > 0 && $bIsPreviousJobAssigned == TRUE) // next job for current truck
                             {
                                 if(($truck->capacity - $iPreviousJobAssignedWeight) >= $job->weight 
                                     && (abs($iPreviousJobAssignedDistance - $job->farm['distance']) <= config('constant.range_cover.distance')))
                                 {
                                     //Assigned job to truck here 
-                                        //code here to save job with truck id
-                                    //a[t][j] = job[j][id]
-                                    $jobs->truck_id = $truck->id;
+                                    //code here to save job with truck id
+                                    $job->truck_id = $truck->id;
                                     $job->truck_driver_id = array_search($truck->id, $iArrDriverTruckIdMapping);
+                                    $job->job_status = config('constant.job_status.assigned');
                                     $job->save();
                                     
+                                    $truck->assigned_job_row_action_count += 1;
+                                    $truck->save();
+
                                     //set all local variable 
                                     $iPreviousJobAssignedWeight += $job->weight;
                                     $iPreviousJobAssignedDistance += $job->farm['distance'];
                                     $bIsPreviousJobAssigned = TRUE;
                                     array_push($arrAssignedJobId, $job->id);
                                 }
-                                else // no space in truck for next job or no job available in given range
-                                {
-                                    break; //go and serach for next fittest truck for that job
-                                }
                             }
                             else //first job of current truck
                             {
                                 //Assigned job to truck here 
-                                    //code here to save job with truck id
-                                //a[t][j] = job[j][id]
-                                $jobs->truck_id = $truck->id;
+                                //code here to save job with truck id
+                                $job->truck_id = $truck->id;
                                 $job->truck_driver_id = array_search($truck->id, $iArrDriverTruckIdMapping);
+                                $job->job_status = config('constant.job_status.assigned');
                                 $job->save();
-                                
+
+                                $truck->assigned_job_row_action_count += 1;
+                                $truck->save();
+
                                 //set all local variable 
                                 $iPreviousJobAssignedWeight += $job->weight;
                                 $iPreviousJobAssignedDistance += $job->farm['distance'];
