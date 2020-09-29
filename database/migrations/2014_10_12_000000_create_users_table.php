@@ -25,8 +25,12 @@ class CreateUsersTable extends Migration
             $table->string("state")->nullable();
             $table->string("zip_code")->nullable();
             $table->string("user_image")->nullable();
+            $table->integer("payment_mode")->nullable()->comment('0: online, 1: cheque');
             $table->integer('role_id');
             $table->unsignedBigInteger('created_by')->nullable();
+            $table->string("hauler_driver_licence")->nullable();
+            $table->string("hauler_driver_licence_image")->nullable();
+            $table->string("user_image")->nullable();
             $table->foreign('created_by')->references('id')->on('users')->nullable();
             $table->unsignedBigInteger('created_from_id');
             $table->foreign('created_from_id')->references('id')->on('users');

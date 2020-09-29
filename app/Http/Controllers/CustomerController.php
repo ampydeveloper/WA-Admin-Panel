@@ -688,6 +688,8 @@ class CustomerController extends Controller {
         });
     }
     
+    
+    
     public function _updateEmail($user, $email) {
         $name = $user->first_name . ' ' . $user->last_name;
         $data = array(
@@ -700,5 +702,43 @@ class CustomerController extends Controller {
             $message->to($email, $name)->subject('Email Address Confirmation');
             $message->from(env('MAIL_USERNAME'), env('MAIL_USERNAME'));
         });
+    }
+    
+    public function updateCustomerPaymentMode(Request $request) {
+        $validator = Validator::make($request->all(), [
+                    'customer_id' => 'required',
+                    'payment_mode' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                        'status' => false,
+                        'message' => 'The given data was invalid.',
+                        'data' => $validator->errors()
+                            ], 422);
+        }
+        
+        $user = User::where('id', $request->customer_id)->first();
+        
+        if($user->payment_mode != $request->payment_mode) {
+            if(User::where('id', $request->customer_id)->update(['payment_mode' => $request->payment_mode])) {
+                return response()->json([
+                                'status' => true,
+                                'message' => 'Payment mode update sucessfully.',
+                                'data' => []
+                                    ], 200);
+            }
+            return response()->json([
+                        'status' => false,
+                        'message' => 'Error while update payment mode.',
+                        'data' => []
+                            ], 500);
+        }
+        
+        return response()->json([
+                        'status' => false,
+                        'message' => 'You entered wrong data.',
+                        'data' => []
+                            ], 500);
+        
     }
 }

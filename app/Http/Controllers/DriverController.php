@@ -216,12 +216,6 @@ class DriverController extends Controller {
                             'message' => 'Driver details updated successfully.',
                             'data' => []
                                 ], 200);
-            DB::commit();
-            return response()->json([
-                        'status' => true,
-                        'message' => 'Driver details updated successfully.',
-                        'data' => []
-                            ], 200);
             }
         } catch (\Exception $e) {
             DB::rollBack();

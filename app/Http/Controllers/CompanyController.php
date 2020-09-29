@@ -21,7 +21,7 @@ class CompanyController extends Controller {
         return response()->json([
                     'status' => true,
                     'message' => 'Hauler List',
-                    'data' => User::whereRoleId(config('constant.roles.Haulers'))->get()
+                    'data' => User::whereRoleId(config('constant.roles.Haulers'))->with('hauler_driver')->get()
                         ], 200);
     }
     
@@ -40,7 +40,7 @@ class CompanyController extends Controller {
         return response()->json([
                     'status' => true,
                     'message' => 'Hauler List',
-                    'data' => User::whereRoleId(config('constant.roles.Haulers'))->skip($request->offset)->take($request->take)->get()
+                    'data' => User::whereRoleId(config('constant.roles.Haulers'))->with('hauler_driver')->skip($request->offset)->take($request->take)->get()
                         ], 200);
     }
     /**
@@ -111,7 +111,7 @@ class CompanyController extends Controller {
         return response()->json([
                     'status' => true,
                     'message' => 'Hauler details',
-                    'data' => user::whereId($request->customer_id)->first()
+                    'data' => user::whereId($request->customer_id)->with('hauler_driver')->first()
                         ], 200);
     }
     /**
@@ -239,4 +239,179 @@ class CompanyController extends Controller {
             $message->from(env('MAIL_USERNAME'), env('MAIL_USERNAME'));
         });
     }
+    
+    public function createHaulerDriver(Request $request) {
+        $validator = Validator::make($request->all(), [
+                    'hauler_id' => 'required',
+                    'driver_first_name' => 'required',
+                    'driver_last_name' => 'required',
+                    'email' => 'required|email|unique:users',
+                    'driver_phone' => 'required',
+                    'driver_address' => 'required',
+                    'driver_city' => 'required',
+                    'driver_province' => 'required',
+                    'driver_zipcode' => 'required',
+//                    'driver_type' => 'required',
+                    'driver_licence' => 'required|unique:drivers',
+                    'driver_licence_image' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                        'status' => false,
+                        'message' => 'The given data was invalid.',
+                        'data' => $validator->errors()
+                            ], 422);
+        }
+        
+        try {
+            $newPassword = Str::random();
+            $user = new User([
+                'prefix' => (isset($request->driver_prefix) && $request->driver_prefix != '' && $request->driver_prefix != null) ? $request->driver_prefix : null,
+                'first_name' => $request->driver_first_name,
+                'last_name' => $request->driver_last_name,
+                'email' => $request->email,
+                'phone' => $request->driver_phone,
+                'address' => $request->driver_address,
+                'city' => $request->driver_city,
+                'state' => $request->driver_province,
+                'zip_code' => $request->driver_zipcode,
+                'user_image' => (isset($request->user_image) && $request->user_image != '' && $request->user_image != null) ? $request->user_image : null,
+                'role_id' => config('constant.roles.Hauler_driver'),
+                'created_from_id' => $request->user()->id,
+                'created_by' => $request->hauler_id,
+                'hauler_driver_licence' => $request->driver_licence,
+                'hauler_driver_licence_image' => $request->driver_licence_image,
+                'is_confirmed' => 1,
+                'is_active' => 1,
+                'password' => bcrypt($newPassword)
+            ]);
+            if ($user->save()) {
+                $this->_confirmPassword($user, $newPassword);
+                return response()->json([
+                                'status' => true,
+                                'message' => 'Driver created successfully.',
+                                'data' => []
+                                    ], 200);
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error(json_encode($e->getMessage()));
+            return response()->json([
+                        'status' => false,
+                        'message' => $e->getMessage(),
+                        'data' => []
+                            ], 500);
+        }
+    }
+    
+    public function editHaulerDriver(Request $request) {
+        $validator = Validator::make($request->all(), [
+                    'driver_id' => 'required',
+                    'driver_first_name' => 'required',
+                    'driver_last_name' => 'required',
+                    'email' => 'required',
+                    'driver_phone' => 'required',
+                    'driver_address' => 'required',
+                    'driver_city' => 'required',
+                    'driver_province' => 'required',
+                    'driver_zipcode' => 'required',
+//                    'driver_type' => 'required',
+                    'driver_licence' => 'required',
+                    'driver_licence_image' => 'required',
+                    'status' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                        'status' => false,
+                        'message' => 'The given data was invalid.',
+                        'data' => $validator->errors()
+                            ], 422);
+        }
+        $confirmed = 1;
+        $driver = User::whereId($request->driver_id)->first();
+        if ($request->email != '' && $request->email != null) {
+            $checkEmail = User::where('email', $request->email)->first();
+            if ($checkEmail !== null) {
+                if ($checkEmail->id !== $driver->id) {
+                    return response()->json([
+                                'status' => false,
+                                'message' => 'Email is already taken.',
+                                'data' => []
+                                    ], 422);
+                }
+            }
+            if ($driver->email !== $request->email) {
+                $confirmed = 0;
+            }
+        }
+        $checkDriverLicence = User::where('hauler_driver_licence', $request->driver_licence)->first();
+        $driverDetail = User::where('id', $request->driver_id)->first();
+        if ($checkDriverLicence !== null) {
+            if ($checkDriverLicence->id !== $driverDetail->id) {
+                return response()->json([
+                            'status' => false,
+                            'message' => 'Driver lecience is already taken.',
+                            'data' => []
+                                ], 422);
+            }
+        }
+        try {
+            DB::beginTransaction();
+            if ($request->password != '' && $request->password != null) {
+                $driver->password = bcrypt($request->password);
+            }
+            $driver->prefix = (isset($request->driver_prefix) && $request->driver_prefix != '' && $request->driver_prefix != null) ? $request->driver_prefix : null;
+            $driver->first_name = $request->driver_first_name;
+            $driver->last_name = $request->driver_last_name;
+            $driver->email = $request->email;
+            $driver->phone = $request->driver_phone;
+            $driver->address = $request->driver_address;
+            $driver->city = $request->driver_city;
+            $driver->state = $request->driver_province;
+            $driver->zip_code = $request->driver_zipcode;
+            $driver->user_image = (isset($request->user_image) && $request->user_image != '' && $request->user_image != null) ? $request->user_image : null;
+            $driver->is_active = $request->status;
+            $driver->hauler_driver_licence = $request->driver_licence;
+            $driver->hauler_driver_licence_image = $request->driver_licence_image;
+            
+            if ($driver->save()) {
+                DB::commit();
+                if ($confirmed == 0) {
+                    $this->_updateEmail($driver, $request->email);
+                }
+                return response()->json([
+                            'status' => true,
+                            'message' => 'Driver details updated successfully.',
+                            'data' => []
+                                ], 200);
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error(json_encode($e->getMessage()));
+            return response()->json([
+                        'status' => false,
+                        'message' => $e->getMessage(),
+                        'data' => []
+                            ], 500);
+        }
+        }
+        
+        public function deleteHaulerDriver(Request $request) {
+        try {
+            User::whereId($request->customer_id)->delete();
+            return response()->json([
+                        'status' => true,
+                        'message' => 'Hauler driver deleted successfully.',
+                        'data' => []
+                            ], 200);
+        } catch (\Exception $e) {
+            Log::error(json_encode($e->getMessage()));
+            return response()->json([
+                        'status' => false,
+                        'message' => $e->getMessage(),
+                        'data' => []
+                            ], 500);
+        }
+    }
+    
 }

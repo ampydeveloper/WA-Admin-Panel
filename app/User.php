@@ -92,8 +92,13 @@ class User extends Authenticatable
     }
     
     public function jobs() {
+        
         return $this->hasMany('App\Job', 'customer_id');
     }
 
+    public function hauler_driver() {
+        
+        return $this->hasMany('App\User', 'created_by');
+    }
     
 }
