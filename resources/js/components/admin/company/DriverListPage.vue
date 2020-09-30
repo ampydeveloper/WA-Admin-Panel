@@ -4,7 +4,7 @@
       <ul>
         <li>
           <h4 class="main-title text-left top_heading">
-            Hauler
+            Hauler Driver List
             <span class="right-bor"></span>
           </h4>
         </li>
@@ -66,6 +66,26 @@
             </span>
           </router-link>
         </li>
+        <li>
+            Drivers
+            <span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16px"
+                height="16px"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="feather feather-chevrons-right w-4 h-4"
+              >
+                <polyline points="13 17 18 12 13 7" />
+                <polyline points="6 17 11 12 6 7" />
+              </svg>
+            </span>
+        </li>
         <li>All</li>
       </ul>
     </div>
@@ -74,12 +94,12 @@
       <v-container fluid>
         <v-row>
           <div class="add-icon">
-            <router-link v-if="isAdmin" to="/admin/hauler/add" class="">
+            <router-link v-if="isAdmin" to="/admin/hauler/driver/add" class="">
                <v-btn color="success" class="btn-outline-green-top">
                 <plus-icon size="1.5x" class="custom-class"></plus-icon>Add New
               </v-btn>
             </router-link>
-            <router-link v-if="!isAdmin" to="/manager/hauler/add" class="">
+            <router-link v-if="!isAdmin" to="/manager/hauler/driver/add" class="">
                <v-btn color="success" class="btn-outline-green-top">
                 <plus-icon size="1.5x" class="custom-class"></plus-icon>Add New
               </v-btn>
@@ -90,11 +110,10 @@
               <thead>
                 <tr>
                   <th class="text-left">#</th>
-                  <th class="text-left">Hauler Name</th>
+                  <th class="text-left">Driver Name</th>
                   <th class="text-left">Email</th>
                   <th class="text-left">Phone</th>
                   <th class="text-left">Address</th>
-                  <th class="text-left">Driver List</th>
                   <th class="text-left">Active</th>
                   <th class="text-left">Action</th>
                 </tr>
@@ -116,36 +135,20 @@
                   <td>{{customer.phone}}</td>
                   <td>{{customer.address}} {{customer.city}} {{customer.state}}, {{customer.zip_code}}</td>
                   <td>
-                    <router-link
-                      v-if="isAdmin"
-                      :to="'/admin/hauler/drivers/list/' + customer.id"
-                      class="nav-item nav-link"
-                    >
-                      View List
-                    </router-link>
-                    <router-link
-                      v-if="!isAdmin"
-                      :to="'/manager/hauler/drivers/list/' + customer.id"
-                      class="nav-item nav-link"
-                    >
-                      View List
-                    </router-link>
-                  </td>
-                  <td>
                     <span v-if="!customer.is_active" class="badges-item">No</span>
                     <span v-if="customer.is_active" class="badges-item">Yes</span>
                   </td>
                   <td class="action-col">
                     <router-link
                       v-if="isAdmin"
-                      :to="'/admin/hauler/edit/' + customer.id"
+                      :to="'/admin/hauler/driver/edit/' + customer.id"
                       class="nav-item nav-link"
                     >
                       <edit-3-icon size="1.2x" class="custom-class"></edit-3-icon>
                     </router-link>
                     <router-link
                       v-if="!isAdmin"
-                      :to="'/manager/hauler/edit/' + customer.id"
+                      :to="'/manager/hauler/driver/edit/' + customer.id"
                       class="nav-item nav-link"
                     >
                       <edit-3-icon size="1.2x" class="custom-class"></edit-3-icon>
@@ -222,7 +225,7 @@ export default {
       return tags.map((tag) => tag.name);
     },
     getResults() {
-      companyService.listHauler().then((response) => {
+      companyService.listHaulerDriver(this.$route.params.id).then((response) => {
         //handle response
         if (response.status) {
           this.customers = response.data;
@@ -247,15 +250,15 @@ export default {
         showLoaderOnConfirm: true,
       }).then((result) => {
         if (result.value) {
-          this.deleteHauler(e);
+          this.deleteHaulerDriver(e);
         }
       });
 
       return false;
     },
-    deleteHauler(e) {
+    deleteHaulerDriver(e) {
       if (e) {
-        companyService.deleteHauler(e).then((response) => {
+        companyService.deleteHaulerDriver(e).then((response) => {
           //handle response
           if (response.status) {
             this.$toast.open({
@@ -293,7 +296,7 @@ export default {
               aTargets: [-1, -2, -3, -4, -5, -6],
             },
           ],
-          oLanguage: { sSearch: "", "sEmptyTable": "No company till now.", "infoEmpty": "No company found.", },
+          oLanguage: { sSearch: "", "sEmptyTable": "No drivers till now.", "infoEmpty": "No company found.", },
           drawCallback: function (settings) {
             $(".dataTables_paginate .paginate_button.previous").html(
               $("#table-chevron-left").html()

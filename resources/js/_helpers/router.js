@@ -41,6 +41,10 @@ import CompanyListPage from "../components/admin/company/ListPage";
 import CompanyAddPage from "../components/admin/company/AddPage";
 import CompanyEdit from "../components/admin/company/EditPage";
 
+import CompanyDriverListPage from "../components/admin/company/DriverListPage";
+import CompanyDriverAddPage from "../components/admin/company/DriverAddPage";
+import CompanyDriverEdit from "../components/admin/company/DriverEditPage";
+
 
 //serivce
 import SerivcesListPage from "../components/admin/services/ListPage";
@@ -143,6 +147,11 @@ export const router = new Router({
         { path: 'hauler', component: CompanyListPage, name: 'Company', meta: { requiresAuth: [Role.Admin] } },
         { path: 'hauler/add', component: CompanyAddPage, name: 'CompanyAdd', meta: { requiresAuth: [Role.Admin] } },
         { path: 'hauler/edit/:id', component: CompanyEdit, name: 'CompanyEdit', meta: { requiresAuth: [Role.Admin] } },
+        
+        { path: 'hauler/drivers/list/:id', component: CompanyDriverListPage, name: 'CompanyDriverListPage', meta: { requiresAuth: [Role.Admin] } },
+        { path: 'hauler/driver/add', component: CompanyDriverAddPage, name: 'CompanyDriverAdd', meta: { requiresAuth: [Role.Admin] } },
+        { path: 'hauler/driver/edit/:id', component: CompanyDriverEdit, name: 'CompanyDriverEdit', meta: { requiresAuth: [Role.Admin] } },
+        
 
         { path: 'manager', component: ListPage, name: 'Manager', meta: { requiresAuth: [Role.Admin] } },
         { path: 'manager/add', component: AddPage, name: 'Add', meta: { requiresAuth: [Role.Admin] } },
@@ -255,7 +264,11 @@ export const router = new Router({
         { path: 'hauler', component: CompanyListPage, name: 'MCompany', meta: { requiresAuth: [Role.Admin_Manager] } },
         { path: 'hauler/add', component: CompanyAddPage, name: 'MCompanyAdd', meta: { requiresAuth: [Role.Admin_Manager] } },
         { path: 'hauler/edit/:id', component: CompanyEdit, name: 'MCompanyEdit', meta: { requiresAuth: [Role.Admin_Manager] } },
-	
+        
+        { path: 'hauler/drivers/list/:id', component: CompanyDriverListPage, name: 'MCompanyDriverListPage', meta: { requiresAuth: [Role.Admin_Manager] } },
+	{ path: 'hauler/driver/add', component: CompanyDriverAddPage, name: 'MCompanyDriverAdd', meta: { requiresAuth: [Role.Admin_Manager] } },
+        { path: 'hauler/driver/edit/:id', component: CompanyDriverEdit, name: 'MCompanyDriverEdit', meta: { requiresAuth: [Role.Admin_Manager] } },
+        
         { path: 'dispatches', component: DispatchesViewPage, name: 'MDispatches', meta: { requiresAuth: [Role.Admin_Manager] } },
         { path: 'accounting/details/:id', component: AccountingViewPage, name: 'MAccounting', meta: { requiresAuth: [Role.Admin_Manager] } },
         { path: 'accounting', component: AccountingDetails, name: 'MAccountingDetails', meta: { requiresAuth: [Role.Admin_Manager] } },

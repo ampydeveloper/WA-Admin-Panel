@@ -104,9 +104,13 @@ Route::group(['prefix' => 'auth'], function () {
             Route::post('update-hauler', 'CompanyController@updateHauler');
             Route::delete('delete-hauler/{customer_id}', 'CompanyController@deleteHauler');
             
+            
+            Route::get('list-hauler-driver/{hauler_id}', 'CompanyController@listHaulerDriver');
+            Route::post('list-hauler-mobile', 'CompanyController@listHaulerMobileDriver');
             Route::post('create-hauler-driver', 'CompanyController@createHaulerDriver');
+            Route::get('get-hauler-driver/{hauler_driver_id}', 'CompanyController@getHaulerDriver');
             Route::post('edit-hauler-driver', 'CompanyController@editHaulerDriver');
-            Route::delete('delete-hauler-driver/{customer_id}', 'CompanyController@deleteHaulerDriver');
+            Route::delete('delete-hauler-driver/{hauler_driver_id}', 'CompanyController@deleteHaulerDriver');
 
             //jobs
             Route::get('job-list', 'JobsController@getAllJob');

@@ -21,7 +21,7 @@ class CompanyController extends Controller {
         return response()->json([
                     'status' => true,
                     'message' => 'Hauler List',
-                    'data' => User::whereRoleId(config('constant.roles.Haulers'))->with('hauler_driver')->get()
+                    'data' => User::whereRoleId(config('constant.roles.Haulers'))->get()
                         ], 200);
     }
     
@@ -40,7 +40,7 @@ class CompanyController extends Controller {
         return response()->json([
                     'status' => true,
                     'message' => 'Hauler List',
-                    'data' => User::whereRoleId(config('constant.roles.Haulers'))->with('hauler_driver')->skip($request->offset)->take($request->take)->get()
+                    'data' => User::whereRoleId(config('constant.roles.Haulers'))->skip($request->offset)->take($request->take)->get()
                         ], 200);
     }
     /**
@@ -111,7 +111,7 @@ class CompanyController extends Controller {
         return response()->json([
                     'status' => true,
                     'message' => 'Hauler details',
-                    'data' => user::whereId($request->customer_id)->with('hauler_driver')->first()
+                    'data' => user::whereId($request->customer_id)->first()
                         ], 200);
     }
     /**
@@ -240,6 +240,34 @@ class CompanyController extends Controller {
         });
     }
     
+    public function listHaulerDriver(Request $request) {
+        return response()->json([
+                    'status' => true,
+                    'message' => 'Hauler drivers list',
+                    'data' => User::whereRoleId(config('constant.roles.Hauler_driver'))->where('created_by', $request->hauler_id)->get()
+                        ], 200);
+    }
+    
+    public function listHaulerMobileDriver(Request $request) {
+        $validator = Validator::make($request->all(), [
+                    'hauler_id' => 'required',
+                    'offset' => 'required',
+                    'take' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                        'status' => false,
+                        'message' => 'The given data was invalid.',
+                        'data' => $validator->errors()
+                            ], 422);
+        }
+        return response()->json([
+                    'status' => true,
+                    'message' => 'Hauler drivers list',
+                    'data' => User::whereRoleId(config('constant.roles.Hauler_driver'))->where('created_by', $request->hauler_id)->skip($request->offset)->take($request->take)->get()
+                        ], 200);
+    }
+    
     public function createHaulerDriver(Request $request) {
         $validator = Validator::make($request->all(), [
                     'hauler_id' => 'required',
@@ -302,6 +330,14 @@ class CompanyController extends Controller {
                         'data' => []
                             ], 500);
         }
+    }
+    
+    public function getHaulerDriver(Request $request) {
+        return response()->json([
+                    'status' => true,
+                    'message' => 'Hauler details',
+                    'data' => user::whereId($request->hauler_driver_id)->first()
+                        ], 200);
     }
     
     public function editHaulerDriver(Request $request) {
@@ -398,7 +434,7 @@ class CompanyController extends Controller {
         
         public function deleteHaulerDriver(Request $request) {
         try {
-            User::whereId($request->customer_id)->delete();
+            User::whereId($request->hauler_driver_id)->delete();
             return response()->json([
                         'status' => true,
                         'message' => 'Hauler driver deleted successfully.',
