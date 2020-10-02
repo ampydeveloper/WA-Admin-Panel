@@ -169,6 +169,13 @@ Route::group(['prefix' => 'auth'], function () {
             Route::post('get-payment', 'AccountingController@getPayment');
             Route::get('job-salary', 'AccountingController@getAllJobSalary');
             Route::get('pay-salary/{driver_id}', 'AccountingController@paySalary');
+            
+            //news
+            Route::post('create-news', 'NewsController@createNews');
+            Route::get('news-list', 'NewsController@newsList');
+            Route::get('single-news/{news_id}', 'NewsController@singleNews');
+            Route::post('update-news', 'NewsController@updateNews');
+            Route::delete('delete-news/{news_id}', 'NewsController@deleteNews');
 
             //message
             Route::post('chat-send', 'MessageController@send');
