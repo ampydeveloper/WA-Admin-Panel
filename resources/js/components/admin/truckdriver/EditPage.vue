@@ -364,6 +364,7 @@
                           @click="save"
                           id="submit_btn"
                         >Update</v-btn>
+                        <router-link to="/admin/truckdrivers" class="btn-custom-danger">Cancel</router-link>
                       </div>
                     </v-col>
                   </v-row>

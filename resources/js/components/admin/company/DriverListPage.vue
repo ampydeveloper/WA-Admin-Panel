@@ -307,7 +307,7 @@ export default {
           },
         });
                $(".dataTables_filter").append($("#search-input-icon").html());
-        $(".dataTables_filter input").attr("placeholder", "Search Haulers by Name / Email / Phone");
+        $(".dataTables_filter input").attr("placeholder", "Search Hauler Drivers by Name / Email / Phone");
         $(".dataTables_paginate .paginate_button.previous").html(
           $("#table-chevron-left").html()
         );

@@ -354,7 +354,6 @@ class CompanyController extends Controller {
 //                    'driver_type' => 'required',
                     'driver_licence' => 'required',
                     'driver_licence_image' => 'required',
-                    'status' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -406,7 +405,6 @@ class CompanyController extends Controller {
             $driver->state = $request->driver_province;
             $driver->zip_code = $request->driver_zipcode;
             $driver->user_image = (isset($request->user_image) && $request->user_image != '' && $request->user_image != null) ? $request->user_image : null;
-            $driver->is_active = $request->status;
             $driver->hauler_driver_licence = $request->driver_licence;
             $driver->hauler_driver_licence_image = $request->driver_licence_image;
             

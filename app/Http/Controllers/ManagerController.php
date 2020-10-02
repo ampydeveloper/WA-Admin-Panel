@@ -348,7 +348,6 @@ class ManagerController extends Controller {
                     'identification_number' => 'required',
                     'id_photo' => 'required',
                     'salary' => 'required',
-                    'is_active' => 'required'
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -377,7 +376,7 @@ class ManagerController extends Controller {
                 'role_id' => config('constant.roles.Admin_Manager'),
                 'created_from_id' => $request->user()->id,
                 'is_confirmed' => 1,
-                'is_active' => $request->is_active,
+                'is_active' => 1,
                 'password' => bcrypt($newPassword)
             ]);
             if ($user->save()) {
