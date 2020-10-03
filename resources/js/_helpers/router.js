@@ -45,6 +45,10 @@ import CompanyDriverListPage from "../components/admin/company/DriverListPage";
 import CompanyDriverAddPage from "../components/admin/company/DriverAddPage";
 import CompanyDriverEdit from "../components/admin/company/DriverEditPage";
 
+//News
+import NewsListPage from "../components/admin/news/ListPage";
+import NewsAddPage from "../components/admin/news/AddPage";
+import NewsEditPage from "../components/admin/news/EditPage";
 
 //serivce
 import SerivcesListPage from "../components/admin/services/ListPage";
@@ -152,6 +156,9 @@ export const router = new Router({
         { path: 'hauler/driver/add', component: CompanyDriverAddPage, name: 'CompanyDriverAdd', meta: { requiresAuth: [Role.Admin] } },
         { path: 'hauler/driver/edit/:id', component: CompanyDriverEdit, name: 'CompanyDriverEdit', meta: { requiresAuth: [Role.Admin] } },
         
+        { path: 'news', component: NewsListPage, name: 'News', meta: { requiresAuth: [Role.Admin] } },
+        { path: 'news/add', component: NewsAddPage, name: 'NewsAdd', meta: { requiresAuth: [Role.Admin] } },
+        { path: 'news/edit/:id', component: NewsEditPage, name: 'NewsEdit', meta: { requiresAuth: [Role.Admin] } },
 
         { path: 'manager', component: ListPage, name: 'Manager', meta: { requiresAuth: [Role.Admin] } },
         { path: 'manager/add', component: AddPage, name: 'Add', meta: { requiresAuth: [Role.Admin] } },
@@ -268,6 +275,10 @@ export const router = new Router({
         { path: 'hauler/drivers/list/:id', component: CompanyDriverListPage, name: 'MCompanyDriverListPage', meta: { requiresAuth: [Role.Admin_Manager] } },
 	{ path: 'hauler/driver/add', component: CompanyDriverAddPage, name: 'MCompanyDriverAdd', meta: { requiresAuth: [Role.Admin_Manager] } },
         { path: 'hauler/driver/edit/:id', component: CompanyDriverEdit, name: 'MCompanyDriverEdit', meta: { requiresAuth: [Role.Admin_Manager] } },
+        
+        { path: 'news', component: NewsListPage, name: 'MNews', meta: { requiresAuth: [Role.Admin_Manager] } },
+        { path: 'news/add', component: NewsAddPage, name: 'MNewsAdd', meta: { requiresAuth: [Role.Admin_Manager] } },
+        { path: 'news/edit/:id', component: NewsEditPage, name: 'MNewsEdit', meta: { requiresAuth: [Role.Admin_Manager] } },
         
         { path: 'dispatches', component: DispatchesViewPage, name: 'MDispatches', meta: { requiresAuth: [Role.Admin_Manager] } },
         { path: 'accounting/details/:id', component: AccountingViewPage, name: 'MAccounting', meta: { requiresAuth: [Role.Admin_Manager] } },

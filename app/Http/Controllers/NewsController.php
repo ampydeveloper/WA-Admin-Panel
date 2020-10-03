@@ -9,7 +9,9 @@ use Illuminate\Http\Request;
 class NewsController extends Controller {
     public function createNews(Request $request) {
         $validator = Validator::make($request->all(), [
+                    'heading' => 'required',
                     'description' => 'required',
+                    'image' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -20,7 +22,9 @@ class NewsController extends Controller {
         }
         try {
             $news = new News([
+                'heading' => $request->heading,
                 'description' => $request->description,
+                'image' => $request->image,
             ]);
             if ($news->save()) {
                 return response()->json([
@@ -66,7 +70,9 @@ class NewsController extends Controller {
     public function updateNews(Request $request) {
         $validator = Validator::make($request->all(), [
                     'news_id' => 'required',
+                    'heading' => 'required',
                     'description' => 'required',
+                    'image' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -77,7 +83,7 @@ class NewsController extends Controller {
         }
         
         try {
-            News::where('id', $request->news_id)->update(['description' => $request->description]);
+            News::where('id', $request->news_id)->update(['description' => $request->description, 'heading' => $request->heading, 'image'=> $request->image]);
             return response()->json([
                     'status' => true,
                     'message' => 'News updated sucessfully.',

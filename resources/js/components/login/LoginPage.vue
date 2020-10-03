@@ -29,7 +29,10 @@
             >
               <label for="email">Email</label>
               <div class="custom_input">
-                <user-icon size="1.5x" class="custom-class icons_custom"></user-icon>
+                <user-icon
+                  size="1.5x"
+                  class="custom-class icons_custom"
+                ></user-icon>
                 <v-text-field
                   v-model="email"
                   :rules="emailRules"
@@ -41,7 +44,10 @@
               </div>
               <label for>Password</label>
               <div class="custom_input">
-                <lock-icon size="1.5x" class="custom-class icons_custom"></lock-icon>
+                <lock-icon
+                  size="1.5x"
+                  class="custom-class icons_custom"
+                ></lock-icon>
                 <v-text-field
                   v-model="password"
                   :rules="[rules.required]"
@@ -61,7 +67,9 @@
                 </v-col>
                 <v-col cols="12" md="6" class="forget-password-div">
                   <div class="forget_password">
-                    <router-link to="/forgot-password">Forgot Password?</router-link>
+                    <router-link to="/forgot-password"
+                      >Forgot Password?</router-link
+                    >
                   </div>
                 </v-col>
               </div>
@@ -222,7 +230,7 @@ export default {
 
 .slide-right label {
   font-size: 15px;
-  color: #626262;
+  color: #c2c6dc;
   font-weight: 300;
 }
 
@@ -267,14 +275,14 @@ export default {
   height: 100vh;
 } */
 .login_txt h2 {
-  color: #2c2c2c;
+  color: #ebeefd;
   font-size: 18.48px;
   font-weight: 500;
   line-height: 1.2;
   margin-bottom: 15px;
 }
 .login_txt p {
-  color: #626262 !important;
+  color: #c2c6dc !important;
   font-size: 15px !important;
   font-weight: 300 !important;
   margin-bottom: 25px !important;
@@ -322,6 +330,22 @@ export default {
   padding-left: 40px !important;
   font-size: 14px;
   font-weight: 300;
+  background: #19191a;
+  color: #c2c6dc !important;
+}
+.v-input input::-webkit-input-placeholder {
+  color: #c2c6dc !important;
+}
+
+.v-input input:-ms-input-placeholder {
+  color: #c2c6dc !important;
+}
+
+.v-input input::placeholder {
+  color: #c2c6dc !important;
+}
+.v-icon.v-icon{
+   color: #c2c6dc !important;
 }
 .v-application .error--text {
   border: none;
@@ -361,7 +385,8 @@ export default {
   position: absolute;
   top: 11px;
   left: 13px;
-  color: rgba(0, 0, 0, 0.4);
+  /* color: rgba(0, 0, 0, 0.4); */
+  color: #c2c6dc !important;
   font-size: 10px;
 }
 .login_form .remember-me-div {
@@ -375,7 +400,7 @@ export default {
   letter-spacing: 0.01rem;
   font-family: Montserrat, Helvetica, Arial, sans-serif;
   padding-left: 0px;
-  color: #626262;
+  color:#c2c6dc;
   font-size: 15px;
   font-weight: 300;
 }
@@ -402,6 +427,10 @@ export default {
 }
 .forget .login-btn-div .btn_grp {
   padding: 0;
+}
+.login_form .login_box-outer {
+  background: #000;
+  color: #c2c6dc;
 }
 @media only screen and (max-width: 992px) {
   .img_bg_outside {

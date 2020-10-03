@@ -15,7 +15,9 @@ class News extends Migration
     {
          Schema::create('news', function (Blueprint $table) {
             $table->increments('id');
-            $table->longText('description');
+            $table->string('heading');
+            $table->longText('description')->nullable();
+            $table->string('image')->nullable();
             $table->timestamps();
             $table->softDeletes();       
         });

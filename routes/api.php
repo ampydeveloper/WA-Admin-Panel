@@ -106,7 +106,7 @@ Route::group(['prefix' => 'auth'], function () {
             
             
             Route::get('list-hauler-driver/{hauler_id}', 'CompanyController@listHaulerDriver');
-            Route::post('list-hauler-mobile', 'CompanyController@listHaulerMobileDriver');
+            Route::post('list-hauler-driver-mobile', 'CompanyController@listHaulerMobileDriver');
             Route::post('create-hauler-driver', 'CompanyController@createHaulerDriver');
             Route::get('get-hauler-driver/{hauler_driver_id}', 'CompanyController@getHaulerDriver');
             Route::post('edit-hauler-driver', 'CompanyController@editHaulerDriver');
