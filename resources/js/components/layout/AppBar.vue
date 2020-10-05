@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar id="app-bar" class="custom-toolbar" absolute app color="transparent" flat height="75">
+  <v-app-bar id="app-bar" class="custom-toolbar" absolute app color="#000" flat height="75">
     <v-row class="user-image">
       <v-col class="user-image-inner" cols="12" md="12">
         <v-row class="float-right" justify="space-around">

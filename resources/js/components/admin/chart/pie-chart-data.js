@@ -1,34 +1,9 @@
 export const planetChartData = {
-    type: 'pie',
+    type: 'doughnut',
     data: {
         // labels: ['0', '1', '2', '3', '4', '5', '6', '7'],
         datasets: [
-            // { // one line graph
-            //     label: 'Number of Moons',
-            //     data: [0, 0, 1, 2, 67, 62, 27, 14],
-            //     backgroundColor: [
-            //         'rgba(54,73,93,.5)', // Blue
-            //         'rgba(54,73,93,.5)',
-            //         'rgba(54,73,93,.5)',
-            //         'rgba(54,73,93,.5)',
-            //         'rgba(54,73,93,.5)',
-            //         'rgba(54,73,93,.5)',
-            //         'rgba(54,73,93,.5)',
-            //         'rgba(54,73,93,.5)'
-            //     ],
-            //     borderColor: [
-            //         '#36495d',
-            //         '#36495d',
-            //         '#36495d',
-            //         '#36495d',
-            //         '#36495d',
-            //         '#36495d',
-            //         '#36495d',
-            //         '#36495d',
-            //     ],
-            //     borderWidth: 3
-            // },
-            { // another line graph
+            { 
                 label: 'Invoices',
                 data: [116.4, 50.7, 49.2],
                 backgroundColor: [
@@ -39,7 +14,7 @@ export const planetChartData = {
                 borderColor: [
                     '#47b784',
                 ],
-                borderWidth: 3
+                borderWidth: 2
             }
         ]
     },

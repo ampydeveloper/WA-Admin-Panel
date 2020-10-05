@@ -4,10 +4,12 @@
       <div class="col-3">
         <div class="services">
           <div class="image-bg-color service-bg-color"></div>
-          <!-- <user-icon size="2x" class="custom-class icons_custom dashboard-icons service-icon"></user-icon> -->
-         
-         <grid-icon size="2x" class="custom-class icons_custom dashboard-icons service-icon"></grid-icon>
-          <h2>92.6k</h2>
+
+          <grid-icon
+            size="2x"
+            class="custom-class icons_custom dashboard-icons service-icon"
+          ></grid-icon>
+          <h2>144</h2>
           <span class="employees">Services</span>
           <div class="services-chart-outer">
             <canvas id="services-chart"></canvas>
@@ -17,10 +19,12 @@
       <div class="col-3">
         <div class="services">
           <div class="image-bg-color employee-bg-color"></div>
-          <!-- <user-icon size="2x" class="custom-class icons_custom dashboard-icons employee-icon"></user-icon> -->
-       
-         <user-check-icon size="2x" class="custom-class icons_custom dashboard-icons employee-icon"></user-check-icon>
-          <h2>352</h2>
+
+          <user-check-icon
+            size="2x"
+            class="custom-class icons_custom dashboard-icons employee-icon"
+          ></user-check-icon>
+          <h2>13</h2>
           <span class="employees">Managers</span>
           <div class="services-chart-outer">
             <canvas id="services-chart2"></canvas>
@@ -30,10 +34,11 @@
       <div class="col-3">
         <div class="services">
           <div class="image-bg-color driver-bg-color"></div>
-          <!-- <user-icon size="2x" class="custom-class icons_custom dashboard-icons driver-icon"></user-icon> -->
-         
-         <users-icon size="2x" class="custom-class icons_custom dashboard-icons driver-icon"></users-icon>
-          <h2>400</h2>
+          <users-icon
+            size="2x"
+            class="custom-class icons_custom dashboard-icons driver-icon"
+          ></users-icon>
+          <h2>22</h2>
           <span class="employees">Drivers</span>
           <div class="services-chart-outer">
             <canvas id="services-chart3"></canvas>
@@ -43,11 +48,13 @@
       <div class="col-3">
         <div class="services">
           <div class="image-bg-color fleet-bg-color"></div>
-          <!-- <user-icon size="2x" class="custom-class icons_custom dashboard-icons fleet-icon"></user-icon> -->
 
-           <truck-icon size="2x" class="custom-class icons_custom dashboard-icons fleet-icon"></truck-icon>
-   
-          <h2>150</h2>
+          <truck-icon
+            size="2x"
+            class="custom-class icons_custom dashboard-icons fleet-icon"
+          ></truck-icon>
+
+          <h2>15</h2>
           <span class="employees">Fleet</span>
           <div class="services-chart-outer">
             <canvas id="services-chart4"></canvas>
@@ -95,8 +102,8 @@
             <div class="customer-graph-para">
               <p>
                 Your have
-                <span>20</span> new customers generating
-                <span>$2500</span> this week.
+                <span>20</span> new customers generating <span>$2500</span> this
+                week.
               </p>
             </div>
           </div>
@@ -124,21 +131,15 @@
           <div class="customer-graph-details-outer pie-data-outer row">
             <div class="customer-graph-details col-sm-4">
               <h5>Customers</h5>
-              <p>
-                <span>$</span> 86,589
-              </p>
+              <p><span>$</span> 86,589</p>
             </div>
             <div class="customer-graph-details col-sm-4">
               <h5>Haulers</h5>
-              <p>
-                <span>$</span>86,589
-              </p>
+              <p><span>$</span>86,589</p>
             </div>
             <div class="customer-graph-details col-sm-4">
               <h5>Outstanding</h5>
-              <p class="green-text">
-                <span>$</span>86,59
-              </p>
+              <p class="green-text"><span>$</span>86,59</p>
             </div>
           </div>
         </div>
@@ -198,7 +199,9 @@
                       stroke-linejoin="round"
                       class="feather feather-cloud-snow w-24 h-24 text-white"
                     >
-                      <path d="M20 17.58A5 5 0 0 0 18 8h-1.26A8 8 0 1 0 4 16.25" />
+                      <path
+                        d="M20 17.58A5 5 0 0 0 18 8h-1.26A8 8 0 1 0 4 16.25"
+                      />
                       <line x1="8" y1="16" x2="8" y2="16" />
                       <line x1="8" y1="20" x2="8" y2="20" />
                       <line x1="12" y1="18" x2="12" y2="18" />
@@ -261,9 +264,10 @@
                   </div>
                   <div class="timeline-info">
                     <p class="font-semibold">Client Meeting</p>
-                    <span
-                      class="activity-desc"
-                    >Bonbon macaroon jelly beans gummi bears jelly lollipop apple</span>
+                    <span class="activity-desc"
+                      >Bonbon macaroon jelly beans gummi bears jelly lollipop
+                      apple</span
+                    >
                   </div>
                   <small class="text-grey activity-e-time">25 mins Ago</small>
                 </li>
@@ -291,7 +295,9 @@
                   </div>
                   <div class="timeline-info">
                     <p class="font-semibold">Email Newsletter</p>
-                    <span class="activity-desc">Cupcake gummi bears soufflé caramels candy</span>
+                    <span class="activity-desc"
+                      >Cupcake gummi bears soufflé caramels candy</span
+                    >
                   </div>
                   <small class="text-grey activity-e-time">15 Days Ago</small>
                 </li>
@@ -319,7 +325,9 @@
                   </div>
                   <div class="timeline-info">
                     <p class="font-semibold">Plan Webinar</p>
-                    <span class="activity-desc">Candy ice cream cake. Halvah gummi bears</span>
+                    <span class="activity-desc"
+                      >Candy ice cream cake. Halvah gummi bears</span
+                    >
                   </div>
                   <small class="text-grey activity-e-time">20 days ago</small>
                 </li>
@@ -347,9 +355,10 @@
                   </div>
                   <div class="timeline-info">
                     <p class="font-semibold">Marketing</p>
-                    <span
-                      class="activity-desc"
-                    >Candy ice cream cake. Halvah gummi bears Cupcake gummi bears.</span>
+                    <span class="activity-desc"
+                      >Candy ice cream cake. Halvah gummi bears Cupcake gummi
+                      bears.</span
+                    >
                   </div>
                   <small class="text-grey activity-e-time">28 days ago</small>
                 </li>
@@ -495,7 +504,14 @@ import Mapbox from "mapbox-gl-vue";
 import planetChartData from "./chart/chart-data.js";
 import pieChartData from "./chart/pie-chart-data.js";
 import servicesData from "./chart/services-data.js";
-import { UserIcon, LockIcon, GridIcon, UserCheckIcon, TruckIcon, UsersIcon } from "vue-feather-icons";
+import {
+  UserIcon,
+  LockIcon,
+  GridIcon,
+  UserCheckIcon,
+  TruckIcon,
+  UsersIcon,
+} from "vue-feather-icons";
 
 export default {
   components: {
@@ -505,7 +521,7 @@ export default {
     GridIcon,
     UserCheckIcon,
     TruckIcon,
-    UsersIcon
+    UsersIcon,
   },
   data() {
     return {
@@ -517,17 +533,28 @@ export default {
     };
   },
   mounted() {
-    this.createChart("planet-chart", this.planetChartData);
-    this.createChart("pie-chart", this.pieChartData);
-    this.createChart("services-chart", this.servicesData);
-    this.createChart("services-chart2", this.servicesData);
-    this.createChart("services-chart3", this.servicesData);
-    this.createChart("services-chart4", this.servicesData);
-    this.createChart("services-chart5", this.servicesData);
+    // this.gradient = this.$refs.canvas.getContext('2d').createLinearGradient(0, 0, 0, 450);
+    this.gradient = null;
+    
+        // this.gradient.addColorStop(0, 'rgba(255, 0,0, 0.5)')
+        // this.gradient.addColorStop(0.5, 'rgba(255, 0, 0, 0.25)');
+        // this.gradient.addColorStop(1, 'rgba(255, 0, 0, 0)');
+
+    this.createChart("planet-chart", this.planetChartData, this.gradient);
+    this.createChart("pie-chart", this.pieChartData, this.gradient);
+    this.createChart("services-chart", this.servicesData, this.gradient);
+    this.createChart("services-chart2", this.servicesData, this.gradient);
+    this.createChart("services-chart3", this.servicesData, this.gradient);
+    this.createChart("services-chart4", this.servicesData, this.gradient);
+    this.createChart("services-chart5", this.servicesData, this.gradient);
   },
   methods: {
-    createChart(chartId, chartData) {
+    createChart(chartId, chartData, gradient) {
       const ctx = document.getElementById(chartId);
+      // const gradient2 = ctx.createLinearGradient(0, 0, 0, 400);
+      // gradient2.addColorStop(0, "rgba(17,178,118,1)");
+      // gradient2.addColorStop(1, "rgba(17,178,118,0)");
+      // chartData.data.datasets.backgroundColor = gradient;
       const myChart = new Chart(ctx, {
         type: chartData.type,
         data: chartData.data,

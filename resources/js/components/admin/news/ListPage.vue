@@ -174,7 +174,7 @@ export default {
       isAdmin: true,
     };
   },
-  getNews() {},
+  // getNews() {},
   mounted() {
     const currentUser = authenticationService.currentUserValue;
     if (currentUser.data.user.role_id == 1) {
