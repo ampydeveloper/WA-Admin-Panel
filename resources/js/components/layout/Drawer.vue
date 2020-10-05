@@ -184,19 +184,9 @@
 
 <script>
   // Utilities
-  import { mapState } from 'vuex'
-// import { UserIcon, LogOutIcon, UserPlusIcon, ListIcon, Edit3Icon, BellIcon } from 'vue-feather-icons';
+  import { mapState } from 'vuex';
   export default {
     name: 'DashboardCoreDrawer',
-
-  //   components: {
-  //       UserIcon,
-	// LogOutIcon,
-	// UserPlusIcon,
-	// ListIcon,
-	// Edit3Icon,
-  // BellIcon,
-  //   },
     props: {
       expandOnHover: {
         type: Boolean,
@@ -251,6 +241,15 @@
             active: true,
             items: [
                { title: 'Accounting',url: '/admin/accounting', icon: "<img src='/images/book-open.svg' />" },
+              // { title: 'Reports', url: '/admin/reports', icon: "<img src='/images/file-text.svg' />" }
+            ]
+          },
+          {
+            action: 'local_activity',
+            title: 'Settings',
+            active: true,
+            items: [
+               { title: 'News',url: '/admin/news', icon: "<img src='/images/book-open.svg' />" },
               // { title: 'Reports', url: '/admin/reports', icon: "<img src='/images/file-text.svg' />" }
             ]
           }
