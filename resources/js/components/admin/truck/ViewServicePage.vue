@@ -4,7 +4,7 @@
       <ul>
         <li>
           <h4 class="main-title top_heading">
-            Details
+            Service Details
             <span class="right-bor"></span>
           </h4>
         </li>
@@ -52,8 +52,6 @@
       <v-container fluid>
         <v-row>
           <div class="add-icon">
-            <!-- <plus-circle-icon size="1.5x" class="custom-class"></plus-circle-icon> -->
-
             <router-link
               v-if="isAdmin"
               :to="'/admin/truck/addservice/' +vehicle_id"
@@ -97,7 +95,7 @@
 
           <v-tabs-items v-model="tab" class="custom-tab-content">
             <v-tab-item v-for="item in items" :key="item">
-              <v-card class="service-tab-content" color="basil" flat v-if="item == 'Service'">
+              <v-card class="service-tab-content" color="basil" flat v-if="item == 'Mechanic Service'">
                 <table
                   id="truck-service-table"
                   class="table table-striped table-bordered table-main"
@@ -146,7 +144,7 @@
                   </tbody>
                 </table>
               </v-card>
-              <v-card class="insurance-tab-content" color="basil" flat v-if="item == 'Insurance'">
+              <v-card class="insurance-tab-content" color="basil" flat v-if="item == 'Vehicle Insurance'">
                 <table
                   id="truck-insurance-table"
                   class="table table-striped table-bordered table-main"
@@ -209,6 +207,11 @@
     <span id="table-chevron-right" class="d-none">
       <chevron-right-icon size="1.5x" class="custom-class"></chevron-right-icon>
     </span>
+    <span id="search-input-icon" class="d-none">
+      <span class="search-input-outer">
+        <search-icon size="1.5x" class="custom-class"></search-icon>
+      </span>
+    </span>
   </v-app>
 </template>
 
@@ -220,6 +223,7 @@ import {
   TrashIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+   SearchIcon,
 } from "vue-feather-icons";
 import { authenticationService } from "../../../_services/authentication.service";
 export default {
@@ -229,12 +233,13 @@ export default {
     TrashIcon,
     ChevronLeftIcon,
     ChevronRightIcon,
+     SearchIcon,
   },
   data() {
     return {
       tab: null,
       isActive: null,
-      items: ["Service", "Insurance"],
+      items: ["Mechanic Service", "Vehicle Insurance"],
       avatar: null,
       truck: [],
       insurance: [],
@@ -412,6 +417,7 @@ export default {
             "placeholder",
             "Search Insurance"
           );
+           $("#truck-insurance-table_filter").append($("#search-input-icon").html());
           $("#truck-insurance-table_paginate .paginate_button.previous").html(
             $("#table-chevron-left").html()
           );
@@ -443,6 +449,7 @@ export default {
             "placeholder",
             "Search Service"
           );
+           $("#truck-service-table_filter").append($("#search-input-icon").html());
           $("#truck-service-table_paginate .paginate_button.previous").html(
             $("#table-chevron-left").html()
           );

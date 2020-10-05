@@ -116,7 +116,7 @@
 
             <v-col class="pt-0 pb-0" cols="12" v-if="!customerNotHauler">
               <v-col sm="2" class="label-align pt-0">
-                <label>Manager</label>
+                <label>Farm Manager</label>
               </v-col>
               <v-col sm="4" class="pt-0">
                 <v-select

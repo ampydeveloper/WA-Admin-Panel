@@ -1,4 +1,4 @@
-import { authenticationService } from "../_/authentication.service";
+import { authenticationService } from "../_services/authentication.service";
 
 export const requestOptions = {
   get() {

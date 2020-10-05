@@ -139,9 +139,6 @@
                     </a>
                   </td>
                 </tr>
-                <!-- <tr v-if="drivers.length == 0">
-                  <td colspan="9">No driver till now.</td>
-                </tr> -->
               </tbody>
             </table>
           </v-col>

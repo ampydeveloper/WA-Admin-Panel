@@ -94,9 +94,9 @@
                   <th class="text-left">Email</th>
                   <th class="text-left">Phone</th>
                   <th class="text-left">Address</th>
-                  <th class="text-left">Driver List</th>
+             
                   <th class="text-left">Active</th>
-                  <th class="text-left">Action</th>
+                  <th class="text-left">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -115,27 +115,26 @@
                   <td>{{customer.email}}</td>
                   <td>{{customer.phone}}</td>
                   <td>{{customer.address}} {{customer.city}} {{customer.state}}, {{customer.zip_code}}</td>
-                  <td>
-                    <router-link
-                      v-if="isAdmin"
-                      :to="'/admin/hauler/drivers/list/' + customer.id"
-                      class="nav-item nav-link"
-                    >
-                      View List
-                    </router-link>
-                    <router-link
-                      v-if="!isAdmin"
-                      :to="'/manager/hauler/drivers/list/' + customer.id"
-                      class="nav-item nav-link"
-                    >
-                      View List
-                    </router-link>
-                  </td>
+               
                   <td>
                     <span v-if="!customer.is_active" class="badges-item">No</span>
                     <span v-if="customer.is_active" class="badges-item">Yes</span>
                   </td>
                   <td class="action-col">
+                    <router-link
+                      v-if="isAdmin"
+                      :to="'/admin/hauler/drivers/list/' + customer.id"
+                      class="btn-outline-green-top"
+                    >
+                      View Drivers
+                    </router-link>
+                    <router-link
+                      v-if="!isAdmin"
+                      :to="'/manager/hauler/drivers/list/' + customer.id"
+                      class="btn-outline-green-top"
+                    >
+                      View Drivers
+                    </router-link>
                     <router-link
                       v-if="isAdmin"
                       :to="'/admin/hauler/edit/' + customer.id"

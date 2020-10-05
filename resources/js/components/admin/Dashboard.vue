@@ -504,6 +504,9 @@ import Mapbox from "mapbox-gl-vue";
 import planetChartData from "./chart/chart-data.js";
 import pieChartData from "./chart/pie-chart-data.js";
 import servicesData from "./chart/services-data.js";
+import servicesData2 from "./chart/services-data2.js";
+import servicesData3 from "./chart/services-data3.js";
+import servicesData4 from "./chart/services-data4.js";
 import {
   UserIcon,
   LockIcon,
@@ -530,6 +533,9 @@ export default {
       planetChartData: planetChartData,
       pieChartData: pieChartData,
       servicesData: servicesData,
+      servicesData2: servicesData2,
+      servicesData3: servicesData3,
+      servicesData4: servicesData4,
     };
   },
   mounted() {
@@ -543,10 +549,9 @@ export default {
     this.createChart("planet-chart", this.planetChartData, this.gradient);
     this.createChart("pie-chart", this.pieChartData, this.gradient);
     this.createChart("services-chart", this.servicesData, this.gradient);
-    this.createChart("services-chart2", this.servicesData, this.gradient);
-    this.createChart("services-chart3", this.servicesData, this.gradient);
-    this.createChart("services-chart4", this.servicesData, this.gradient);
-    this.createChart("services-chart5", this.servicesData, this.gradient);
+    this.createChart("services-chart2", this.servicesData4, this.gradient);
+    this.createChart("services-chart3", this.servicesData2, this.gradient);
+    this.createChart("services-chart4", this.servicesData3, this.gradient);
   },
   methods: {
     createChart(chartId, chartData, gradient) {

@@ -249,14 +249,14 @@
                       </div>
                       <div class="custom-col row">
                         <v-col sm="4" class="label-align pt-0">
-                          <label>Identification Number</label>
+                          <label>Licence Number</label>
                         </v-col>
                         <v-col sm="8" class="pt-0 pb-0">
                           <v-text-field
                             v-model="addForm.identification_number"
                             required
-                            :rules="[v => !!v || 'Identification number is required.']"
-                            label="Enter Identification Number"
+                            :rules="[v => !!v || 'Licence number is required.']"
+                            label="Enter Licence Number"
                             placeholder
                           ></v-text-field>
                         </v-col>
@@ -324,21 +324,21 @@
                       </div>
                       <div class="custom-col row">
                         <v-col sm="4" class="label-align pt-0">
-                          <label>Manager Salary</label>
+                          <label>Salary</label>
                         </v-col>
                         <v-col sm="8" class="pt-0 pb-0">
                           <v-text-field
                             v-model="addForm.salary"
                             required
                             :rules="salaryRules"
-                            label="Enter Manager Salary"
+                            label="Enter Salary"
                             placeholder
                           ></v-text-field>
                         </v-col>
                       </div>
                       <div class="custom-col row custom-img-holder">
                         <v-col sm="4" class="label-align pt-0 image-upload-label">
-                          <label>Identification Document</label>
+                          <label>Licence Document</label>
                         </v-col>
                         <v-col sm="8" class="pt-0 pb-0">
                           <div class="col-img-holder">
@@ -365,7 +365,7 @@
                               <div class="v-messages__wrapper">
                                 <div
                                   class="v-messages__message"
-                                >Identification Document is required.</div>
+                                >Licence Document is required.</div>
                               </div>
                             </div>
                           </div>

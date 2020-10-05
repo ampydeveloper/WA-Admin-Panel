@@ -952,7 +952,7 @@ h6,
         .v-tab {
             text-transform: capitalize;
             font-weight: 500;
-            color: #2c2c2c;
+            color: #fff;
             font-size: 0.9rem;
         }
     }
@@ -2556,17 +2556,6 @@ div#example_info {
 
 .customer-edit-first {
     margin-bottom: 10px;
-
-    // .v-list-item__avatar {
-    //     border-radius: 4px;
-    //     width: 84px;
-    //     float: left;
-    //     margin-right: 15px !important;
-    // }
-
-    // .filepond--wrapper {
-    //     width: 300px;
-    // }
 }
 
 .t-s-inner {
@@ -2645,12 +2634,12 @@ div#example_info {
 
 .image-bg-color.driver-bg-color {
 
-    background: rgba(40, 199, 111, 0.15);
+    background: rgb(234 83 83 / 15%);
 }
 
 .image-bg-color.fleet-bg-color {
 
-    background: rgba(40, 199, 111, 0.15);
+    background: rgba(255, 159, 67, 0.15);
 }
 
 .image-bg-color.skid-bg-color {
@@ -2668,15 +2657,15 @@ div#example_info {
 }
 
 .dashboard-icons.employee-icon {
-    color: #11b276;
+    color: rgb(255, 159, 67);
 }
 
 .dashboard-icons.driver-icon {
-    color: #11b276;
+    color: rgb(234, 83, 83);
 }
 
 .dashboard-icons.fleet-icon {
-    color: #11b276;
+    color: rgb(255, 159, 67);
 }
 
 .dashboard-icons.skid-icon {
@@ -2749,6 +2738,10 @@ div#example_info {
     margin-top: -3px;
     margin-right: -7px;
 
+    .v-select__slot {
+        background: #19191a;
+    }
+
     .v-text-field {
         padding: 0;
         margin: 0;
@@ -2781,6 +2774,12 @@ div#example_info {
 
     padding: 2px 0;
 
+    .v-select-list {
+        background: #19191a !important;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+
     .v-list-item {
         min-height: 25px;
 
@@ -2797,9 +2796,8 @@ div#example_info {
 
     .v-list-item__title {
         font-size: 12px;
+        color: #ffff;
     }
-
-
 }
 
 .customer-graph-details-outer {
