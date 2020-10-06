@@ -93,32 +93,39 @@
                   <th class="text-left">Heading</th>
                   <th class="text-left">Description</th>
                   <th class="text-left">Image</th>
-                  <th class="text-left">Action</th>
+                  <th class="text-left">Actions</th>
+                  <th class="text-left">Remove it</th>
+             
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(khabar, index) in news">
+                <tr v-for="(customer, index) in customers">
                   <td>{{index+1}}</td>
-                  <td>{{khabar.heading}}</td>
-                  <td>{{khabar.description}}</td>
-                  <td><img class="small-img" :src="'../'+khabar.image" /></td>
+                  <td> {{customer.heading}} </td>
+                  <td>{{customer.description}}</td>
+                  <td>
+                    <div class="v-avatar v-list-item__avatar">
+                        <img class="small-img" :src="'../'+customer.image" />
+                    </div>
+                  </td>
+               
                   <td class="action-col">
                     <router-link
                       v-if="isAdmin"
-                      :to="'/admin/news/edit/' + khabar.id"
+                      :to="'/admin/news/edit/' + customer.id"
                       class="nav-item nav-link"
                     >
                       <edit-3-icon size="1.2x" class="custom-class"></edit-3-icon>
                     </router-link>
                     <router-link
                       v-if="!isAdmin"
-                      :to="'/manager/news/edit/' + khabar.id"
+                      :to="'/manager/news/edit/' + customer.id"
                       class="nav-item nav-link"
                     >
                       <edit-3-icon size="1.2x" class="custom-class"></edit-3-icon>
                     </router-link>
 
-                    <a href="javascript:void(0);" text @click="Delete(khabar.id)">
+                    <a href="javascript:void(0);" text @click="Delete(customer.id)">
                       <trash-icon size="1.5x" class="custom-class"></trash-icon>
                     </a>
                   </td>
@@ -145,7 +152,7 @@
 
 <script>
 import { required } from "vuelidate/lib/validators";
-import { companyService } from "../../../_services/news.service";
+import { newsService } from "../../../_services/news.service";
 import { authenticationService } from "../../../_services/authentication.service";
 import {
   UserIcon,
@@ -170,11 +177,11 @@ export default {
   },
   data() {
     return {
-      news: [],
+      customers: [],
       isAdmin: true,
     };
   },
-  // getNews() {},
+  getList() {},
   mounted() {
     const currentUser = authenticationService.currentUserValue;
     if (currentUser.data.user.role_id == 1) {
@@ -192,7 +199,7 @@ export default {
       newsService.listNews().then((response) => {
         //handle response
         if (response.status) {
-          this.news = response.data;
+          this.customers = response.data;
         } else {
           this.$toast.open({
             message: response.message,
@@ -205,7 +212,7 @@ export default {
     Delete(e) {
       this.$swal({
         title: "Are you sure?",
-        text: "Are you sure you want to delete this hauler?",
+        text: "Are you sure you want to delete this news?",
         type: "warning",
         showCancelButton: true,
         confirmButtonText: "Yes Delete it",
@@ -217,7 +224,6 @@ export default {
           this.deleteNews(e);
         }
       });
-
       return false;
     },
     deleteNews(e) {
@@ -271,7 +277,7 @@ export default {
           },
         });
                $(".dataTables_filter").append($("#search-input-icon").html());
-        $(".dataTables_filter input").attr("placeholder", "Search News");
+        $(".dataTables_filter input").attr("placeholder", "Search News by Heading / Description");
         $(".dataTables_paginate .paginate_button.previous").html(
           $("#table-chevron-left").html()
         );

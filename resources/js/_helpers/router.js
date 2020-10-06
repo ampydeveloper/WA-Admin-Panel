@@ -55,8 +55,7 @@ import SerivcesListPage from "../components/admin/services/ListPage";
 import SerivcesAddPage from "../components/admin/services/AddPage";
 import SerivcesEditPage from "../components/admin/services/EditPage";
 import SerivcesViewPage from "../components/admin/services/ViewPage";
-//ww
-// import TestListPage from "../components/admin/test/ListPage";
+
 
 //truck driver
 import TruckDriverListPage from "../components/admin/truckdriver/ListPage";
@@ -196,10 +195,6 @@ export const router = new Router({
     { path: 'Skidsteer/addinsurance/:id', component: skidsteerInsuranceServicePage, name: 'SkidsteerAddInsurance', meta: { requiresAuth: [Role.Admin] } },
 
    { path: 'Skidsteer/editinsurance/:id', component: skidsteerInsuranceEditServicePage, name: 'SkidsteerEditInsurance', meta: { requiresAuth: [Role.Admin] } },
-   
-   { path: 'news', component: NewsListPage, name: 'MNews', meta: { requiresAuth: [Role.Admin_Manager] } },
-   { path: 'news/add', component: NewsAddPage, name: 'MNewsAdd', meta: { requiresAuth: [Role.Admin_Manager] } },
-   { path: 'news/edit/:id', component: NewsEditPage, name: 'MNewsEdit', meta: { requiresAuth: [Role.Admin_Manager] } },
    
         { path: 'jobs', component: JobsViewPage, name: 'Jobs', meta: { requiresAuth: [Role.Admin] } },
         { path: 'jobs/add', component: JobsAddPage, name: 'JobsAdd', meta: { requiresAuth: [Role.Admin] } },

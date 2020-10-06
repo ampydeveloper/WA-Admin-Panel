@@ -46,7 +46,7 @@
         </li>
         <li>
           <router-link to="/admin/news">
-            Hauler
+            News
             <span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -83,9 +83,38 @@
             >
               <v-row>
                 <v-col cols="6" md="6" class="pl-0 manager-cols">
-                  <div class="custom-col row custom-img-holder">
+                  
+                  <div class="custom-col row">
+                    <v-col sm="4" class="label-align pt-0">
+                      <label>News Heading</label>
+                    </v-col>
+                    <v-col sm="8" class="pt-0 pb-0">
+                      <v-text-field
+                        v-model="addForm.heading"
+                        label="Enter Heading"
+                        required
+                        :rules="[v => !!v || 'News Heading is required.']"
+                      ></v-text-field>
+                    </v-col>
+                  </div>
+                  <div class="custom-col row">
+                    <v-col sm="4" class="label-align pt-0">
+                      <label>Description</label>
+                    </v-col>
+                    <v-col sm="8" class="pt-0 pb-0">
+                      <v-textarea
+                        v-model="addForm.description"
+                        label="Enter Description"
+                        required
+                        :rules="[v => !!v || 'Description is required.']"
+                      ></v-textarea>
+                    </v-col>
+                  </div>
+                </v-col>
+                <v-col cols="6" md="6" class="pl-0 manager-cols">
+                    <div class="custom-col row custom-img-holder">
                     <v-col sm="4" class="label-align pt-0 image-upload-label">
-                      <label>Profile Image</label>
+                      <label>Image</label>
                     </v-col>
                     <v-col sm="8" class="pt-0 pb-0">
                       <file-pond
@@ -103,135 +132,6 @@
                       />
                     </v-col>
                   </div>
-                  <div class="custom-col row">
-                    <v-col sm="4" class="label-align pt-0">
-                      <label>Prefix</label>
-                    </v-col>
-                    <v-col sm="8" class="pt-0 pb-0">
-                      <v-select
-                        v-model="addForm.prefix"
-                        :items="prefixs"
-                        label="Select Prefix"
-                        :rules="[v => !!v || 'Prefix is required.']"
-                      ></v-select>
-                    </v-col>
-                  </div>
-                  <div class="custom-col row">
-                    <v-col sm="4" class="label-align pt-0">
-                      <label>First Name</label>
-                    </v-col>
-                    <v-col sm="8" class="pt-0 pb-0">
-                      <v-text-field
-                        v-model="addForm.first_name"
-                        label="Enter First Name"
-                        required
-                        :rules="[v => !!v || 'Customer Name is required.']"
-                      ></v-text-field>
-                    </v-col>
-                  </div>
-                  <div class="custom-col row">
-                    <v-col sm="4" class="label-align pt-0">
-                      <label>Last Name</label>
-                    </v-col>
-                    <v-col sm="8" class="pt-0 pb-0">
-                      <v-text-field
-                        v-model="addForm.last_name"
-                        label="Enter Last Name"
-                        required
-                        :rules="[v => !!v || 'Customer Name is required.']"
-                      ></v-text-field>
-                    </v-col>
-                  </div>
-                  <div class="custom-col row">
-                    <v-col sm="4" class="label-align pt-0">
-                      <label>Email</label>
-                    </v-col>
-                    <v-col sm="8" class="pt-0 pb-0">
-                      <v-text-field
-                        v-model="addForm.email"
-                        :rules="emailRules"
-                        name="email"
-                        label="Enter Email"
-                        required
-                      ></v-text-field>
-                    </v-col>
-                  </div>
-                  <div class="custom-col row">
-                    <v-col sm="4" class="label-align pt-0">
-                      <label>Phone</label>
-                    </v-col>
-                    <v-col sm="8" class="pt-0 pb-0">
-                      <v-text-field
-                        v-model="addForm.phone"
-                        :rules="phoneRules"
-                        label="Enter Phone"
-                        required
-                        maxlength="10"
-                      ></v-text-field>
-                    </v-col>
-                  </div>
-                </v-col>
-                <v-col cols="6" md="6" class="pl-0 manager-cols">
-                  <div class="custom-col row">
-                    <v-col sm="4" class="label-align pt-0">
-                      <label>Address</label>
-                    </v-col>
-                    <v-col sm="8" class="pt-0 pb-0">
-                      <v-text-field
-                        v-model="addForm.address"
-                        label="Enter Address"
-                        required
-                        :rules="[v => !!v || 'Address is required.']"
-                      ></v-text-field>
-                    </v-col>
-                  </div>
-                  <div class="custom-col row">
-                    <v-col sm="4" class="label-align pt-0">
-                      <label>City</label>
-                    </v-col>
-                    <v-col sm="8" class="pt-0 pb-0">
-                      <v-text-field
-                        v-model="addForm.city"
-                        label="Enter City"
-                        required
-                        :rules="[v => !!v || 'City is required.']"
-                      ></v-text-field>
-                    </v-col>
-                  </div>
-                  <div class="custom-col row">
-                    <v-col sm="4" class="label-align pt-0">
-                      <label>Province</label>
-                    </v-col>
-                    <v-col sm="8" class="pt-0 pb-0">
-                      <v-text-field
-                        v-model="addForm.province"
-                        label="Enter Province"
-                        required
-                        :rules="[v => !!v || 'Province is required.']"
-                      ></v-text-field>
-                    </v-col>
-                  </div>
-                  <div class="custom-col row">
-                    <v-col sm="4" class="label-align pt-0">
-                      <label>Zipcode</label>
-                    </v-col>
-                    <v-col sm="8" class="pt-0 pb-0">
-                      <v-text-field
-                        v-model="addForm.zipcode"
-                        :rules="[v => !!v || 'Zipcode is required.']"
-                        label="Enter Zipcode"
-                        required
-                      ></v-text-field>
-                    </v-col>
-                  </div>
-                  <div class="custom-col row">
-                    <v-col sm="4" class="label-align pt-0">
-                      <label class="label_text label-check-half">Status</label>
-                    </v-col>
-                    <v-col sm="8" class="pt-0 pb-0">
-                      <v-switch v-model="addForm.is_active" class="mx-2"></v-switch>
-                    </v-col>
-                  </div>
                 </v-col>
 
                 <v-col class="pt-0 pb-0" cols="12" md="12">
@@ -244,8 +144,8 @@
                       class="custom-save-btn"
                       @click="update"
                       id="submit_btn"
-                    >Create Hauler</v-btn>
-                    <router-link to="/admin/hauler" class="btn-custom-danger">Cancel</router-link>
+                    >Create News</v-btn>
+                    <router-link to="/admin/news" class="btn-custom-danger">Cancel</router-link>
                   </div>
                 </v-col>
               </v-row>
@@ -259,7 +159,7 @@
 
 <script>
 import { required } from "vuelidate/lib/validators";
-import { companyService } from "../../../_services/company.service";
+import { newsService } from "../../../_services/news.service";
 import { router } from "../../../_helpers/router";
 import { environment } from "../../../config/test.env";
 import VueGoogleAutocomplete from "vue-google-autocomplete";
@@ -271,7 +171,6 @@ export default {
   data() {
     return {
       loading: false,
-      prefixs: ["Ms.", "Mr.", "Mrs."],
       valid: true,
       avatar: null,
       customer_img: "",
@@ -281,28 +180,10 @@ export default {
       uberMapApiUrl: environment.uberMapApiUrl,
       uberMapToken: environment.uberMapToken,
       addForm: {
-        prefix: "",
-        first_name: "",
-        last_name: "",
-        email: "",
-        phone: "",
-        address: "",
-        city: "",
-        province: "",
-        user_image: null,
-        zipcode: "",
-        is_active: true,
-        customer_role: 6,
+        heading: "",
+        description: "",
+        image: null,
       },
-      emailRules: [
-        (v) => !!v || "Email is required.",
-        (v) => /.+@.+/.test(v) || "Email must be valid.",
-      ],
-      phoneRules: [
-        (v) => !!v || "Phone Number is required.",
-        (v) => /^\d*$/.test(v) || "Phone Number must be valid.",
-        (v) => v.length >= 10 || "Phone Number must be greater than 10 characters.",
-      ],
       rules: [
         (value) =>
           !value ||
@@ -350,11 +231,11 @@ export default {
     },
     handleProcessFile: function (error, file) {
       this.customer_img = this.imgUrl + file.serverId;
-      this.addForm.user_image = file.serverId;
+      this.addForm.image = file.serverId;
       this.uploadInProgress = false;
     },
     handleRemoveFile: function (file) {
-      this.addForm.user_image = "";
+      this.addForm.image = "";
       this.customer_img = "/images/avatar.png";
     },
     update() {
@@ -369,7 +250,7 @@ export default {
       if (this.$refs.form.validate()) {
         //start loading
         this.loading = true;
-        companyService.add(this.addForm).then((response) => {
+        newsService.add(this.addForm).then((response) => {
           //stop loading
           this.loading = false;
           //handle response
@@ -382,9 +263,9 @@ export default {
             //redirect to login
             const currentUser = authenticationService.currentUserValue;
             if (currentUser.data.user.role_id == 1) {
-              router.push("/admin/hauler");
+              router.push("/admin/news");
             } else {
-              router.push("/manager/hauler");
+              router.push("/manager/news");
             }
           } else {
             this.$toast.open({
