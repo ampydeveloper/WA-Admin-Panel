@@ -96,7 +96,6 @@
                   <th class="text-left">Service Type</th>
                   <th class="text-left">Price</th>
                   <th class="text-left">Day Time</th>
-                  <th class="text-left">Time Slot</th>
                   <th class="text-left">Actions</th>
                 </tr>
               </thead>
@@ -114,16 +113,11 @@
                   <td>${{ item.price }}</td>
                   <td>
                     <span v-for="(type, index) in item.slot_type">
-                      <span class="badges-item" v-if="type == 1 || type == 2">
+                      <span class="badges-item" v-if="type == 1 || type == 2 || type == 3">
                         <label v-if="type == 1">Morning</label>
                         <label v-if="type == 2">Afternoon</label>
+                        <label v-if="type == 3">Evening</label>
                       </span>
-                    </span>
-                  </td>
-                  <td>
-                    <span v-for="(tSlot, index) in item.timeSlots" class="badges-item">
-                      <label>{{tSlot.slot_start+'-'+tSlot.slot_end}}</label>
-                      <label v-if="item.timeSlots.length-1 != index"></label>
                     </span>
                   </td>
                   <td class="action-col">
