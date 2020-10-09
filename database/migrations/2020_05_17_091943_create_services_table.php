@@ -23,7 +23,8 @@ class CreateServicesTable extends Migration
             $table->string("service_image");
             $table->tinyInteger("service_for")->comment("4: for customer, 6: for haulers");
             $table->json("slot_type")->nullable();
-            $table->json("slot_time")->nullable();
+//            $table->json("slot_time")->nullable();
+            $table->tinyInteger('time_taken_to_complete_service')->nullable()->comment("1: 15_mins, 2: 30_mins, 3: 45_mins, 4: 60_mins, 5: 75_mins, 6: 90_mins,");
             $table->unsignedBigInteger('service_created_by');
             $table->foreign('service_created_by')->references('id')->on('users');
             $table->timestamps();

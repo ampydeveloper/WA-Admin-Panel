@@ -26,7 +26,8 @@ class ServicesController extends Controller
             'service_image' => 'required|string',
             'service_for' => 'required|numeric',
             'slot_type' => 'required_if:service_for,==,4|array',
-            'slot_time' => 'required_if:service_for,==,4|array',
+//            'slot_time' => 'required_if:service_for,==,4|array',
+            'time_taken_to_complete_service' => 'required_if:service_for,==,4',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -44,7 +45,7 @@ class ServicesController extends Controller
                 'service_image' => $request->service_image,
                 'service_for' => $request->service_for,
                 'slot_type' => json_encode($request->slot_type),
-                'slot_time' => json_encode($request->slot_time),
+                'time_taken_to_complete_service' => $request->time_taken_to_complete_service,
                 'service_created_by' => $request->user()->id,
             ]);
             if ($service->save()) {
@@ -78,7 +79,7 @@ class ServicesController extends Controller
             'service_image' => 'required|string',
             'service_for' => 'required|numeric',
             'slot_type' => 'required_if:service_for,==,4|array',
-            'slot_time' => 'required_if:service_for,==,4|array',
+            'time_taken_to_complete_service' => 'required_if:service_for,==,4|array',
         ]);
 
         if ($validator->fails()) {
@@ -98,7 +99,7 @@ class ServicesController extends Controller
                 'service_image' => $request->service_image,
                 'service_for' => $request->service_for,
                 'slot_type' => json_encode($request->slot_type),
-                'slot_time' => json_encode($request->slot_time),
+                'time_taken_to_complete_service' => $request->time_taken_to_complete_service,
             ]);
             return response()->json([
                 'status' => true,
@@ -119,19 +120,19 @@ class ServicesController extends Controller
      * list services
      */
     public function listServices() {
-        $getAllServices = Service::get();
-        if (count($getAllServices) > 0) {
-            foreach ($getAllServices as $key => $service) {
-                if ($service->service_for == config('constant.roles.Customer')) {
-                    $timeSlots = TimeSlots::whereIn('id', json_decode($service->slot_time))->get();
-                    $getAllServices[$key]["timeSlots"] = $timeSlots;
-                }
-            }
-        }
+//        $getAllServices = Service::get();
+//        if (count($getAllServices) > 0) {
+//            foreach ($getAllServices as $key => $service) {
+//                if ($service->service_for == config('constant.roles.Customer')) {
+//                    $timeSlots = TimeSlots::whereIn('id', json_decode($service->slot_time))->get();
+//                    $getAllServices[$key]["timeSlots"] = $timeSlots;
+//                }
+//            }
+//        }
         return response()->json([
             'status' => true,
             'message' => 'Service Listing.',
-            'data' => $getAllServices
+            'data' => Service::get()
         ], 200);
     }
     
@@ -149,14 +150,14 @@ class ServicesController extends Controller
         }
         
         $getAllServices = Service::skip($request->offset)->take($request->take)->get();
-        if (count($getAllServices) > 0) {
-            foreach ($getAllServices as $key => $service) {
-                if ($service->service_for == config('constant.roles.Customer')) {
-                    $timeSlots = TimeSlots::whereIn('id', json_decode($service->slot_time))->get();
-                    $getAllServices[$key]["timeSlots"] = $timeSlots;
-                }
-            }
-        }
+//        if (count($getAllServices) > 0) {
+//            foreach ($getAllServices as $key => $service) {
+//                if ($service->service_for == config('constant.roles.Customer')) {
+//                    $timeSlots = TimeSlots::whereIn('id', json_decode($service->slot_time))->get();
+//                    $getAllServices[$key]["timeSlots"] = $timeSlots;
+//                }
+//            }
+//        }
         return response()->json([
             'status' => true,
             'message' => 'Service Listing.',

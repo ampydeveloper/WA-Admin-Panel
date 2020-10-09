@@ -86,5 +86,26 @@ return [
     ],
     'range_cover' => [
         'distance' => 4
+    ],
+    'service_slot_type' => [
+        'morning' => 1,
+        'afternoon' => 2,
+        'evening' => 3
+    ],
+    'time_taken_to_complete_service' => [
+        '15_mins' => 1,
+        '30_mins' => 2,
+        '45_mins' => 3,
+        '60_mins' => 4,
+        '75_mins' => 5,
+        '90_mins' => 6,
+    ],
+    'time_taken_to_complete_service_reverse' => [
+        1 =>'15',
+        2 =>'30',
+        3 =>'45',
+        4 =>'60',
+        5 =>'75',
+        6 =>'90',
     ]
 ];
