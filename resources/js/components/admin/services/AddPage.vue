@@ -89,7 +89,7 @@
                   <v-text-field
                     v-model="addForm.service_name"
                     required
-                    :rules="[v => !!v || 'Service Name is required.']"
+                    :rules="[(v) => !!v || 'Service Name is required.']"
                     label="Enter Service Name"
                     placeholder
                   ></v-text-field>
@@ -108,7 +108,7 @@
                     v-model="addForm.service_for"
                     :mandatory="true"
                     required
-                    :rules="[v => !!v || 'Service For is required.']"
+                    :rules="[(v) => !!v || 'Service For is required.']"
                   >
                     <v-radio
                       label="Customer"
@@ -116,7 +116,12 @@
                       value="4"
                       class="mor_eve"
                     ></v-radio>
-                    <v-radio label="Hauler" @change="getSelectedType(6)" value="6" class="mor_eve"></v-radio>
+                    <v-radio
+                      label="Hauler"
+                      @change="getSelectedType(6)"
+                      value="6"
+                      class="mor_eve"
+                    ></v-radio>
                   </v-radio-group>
                 </v-col>
               </v-col>
@@ -133,7 +138,6 @@
                         class="pr-6"
                         v-model="addForm.slot_type"
                         :checked="true"
-                        @change="getTime(1)"
                         value="1"
                         id="morningJob"
                       />
@@ -145,7 +149,17 @@
                         type="checkbox"
                         class="pr-6"
                         v-model="addForm.slot_type"
-                        @change="getTime(2)"
+                        value="2"
+                        id="afternoonJob"
+                      />
+                      <label for="afternoonJob"></label>
+                      <span class="checkbox-title mor_eve">Afternoon</span>
+                    </div>
+                    <div class="custom-checkbox d-ib">
+                      <input
+                        type="checkbox"
+                        class="pr-6"
+                        v-model="addForm.slot_type"
                         value="2"
                         id="eveningJob"
                       />
@@ -158,13 +172,16 @@
                       v-if="!timeSlotErr"
                     >
                       <div class="v-messages__wrapper">
-                        <div class="v-messages__message">Service Time is required.</div>
+                        <div class="v-messages__message">
+                          Service Time is required.
+                        </div>
                       </div>
                     </div>
                   </v-col>
                 </v-col>
+              </div>
 
-                <v-col class="time-slots pt-0" cols="12" md="12" v-if="morningSlots.length">
+              <!-- <v-col class="time-slots pt-0" cols="12" md="12" v-if="morningSlots.length">
                   <v-col sm="2"></v-col>
                   <v-col sm="9" class="pt-0 pb-0">
                     <template v-for="(timeSlot, index) in morningSlots">
@@ -184,9 +201,9 @@
                       </span>
                     </template>
                   </v-col>
-                </v-col>
+                </v-col> -->
 
-                <v-col class="time-slots pt-0 pb-0" cols="12" md="12" v-if="eveningSlots.length">
+              <!-- <v-col class="time-slots pt-0 pb-0" cols="12" md="12" v-if="eveningSlots.length">
                   <v-col sm="2"></v-col>
                   <v-col sm="9" class="pt-0 pb-0">
                     <template v-for="(timeSlot, index) in eveningSlots">
@@ -207,7 +224,25 @@
                     </template>
                   </v-col>
                 </v-col>
-              </div>
+              </div> -->
+
+              <v-col cols="12" md="12" class="pt-0 pb-0">
+                <v-col sm="2" class="label-align pt-0">
+                  <label class="label_text"
+                    >Complete Time <small>(in mins)</small></label
+                  >
+                </v-col>
+                <v-col sm="4" class="pt-0 pb-0">
+                  <v-select
+                    v-model="addForm.time_taken_to_complete_service"
+                    :items="completeTime"
+                     item-text="value"
+          item-value="id"
+                    label="Select Complete Time"
+                    :rules="[(v) => !!v || 'Complete Time is required.']"
+                  ></v-select>
+                </v-col>
+              </v-col>
 
               <v-col cols="12" md="12" class="pt-0 pb-0">
                 <v-col sm="2" class="label-align pt-0">
@@ -261,15 +296,26 @@
                     allow-file-type-validation="true"
                     accepted-file-types="image/jpeg, image/png"
                   />
-                  <div class="v-messages theme--light error--text" role="alert" v-if="docError">
+                  <div
+                    class="v-messages theme--light error--text"
+                    role="alert"
+                    v-if="docError"
+                  >
                     <div class="v-messages__wrapper">
-                      <div class="v-messages__message">Service Image is required.</div>
+                      <div class="v-messages__message">
+                        Service Image is required.
+                      </div>
                     </div>
                   </div>
                 </v-col>
               </v-col>
 
-              <v-col cols="12" md="12" class="pt-0 pb-0" v-if="selectedType == 4">
+              <v-col
+                cols="12"
+                md="12"
+                class="pt-0 pb-0"
+                v-if="selectedType == 4"
+              >
                 <v-col sm="2" class="label-align pt-0">
                   <label class="label_text label-full">Service Type</label>
                 </v-col>
@@ -281,9 +327,13 @@
                     v-model="addForm.service_type"
                     :mandatory="false"
                     required
-                    :rules="[v => !!v || 'Service type is required.']"
+                    :rules="[(v) => !!v || 'Service type is required.']"
                   >
-                    <v-radio label="Per Load" value="1" class="mor_eve"></v-radio>
+                    <v-radio
+                      label="Per Load"
+                      value="1"
+                      class="mor_eve"
+                    ></v-radio>
                     <v-radio label="Trip" value="2" class="mor_eve"></v-radio>
                     <v-radio label="Bucket" value="3" class="mor_eve"></v-radio>
                   </v-radio-group>
@@ -302,9 +352,14 @@
                       class="custom-save-btn mt-4"
                       @click="save"
                       id="submit_btn"
-                    >Create Service</v-btn>
+                      >Create Service</v-btn
+                    >
 
-                    <router-link to="/admin/services" class="btn-custom-danger mt-4">Cancel</router-link>
+                    <router-link
+                      to="/admin/services"
+                      class="btn-custom-danger mt-4"
+                      >Cancel</router-link
+                    >
                   </v-col>
                 </v-row>
               </v-col>
@@ -329,6 +384,14 @@ export default {
   },
   data() {
     return {
+             completeTime: [
+          { id: 1, value: '15 Mins' },
+          { id: 2, value: '30 Mins' },
+          { id: 3, value: '45 Mins' },
+          { id: 4, value: '60 Mins' },
+          { id: 5, value: '75 Mins' },
+           { id: 6, value: '90 Mins' },
+        ],
       loading: false,
       valid: true,
       avatar: null,
@@ -344,7 +407,7 @@ export default {
         service_image: "",
         service_type: "2",
         slot_type: [],
-        slot_time: [],
+        time_taken_to_complete_service: [],
       },
       checkedSlot: {
         slot_type: "",
@@ -387,68 +450,68 @@ export default {
   },
   created() {},
   mounted: function () {
-    this.getTime(1);
+    // this.getTime(1);
   },
   methods: {
-    getTime(choosenCheckbox) {
-      this.checkedSlot.slot_type = choosenCheckbox;
-      serviceService.getTimeSlots(this.checkedSlot).then((response) => {
-        //handle response
-        if (response.status) {
-          if (choosenCheckbox == 1) {
-            if (this.morningSlots.length > 0) {
-              for (var i = 0; i < this.morningSlots.length; i++) {
-                if (this.addForm.slot_time.includes(this.morningSlots[i].id)) {
-                  this.addForm.slot_time.splice(
-                    this.addForm.slot_time.indexOf(this.morningSlots[i].id),
-                    1
-                  );
-                }
-              }
-              this.morningSlots = [];
-            } else {
-              this.morningSlots = [];
-              this.morningSlots = response.data;
-            }
-          } else {
-            if (this.eveningSlots.length > 0) {
-              for (var i = 0; i < this.eveningSlots.length; i++) {
-                if (this.addForm.slot_time.includes(this.eveningSlots[i].id)) {
-                  this.addForm.slot_time.splice(
-                    this.addForm.slot_time.indexOf(this.eveningSlots[i].id),
-                    1
-                  );
-                }
-              }
-              this.eveningSlots = [];
-            } else {
-              this.eveningSlots = [];
-              this.eveningSlots = response.data;
-            }
-          }
-        } else {
-          this.timeSlotErr = false;
-          this.$toast.open({
-            message: response.message,
-            type: "error",
-            timeout: 8000,
-            position: "top-right",
-          });
-        }
-      });
-    },
+    // getTime(choosenCheckbox) {
+    //   this.checkedSlot.slot_type = choosenCheckbox;
+    //   serviceService.getTimeSlots(this.checkedSlot).then((response) => {
+    //     //handle response
+    //     if (response.status) {
+    //       if (choosenCheckbox == 1) {
+    //         if (this.morningSlots.length > 0) {
+    //           for (var i = 0; i < this.morningSlots.length; i++) {
+    //             if (this.addForm.slot_time.includes(this.morningSlots[i].id)) {
+    //               this.addForm.slot_time.splice(
+    //                 this.addForm.slot_time.indexOf(this.morningSlots[i].id),
+    //                 1
+    //               );
+    //             }
+    //           }
+    //           this.morningSlots = [];
+    //         } else {
+    //           this.morningSlots = [];
+    //           this.morningSlots = response.data;
+    //         }
+    //       } else {
+    //         if (this.eveningSlots.length > 0) {
+    //           for (var i = 0; i < this.eveningSlots.length; i++) {
+    //             if (this.addForm.slot_time.includes(this.eveningSlots[i].id)) {
+    //               this.addForm.slot_time.splice(
+    //                 this.addForm.slot_time.indexOf(this.eveningSlots[i].id),
+    //                 1
+    //               );
+    //             }
+    //           }
+    //           this.eveningSlots = [];
+    //         } else {
+    //           this.eveningSlots = [];
+    //           this.eveningSlots = response.data;
+    //         }
+    //       }
+    //     } else {
+    //       this.timeSlotErr = false;
+    //       this.$toast.open({
+    //         message: response.message,
+    //         type: "error",
+    //         timeout: 8000,
+    //         position: "top-right",
+    //       });
+    //     }
+    //   });
+    // },
     getSelectedType(checkType) {
       this.selectedType = checkType;
     },
     //set time slow
-    setTimeSlot(timeSlotId, index) {
-      var findIndex = this.addForm.slot_time.indexOf(timeSlotId);
-      if (findIndex > -1) {
-        this.addForm.slot_time.splice(findIndex, 1);
-      } else {
-        this.addForm.slot_time.push(timeSlotId);
-      }
-    },
+    // setTimeSlot(timeSlotId, index) {
+    //   var findIndex = this.addForm.slot_time.indexOf(timeSlotId);
+    //   if (findIndex > -1) {
+    //     this.addForm.slot_time.splice(findIndex, 1);
+    //   } else {
+    //     this.addForm.slot_time.push(timeSlotId);
+    //   }
+    // },
     handleProcessFile: function (error, file) {
       this.addForm.service_image = file.serverId;
       this.docError = false;
@@ -462,65 +525,65 @@ export default {
       e.preventDefault();
 
       //time slot validation if customer service selected
-      if (this.selectedType == 4) {
-        //time slots validation
-        if (this.addForm.slot_time.length > 0) {
-          //morning check
-          if (this.morningSlots.length > 0) {
-            var checkMorning = 0;
-            for (var i = 0; i < this.morningSlots.length; i++) {
-              if (this.addForm.slot_time.includes(this.morningSlots[i].id)) {
-                checkMorning++;
-              }
-            }
-            //check if any morning selected
-            if (checkMorning == 0) {
-              this.$toast.open({
-                message: "Please select at least one morning time slot.",
-                type: "error",
-                timeout: 8000,
-                position: "top-right",
-              });
-              return false;
-            }
-          }
+      // if (this.selectedType == 4) {
+      //   //time slots validation
+      //   if (this.addForm.slot_time.length > 0) {
+      //     //morning check
+      //     if (this.morningSlots.length > 0) {
+      //       var checkMorning = 0;
+      //       for (var i = 0; i < this.morningSlots.length; i++) {
+      //         if (this.addForm.slot_time.includes(this.morningSlots[i].id)) {
+      //           checkMorning++;
+      //         }
+      //       }
+      //       //check if any morning selected
+      //       if (checkMorning == 0) {
+      //         this.$toast.open({
+      //           message: "Please select at least one morning time slot.",
+      //           type: "error",
+      //           timeout: 8000,
+      //           position: "top-right",
+      //         });
+      //         return false;
+      //       }
+      //     }
 
-          //check for time slots
-          if (this.eveningSlots.length > 0) {
-            var checkEvening = 0;
-            for (var i = 0; i < this.eveningSlots.length; i++) {
-              if (this.addForm.slot_time.includes(this.eveningSlots[i].id)) {
-                checkEvening++;
-              }
-            }
-            //check if any morning selected
-            if (checkEvening == 0) {
-              this.$toast.open({
-                message: "Please select at least one evening time slot.",
-                type: "error",
-                timeout: 8000,
-                position: "top-right",
-              });
-              return false;
-            }
-          }
-        } else {
-          this.$toast.open({
-            message: "Please select at least one time slot.",
-            type: "error",
-            timeout: 15000,
-            position: "top-right",
-          });
-          return false;
-        }
-        //time slots validation
-      }
+      //     //check for time slots
+      //     if (this.eveningSlots.length > 0) {
+      //       var checkEvening = 0;
+      //       for (var i = 0; i < this.eveningSlots.length; i++) {
+      //         if (this.addForm.slot_time.includes(this.eveningSlots[i].id)) {
+      //           checkEvening++;
+      //         }
+      //       }
+      //       //check if any morning selected
+      //       if (checkEvening == 0) {
+      //         this.$toast.open({
+      //           message: "Please select at least one evening time slot.",
+      //           type: "error",
+      //           timeout: 8000,
+      //           position: "top-right",
+      //         });
+      //         return false;
+      //       }
+      //     }
+      //   } else {
+      //     this.$toast.open({
+      //       message: "Please select at least one time slot.",
+      //       type: "error",
+      //       timeout: 15000,
+      //       position: "top-right",
+      //     });
+      //     return false;
+      //   }
+      //   //time slots validation
+      // }
 
       if (this.addForm.service_image == "") {
         this.docError = true;
       }
 
-      if (this.$refs.form.validate() && this.timeSlotErr && !this.docError) {
+      if (this.$refs.form.validate() && !this.docError) {
         if (this.loading) {
           return false;
         }

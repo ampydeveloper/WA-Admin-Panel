@@ -255,14 +255,6 @@
                   <label>Notes</label>
                 </v-col>
                 <v-col sm="4" class="pt-0">
-                  <!-- <v-text-field
-                    label="Enter Notes"
-                    v-model="addForm.notes"
-                    required
-                    :rules="[v => !!v || 'Notes is required.']"
-                    placeholder
-                  ></v-text-field>-->
-
                   <v-textarea
                     label="Enter Notes"
                     placeholder
