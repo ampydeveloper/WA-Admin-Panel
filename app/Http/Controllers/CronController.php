@@ -17,55 +17,113 @@ class CronController extends Controller
      */
     public function assignTecs() {
      
-       /* $getAllJobs = Job::with(
-            "customer",
-            "manager",
-            "farm",
-            "service",
-            "timeslots",
-            "truck",
-            "skidsteer",
-            "truck_driver",
-            "skidsteer_driver"
-        )
-        ->whereJobStatus(config('constant.job_status.open'))
-        // ->whereCreatedAt(Carbon::now())
-        ->whereTruckId(null)
-        ->whereSkidsteerId(null)
-        ->whereTruckDriverId(null)
-        ->whereSkidsteerDriverId(null)
-        ->get(); 
-        */
-        
-        /*
-         $getTruckDriver = User::with(['driver' => function($query) {
-             $query->whereDriverType(1);
-         }])
-         ->orDoesntHave('jobTruckDriver')
-         ->orWherehas('jobTruckDriver', function ($query) {
-            $query->whereJobStatus(config('constant.job_status.open'));
-         })
-         ->whereRoleId(config('constant.roles.Driver'))->first();
-        */
-        
-        /*
-        foreach($getAllJobs as $jobs) {
-            $truck = Vehicle::whereVehicleType(config('constant.vehicle_type.truck'))->first();
-            $truckDriver = Driver::with('user')->whereDriverType(1)->first();
-            $skidster = Vehicle::whereVehicleType(config('constant.vehicle_type.skidsteer'))->first();
-            $skidSterDriver = Driver::with('user')->whereDriverType(2)->first();
-            
-            //assign to job 
-            $jobs->truck_id = $truck != null ? $truck->id:null;
-            $jobs->skidsteer_id = $skidster != null ? $skidster->id:null;
-            $jobs->truck_driver_id = $truckDriver != null ? $truckDriver->user_id:null;
-            $jobs->skidsteer_driver_id = $skidSterDriver != null ? $skidSterDriver->user_id:null;
+        $speed = 40;
+        $timeTakenByService = config('constant.time_taken_to_complete_service_reverse');
+        $maxRouteDuration = 180;
+//        $distance = 110;
+//        $time = ($distance/$speed)*60;
+//        dd($time);
 
-            $jobs->save();
+        $morning_jobs = Job::where([
+            ['job_providing_date','=', date("Y-m-d", strtotime("+1 day"))],
+            ['time_slots_id', '=', config('constant.service_slot_type.morning')],
+            ['is_repeating_job', '=',config('constant.repeating_job.no')]
+        ])->with('farm', 'service')->get()->groupBy('farm.farm_zipcode');
+        foreach ($morning_jobs as $key => $jobs) {
+            $durationRouteGot = 0;
+            $job_ids = [];
+            reset($job_ids);
+            $flag = 0;
+            foreach ($jobs as $job) {
+                $communiteTime = ($job->farm->distance / $speed) * 60;
+                $timeTakenByServiceToComplete = $timeTakenByService[$job->service->time_taken_to_complete_service];
+                if ($durationRouteGot == 0) {
+                    $durationRouteGot = $communiteTime + $timeTakenByServiceToComplete;
+                    $job_ids[$job->id] = 1;
+                } else {
+                    $checkIfTruckHasTime = $maxRouteDuration - $durationRouteGot;
+                    if ($checkIfTruckHasTime >= ($communiteTime + $timeTakenByServiceToComplete)) {
+                        $durationRouteGot += $communiteTime + $timeTakenByServiceToComplete;
+                        $job_ids[$job->id] = 1;
+                    } else {
+                        $unRoutedJobs_morning[$key][$job->id] = [
+                            'job_time_slot' => 1,
+                            'time_needed_to_complete_job' => $communiteTime + $timeTakenByServiceToComplete,
+                        ];
+                    }
+                }
+            }
+            $route_details_morning[$key] = [
+                'time_taken_to_complete' => $durationRouteGot,
+                'spare_time' => $maxRouteDuration - $durationRouteGot,
+                'job_ids' => $job_ids,
+            ];
         }
-         */
+        dump($route_details_morning);
+        dump($unRoutedJobs_morning);
         
+        $afternoon_jobs = Job::where([
+            ['job_providing_date','=', date("Y-m-d", strtotime("+1 day"))],
+            ['time_slots_id', '=', config('constant.service_slot_type.afternoon')],
+            ['is_repeating_job', '=',config('constant.repeating_job.no')]
+        ])->with('farm', 'service')->get()->groupBy('farm.farm_zipcode');
         
+//        dd($jobs->toArray());
+        foreach ($afternoon_jobs as $key => $jobs) {
+            $durationRouteGot = 0;
+            $job_ids = [];
+            reset($job_ids);
+            $flag = 0;
+            foreach ($jobs as $job) {
+                $communiteTime = ($job->farm->distance / $speed) * 60;
+                $timeTakenByServiceToComplete = $timeTakenByService[$job->service->time_taken_to_complete_service];
+                if ($durationRouteGot == 0) {
+                    $durationRouteGot = $communiteTime + $timeTakenByServiceToComplete;
+                    $job_ids[$job->id] = 2;
+                } else {
+                    $checkIfTruckHasTime = $maxRouteDuration - $durationRouteGot;
+                    if ($checkIfTruckHasTime >= ($communiteTime + $timeTakenByServiceToComplete)) {
+                        $durationRouteGot += $communiteTime + $timeTakenByServiceToComplete;
+                        $job_ids[$job->id] = 2;
+                    } else {
+                        $unRoutedJobs_afternoon[$key][$job->id] = [
+                            'job_time_slot' => 2,
+                            'time_needed_to_complete_job' => $communiteTime + $timeTakenByServiceToComplete,
+                        ];
+                    }
+                }
+            }
+            $route_details_afternoon[$key] = [
+                'time_taken_to_complete' => $durationRouteGot,
+                'spare_time' => $maxRouteDuration - $durationRouteGot,
+                'job_ids' => $job_ids,
+            ];
+        }
+        
+        dump($route_details_afternoon);
+//        dd($unRoutedJobs_afternoon);
+        
+        if(isset($unRoutedJobs_morning)) {
+            foreach($unRoutedJobs_morning as $key => $unRoutedJob) {
+                dump($key);
+                if (isset($route_details_afternoon[$key])) {
+                    foreach ($unRoutedJob as $job_id => $job) {
+                        if ($job['time_needed_to_complete_job'] <= $route_details_afternoon[$key]['spare_time']) {
+                            $route_details_afternoon[$key]['time_taken_to_complete'] += $job['time_needed_to_complete_job'];
+                            $route_details_afternoon[$key]['spare_time'] = $route_details_afternoon[$key]['spare_time'] - $job['time_needed_to_complete_job'];
+                            $route_details_afternoon[$key]['job_ids'][$job_id] = 'late';
+                            unset($unRoutedJobs_morning[$key][$job_id]);
+                        }
+                    }
+                }
+            }
+        }
+        
+        dump($route_details_afternoon);
+        dd($unRoutedJobs_morning);
+ dd('end');
+
+
         //select driver 
         $cDrivers = Driver::where([
                 ['driver_type', '=', config('constant.driver_type.truck_driver')],
