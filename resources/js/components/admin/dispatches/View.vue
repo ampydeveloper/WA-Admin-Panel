@@ -273,9 +273,13 @@ export default {
                 coordinates: start
               }
           });
+        map.flyTo({
+          center: start,
+          speed: 0.5
+        });
       getRoute(start, [-122.61365699963287, 45.51773726437733]);
 
-      }, 5000);
+      }, 2000);
 
   },
   methods: {
