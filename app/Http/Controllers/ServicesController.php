@@ -22,11 +22,10 @@ class ServicesController extends Controller
             'service_name' => 'required|string',
             'price' => 'required|numeric',
             'description' => 'required|string',
-            'service_type' => 'required|numeric',
             'service_image' => 'required|string',
             'service_for' => 'required|numeric',
             'slot_type' => 'required_if:service_for,==,4|array',
-//            'slot_time' => 'required_if:service_for,==,4|array',
+            'service_type' => 'required_if:service_for,==,4',
             'time_taken_to_complete_service' => 'required_if:service_for,==,4',
         ]);
         if ($validator->fails()) {
@@ -75,11 +74,11 @@ class ServicesController extends Controller
             'service_name' => 'required|string',
             'price' => 'required|numeric',
             'description' => 'required|string',
-            'service_type' => 'required|numeric',
             'service_image' => 'required|string',
             'service_for' => 'required|numeric',
+            'service_type' => 'required_if:service_for,==,4',
             'slot_type' => 'required_if:service_for,==,4|array',
-            'time_taken_to_complete_service' => 'required_if:service_for,==,4|array',
+            'time_taken_to_complete_service' => 'required_if:service_for,==,4',
         ]);
 
         if ($validator->fails()) {

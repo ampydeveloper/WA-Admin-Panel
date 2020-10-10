@@ -226,7 +226,7 @@
                 </v-col>
               </div> -->
 
-              <v-col cols="12" md="12" class="pt-0 pb-0">
+              <v-col cols="12" md="12" class="pt-0 pb-0" v-if="selectedType == 4">
                 <v-col sm="2" class="label-align pt-0">
                   <label class="label_text"
                     >Complete Time <small>(in mins)</small></label

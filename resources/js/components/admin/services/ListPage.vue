@@ -96,6 +96,7 @@
                   <th class="text-left">Service Type</th>
                   <th class="text-left">Price</th>
                   <th class="text-left">Day Time</th>
+                  <th class="text-left">Complete Time</th>
                   <th class="text-left">Actions</th>
                 </tr>
               </thead>
@@ -120,6 +121,13 @@
                       </span>
                     </span>
                   </td>
+                  <td v-if="item.time_taken_to_complete_service == 1">15 mins</td>
+                  <td v-if="item.time_taken_to_complete_service == 2">30 mins</td>
+                  <td v-if="item.time_taken_to_complete_service == 3">45 mins</td>
+                  <td v-if="item.time_taken_to_complete_service == 4">60 mins</td>
+                  <td v-if="item.time_taken_to_complete_service == 5">75 mins</td>
+                  <td v-if="item.time_taken_to_complete_service == 6">90 mins</td>
+                  <td v-if="item.time_taken_to_complete_service == null"></td>
                   <td class="action-col">
                     <router-link
                       v-if="isAdmin"
