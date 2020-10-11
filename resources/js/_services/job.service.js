@@ -11,6 +11,7 @@ const currentUserSubject = new BehaviorSubject(
 
 export const jobService = {
   getCustomer,
+  getJobChatMessages,
   getManager,
   getFrams,
   listService,
@@ -29,6 +30,8 @@ export const jobService = {
   jobrepeating,
   jobunpaid,
   apiUrl: environment.apiUrl,
+  // chatUrl: 'http://13.235.151.113:3100/',
+  chatUrl: 'http://wa.customer.leagueofclicks.com/',
   currentUrl: '',
   currentUser: currentUserSubject.asObservable(),
   get currentUserValue() {
@@ -40,6 +43,19 @@ function getCustomer() {
   return fetch(
     this.apiUrl+`admin/job-customer`,
     requestOptions.get()
+  )
+    .then(handleResponse)
+    .then(user => {
+      // store user details and passport token in local storage to keep user logged in between page refreshes
+
+      return user;
+    });
+}
+
+function getJobChatMessages(data) {
+  return fetch(
+    this.apiUrl+`job-chat`,
+    requestOptions.post(data)
   )
     .then(handleResponse)
     .then(user => {
