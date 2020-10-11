@@ -24,43 +24,126 @@ class CronController extends Controller
 //        $time = ($distance/$speed)*60;
 //        dd($time);
 
+        $cDrivers = Driver::where([
+                ['driver_type', '=', config('constant.driver_type.truck_driver')],
+                ['status', '=', config('constant.driver_status.available')]
+            ])->pluck('id');
+        
+        $cAllTrucks = Vehicle::where([
+                ['vehicle_type', '=', config('constant.vehicle_type.truck')],
+                ['status', '=', config('constant.vehicle_status.available')],
+            ])->pluck('id');
+        
+        //find min cout of $iArrDriversId b/w $iArrTrucksId
+        $iMinCount = min(count($cDrivers), count($cAllTrucks));
+        $iArrDriverTruckIdMapping = [];
+        
+        //assigning one driver to one truck for a day DriverId => TruckId (2 => )
+        for ($index = 0; $index < $iMinCount; $index++)
+        {
+            $iArrDriverTruckIdMapping[$cDrivers[$index]] = $cAllTrucks[$index];
+            $truckAssignedToDrivers[] = [
+                'truck_id' => $cAllTrucks[$index],
+                'driver_id' => $cDrivers[$index]
+            ] ;
+        }
+        
+        dump($truckAssignedToDrivers);
+        
         $morning_jobs = Job::where([
             ['job_providing_date','=', date("Y-m-d", strtotime("+1 day"))],
             ['time_slots_id', '=', config('constant.service_slot_type.morning')],
             ['is_repeating_job', '=',config('constant.repeating_job.no')]
         ])->with('farm', 'service')->get()->groupBy('farm.farm_zipcode');
+//        dd($morning_jobs->toArray());
         foreach ($morning_jobs as $key => $jobs) {
             $durationRouteGot = 0;
             $job_ids = [];
-            reset($job_ids);
+//            reset($job_ids);
             $flag = 0;
-            foreach ($jobs as $job) {
-                $communiteTime = ($job->farm->distance / $speed) * 60;
-                $timeTakenByServiceToComplete = $timeTakenByService[$job->service->time_taken_to_complete_service];
-                if ($durationRouteGot == 0) {
-                    $durationRouteGot = $communiteTime + $timeTakenByServiceToComplete;
-                    $job_ids[$job->id] = 1;
-                } else {
-                    $checkIfTruckHasTime = $maxRouteDuration - $durationRouteGot;
-                    if ($checkIfTruckHasTime >= ($communiteTime + $timeTakenByServiceToComplete)) {
-                        $durationRouteGot += $communiteTime + $timeTakenByServiceToComplete;
+            if (count($truckAssignedToDrivers) > 0) {
+                foreach ($jobs as $job) {
+                    $communiteTime = ($job->farm->distance / $speed) * 60;
+                    $timeTakenByServiceToComplete = $timeTakenByService[$job->service->time_taken_to_complete_service];
+                    if ($durationRouteGot == 0) {
+                        $durationRouteGot = $communiteTime + $timeTakenByServiceToComplete;
                         $job_ids[$job->id] = 1;
                     } else {
-                        $unRoutedJobs_morning[$key][$job->id] = [
-                            'job_time_slot' => 1,
-                            'time_needed_to_complete_job' => $communiteTime + $timeTakenByServiceToComplete,
-                        ];
+                        $checkIfTruckHasTime = $maxRouteDuration - $durationRouteGot;
+                        if ($checkIfTruckHasTime >= ($communiteTime + $timeTakenByServiceToComplete)) {
+                            $durationRouteGot += $communiteTime + $timeTakenByServiceToComplete;
+                            $job_ids[$job->id] = 1;
+                        } else {
+                            $unRoutedJobs_morning[$key][$job->id] = [
+                                'job_time_slot' => 1,
+                                'time_needed_to_complete_job' => $communiteTime + $timeTakenByServiceToComplete,
+                            ];
+                        }
                     }
                 }
+                
+                foreach ($truckAssignedToDrivers as $key1 => $truckAssignedToDriver) {
+                    $route_details_morning[$key] = [
+                        'time_taken_to_complete' => $durationRouteGot,
+                        'spare_time' => $maxRouteDuration - $durationRouteGot,
+                        'job_ids' => $job_ids,
+                        'truck_id' => $truckAssignedToDriver['truck_id'],
+                        'driver_id' => $truckAssignedToDriver['driver_id'],
+                    ];
+                    unset($truckAssignedToDrivers[$key1]);
+                    break;
+                }
             }
-            $route_details_morning[$key] = [
-                'time_taken_to_complete' => $durationRouteGot,
-                'spare_time' => $maxRouteDuration - $durationRouteGot,
-                'job_ids' => $job_ids,
-            ];
         }
         dump($route_details_morning);
         dump($unRoutedJobs_morning);
+        dump($truckAssignedToDrivers);
+        
+        if(isset($unRoutedJobs_morning)) {
+            foreach ($unRoutedJobs_morning as $route => $value) {
+                reset($job_ids);
+                if (count($truckAssignedToDrivers) > 0) {
+                    $durationRouteGot = 0;
+                    $job_ids = [];
+                    foreach ($value as $job_id => $unRoutedJob) {
+                        if ($durationRouteGot == 0) {
+                            $durationRouteGot = $unRoutedJob['time_needed_to_complete_job'];
+                            $job_ids[$job_id] = 1;
+                            unset($unRoutedJobs_morning[$route][$job_id]);
+                        } else {
+                            $checkIfTruckHasTime = $maxRouteDuration - $durationRouteGot;
+                            if ($checkIfTruckHasTime >= $unRoutedJob['time_needed_to_complete_job']) {
+                                $durationRouteGot += $communiteTime + $timeTakenByServiceToComplete;
+                                $job_ids[$job_id] = 1;
+                                unset($unRoutedJobs_morning[$route][$job_id]);
+                            } 
+                        }
+                        
+                    }
+                    foreach ($truckAssignedToDrivers as $key1 => $truckAssignedToDriver) {
+                        $route_details[$route] = [
+                            'time_taken_to_complete' => $durationRouteGot,
+                            'spare_time' => $maxRouteDuration - $durationRouteGot,
+                            'job_ids' => $job_ids,
+                            'truck_id' => $truckAssignedToDriver['truck_id'],
+                            'driver_id' => $truckAssignedToDriver['driver_id'],
+                        ];
+                        unset($truckAssignedToDrivers[$key1]);
+                        break;
+                    }
+                }
+            }
+        }
+        
+        dump($route_details);
+        dump($unRoutedJobs_morning);
+        dd($truckAssignedToDrivers);
+
+
+        dd($drivers->toArray());
+        
+        
+        
         
         $afternoon_jobs = Job::where([
             ['job_providing_date','=', date("Y-m-d", strtotime("+1 day"))],
@@ -147,6 +230,7 @@ class CronController extends Controller
             array_push($iArrTrucksId, $truck->id);
         }
         
+        
         //find min cout of $iArrDriversId b/w $iArrTrucksId
         $iMinCount = min(count($iArrDriversId), count($iArrTrucksId));
         $iArrDriverTruckIdMapping = [];
@@ -154,8 +238,14 @@ class CronController extends Controller
         for ($index = 0; $index < $iMinCount; $index++)
         {
             $iArrDriverTruckIdMapping[$iArrDriversId[$index]] = $iArrTrucksId[$index];
+            $truckAssignedToDrivers[] = [
+                'truck_id' => $iArrTrucksId[$index],
+                'driver_id' => $iArrDriversId[$index]
+            ] ;
         }
-        
+        dump($iArrDriversId);
+        dump($iArrTrucksId);
+        dd($truckAssignedToDrivers);
         //select all jobs in a particular interval time and loop for all interval 
         for($timeSlot = 1; $timeSlot <= config('constant.time_slots.total_time_slots'); $timeSlot++)
         {

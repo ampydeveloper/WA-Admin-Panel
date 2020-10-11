@@ -281,55 +281,64 @@ class ManagerController extends Controller {
         }
         $confirmed = 1;
         $admin = User::whereId($request->admin_id)->first();
-        if ($request->email != '' && $request->email != null) {
-            $checkEmail = User::where('email', $request->email)->first();
-            if ($checkEmail !== null) {
-                if ($checkEmail->id !== $admin->id) {
-                    return response()->json([
-                                'status' => false,
-                                'message' => 'Email is already taken.',
-                                'data' => []
-                                    ], 422);
+        if ($admin) {
+            if ($request->email != '' && $request->email != null) {
+                $checkEmail = User::where('email', $request->email)->first();
+                if ($checkEmail !== null) {
+                    if ($checkEmail->id !== $admin->id) {
+                        return response()->json([
+                                    'status' => false,
+                                    'message' => 'Email is already taken.',
+                                    'data' => []
+                                        ], 422);
+                    }
                 }
-            } 
-            if ($admin->email !== $request->email) {
-                $confirmed = 0;
-            }
-        }
-        try {
-            if ($request->password != '' && $request->password != null) {
-                $admin->password = bcrypt($request->password);
-            }
-            $admin->first_name = $request->admin_first_name;
-            $admin->last_name = $request->admin_last_name;
-            $admin->email = $request->email;
-            $admin->user_image = (isset($request->user_image) && $request->user_image != '' && $request->user_image != null) ? $request->user_image : null;
-            $admin->is_confirmed = $confirmed;
-            $admin->save();
-            if ($confirmed == 0) {
-                $this->_updateEmail($admin, $request->email);
-                if ($request->user()->id == $request->admin_id) {
-                    $request->user()->token()->revoke();
-                    return response()->json([
-                                'status' => true,
-                                'message' => 'Successfully logged out',
-                                'data' => []
-                    ]);
+                if ($admin->email !== $request->email) {
+                    if(!isset($request->is_mobile)) {
+                        $confirmed = 0;
+                    }
                 }
             }
-            return response()->json([
-                        'status' => true,
-                        'message' => 'Admin updated sucessfully.',
-                        'data' => []
-            ]);
-        } catch (\Exception $e) {
-            Log::error(json_encode($e->getMessage()));
-            return response()->json([
-                        'status' => false,
-                        'message' => $e->getMessage(),
-                        'data' => []
-                            ], 500);
+            try {
+                if ($request->password != '' && $request->password != null) {
+                    $admin->password = bcrypt($request->password);
+                }
+                $admin->first_name = $request->admin_first_name;
+                $admin->last_name = $request->admin_last_name;
+                $admin->email = $request->email;
+                $admin->user_image = (isset($request->user_image) && $request->user_image != '' && $request->user_image != null) ? $request->user_image : null;
+                $admin->is_confirmed = $confirmed;
+                $admin->save();
+                if ($confirmed == 0) {
+                    $this->_updateEmail($admin, $request->email);
+//                    if ($request->user()->id == $request->admin_id) {
+//                        $request->user()->token()->revoke();
+//                        return response()->json([
+//                                    'status' => true,
+//                                    'message' => 'Successfully logged out',
+//                                    'data' => []
+//                        ]);
+//                    }
+                }
+                return response()->json([
+                            'status' => true,
+                            'message' => 'Admin updated sucessfully.',
+                            'data' => []
+                ]);
+            } catch (\Exception $e) {
+                Log::error(json_encode($e->getMessage()));
+                return response()->json([
+                            'status' => false,
+                            'message' => $e->getMessage(),
+                            'data' => []
+                                ], 500);
+            }
         }
+        return response()->json([
+                    'status' => false,
+                    'message' => "No admin.",
+                    'data' => []
+                        ], 500);
     }
 
     /**
