@@ -272,6 +272,7 @@ class ManagerController extends Controller {
                     'admin_last_name' => 'required|string',
                     'email' => 'required'
         ]);
+        
         if ($validator->fails()) {
             return response()->json([
                         'status' => false,
@@ -294,11 +295,10 @@ class ManagerController extends Controller {
                     }
                 }
                 if ($admin->email !== $request->email) {
-                    if(!isset($request->is_mobile)) {
-                        $confirmed = 0;
-                    }
+                    $confirmed = 0;
                 }
             }
+//            dd($confirmed);
             try {
                 if ($request->password != '' && $request->password != null) {
                     $admin->password = bcrypt($request->password);
@@ -582,7 +582,7 @@ class ManagerController extends Controller {
         return response()->json([
                     'status' => true,
                     'message' => 'Admin List',
-                    'data' => User::whereRoleId(config('constant.roles.Admin_Manager'))->with('managerDetails')->skip($request->offset)->take($request->take)->get()
+                    'data' => User::whereRoleId(config('constant.roles.Admin_Manager'))->with('managerDetails')->skip($request->offset)->take($request->take)->orderBy('id', 'DESC')->get()
                         ], 200);
     }
     /**
@@ -611,7 +611,7 @@ class ManagerController extends Controller {
         return response()->json([
                     'status' => true,
                     'message' => 'Admin List',
-                    'data' => User::whereRoleId(config('constant.roles.Admin'))->skip($request->offset)->take($request->take)->get()
+                    'data' => User::whereRoleId(config('constant.roles.Admin'))->skip($request->offset)->take($request->take)->orderBy('id', 'DESC')->get()
                         ], 200);
     }
     /**

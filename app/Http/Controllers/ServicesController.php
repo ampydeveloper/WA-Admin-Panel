@@ -149,14 +149,14 @@ class ServicesController extends Controller
         }
         
         $getAllServices = Service::skip($request->offset)->take($request->take)->get();
-//        if (count($getAllServices) > 0) {
-//            foreach ($getAllServices as $key => $service) {
-//                if ($service->service_for == config('constant.roles.Customer')) {
-//                    $timeSlots = TimeSlots::whereIn('id', json_decode($service->slot_time))->get();
-//                    $getAllServices[$key]["timeSlots"] = $timeSlots;
-//                }
-//            }
-//        }
+        if (count($getAllServices) > 0) {
+            foreach ($getAllServices as $key => $service) {
+                if ($service->slot_type !== null) {
+                    $slot_type = json_decode($service->slot_type);
+                    $getAllServices[$key]["slot_type"] = $slot_type;
+                }
+            }
+        }
         return response()->json([
             'status' => true,
             'message' => 'Service Listing.',
@@ -169,7 +169,10 @@ class ServicesController extends Controller
      */
     public function getService(Request $request) {
         $fetchService = Service::whereId($request->service_id)->first();
+        
         if($fetchService != null) {
+            $slot_type = json_decode($fetchService->slot_type);
+            $fetchService["slot_type"] = $slot_type;
             $status = true;
             $message = "Service Found.";
             $statusCode = 200;

@@ -349,7 +349,7 @@ class VehicleController extends Controller {
         return response()->json([
                     'status' => true,
                     'message' => 'Vehicle insurance with vehicle',
-                    'data' => VehicleInsurance::where('vehicle_id', $request->vehicle_id)->skip($request->offset)->take($request->take)->get()
+                    'data' => VehicleInsurance::where('vehicle_id', $request->vehicle_id)->skip($request->offset)->take($request->take)->orderBy('id', 'DESC')->get()
                         ], 200);
     }
     /**
@@ -486,7 +486,7 @@ class VehicleController extends Controller {
         return response()->json([
                     'status' => true,
                     'message' => 'Vehicle Details',
-                    'data' => VehicleService::where('vehicle_id', $request->vehicle_id)->skip($request->offset)->take($request->take)->get()
+                    'data' => VehicleService::where('vehicle_id', $request->vehicle_id)->skip($request->offset)->take($request->take)->orderBy('id', 'DESC')->get()
                         ], 200);
     }
     /**

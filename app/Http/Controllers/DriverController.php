@@ -39,7 +39,7 @@ class DriverController extends Controller {
         return response()->json([
                     'status' => true,
                     'message' => 'Drivers Details',
-                    'data' => User::where('role_id', config('constant.roles.Driver'))->with('driver')->skip($request->offset)->take($request->take)->get()
+                    'data' => User::where('role_id', config('constant.roles.Driver'))->with('driver')->skip($request->offset)->take($request->take)->orderBy('id', 'DESC')->get()
                         ], 200);
     }
 
