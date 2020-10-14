@@ -11,7 +11,6 @@ use Validator;
 use Mail;
 use App\User;
 use App\Service;
-use App\TimeSlots;
 use App\Job;
 use App\CustomerFarm;
 
@@ -24,8 +23,8 @@ class JobsController extends Controller {
                     'status' => true,
                     'message' => 'job Details',
                     'data' => [
-                        'allJobs' => Job::with("customer", "manager", "farm", "service", "timeslots", "truck", "skidsteer", "truck_driver", "skidsteer_driver")->get(),
-                        'repeatingJobs' => Job::where('is_repeating_job', config('constant.repeating_job.yes'))->with("customer", "manager", "farm", "service", "timeslots", "truck", "skidsteer", "truck_driver", "skidsteer_driver")->get()
+                        'allJobs' => Job::with("customer", "manager", "farm", "service", "truck", "skidsteer", "truck_driver", "skidsteer_driver")->get(),
+                        'repeatingJobs' => Job::where('is_repeating_job', config('constant.repeating_job.yes'))->with("customer", "manager", "farm", "service", "truck", "skidsteer", "truck_driver", "skidsteer_driver")->get()
                     ]
                         ], 200);
     }
@@ -45,8 +44,8 @@ class JobsController extends Controller {
                     'status' => true,
                     'message' => 'job Details',
                     'data' => [
-                        'allJobs' => Job::with("customer", "manager", "farm", "service", "timeslots", "truck", "skidsteer", "truck_driver", "skidsteer_driver")->skip($request->offset)->take($request->take)->get(),
-                        'repeatingJobs' => Job::where('is_repeating_job', config('constant.repeating_job.yes'))->with("customer", "manager", "farm", "service", "timeslots", "truck", "skidsteer", "truck_driver", "skidsteer_driver")->skip($request->offset)->take($request->take)->get()
+                        'allJobs' => Job::with("customer", "manager", "farm", "service", "truck", "skidsteer", "truck_driver", "skidsteer_driver")->skip($request->offset)->take($request->take)->get(),
+                        'repeatingJobs' => Job::where('is_repeating_job', config('constant.repeating_job.yes'))->with("customer", "manager", "farm", "service", "truck", "skidsteer", "truck_driver", "skidsteer_driver")->skip($request->offset)->take($request->take)->get()
                     ]
                         ], 200);
     }
@@ -55,13 +54,13 @@ class JobsController extends Controller {
      */
     public function jobFilter(Request $request) {
         if ($request->has('job_status')) {
-            $filterJobs = $repeatingJobs = Job::where('job_status', $request->job_status)->with("customer", "manager", "farm", "service", "timeslots", "truck", "skidsteer", "truck_driver", "skidsteer_driver")->get();
+            $filterJobs = $repeatingJobs = Job::where('job_status', $request->job_status)->with("customer", "manager", "farm", "service", "truck", "skidsteer", "truck_driver", "skidsteer_driver")->get();
         } elseif ($request->has('payment_mode')) {
-            $filterJobs = $repeatingJobs = Job::where('payment_mode', $request->payment_mode)->with("customer", "manager", "farm", "service", "timeslots", "truck", "skidsteer", "truck_driver", "skidsteer_driver")->get();
+            $filterJobs = $repeatingJobs = Job::where('payment_mode', $request->payment_mode)->with("customer", "manager", "farm", "service", "truck", "skidsteer", "truck_driver", "skidsteer_driver")->get();
         } elseif ($request->has('payment_status')) {
-            $filterJobs = $repeatingJobs = Job::where('payment_status', $request->payment_status)->with("customer", "manager", "farm", "service", "timeslots", "truck", "skidsteer", "truck_driver", "skidsteer_driver")->get();
+            $filterJobs = $repeatingJobs = Job::where('payment_status', $request->payment_status)->with("customer", "manager", "farm", "service", "truck", "skidsteer", "truck_driver", "skidsteer_driver")->get();
         } elseif ($request->has('quick_book')) {
-            $filterJobs = $repeatingJobs = Job::where('quick_book', $request->quick_book)->with("customer", "manager", "farm", "service", "timeslots", "truck", "skidsteer", "truck_driver", "skidsteer_driver")->get();
+            $filterJobs = $repeatingJobs = Job::where('quick_book', $request->quick_book)->with("customer", "manager", "farm", "service", "truck", "skidsteer", "truck_driver", "skidsteer_driver")->get();
         }
         return response()->json([
                     'status' => true,
@@ -212,28 +211,28 @@ class JobsController extends Controller {
     /**
      * get service time slots
      */
-    public function getServiceSlots(Request $request) {
-        $service = Service::whereId($request->service_id)->first();
-        if ($service != null) {
-            $timeSlots = TimeSlots::whereIn('id', json_decode($service->slot_time))->get();
-            return response()->json([
-                        'status' => true,
-                        'message' => 'Service Slot Details',
-                        'data' => $timeSlots
-                            ], 200);
-        } else {
-            return response()->json([
-                        'status' => true,
-                        'message' => 'No time slot available',
-                        'data' => []
-                            ], 500);
-        }
-    }
+//    public function getServiceSlots(Request $request) {
+//        $service = Service::whereId($request->service_id)->first();
+//        if ($service != null) {
+//            $timeSlots = TimeSlots::whereIn('id', json_decode($service->slot_time))->get();
+//            return response()->json([
+//                        'status' => true,
+//                        'message' => 'Service Slot Details',
+//                        'data' => $timeSlots
+//                            ], 200);
+//        } else {
+//            return response()->json([
+//                        'status' => true,
+//                        'message' => 'No time slot available',
+//                        'data' => []
+//                            ], 500);
+//        }
+//    }
     /**
      * get single jobs
      */
     public function getSingleJob(Request $request) {
-        $getSingleJobs = Job::whereId($request->job_id)->with("customer", "manager", "farm", "service", "timeslots", "truck", "skidsteer", "truck_driver", "skidsteer_driver")->first();
+        $getSingleJobs = Job::whereId($request->job_id)->with("customer", "manager", "farm", "service", "truck", "skidsteer", "truck_driver", "skidsteer_driver")->first();
         return response()->json([
                     'status' => true,
                     'message' => 'single job Details',
@@ -368,6 +367,15 @@ class JobsController extends Controller {
                     'message' => 'You cannot cancel the job.',
                     'data' => []
                         ], 500);
+    }
+    
+    
+    public function dispatches() {
+        return response()->json([
+                    'status' => true,
+                    'message' => 'Dispatches',
+                    'data' => Job::where('job_status', config('constant.job_status.assigned'))->where('job_providing_date', date("Y-m-d"))->with("customer", "manager", "farm", "service", "truck", "skidsteer", "truck_driver", "skidsteer_driver")->get()
+                        ], 200);
     }
 
 }
