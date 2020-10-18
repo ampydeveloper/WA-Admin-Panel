@@ -178,6 +178,20 @@ Route::group(['prefix' => 'auth'], function () {
             Route::get('single-news/{news_id}', 'NewsController@singleNews');
             Route::post('update-news', 'NewsController@updateNews');
             Route::delete('delete-news/{news_id}', 'NewsController@deleteNews');
+            
+            //faq
+            Route::get('faq-list', 'NewsController@faqList');
+            Route::post('create-faq', 'NewsController@createFaq');
+            Route::get('single-faq/{faq_id}', 'NewsController@singleFaq');
+            Route::post('update-faq', 'NewsController@updateFaq');
+            Route::delete('delete-faq/{faq_id}', 'NewsController@deleteFaq');
+            
+            //mechanic
+            Route::get('mechanic-list', 'ManagerController@mechanicList');
+            Route::post('create-mechanic', 'ManagerController@createMechanic');
+            Route::get('single-mechanic/{mechanic_id}', 'ManagerController@singleMechanic');
+            Route::post('update-mechanic', 'ManagerController@updateMechanic');
+            Route::delete('delete-mechanic/{mechanic_id}', 'ManagerController@deleteMechanic');
 
             //message
             Route::post('chat-send', 'MessageController@send');

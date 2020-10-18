@@ -4,7 +4,7 @@
       <ul>
         <li>
           <h4 class="main-title text-left top_heading">
-            Update News
+            Update FAQ
             <span class="right-bor"></span>
           </h4>
         </li>
@@ -45,8 +45,8 @@
           </router-link>
         </li>
         <li>
-          <router-link to="/admin/news">
-            News
+          <router-link to="/admin/faq">
+            FAQ
             <span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -81,72 +81,36 @@
               lazy-validation
               id="form_field"
             >
-            <input type="hidden" name="news_id" value="">
+            <input type="hidden" name="faq_id" value="">
               <v-row>
                 <v-col cols="6" md="6" class="pl-0 manager-cols">
                   <div class="custom-col row">
                     <v-col sm="4" class="label-align pt-0">
-                      <label>News Heading</label>
+                      <label>Question</label>
                     </v-col>
                     <v-col sm="8" class="pt-0 pb-0">
                       <v-text-field
-                        v-model="addForm.heading"
-                        label="Enter Heading"
+                        v-model="addForm.question"
+                        label="Enter Question"
                         required
-                        :rules="[v => !!v || 'News Heading is required.']"
+                        :rules="[v => !!v || 'FAQ Question is required.']"
                       ></v-text-field>
                     </v-col>
                   </div>
                   <div class="custom-col row">
                     <v-col sm="4" class="label-align pt-0">
-                      <label>Description</label>
+                      <label>Answer</label>
                     </v-col>
                     <v-col sm="8" class="pt-0 pb-0">
                       <v-textarea
-                        v-model="addForm.description"
-                        label="Enter Description"
+                        v-model="addForm.answer"
+                        label="Enter Answer"
                         required
-                        :rules="[v => !!v || 'Description is required.']"
+                        :rules="[v => !!v || 'Answer is required.']"
                       ></v-textarea>
                     </v-col>
                   </div>
                 </v-col>
-                <v-col cols="6" md="6" class="pl-0 manager-cols">
-                    <div class="custom-col row custom-img-holder">
-                    <v-col sm="4" class="label-align pt-0 image-upload-label">
-                      <label>Image</label>
-                    </v-col>
-                    <v-col sm="8" class="pt-0 pb-0">
-                      <file-pond
-                        name="uploadImage"
-                        ref="pond"
-                        label-idle="Drop or Browse your files"
-                        v-bind:allow-multiple="false"
-                        v-bind:server="serverOptions"
-                        v-bind:files="myFiles"
-                        v-on:addfilestart="setUploadIndex"
-                        allow-file-type-validation="true"
-                        accepted-file-types="image/jpeg, image/png"
-                        v-on:processfile="handleProcessFile"
-                        v-on:processfilerevert="handleRemoveFile"
-                      />
-                      <div
-                       class="service-image-outer"
-                      >
-                        <button
-                          type="submit"
-                          class="close"
-                          v-if="cross"
-                          @click="Remove()"
-                        >
-                          <span>&times;</span>
-                        </button>
-                        <img :src="avatar" />
-                      </div>
-                    </v-col>
-                  </div>
-                </v-col>
-
                 <v-col class="pt-0 pb-0" cols="12" md="12">
                   <div class="p-0 float-right">
                     <v-btn
@@ -158,7 +122,7 @@
                       @click="update"
                       id="submit_btn"
                     >Update</v-btn>
-                    <router-link to="/admin/news" class="btn-custom-danger">Cancel</router-link>
+                    <router-link to="/admin/faq" class="btn-custom-danger">Cancel</router-link>
                   </div>
                 </v-col>
               </v-row>
@@ -172,7 +136,7 @@
 
 <script>
 import { required } from "vuelidate/lib/validators";
-import { newsService } from "../../../_services/news.service";
+import { faqService } from "../../../_services/faq.service";
 import { router } from "../../../_helpers/router";
 import { environment } from "../../../config/test.env";
 import VueGoogleAutocomplete from "vue-google-autocomplete";
@@ -185,27 +149,17 @@ export default {
     return {
       loading: false,
       valid: true,
-      avatar: null,
-      customer_img: "",
-      uploadInProgress: false,
       apiUrl: environment.apiUrl,
       imgUrl: environment.imgUrl,
       uberMapApiUrl: environment.uberMapApiUrl,
       uberMapToken: environment.uberMapToken,
       cross: false,
       addForm: {
-        news_id:"",
-        heading: "",
-        description: "",
+        faq_id:"",
+        question: "",
+        answer: "",
         image: null,
       },
-      rules: [
-        (value) =>
-          !value ||
-          value.size < 2000000 ||
-          "Profile Image size should be less than 2 MB.",
-      ],
-      myFiles: [],
     };
   },
   computed: {
@@ -237,25 +191,15 @@ export default {
       }
     },
   },
-  created() {
-    this.customer_img = "/images/avatar.png";
-  },
   mounted: function () {
-    newsService.getNews(this.$route.params.id).then((response) => {
+    faqService.getFaq(this.$route.params.id).then((response) => {
       //handle response
       if (response.status) {
         this.addForm = {
-          news_id: response.data.id,
-          heading: response.data.heading,
-          description: response.data.description,
-          image: response.data.image,
+          faq_id: response.data.id,
+          question: response.data.question,
+          answer: response.data.answer,
         };
-        if (response.data.image) {
-          this.cross = true;
-          this.avatar = this.imgUrl + response.data.image;
-        } else {
-          this.avatar = "";
-        }
       } else {
         this.$toast.open({
           message: response.message,
@@ -266,37 +210,11 @@ export default {
     });
   },
   methods: {
-    Remove() {
-      this.avatar = "";
-      this.cross = false;
-      this.addForm.image = "";
-    },
-    setUploadIndex() {
-      this.uploadInProgress = true;
-    },
-    handleProcessFile: function (error, file) {
-      this.avatar = this.imgUrl + file.serverId;
-      this.addForm.image = file.serverId;
-      this.uploadInProgress = false;
-    },
-    handleRemoveFile: function (file) {
-      this.addForm.image = "";
-      this.avatar = "";
-      this.cross = false;
-    },
     update() {
-      if (this.uploadInProgress) {
-        this.$toast.open({
-          message: "Image uploading is in progress.",
-          type: "error",
-          position: "top-right",
-        });
-        return false;
-      }
       if (this.$refs.form.validate()) {
         //start loading
         this.loading = true;
-        newsService
+        faqService
           .edit(this.addForm, this.$route.params.id)
           .then((response) => {
             //stop loading
@@ -311,9 +229,9 @@ export default {
               //redirect to login
               const currentUser = authenticationService.currentUserValue;
               if (currentUser.data.user.role_id == 1) {
-                router.push("/admin/news");
+                router.push("/admin/faq");
               } else {
-                router.push("/manager/news");
+                router.push("/manager/faq");
               }
             } else {
               this.$toast.open({

@@ -223,7 +223,8 @@
             items: [
               { title: 'Admin', url: '/admin/admin', icon: "<img src='/images/user.svg' />" },
               { title: 'Managers', url: '/admin/manager', icon: "<img src='/images/user-check.svg' />" },
-	            { title: 'Drivers', url: '/admin/truckdrivers', icon: "<img src='/images/users.svg' />" }
+	      { title: 'Drivers', url: '/admin/truckdrivers', icon: "<img src='/images/users.svg' />" },
+              { title: 'Mechanic',url: '/admin/mechanic', icon: "<img src='/images/users.svg' />" },
             ]
           },
           {
@@ -250,7 +251,7 @@
             active: true,
             items: [
                { title: 'News',url: '/admin/news', icon: "<img src='/images/book-open.svg' />" },
-              // { title: 'Reports', url: '/admin/reports', icon: "<img src='/images/file-text.svg' />" }
+               { title: 'FAQ',url: '/admin/faq', icon: "<img src='/images/book-open.svg' />" },
             ]
           }
         ],

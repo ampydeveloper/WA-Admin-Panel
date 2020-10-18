@@ -642,5 +642,150 @@ class ManagerController extends Controller {
             $message->from(env('MAIL_USERNAME'), env('MAIL_USERNAME'));
         });
     }
+    
+    public function mechanicList() {
+        return response()->json([
+                    'status' => true,
+                    'message' => 'Mechanic List',
+                    'data' => User::whereRoleId(config('constant.roles.Mechanic'))->get()
+                        ], 200);
+    }
+    
+    
+    public function createMechanic(Request $request) {
+        $validator = Validator::make($request->all(), [
+                    'first_name' => 'required',
+                    'last_name' => 'required',
+                    'email' => 'required|email|unique:users',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                        'status' => false,
+                        'message' => 'The given data was invalid.',
+                        'data' => $validator->errors()
+                            ], 422);
+        }
+        try {
+            DB::beginTransaction();
+            $newPassword = Str::random();
+            $user = new User([
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'email' => $request->email,
+                'role_id' => config('constant.roles.Mechanic'),
+                'created_from_id' => $request->user()->id,
+                'is_confirmed' => 1,
+                'is_active' => 1,
+                'password' => bcrypt($newPassword)
+            ]);
+            if ($user->save()) {
+                $this->_confirmPassword($user, $newPassword);
+                DB::commit();
+                return response()->json([
+                            'status' => true,
+                            'message' => 'Mechanic created successfully.',
+                            'data' => []
+                                ], 200);
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error(json_encode($e->getMessage()));
+            return response()->json([
+                        'status' => false,
+                        'message' => $e->getMessage(),
+                        'data' => []
+                            ], 500);
+        }
+    }
+    
+    
+    public function singleMechanic(Request $request) {
+        return response()->json([
+                    'status' => true,
+                    'message' => 'Mechanic Details',
+                    'data' => User::whereId($request->mechanic_id)->first()
+                        ], 200);
+    }
+    public function updateMechanic(Request $request) {
+        $validator = Validator::make($request->all(), [
+                    'mechanic_id' => 'required',
+                    'first_name' => 'required|string',
+                    'last_name' => 'required|string',
+                    'email' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                        'status' => false,
+                        'message' => 'The given data was invalid.',
+                        'data' => $validator->errors()
+                            ], 422);
+        }
+        $confirmed = 1;
+        $mechanic = User::whereId($request->mechanic_id)->first();
+        if ($mechanic) {
+            if ($request->email != '' && $request->email != null) {
+                $checkEmail = User::where('email', $request->email)->first();
+                if ($checkEmail !== null) {
+                    if ($checkEmail->id !== $mechanic->id) {
+                        return response()->json([
+                                    'status' => false,
+                                    'message' => 'Email is already taken.',
+                                    'data' => []
+                                        ], 422);
+                    }
+                }
+                if ($mechanic->email !== $request->email) {
+                    $confirmed = 0;
+                }
+            }
+            try {
+                if ($request->password != '' && $request->password != null) {
+                    $mechanic->password = bcrypt($request->password);
+                }
+                $mechanic->first_name = $request->first_name;
+                $mechanic->last_name = $request->last_name;
+                $mechanic->email = $request->email;
+                $mechanic->is_confirmed = $confirmed;
+                $mechanic->save();
+                if ($confirmed == 0) {
+                    $this->_updateEmail($mechanic, $request->email);
+                }
+                return response()->json([
+                            'status' => true,
+                            'message' => 'Mechanic updated sucessfully.',
+                            'data' => []
+                ]);
+            } catch (\Exception $e) {
+                Log::error(json_encode($e->getMessage()));
+                return response()->json([
+                            'status' => false,
+                            'message' => $e->getMessage(),
+                            'data' => []
+                                ], 500);
+            }
+        }
+        return response()->json([
+                    'status' => false,
+                    'message' => "No Mechanic.",
+                    'data' => []
+                        ], 500);
+    }
+    public function deleteMechanic(Request $request) {
+        try {
+            User::whereId($request->mechanic_id)->delete();
+            return response()->json([
+                        'status' => true,
+                        'message' => 'Mechanic deleted successfully.',
+                        'data' => []
+                            ], 200);
+        } catch (\Exception $e) {
+            Log::error(json_encode($e->getMessage()));
+            return response()->json([
+                        'status' => false,
+                        'message' => $e->getMessage(),
+                        'data' => []
+                            ], 500);
+        }
+    }
 
 }

@@ -50,6 +50,16 @@ import NewsListPage from "../components/admin/news/ListPage";
 import NewsAddPage from "../components/admin/news/AddPage";
 import NewsEditPage from "../components/admin/news/EditPage";
 
+//Mechanic
+import MechanicListPage from "../components/admin/mechanic/ListPage";
+import MechanicAddPage from "../components/admin/mechanic/AddPage";
+import MechanicEditPage from "../components/admin/mechanic/EditPage";
+
+//FAQ
+import FaqListPage from "../components/admin/faq/ListPage";
+import FaqAddPage from "../components/admin/faq/AddPage";
+import FaqEditPage from "../components/admin/faq/EditPage";
+
 //serivce
 import SerivcesListPage from "../components/admin/services/ListPage";
 import SerivcesAddPage from "../components/admin/services/AddPage";
@@ -159,6 +169,14 @@ export const router = new Router({
         { path: 'news', component: NewsListPage, name: 'News', meta: { requiresAuth: [Role.Admin] } },
         { path: 'news/add', component: NewsAddPage, name: 'NewsAdd', meta: { requiresAuth: [Role.Admin] } },
         { path: 'news/edit/:id', component: NewsEditPage, name: 'NewsEdit', meta: { requiresAuth: [Role.Admin] } },
+        
+        { path: 'faq', component: FaqListPage, name: 'Faq', meta: { requiresAuth: [Role.Admin] } },
+        { path: 'faq/add', component: FaqAddPage, name: 'FaqAdd', meta: { requiresAuth: [Role.Admin] } },
+        { path: 'faq/edit/:id', component: FaqEditPage, name: 'FaqEdit', meta: { requiresAuth: [Role.Admin] } },
+        
+        { path: 'mechanic', component: MechanicListPage, name: 'Mechanic', meta: { requiresAuth: [Role.Admin] } },
+        { path: 'mechanic/add', component: MechanicAddPage, name: 'MechanicAdd', meta: { requiresAuth: [Role.Admin] } },
+        { path: 'mechanic/edit/:id', component: MechanicEditPage, name: 'MechanicEdit', meta: { requiresAuth: [Role.Admin] } },
 
         { path: 'manager', component: ListPage, name: 'Manager', meta: { requiresAuth: [Role.Admin] } },
         { path: 'manager/add', component: AddPage, name: 'Add', meta: { requiresAuth: [Role.Admin] } },
@@ -279,6 +297,14 @@ export const router = new Router({
         { path: 'news', component: NewsListPage, name: 'MNews', meta: { requiresAuth: [Role.Admin_Manager] } },
         { path: 'news/add', component: NewsAddPage, name: 'MNewsAdd', meta: { requiresAuth: [Role.Admin_Manager] } },
         { path: 'news/edit/:id', component: NewsEditPage, name: 'MNewsEdit', meta: { requiresAuth: [Role.Admin_Manager] } },
+        
+        { path: 'faq', component: FaqListPage, name: 'MFaq', meta: { requiresAuth: [Role.Admin_Manager] } },
+        { path: 'faq/add', component: FaqAddPage, name: 'MFaqAdd', meta: { requiresAuth: [Role.Admin_Manager] } },
+        { path: 'faq/edit/:id', component: FaqEditPage, name: 'MFaqEdit', meta: { requiresAuth: [Role.Admin_Manager] } },
+        
+        { path: 'mechanic', component: MechanicListPage, name: 'MMechanic', meta: { requiresAuth: [Role.Admin_Manager] } },
+        { path: 'mechanic/add', component: MechanicAddPage, name: 'MMechanicAdd', meta: { requiresAuth: [Role.Admin_Manager] } },
+        { path: 'mechanic/edit/:id', component: MechanicEditPage, name: 'MMechanicEdit', meta: { requiresAuth: [Role.Admin_Manager] } },
         
         { path: 'dispatches', component: DispatchesViewPage, name: 'MDispatches', meta: { requiresAuth: [Role.Admin_Manager] } },
         { path: 'accounting/details/:id', component: AccountingViewPage, name: 'MAccounting', meta: { requiresAuth: [Role.Admin_Manager] } },
