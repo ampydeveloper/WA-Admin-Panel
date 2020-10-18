@@ -504,7 +504,7 @@ class CustomerController extends Controller {
             if ($request->password != '' && $request->password != null) {
                 $customerDetails->password = bcrypt($request->password);
             }
-            $customerDetails->prefix = (isset($request->customer_prefix) && $request->customer_prefix != '' && $request->customer_prefix != null) ? $request->customer_prefix : null;
+            $customerDetails->prefix = (isset($request->prefix) && $request->prefix != '' && $request->prefix != null) ? $request->prefix : null;
             $customerDetails->first_name = $request->customer_first_name;
             $customerDetails->last_name = $request->customer_last_name;
             $customerDetails->email = $request->email;
