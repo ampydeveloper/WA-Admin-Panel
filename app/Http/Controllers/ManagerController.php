@@ -20,6 +20,8 @@ class ManagerController extends Controller {
     
     
     public function dashboard(Request $request) {
+        $startDate = date('Y-m-d', strtotime('-7 days'));
+        
         $data['count']['services'] = Service::get()->count();
         $data['count']['managers'] = User::where('role_id', config('constant.roles.Admin_Manager'))->get()->count();
         $data['count']['drivers'] = User::where('role_id', config('constant.roles.Driver'))->get()->count();
@@ -27,39 +29,60 @@ class ManagerController extends Controller {
         $data['count']['skidsteers'] = Vehicle::where('vehicle_type', config('constant.vehicle_type.skidsteer'))->get()->count();
         
         // Graphs
-        $data['graphs']['allCustomersCount'] = User::where('role_id', config('constant.roles.Customer'))->get()->count();
-        $data['graphs']['newCustomersCount'] = User::where('role_id', config('constant.roles.Customer'))->where('created_at', 'like', '%' . date('Y-m-d') . '%' )->get()->count();
-        $data['graphs']['revenueGeneratedByNewCustomers'] = Job::whereHas('customer', function($q) {
-            $q->where('role_id', config('constant.roles.Customer'))->where('created_at', 'like', '%' . date('Y-m-d') . '%' );
+        $allCustomer = User::where('role_id', config('constant.roles.Customer'))->get();
+        $data['graphs']['allCustomersCount'] = $allCustomer->count();
+
+        $newCustomers = User::where('role_id', config('constant.roles.Customer'))->whereBetween('created_at',[$startDate,date('Y-m-d')])->get()->groupBy('created_at');
+        $data['graphs']['newCustomersCount'] = $newCustomers->count();
+        
+        $counter = 0;
+        foreach($newCustomers as $key => $value) {
+            $data['graphs']['newCustomerGraph'][$counter]['date'] = $key;
+            $data['graphs']['newCustomerGraph'][$counter]['no'] = count($value);
+            $counter++;
+        }
+        $data['graphs']['revenueGeneratedByNewCustomers'] = Job::whereHas('customer', function($q) use($startDate) {
+            $q->where('role_id', config('constant.roles.Customer'))->whereBetween('created_at',[$startDate,date('Y-m-d')]);
         })->sum('amount');
         
-        $data['graphs']['allHaulersCount'] = User::where('role_id', config('constant.roles.Haulers'))->get()->count();
-        $data['graphs']['newHaulersCount'] = User::where('role_id', config('constant.roles.Haulers'))->where('created_at', 'like', '%' . date('Y-m-d') . '%' )->get()->count();
-        $data['graphs']['revenueGeneratedByNewHaulers'] = Job::whereHas('customer', function($q) {
-            $q->where('role_id', config('constant.roles.Haulers'))->where('created_at', 'like', '%' . date('Y-m-d') . '%' );
+        $allHaulers = User::where('role_id', config('constant.roles.Haulers'))->get();
+        $data['graphs']['allHaulersCount'] = $allHaulers->count();
+        
+        $newHaulers = User::where('role_id', config('constant.roles.Haulers'))->whereBetween('created_at',[$startDate,date('Y-m-d')])->get()->groupBy('created_at');
+        $data['graphs']['newHaulersCount'] = $newHaulers->count();
+        
+        $counter = 0;
+        foreach($newHaulers as $key => $value) {
+            $data['graphs']['newHaulerGraph'][$counter]['date'] = $key;
+            $data['graphs']['newHaulerGraph'][$counter]['no'] = count($value);
+            $counter++;
+        }
+        
+        $data['graphs']['revenueGeneratedByNewHaulers'] = Job::whereHas('customer', function($q) use($startDate) {
+            $q->where('role_id', config('constant.roles.Haulers'))->whereBetween('created_at',[$startDate,date('Y-m-d')]);
         })->sum('amount');
         
         $data['graphs']['allJobsCount'] = Job::get()->count();
-        $data['graphs']['newJobsCount'] = Job::where('created_at', 'like', '%' . date('Y-m-d') . '%' )->get()->count();
-        $data['graphs']['revenueGeneratedByNewJobs'] = Job::where('created_at', 'like', '%' . date('Y-m-d') . '%' )->sum('amount');
+        $data['graphs']['newJobsCount'] = Job::whereBetween('created_at', [$startDate,date('Y-m-d')])->get()->count();
+        $data['graphs']['revenueGeneratedByNewJobs'] = Job::whereBetween('created_at', [$startDate,date('Y-m-d')])->sum('amount');
         
         //invoices
         $data['invoiceGraphs']['customerInvoices'] = Job::whereHas('customer', function($q) {
             $q->where('role_id', config('constant.roles.Customer'));
-        })->where('payment_status', config('constant.payment_status.paid'))->sum('amount');
+        })->where('payment_status', config('constant.payment_status.paid'))->whereBetween('created_at', [$startDate,date('Y-m-d')])->sum('amount');
         
         $data['invoiceGraphs']['haulerInvoices'] = Job::whereHas('customer', function($q) {
             $q->where('role_id', config('constant.roles.Haulers'));
-        })->where('payment_status', config('constant.payment_status.paid'))->sum('amount');
+        })->where('payment_status', config('constant.payment_status.paid'))->whereBetween('created_at', [$startDate,date('Y-m-d')])->sum('amount');
         
         $data['invoiceGraphs']['outstandingInvoices'] = Job::whereHas('customer', function($q) {
             $q->where('role_id', config('constant.roles.Haulers'));
         })->where('payment_status', config('constant.payment_status.unpaid'))->where(function($q) {
             $q->where('payment_mode', config('constant.payment_mode.cheque'))->orWhere('payment_mode', config('constant.payment_mode.cash'));
-        })->sum('amount');
+        })->whereBetween('created_at', [$startDate,date('Y-m-d')])->sum('amount');
         return response()->json([
                             'status' => true,
-                            'message' => 'Admin created successfully.',
+                            'message' => 'Dashboard data.',
                             'data' => $data
                                 ], 200);
     }
@@ -87,19 +110,31 @@ class ManagerController extends Controller {
 
 
         if ($request->filter_for == 'graphs') {
-            $data['graphs']['allCustomersCount'] = User::where('role_id', config('constant.roles.Customer'))->get()->count();
-            $data['graphs']['newCustomersCount'] = User::where('role_id', config('constant.roles.Customer'))->whereBetween('created_at',[$startDate,date('Y-m-d')])->get()->count();
+            $newCustomers = User::where('role_id', config('constant.roles.Customer'))->whereBetween('created_at',[$startDate,date('Y-m-d')])->get()->groupBy('created_at');
+            $data['graphs']['newCustomersCount'] = $newCustomers->count();
+            $counter = 0;
+            foreach ($newCustomers as $key => $value) {
+                $data['graphs']['newCustomerGraph'][$counter]['date'] = $key;
+                $data['graphs']['newCustomerGraph'][$counter]['no'] = count($value);
+                $counter++;
+            }
             $data['graphs']['revenueGeneratedByNewCustomers'] = Job::whereHas('customer', function($q) use($startDate) {
                         $q->where('role_id', config('constant.roles.Customer'))->whereBetween('created_at',[$startDate,date('Y-m-d')]);
                     })->sum('amount');
 
-            $data['graphs']['allHaulersCount'] = User::where('role_id', config('constant.roles.Haulers'))->get()->count();
-            $data['graphs']['newHaulersCount'] = User::where('role_id', config('constant.roles.Haulers'))->whereBetween('created_at',[$startDate,date('Y-m-d')])->get()->count();
+            $newHaulers = User::where('role_id', config('constant.roles.Haulers'))->whereBetween('created_at',[$startDate,date('Y-m-d')])->get()->groupBy('created_at');
+            $data['graphs']['newHaulersCount'] = $newHaulers->count();
+            $counter = 0;
+            foreach ($newHaulers as $key => $value) {
+                $data['graphs']['newHaulerGraph'][$counter]['date'] = $key;
+                $data['graphs']['newHaulerGraph'][$counter]['no'] = count($value);
+                $counter++;
+            }
+
             $data['graphs']['revenueGeneratedByNewHaulers'] = Job::whereHas('customer', function($q) use($startDate) {
                         $q->where('role_id', config('constant.roles.Haulers'))->whereBetween('created_at',[$startDate,date('Y-m-d')]);
                     })->sum('amount');
 
-            $data['graphs']['allJobsCount'] = Job::get()->count();
             $data['graphs']['newJobsCount'] = Job::whereBetween('created_at',[$startDate,date('Y-m-d')])->get()->count();
             $data['graphs']['revenueGeneratedByNewJobs'] = Job::whereBetween('created_at',[$startDate,date('Y-m-d')])->sum('amount');
         } else {
@@ -119,7 +154,7 @@ class ManagerController extends Controller {
         }
         return response()->json([
                             'status' => true,
-                            'message' => 'Admin created successfully.',
+                            'message' => 'Dashboard data.',
                             'data' => $data
                                 ], 200);
     }
