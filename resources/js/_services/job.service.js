@@ -23,7 +23,9 @@ export const jobService = {
   chatList,
   storeMessage,
   joblist,
-  dispatchJobList,
+  dispatchlist,
+  dispatchAllJoblist,
+  // dispatchJoblist,
   jobassigned,
   jobcomplete,
   jobopned,
@@ -155,6 +157,30 @@ function joblist() {
       return user;
     });
 }
+function dispatchAllJoblist() {
+  return fetch(
+    this.apiUrl+`admin/dispatches`,
+    requestOptions.get()
+  )
+    .then(handleResponse)
+    .then(user => {
+      // store user details and passport token in local storage to keep user logged in between page refreshes
+
+      return user;
+    });
+}
+function dispatchlist() {
+  return fetch(
+    this.apiUrl+`test-task`,
+    requestOptions.get()
+  )
+    .then(handleResponse)
+    .then(user => {
+      // store user details and passport token in local storage to keep user logged in between page refreshes
+
+      return user;
+    });
+}
 function getFarm(data) {
   return fetch(
     this.apiUrl+`admin/get-farm/`+data,
@@ -167,18 +193,18 @@ function getFarm(data) {
       return user;
     });
 }
-function dispatchJobList() {
-  return fetch(
-    this.apiUrl+`admin/dispatch-job-list`,
-    requestOptions.get()
-  )
-    .then(handleResponse)
-    .then(user => {
-      // store user details and passport token in local storage to keep user logged in between page refreshes
+// function dispatchJobList() {
+//   return fetch(
+//     this.apiUrl+`admin/dispatch-job-list`,
+//     requestOptions.get()
+//   )
+//     .then(handleResponse)
+//     .then(user => {
+//       // store user details and passport token in local storage to keep user logged in between page refreshes
 
-      return user;
-    });
-}
+//       return user;
+//     });
+// }
 
 function jobassigned() {
   return fetch(

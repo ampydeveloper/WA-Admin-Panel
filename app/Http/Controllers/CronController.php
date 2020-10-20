@@ -28,15 +28,15 @@ class CronController extends Controller
                 ['driver_type', '=', config('constant.driver_type.truck_driver')],
                 ['status', '=', config('constant.driver_status.available')]
             ])->pluck('id');
-        dump('Drivers available');
-        dump($cDrivers);
+//        dump('Drivers available');
+//        dump($cDrivers);
         $cAllTrucks = Vehicle::where([
                 ['vehicle_type', '=', config('constant.vehicle_type.truck')],
                 ['status', '=', config('constant.vehicle_status.available')],
             ])->pluck('id');
         
-        dump('Trucks available');
-        dump($cAllTrucks);
+//        dump('Trucks available');
+//        dump($cAllTrucks);
         //find min cout of $iArrDriversId b/w $iArrTrucksId
         $iMinCount = min(count($cDrivers), count($cAllTrucks));
         $iArrDriverTruckIdMapping = [];
@@ -50,16 +50,16 @@ class CronController extends Controller
                 'driver_id' => $cDrivers[$index]
             ] ;
         }
-        dump('Truck assigned to driver');
-        dump($truckAssignedToDrivers);
+//        dump('Truck assigned to driver');
+//        dump($truckAssignedToDrivers);
         
         $morning_jobs = Job::where([
             ['job_providing_date','=', date("Y-m-d", strtotime("+1 day"))],
             ['time_slots_id', '=', config('constant.service_slot_type.morning')],
             ['is_repeating_job', '=',config('constant.repeating_job.no')]
         ])->with('farm', 'service')->get()->groupBy('farm.farm_zipcode');
-        dump('Jobs available zip code wise');
-        dump($morning_jobs->toArray());
+//        dump('Jobs available zip code wise');
+//        dump($morning_jobs->toArray());
         foreach ($morning_jobs as $key => $jobs) {
             $durationRouteGot = 0;
             $job_ids = [];
@@ -110,14 +110,14 @@ class CronController extends Controller
                 }
             }
         }
-        dump('Jobs assigned to driver and truck');
-        dump($route_details_morning);
-        dump('Pending jobs');
-        dump($unRoutedJobs_morning);
-        dump('Drivers not given jobs');
-        dump($truckAssignedToDrivers);
-        
-        dump('Logic for if pending job can be assigned to driver.');
+//        dump('Jobs assigned to driver and truck');
+//        dump($route_details_morning);
+//        dump('Pending jobs');
+//        dump($unRoutedJobs_morning);
+//        dump('Drivers not given jobs');
+//        dump($truckAssignedToDrivers);
+//        
+//        dump('Logic for if pending job can be assigned to driver.');
         if(isset($unRoutedJobs_morning)) {
             foreach ($unRoutedJobs_morning as $route => $value) {
                 reset($job_ids);
@@ -153,16 +153,21 @@ class CronController extends Controller
                 }
             }
         }
-        if(isset($route_details)) {
-            dump($route_details);
-        }
-        if(isset($unRoutedJobs_morning)) {
-            dump($unRoutedJobs_morning);
-        }
-        if(isset($truckAssignedToDrivers)) {
-            dd($truckAssignedToDrivers);
-        }
+//        if(isset($route_details)) {
+//            dump($route_details);
+//        }
+//        if(isset($unRoutedJobs_morning)) {
+//            dump($unRoutedJobs_morning);
+//        }
+//        if(isset($truckAssignedToDrivers)) {
+//            dd($truckAssignedToDrivers);
+//        }
 
+        return response()->json([
+                    'status' => true,
+                    'data' => $route_details_morning
+                        ], 200);
+        
         dd('end');
         dd($drivers->toArray());
         

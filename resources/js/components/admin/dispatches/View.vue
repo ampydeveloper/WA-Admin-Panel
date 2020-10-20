@@ -51,74 +51,195 @@
     <div class="main_box">
       <v-container fluid class>
         <v-row>
-          <v-col cols="7" md="7">
+          <v-col cols="12" md="12" class="">
+            <div id="app">
+              <div id="map" class="contain"></div>
+            </div>
+          </v-col>
+          <v-col cols="12" md="12">
             <div class="dispatch-top">
               <div class="form-group">
                 <label>Date</label>
                 <span>21/06/2020</span>
               </div>
-              <h4 class="main-title pl-0"></h4>
             </div>
-            <table id="dispatch-table" class="table table-striped table-bordered table-main">
+
+            <table
+              id="all-dispatch-table"
+              class="table table-striped table-bordered table-main all_jobs"
+            >
               <thead>
                 <tr>
-                  <th>#</th>
-                  <th>Job ID</th>
-                  <th>Price</th>
-                  <th>Start Time</th>
-                  <th>End Time</th>
-                  <th>Service</th>
-                  <th>Driver</th>
-                  <th>Edit</th>
-                  <th>View Detail</th>
+                  <th class="job-summ">Job Summary</th>
+                  <th>Customer / Manager / Farm Location</th>
+                  <th class="tech-col">Techs / Vehicles</th>
+                  <th class="time-col">Est. Time</th>
+                
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="(job, index) in alljobs">
-                  <td>{{index+1}}</td>
-                  <td>{{job.id}}</td>
-                  <td>{{job.job_amount}}</td>
-                  <td>{{job.start_date}}</td>
-                  <td>{{job.start_time}}</td>
-                  <td>{{job.service.service_name}}</td>
-                  <td>{{job.truck_driver == null ? job.truck_driver_id:job.truck_driver.first_name}}</td>
-                  <td>Edit Job</td>
-                  <td>View Map</td>
+                  <td>
+                    <span class="basic-info">{{
+                      job.start_date | formatDateLic
+                    }}</span>
+                    <span class="basic-big">#JOB100{{ job.id }}</span>
+                   
+                    <span class="basic-grey">{{
+                      job.service.service_name
+                    }}</span>
+                  </td>
+                  <td>
+                    <span class="basic-big">{{ job.customer.first_name }}</span>
+                    <span class="basic-grey"
+                      >{{ job.manager.first_name }} ({{
+                        job.manager.email
+                      }})</span
+                    >
+                    <span class="basic-grey"
+                      >{{ job.manager.address }} {{ job.manager.city }}
+                      {{ job.manager.state }} {{ job.manager.country }}
+                      {{ job.manager.zip_code }}</span
+                    >
+                  </td>
+                  <td class="job-col-body">
+                    <span class="basic-grey-label-half">Truck Driver</span>
+                    <span class="basic-info-half" v-if="job.truck_driver">{{
+                      job.truck_driver.first_name
+                    }}</span>
+                    <span class="basic-info-half" v-if="!job.truck_driver"
+                      >Not Assigned</span
+                    >
+                    <div class="clearfix"></div>
+                    <span class="basic-grey-label-half">Truck</span>
+                    <span class="basic-info-half" v-if="job.truck">{{
+                      job.truck.truck_number
+                    }}</span>
+                    <span class="basic-info-half" v-if="!job.truck"
+                      >Not Assigned</span
+                    >
+                    <div class="clearfix"></div>
+                    <span class="basic-grey-label-half">Skidsteer Driver</span>
+                    <span class="basic-info-half" v-if="job.skidsteer_driver">{{
+                      job.skidsteer_driver.first_name
+                    }}</span>
+                    <span class="basic-info-half" v-if="!job.skidsteer_driver"
+                      >Not Assigned</span
+                    >
+                    <div class="clearfix"></div>
+                    <span class="basic-grey-label-half">Skidsteer</span>
+                    <span class="basic-info-half" v-if="job.skidsteer">{{
+                      job.skidsteer.truck_number
+                    }}</span>
+                    <span class="basic-info-half" v-if="!job.skidsteer"
+                      >Not Assigned</span
+                    >
+                  </td>
+                  <td class="job-col-body">
+                    <span class="basic-grey-label-full">Start Time</span>
+                    <span class="basic-info-full">9:30 pm</span>
+                  </td>
+                 
+                  <td>
+                    <router-link
+                      v-if="isAdmin"
+                      :to="'/admin/jobs/chat/' + job.id"
+                      class
+                    >
+                      <v-btn color="success" class="btn-outline-green"
+                        >View chat</v-btn
+                      >
+                    </router-link>
+                    <router-link
+                      v-if="!isAdmin"
+                      :to="'/manager/jobs/chat/' + job.id"
+                      class
+                    >
+                      <v-btn color="success" class="btn-outline-green"
+                        >View chat</v-btn
+                      >
+                    </router-link>
+                  </td>
                 </tr>
               </tbody>
             </table>
           </v-col>
-          <v-col cols="5" md="5" class="pr-0">
-            <div id="app">
-            
-              <div id='map' class='contain'> </div>
-            </div>
-          </v-col>
+          
         </v-row>
       </v-container>
+       <span id="table-chevron-left" class="d-none">
+      <chevron-left-icon size="1.5x" class="custom-class"></chevron-left-icon>
+    </span>
+    <span id="table-chevron-right" class="d-none">
+      <chevron-right-icon size="1.5x" class="custom-class"></chevron-right-icon>
+    </span>
+    <span id="search-input-icon" class="d-none">
+      <span class="search-input-outer">
+        <search-icon size="1.5x" class="custom-class"></search-icon>
+      </span>
+    </span>
+    <span id="search-input-icon2" class="d-none">
+      <span class="search-input-outer">
+        <search-icon size="1.5x" class="custom-class"></search-icon>
+      </span>
+    </span>
     </div>
   </v-app>
 </template>
 <script>
-import Mapbox from "mapbox-gl-vue";
+// import Mapbox from "mapbox-gl-vue";
 import { jobService } from "../../../_services/job.service";
 import { environment } from "../../../config/test.env";
-import mapboxgl from "mapbox-gl";
-
+// import mapboxgl from "mapbox-gl";
+import { authenticationService } from "../../../_services/authentication.service";
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  SearchIcon,
+} from "vue-feather-icons";
 export default {
-  components: { Mapbox },
+  components: { 
+    // Mapbox,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  SearchIcon, },
   data() {
     return {
       alljobs: [],
+      alldispatch: [], 
     };
   },
-  created() {},
-  mounted() {
+  created() {
+    const currentUser = authenticationService.currentUserValue;
+    if (currentUser.data.user.role_id == 1) {
+      this.isAdmin = true;
+    } else {
+      this.isAdmin = false;
+    }
+
     this.getResults();
-    mapboxgl.accessToken = 'pk.eyJ1IjoibG9jb25lIiwiYSI6ImNrYmZkMzNzbDB1ZzUyenM3empmbXE3ODQifQ.SiBnr9-6jpC1Wa8OTAmgVA';
+    this.getDispatch();
+  },
+  mounted() {
+    let scrollScript = document.createElement("script");
+    scrollScript.setAttribute(
+      "src",
+      "https://api.tiles.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"
+    );
+    document.head.appendChild(scrollScript);
+    let scrollScript2 = document.createElement("link");
+    scrollScript2.setAttribute(
+      "href",
+      "https://api.tiles.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css"
+    );
+    scrollScript2.setAttribute("rel", "stylesheet");
+    document.head.appendChild(scrollScript2);
+
+  mapboxgl.accessToken = 'pk.eyJ1IjoibG9jb25lIiwiYSI6ImNrYmZkMzNzbDB1ZzUyenM3empmbXE3ODQifQ.SiBnr9-6jpC1Wa8OTAmgVA';
       var map = new mapboxgl.Map({
         container: 'map',
-        style: 'mapbox://styles/mapbox/light-v9',
+        style: 'mapbox://styles/mapbox/dark-v9',
         center: [-122.662323, 45.523751], // starting position
         zoom: 12
       });
@@ -133,13 +254,12 @@ export default {
       // only the end or destination will change
       var start = [-122.662323, 45.523751];
 
-
       // create a function to make a directions request
       function getRoute(start, end) {
         // make a directions request using cycling profile
         // an arbitrary start will always be the same
         // only the end or destination will change
-        var url = 'https://api.mapbox.com/directions/v5/mapbox/cycling/' + start[0] + ',' + start[1] + ';' + end[0] + ',' + end[1] + '?steps=true&geometries=geojson&access_token=' + mapboxgl.accessToken;
+        var url = 'https://api.mapbox.com/directions/v5/mapbox/cycling/' + start[0] + ',' + start[1] + ';' + end[0] + ',' + end[1] + '?steps=true&geometries=geojson&access_token=pk.eyJ1IjoibG9jb25lIiwiYSI6ImNrYmZkMzNzbDB1ZzUyenM3empmbXE3ODQifQ.SiBnr9-6jpC1Wa8OTAmgVA';
 
         // make an XHR request https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
         var req = new XMLHttpRequest();
@@ -197,8 +317,8 @@ export default {
         // starts and ends at the same location
         getRoute(start, [-122.61365699963287, 45.51773726437733]);
 
-        map.addSource('truck', { 
-            type: 'geojson', 
+        map.addSource('truck', {
+            type: 'geojson',
             data: {
             type: 'FeatureCollection',
             features: [{
@@ -250,21 +370,9 @@ export default {
       });
       window.lo = 45.523751;
       window.setInterval(function () {
-        // reqest to get new cordinates
-        // request.open('GET', url, true);
-        // request.onload = function () {
-        //   if (this.status >= 200 && this.status < 400) {
-        //     // retrieve the JSON from the response
-        //     var json = JSON.parse(this.response);
-            
-        //     // update the drone symbol's location on the map
-            
-        //   }
-        // };
-        // request.send();
         lo = lo - .0001
         start = [-122.662453, lo];
-        
+
         map.getSource('truck').setData({
               type: 'Feature',
               properties: {},
@@ -280,16 +388,30 @@ export default {
       getRoute(start, [-122.61365699963287, 45.51773726437733]);
 
       }, 2000);
-
   },
   methods: {
     getResults() {
-      jobService.dispatchJobList().then((response) => {
+      this.alljobs = [];
+      jobService.dispatchAllJoblist().then((response) => {
         //handle response
         if (response.status) {
           this.alljobs = response.data;
-
-          console.log(this.alljobs);
+        } else {
+          this.$toast.open({
+            message: response.message,
+            type: "error",
+            position: "top-right",
+          });
+        }
+      });
+    },
+    getDispatch() {
+      // this.alljobs = [];
+      jobService.dispatchlist().then((response) => {
+        //handle response
+        if (response.status) {
+          this.alldispatch = response.data;
+          console.log(response.data);
         } else {
           this.$toast.open({
             message: response.message,
@@ -303,6 +425,7 @@ export default {
   updated() {
     setTimeout(function () {
       $(document).ready(function () {
+              if (!$.fn.dataTable.isDataTable(".table-main")) {
         $(".table-main").DataTable({
           aoColumnDefs: [
             {
@@ -320,7 +443,11 @@ export default {
             );
           },
         });
-        $(".dataTables_filter input").attr("placeholder", "Search Services");
+          $(".dataTables_filter").append($("#search-input-icon").html());
+        $(".dataTables_filter input").attr(
+          "placeholder",
+          "Search Jobs by Job ID / Customer / Service"
+        );
         $(".dataTables_paginate .paginate_button.previous").html(
           $("#table-chevron-left").html()
         );
@@ -328,6 +455,7 @@ export default {
           $("#table-chevron-right").html()
         );
         $(".table-main").css({ opacity: 1 });
+              }
       });
     }, 1000);
   },
@@ -337,5 +465,7 @@ export default {
 #map {
   width: 100%;
   height: 500px;
+  position: relative;
+  float: left; 
 }
 </style>
