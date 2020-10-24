@@ -24,7 +24,7 @@ class AccountingController extends Controller
         return response()->json([
                     'status' => true,
                     'message' => 'job invoice Details',
-                    'data' => Job::where('payment_status', config('constant.payment_status.paid'))->select('id', 'customer_id', 'service_id', 'amount', 'created_at')->with(['customer' => function($q) {
+                    'data' => Job::where('payment_status', config('constant.payment_status.paid'))->select('id', 'customer_id', 'service_id', 'amount', 'payment_mode','job_status','payment_status','quick_book', 'created_at')->with(['customer' => function($q) {
                             $q->select('id', 'first_name', 'last_name', 'email');
                         }])->with(['service' => function($q) {
                             $q->select('id', 'service_name');

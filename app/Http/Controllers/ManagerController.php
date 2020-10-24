@@ -80,6 +80,17 @@ class ManagerController extends Controller {
         })->where('payment_status', config('constant.payment_status.unpaid'))->where(function($q) {
             $q->where('payment_mode', config('constant.payment_mode.cheque'))->orWhere('payment_mode', config('constant.payment_mode.cash'));
         })->whereBetween('created_at', [$startDate,date('Y-m-d')])->sum('amount');
+        
+        
+        //Dumy data
+//        $data['graphs']['revenueGeneratedByNewCustomers'] = 25987;
+//        $data['graphs']['revenueGeneratedByNewHaulers'] = 12967;
+//        $data['invoiceGraphs']['customerInvoices'] = 54789;
+//        $data['invoiceGraphs']['haulerInvoices'] = 45698;
+//        $data['invoiceGraphs']['outstandingInvoices'] = 23658;
+        
+        
+        
         return response()->json([
                             'status' => true,
                             'message' => 'Dashboard data.',

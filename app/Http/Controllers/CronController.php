@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Carbon;
 use App\Job;
 use App\User;
 use App\Driver;
 use App\Vehicle;
+use App\DailyRouteDetail;
+use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class CronController extends Controller
 {
@@ -18,150 +19,425 @@ class CronController extends Controller
     public function assignTecs() {
      
         $speed = 40;
-        $timeTakenByService = config('constant.time_taken_to_complete_service_reverse');
         $maxRouteDuration = 180;
-//        $distance = 110;
-//        $time = ($distance/$speed)*60;
-//        dd($time);
+        $timeTakenByService = config('constant.time_taken_to_complete_service_reverse');
+        $counter = 1;
+        
+        for($i = 0; $i<$counter;) {
 
-        $cDrivers = Driver::where([
-                ['driver_type', '=', config('constant.driver_type.truck_driver')],
-                ['status', '=', config('constant.driver_status.available')]
-            ])->pluck('id');
-//        dump('Drivers available');
-//        dump($cDrivers);
-        $cAllTrucks = Vehicle::where([
-                ['vehicle_type', '=', config('constant.vehicle_type.truck')],
-                ['status', '=', config('constant.vehicle_status.available')],
-            ])->pluck('id');
-        
-//        dump('Trucks available');
-//        dump($cAllTrucks);
-        //find min cout of $iArrDriversId b/w $iArrTrucksId
-        $iMinCount = min(count($cDrivers), count($cAllTrucks));
-        $iArrDriverTruckIdMapping = [];
-        
-        //assigning one driver to one truck for a day DriverId => TruckId (2 => )
-        for ($index = 0; $index < $iMinCount; $index++)
-        {
-            $iArrDriverTruckIdMapping[$cDrivers[$index]] = $cAllTrucks[$index];
-            $truckAssignedToDrivers[] = [
-                'truck_id' => $cAllTrucks[$index],
-                'driver_id' => $cDrivers[$index]
-            ] ;
-        }
-//        dump('Truck assigned to driver');
-//        dump($truckAssignedToDrivers);
-        
-        $morning_jobs = Job::where([
-            ['job_providing_date','=', date("Y-m-d", strtotime("+1 day"))],
-            ['time_slots_id', '=', config('constant.service_slot_type.morning')],
-            ['is_repeating_job', '=',config('constant.repeating_job.no')]
-        ])->with('farm', 'service')->get()->groupBy('farm.farm_zipcode');
-//        dump('Jobs available zip code wise');
-//        dump($morning_jobs->toArray());
-        foreach ($morning_jobs as $key => $jobs) {
-            $durationRouteGot = 0;
-            $job_ids = [];
-//            reset($job_ids);
-            $flag = 0;
-            if (count($truckAssignedToDrivers) > 0) {
-                foreach ($jobs as $job) {
-//                    dd($job->toArray());
-                    $communiteTime = ($job->farm->distance / $speed) * 60;
-                    $timeTakenByServiceToComplete = $timeTakenByService[$job->service->time_taken_to_complete_service];
-                    if ($durationRouteGot == 0) {
-                        $durationRouteGot = $communiteTime + $timeTakenByServiceToComplete;
-                        $job_ids[$job->id] = [
-                                'job_time_slot' => 1,
-                                'latitude' => $job->farm->latitude,
-                                'longitude' => $job->farm->longitude,
-                            ];
-                    } else {
-                        $checkIfTruckHasTime = $maxRouteDuration - $durationRouteGot;
-                        if ($checkIfTruckHasTime >= ($communiteTime + $timeTakenByServiceToComplete)) {
-                            $durationRouteGot += $communiteTime + $timeTakenByServiceToComplete;
-                            $job_ids[$job->id] = [
-                                'job_time_slot' => 1,
-                                'latitude' => $job->farm->latitude,
-                                'longitude' => $job->farm->longitude,
-                            ];
-                        } else {
-                            $unRoutedJobs_morning[$key][$job->id] = [
-                                'job_time_slot' => 1,
-                                'latitude' => $job->farm->latitude,
-                                'longitude' => $job->farm->longitude,
-                                'time_needed_to_complete_job' => $communiteTime + $timeTakenByServiceToComplete,
-                            ];
-                        }
-                    }
-                }
-                
-                foreach ($truckAssignedToDrivers as $key1 => $truckAssignedToDriver) {
-                    $route_details_morning[$key] = [
-                        'time_taken_to_complete' => $durationRouteGot,
-                        'spare_time' => $maxRouteDuration - $durationRouteGot,
-                        'job_ids' => $job_ids,
-                        'truck_id' => $truckAssignedToDriver['truck_id'],
-                        'driver_id' => $truckAssignedToDriver['driver_id'],
-                    ];
-                    unset($truckAssignedToDrivers[$key1]);
-                    break;
-                }
+
+            $cDrivers = Driver::where([
+                            ['driver_type', '=', config('constant.driver_type.truck_driver')],
+                            ['status', '=', config('constant.driver_status.available')],
+                            ['route_given', '=', 0]
+                    ])->pluck('user_id');
+            
+            $cAllTrucks = Vehicle::where([
+                            ['vehicle_type', '=', config('constant.vehicle_type.truck')],
+                            ['status', '=', config('constant.vehicle_status.available')],
+                            ['route_assigned', '=', 0]
+                    ])->pluck('id');
+
+            //find min cout of $iArrDriversId b/w $iArrTrucksId
+            $iMinCount = min(count($cDrivers), count($cAllTrucks));
+            $iArrDriverTruckIdMapping = [];
+
+            for ($index = 0; $index < $iMinCount; $index++) {
+                $iArrDriverTruckIdMapping[$index]['driver_id'] = $cDrivers[$index];
+                $iArrDriverTruckIdMapping[$index]['truck_id'] = $cAllTrucks[$index];
             }
-        }
-//        dump('Jobs assigned to driver and truck');
-//        dump($route_details_morning);
-//        dump('Pending jobs');
-//        dump($unRoutedJobs_morning);
-//        dump('Drivers not given jobs');
-//        dump($truckAssignedToDrivers);
-//        
-//        dump('Logic for if pending job can be assigned to driver.');
-        if(isset($unRoutedJobs_morning)) {
-            foreach ($unRoutedJobs_morning as $route => $value) {
-                reset($job_ids);
-                if (count($truckAssignedToDrivers) > 0) {
-                    $durationRouteGot = 0;
+
+            $all_jobs = Job::where([
+                            ['job_providing_date', '=', date("Y-m-d")],
+                            ['is_repeating_job', '=', config('constant.repeating_job.no')],
+                            ['job_status', '=', config('constant.job_status.open')]
+                    ])->select('id', 'farm_id', 'service_id', 'time_slots_id', 'weight', 'is_repeating_job')->with('farm', 'service')->get()->groupBy('farm.farm_zipcode');
+
+            if ($all_jobs->count() && count($iArrDriverTruckIdMapping)) {
+
+                // Making route according to zip code.
+                foreach ($all_jobs as $key => $jobs) {
+                    $durationRouteGotMorning = 0;
+                    $durationRouteGotAfternoon = 0;
+                    $durationRouteGotEvening = 0;
+                    $maxRouteDurationMorning = 180;
+                    $maxRouteDurationAfternoon = 180;
+                    $maxRouteDurationEvening = 180;
                     $job_ids = [];
-                    foreach ($value as $job_id => $unRoutedJob) {
-                        if ($durationRouteGot == 0) {
-                            $durationRouteGot = $unRoutedJob['time_needed_to_complete_job'];
-                            $job_ids[$job_id] = 1;
-                            unset($unRoutedJobs_morning[$route][$job_id]);
-                        } else {
-                            $checkIfTruckHasTime = $maxRouteDuration - $durationRouteGot;
-                            if ($checkIfTruckHasTime >= $unRoutedJob['time_needed_to_complete_job']) {
-                                $durationRouteGot += $communiteTime + $timeTakenByServiceToComplete;
-                                $job_ids[$job_id] = 1;
-                                unset($unRoutedJobs_morning[$route][$job_id]);
-                            } 
+
+                    if (count($iArrDriverTruckIdMapping)) {
+                        foreach ($jobs as $job) {
+                            $communiteTime = ($job->farm->distance / $speed) * 60;
+                            $timeTakenByServiceToComplete = $timeTakenByService[$job->service->time_taken_to_complete_service];
+
+                            if ($job->time_slots_id == config('constant.service_slot_type.morning')) {
+                                if ($durationRouteGotMorning == 0) {
+                                    $durationRouteGotMorning = $communiteTime + $timeTakenByServiceToComplete;
+                                    $job_ids['morning'][$job->id] = [
+                                        'job_time_slot' => config('constant.service_slot_type_inverse.1'),
+                                        'latitude' => $job->farm->latitude,
+                                        'longitude' => $job->farm->longitude,
+                                    ];
+                                } else {
+                                    $checkIfTruckHasTime = $maxRouteDurationMorning - $durationRouteGotMorning;
+                                    if ($checkIfTruckHasTime >= ($communiteTime + $timeTakenByServiceToComplete)) {
+                                        $durationRouteGotMorning += $communiteTime + $timeTakenByServiceToComplete;
+                                        $job_ids['morning'][$job->id] = [
+                                            'job_time_slot' => config('constant.service_slot_type_inverse.1'),
+                                            'latitude' => $job->farm->latitude,
+                                            'longitude' => $job->farm->longitude,
+                                        ];
+                                    } else {
+                                        $unRoutedJobs['morning'][$key][$job->id] = [
+                                            'job_time_slot' => config('constant.service_slot_type_inverse.1'),
+                                            'latitude' => $job->farm->latitude,
+                                            'longitude' => $job->farm->longitude,
+                                            'time_needed_to_complete_job' => $communiteTime + $timeTakenByServiceToComplete,
+                                        ];
+                                    }
+                                }
+                            } elseif ($job->time_slots_id == config('constant.service_slot_type.afternoon')) {
+                                if ($durationRouteGotAfternoon == 0) {
+                                    $durationRouteGotAfternoon = $communiteTime + $timeTakenByServiceToComplete;
+                                    $job_ids['afternoon'][$job->id] = [
+                                        'job_time_slot' => config('constant.service_slot_type_inverse.2'),
+                                        'latitude' => $job->farm->latitude,
+                                        'longitude' => $job->farm->longitude,
+                                    ];
+                                } else {
+                                    $checkIfTruckHasTime = $maxRouteDurationMorning - $durationRouteGotAfternoon;
+                                    if ($checkIfTruckHasTime >= ($communiteTime + $timeTakenByServiceToComplete)) {
+                                        $durationRouteGotAfternoon += $communiteTime + $timeTakenByServiceToComplete;
+                                        $job_ids['afternoon'][$job->id] = [
+                                            'job_time_slot' => config('constant.service_slot_type_inverse.2'),
+                                            'latitude' => $job->farm->latitude,
+                                            'longitude' => $job->farm->longitude,
+                                        ];
+                                    } else {
+                                        $unRoutedJobs['afternoon'][$key][$job->id] = [
+                                            'job_time_slot' => config('constant.service_slot_type_inverse.2'),
+                                            'latitude' => $job->farm->latitude,
+                                            'longitude' => $job->farm->longitude,
+                                            'time_needed_to_complete_job' => $communiteTime + $timeTakenByServiceToComplete,
+                                        ];
+                                    }
+                                }
+                            } else {
+                                if ($durationRouteGotEvening == 0) {
+                                    $durationRouteGotEvening = $communiteTime + $timeTakenByServiceToComplete;
+                                    $job_ids['evening'][$job->id] = [
+                                        'job_time_slot' => config('constant.service_slot_type_inverse.3'),
+                                        'latitude' => $job->farm->latitude,
+                                        'longitude' => $job->farm->longitude,
+                                    ];
+                                } else {
+                                    $checkIfTruckHasTime = $maxRouteDurationMorning - $durationRouteGotEvening;
+                                    if ($checkIfTruckHasTime >= ($communiteTime + $timeTakenByServiceToComplete)) {
+                                        $durationRouteGotEvening += $communiteTime + $timeTakenByServiceToComplete;
+                                        $job_ids['evening'][$job->id] = [
+                                            'job_time_slot' => config('constant.service_slot_type_inverse.3'),
+                                            'latitude' => $job->farm->latitude,
+                                            'longitude' => $job->farm->longitude,
+                                        ];
+                                    } else {
+                                        $unRoutedJobs['evening'][$key][$job->id] = [
+                                            'job_time_slot' => config('constant.service_slot_type_inverse.3'),
+                                            'latitude' => $job->farm->latitude,
+                                            'longitude' => $job->farm->longitude,
+                                            'time_needed_to_complete_job' => $communiteTime + $timeTakenByServiceToComplete,
+                                        ];
+                                    }
+                                }
+                            }
+
+                            if (isset($job_ids['morning'])) {
+                                $route_details[$key]['morning'] = [
+                                    'time_taken_to_complete' => $durationRouteGotMorning,
+                                    'spare_time' => $maxRouteDurationMorning - $durationRouteGotMorning,
+                                    'job_ids' => $job_ids['morning'],
+                                ];
+                            }
+                            if (isset($job_ids['afternoon'])) {
+                                $route_details[$key]['afternoon'] = [
+                                    'time_taken_to_complete' => $durationRouteGotAfternoon,
+                                    'spare_time' => $maxRouteDurationAfternoon - $durationRouteGotAfternoon,
+                                    'job_ids' => $job_ids['afternoon'],
+                                ];
+                            }
+                            if (isset($job_ids['evening'])) {
+                                $route_details[$key]['evening'] = [
+                                    'time_taken_to_complete' => $durationRouteGotEvening,
+                                    'spare_time' => $maxRouteDurationEvening - $durationRouteGotEvening,
+                                    'job_ids' => $job_ids['evening'],
+                                ];
+                            }
                         }
-                        
+                        $route_details[$key]['total_time_taken_to_complete_route'] = $durationRouteGotMorning + $durationRouteGotAfternoon + $durationRouteGotEvening;
+                        $route_details[$key]['total_spare_time'] = 540 - $route_details[$key]['total_time_taken_to_complete_route'];
+                        $route_details[$key]['driver_id'] = $iArrDriverTruckIdMapping[0]['driver_id'];
+                        $route_details[$key]['truck_id'] = $iArrDriverTruckIdMapping[0]['truck_id'];
+                        unset($iArrDriverTruckIdMapping[0]);
+                        $iArrDriverTruckIdMapping = array_values($iArrDriverTruckIdMapping);
                     }
-                    foreach ($truckAssignedToDrivers as $key1 => $truckAssignedToDriver) {
-                        $route_details[$route] = [
-                            'time_taken_to_complete' => $durationRouteGot,
-                            'spare_time' => $maxRouteDuration - $durationRouteGot,
-                            'job_ids' => $job_ids,
-                            'truck_id' => $truckAssignedToDriver['truck_id'],
-                            'driver_id' => $truckAssignedToDriver['driver_id'],
-                        ];
-                        unset($truckAssignedToDrivers[$key1]);
-                        break;
+                }
+
+                // If all jobs are not fitted in route, then assigning jobs to other routes in same time zone.
+                if (isset($unRoutedJobs)) {
+                    foreach ($route_details as $key => $detail) {
+                        $job_ids = [];
+                        if (!isset($detail['morning'])) {
+                            if (isset($unRoutedJobs['morning'])) {
+                                if ($detail['total_spare_time'] >= 180) {
+                                    $maxRouteDurationMorning = 180;
+                                } else {
+                                    $maxRouteDurationMorning = $detail['total_spare_time'];
+                                }
+                                $durationRouteGotMorning = 0;
+                                foreach ($unRoutedJobs['morning'] as $routeKey => $unRoutedJob) {
+                                    foreach ($unRoutedJob as $jobIdKey => $job) {
+                                        if ($job['time_needed_to_complete_job'] <= $maxRouteDurationMorning) {
+                                            $job_ids['morning'][$jobIdKey] = [
+                                                'job_time_slot' => config('constant.service_slot_type_inverse.1'),
+                                                'latitude' => $job['latitude'],
+                                                'longitude' => $job['longitude'],
+                                            ];
+                                            $durationRouteGotMorning += $job['time_needed_to_complete_job'];
+                                            $maxRouteDurationMorning = $maxRouteDurationMorning - $job['time_needed_to_complete_job'];
+
+                                            if (count($unRoutedJobs['morning']) == 1) {
+                                                unset($unRoutedJobs['morning']);
+                                            } else {
+                                                if (count($unRoutedJobs['morning'][$routeKey]) == 1) {
+                                                    unset($unRoutedJobs['morning'][$routeKey]);
+                                                } else {
+                                                    unset($unRoutedJobs['morning'][$routeKey][$jobIdKey]);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                $route_details[$key]['morning']['time_taken_to_complete'] = $durationRouteGotMorning;
+                                $route_details[$key]['morning']['spare_time'] = $maxRouteDurationMorning;
+                                $route_details[$key]['morning']['job_ids'] = $job_ids['morning'];
+                                $route_details[$key]['total_time_taken_to_complete_route'] += $durationRouteGotMorning;
+                                $route_details[$key]['total_spare_time'] = $route_details[$key]['total_spare_time'] - $durationRouteGotMorning;
+                            }
+                        }
+
+                        if (!isset($detail['afternoon'])) {
+                            if (isset($unRoutedJobs['afternoon'])) {
+                                if ($detail['total_spare_time'] >= 180) {
+                                    $maxRouteDurationMorning = 180;
+                                } else {
+                                    $maxRouteDurationMorning = $detail['total_spare_time'];
+                                }
+                                $durationRouteGotMorning = 0;
+                                foreach ($unRoutedJobs['afternoon'] as $routeKey => $unRoutedJob) {
+                                    foreach ($unRoutedJob as $jobIdKey => $job) {
+                                        if ($job['time_needed_to_complete_job'] <= $maxRouteDurationMorning) {
+                                            $job_ids['afternoon'][$jobIdKey] = [
+                                                'job_time_slot' => config('constant.service_slot_type_inverse.2'),
+                                                'latitude' => $job['latitude'],
+                                                'longitude' => $job['longitude'],
+                                            ];
+                                            $durationRouteGotMorning += $job['time_needed_to_complete_job'];
+                                            $maxRouteDurationMorning = $maxRouteDurationMorning - $job['time_needed_to_complete_job'];
+                                            if (count($unRoutedJobs['afternoon']) == 1) {
+                                                unset($unRoutedJobs['afternoon']);
+                                            } else {
+                                                if (count($unRoutedJobs['afternoon'][$routeKey]) == 1) {
+                                                    unset($unRoutedJobs['afternoon'][$routeKey]);
+                                                } else {
+                                                    unset($unRoutedJobs['afternoon'][$routeKey][$jobIdKey]);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                $route_details[$key]['afternoon']['time_taken_to_complete'] = $durationRouteGotMorning;
+                                $route_details[$key]['afternoon']['spare_time'] = $maxRouteDurationMorning;
+                                $route_details[$key]['afternoon']['job_ids'] = $job_ids['afternoon'];
+                                $route_details[$key]['total_time_taken_to_complete_route'] += $durationRouteGotMorning;
+                                $route_details[$key]['total_spare_time'] = $route_details[$key]['total_spare_time'] - $durationRouteGotMorning;
+                            }
+                        }
+
+                        if (!isset($detail['evening'])) {
+                            if (isset($unRoutedJobs['evening'])) {
+                                if ($detail['total_spare_time'] >= 180) {
+                                    $maxRouteDurationMorning = 180;
+                                } else {
+                                    $maxRouteDurationMorning = $detail['total_spare_time'];
+                                }
+                                $durationRouteGotMorning = 0;
+                                foreach ($unRoutedJobs['evening'] as $routeKey => $unRoutedJob) {
+                                    foreach ($unRoutedJob as $jobIdKey => $job) {
+                                        if ($job['time_needed_to_complete_job'] <= $maxRouteDurationMorning) {
+                                            $job_ids['evening'][$jobIdKey] = [
+                                                'job_time_slot' => config('constant.service_slot_type_inverse.3'),
+                                                'latitude' => $job['latitude'],
+                                                'longitude' => $job['longitude'],
+                                            ];
+                                            $durationRouteGotMorning += $job['time_needed_to_complete_job'];
+                                            $maxRouteDurationMorning = $maxRouteDurationMorning - $job['time_needed_to_complete_job'];
+                                            if (count($unRoutedJobs['evening']) == 1) {
+                                                unset($unRoutedJobs['evening']);
+                                            } else {
+                                                if (count($unRoutedJobs['evening'][$routeKey]) == 1) {
+                                                    unset($unRoutedJobs['evening'][$routeKey]);
+                                                } else {
+                                                    unset($unRoutedJobs['evening'][$routeKey][$jobIdKey]);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                $route_details[$key]['evening']['time_taken_to_complete'] = $durationRouteGotMorning;
+                                $route_details[$key]['evening']['spare_time'] = $maxRouteDurationMorning;
+                                $route_details[$key]['evening']['job_ids'] = $job_ids['evening'];
+                                $route_details[$key]['total_time_taken_to_complete_route'] += $durationRouteGotMorning;
+                                $route_details[$key]['total_spare_time'] = $route_details[$key]['total_spare_time'] - $durationRouteGotMorning;
+                            }
+                        }
+                    }
+                }
+
+                // If still has pending job, assigning job to that route which has time with them.
+                if (count($unRoutedJobs)) {
+                    if (isset($unRoutedJobs['morning'])) {
+                        foreach ($unRoutedJobs['morning'] as $k => $value) {
+                            foreach ($value as $key => $job) {
+
+                                foreach ($route_details as $routeKey => $detail) {
+                                    if ($detail['total_spare_time'] >= $job['time_needed_to_complete_job']) {
+                                        $route_details[$routeKey]['total_time_taken_to_complete_route'] += $job['time_needed_to_complete_job'];
+                                        $route_details[$routeKey]['total_spare_time'] = $route_details[$routeKey]['total_spare_time'] - $job['time_needed_to_complete_job'];
+                                        $route_details[$routeKey]['morning']['time_taken_to_complete'] += $job['time_needed_to_complete_job'];
+                                        $route_details[$routeKey]['morning']['spare_time'] = $route_details[$routeKey]['afternoon']['spare_time'] - $job['time_needed_to_complete_job'];
+                                        $route_details[$routeKey]['morning']['job_ids'][$key]['job_time_slot'] = $job['job_time_slot'];
+                                        $route_details[$routeKey]['morning']['job_ids'][$key]['latitude'] = $job['latitude'];
+                                        $route_details[$routeKey]['morning']['job_ids'][$key]['longitude'] = $job['longitude'];
+                                        if (count($unRoutedJobs['morning']) == 1) {
+                                            unset($unRoutedJobs['morning']);
+                                        } else {
+                                            if (count($unRoutedJobs['morning'][$routeKey]) == 1) {
+                                                unset($unRoutedJobs['morning'][$routeKey]);
+                                            } else {
+                                                unset($unRoutedJobs['morning'][$routeKey][$jobIdKey]);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if (isset($unRoutedJobs['afternoon'])) {
+                        foreach ($unRoutedJobs['afternoon'] as $k => $value) {
+                            foreach ($value as $key => $job) {
+
+                                foreach ($route_details as $routeKey => $detail) {
+                                    if ($detail['total_spare_time'] >= $job['time_needed_to_complete_job']) {
+                                        $route_details[$routeKey]['total_time_taken_to_complete_route'] += $job['time_needed_to_complete_job'];
+                                        $route_details[$routeKey]['total_spare_time'] = $route_details[$routeKey]['total_spare_time'] - $job['time_needed_to_complete_job'];
+                                        $route_details[$routeKey]['afternoon']['time_taken_to_complete'] += $job['time_needed_to_complete_job'];
+                                        $route_details[$routeKey]['afternoon']['spare_time'] = $route_details[$routeKey]['afternoon']['spare_time'] - $job['time_needed_to_complete_job'];
+                                        $route_details[$routeKey]['afternoon']['job_ids'][$key]['job_time_slot'] = $job['job_time_slot'];
+                                        $route_details[$routeKey]['afternoon']['job_ids'][$key]['latitude'] = $job['latitude'];
+                                        $route_details[$routeKey]['afternoon']['job_ids'][$key]['longitude'] = $job['longitude'];
+                                        if (count($unRoutedJobs['afternoon']) == 1) {
+                                            unset($unRoutedJobs['afternoon']);
+                                        } else {
+                                            if (count($unRoutedJobs['afternoon'][$routeKey]) == 1) {
+                                                unset($unRoutedJobs['afternoon'][$routeKey]);
+                                            } else {
+                                                unset($unRoutedJobs['afternoon'][$routeKey][$jobIdKey]);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if (isset($unRoutedJobs['evening'])) {
+                        foreach ($unRoutedJobs['evening'] as $k => $value) {
+                            foreach ($value as $key => $job) {
+
+                                foreach ($route_details as $routeKey => $detail) {
+                                    if ($detail['total_spare_time'] >= $job['time_needed_to_complete_job']) {
+                                        $route_details[$routeKey]['total_time_taken_to_complete_route'] += $job['time_needed_to_complete_job'];
+                                        $route_details[$routeKey]['total_spare_time'] = $route_details[$routeKey]['total_spare_time'] - $job['time_needed_to_complete_job'];
+                                        $route_details[$routeKey]['evening']['time_taken_to_complete'] += $job['time_needed_to_complete_job'];
+                                        $route_details[$routeKey]['evening']['spare_time'] = $route_details[$routeKey]['afternoon']['spare_time'] - $job['time_needed_to_complete_job'];
+                                        $route_details[$routeKey]['evening']['job_ids'][$key]['job_time_slot'] = $job['job_time_slot'];
+                                        $route_details[$routeKey]['evening']['job_ids'][$key]['latitude'] = $job['latitude'];
+                                        $route_details[$routeKey]['evening']['job_ids'][$key]['longitude'] = $job['longitude'];
+                                        if (count($unRoutedJobs['evening']) == 1) {
+                                            unset($unRoutedJobs['evening']);
+                                        } else {
+                                            if (count($unRoutedJobs['evening'][$routeKey]) == 1) {
+                                                unset($unRoutedJobs['evening'][$routeKey]);
+                                            } else {
+                                                unset($unRoutedJobs['evening'][$routeKey][$jobIdKey]);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
+
+            foreach ($route_details as $detail) {
+                $daily_route_details = new DailyRouteDetail();
+                $daily_route_details->date = date("Y-m-d");
+                $daily_route_details->driver_id = $detail['driver_id'];
+                $daily_route_details->truck_id = $detail['truck_id'];
+                $daily_route_details->morning_jobs = json_encode($detail['morning']['job_ids']);
+                $daily_route_details->time_for_morning_jobs = $detail['morning']['time_taken_to_complete'];
+                $daily_route_details->spare_time_in_morning = $detail['morning']['spare_time'];
+                $daily_route_details->over_time_in_morning = ($detail['morning']['spare_time'] < 0) ? 1 : 0;
+                $daily_route_details->afternoon_jobs = json_encode($detail['afternoon']['job_ids']);
+                $daily_route_details->time_for_afternoon_jobs = $detail['afternoon']['time_taken_to_complete'];
+                $daily_route_details->spare_time_in_afternoon = $detail['afternoon']['spare_time'];
+                $daily_route_details->over_time_in_afternoon = ($detail['afternoon']['spare_time'] < 0) ? 1 : 0;
+                $daily_route_details->evening_jobs = json_encode($detail['evening']['job_ids']);
+                $daily_route_details->time_for_evening_jobs = $detail['evening']['time_taken_to_complete'];
+                $daily_route_details->spare_time_in_evening = $detail['evening']['spare_time'];
+                $daily_route_details->over_time_in_evening = ($detail['evening']['spare_time'] < 0) ? 1 : 0;
+                $daily_route_details->total_time_for_route = $detail['total_time_taken_to_complete_route'];
+                $daily_route_details->total_spare_time_in_route = $detail['total_spare_time'];
+
+                if ($daily_route_details->save()) {
+                    Driver::where('user_id', $detail['driver_id'])->update(['route_given' => 1]);
+                    Vehicle::where('id', $detail['truck_id'])->update(['route_assigned' => 1]);
+                    if (isset($detail['morning'])) {
+                        foreach ($detail['morning']['job_ids'] as $jobId => $value) {
+                            Job::where('id', $jobId)->update(['job_status' => 1, 'truck_id' => $detail['truck_id'], 'truck_driver_id' => $detail['driver_id']]);
+                        }
+                    }
+                    if (isset($detail['afternoon'])) {
+                        foreach ($detail['afternoon']['job_ids'] as $jobId => $value) {
+                            Job::where('id', $jobId)->update(['job_status' => 1, 'truck_id' => $detail['truck_id'], 'truck_driver_id' => $detail['driver_id']]);
+                        }
+                    }
+                    if (isset($detail['evening'])) {
+                        foreach ($detail['evening']['job_ids'] as $jobId => $value) {
+                            Job::where('id', $jobId)->update(['job_status' => 1, 'truck_id' => $detail['truck_id'], 'truck_driver_id' => $detail['driver_id']]);
+                        }
+                    }
+                }
+            }
+            if (count($unRoutedJobs) == 0 || count($iArrDriverTruckIdMapping) == 0) {
+                $i++;
+            }
         }
-//        if(isset($route_details)) {
-//            dump($route_details);
-//        }
-//        if(isset($unRoutedJobs_morning)) {
-//            dump($unRoutedJobs_morning);
-//        }
-//        if(isset($truckAssignedToDrivers)) {
-//            dd($truckAssignedToDrivers);
-//        }
+
+
+        dd('end');
+
 
         return response()->json([
                     'status' => true,
@@ -169,6 +445,19 @@ class CronController extends Controller
                         ], 200);
         
         dd('end');
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         dd($drivers->toArray());
         
         

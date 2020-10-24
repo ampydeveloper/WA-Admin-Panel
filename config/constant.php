@@ -93,6 +93,11 @@ return [
         'afternoon' => 2,
         'evening' => 3
     ],
+    'service_slot_type_inverse' => [
+        1 => 'morning',
+        2 => 'afternoon',
+        3 => 'evening',
+    ],
     'time_taken_to_complete_service' => [
         '15_mins' => 1,
         '30_mins' => 2,
@@ -108,5 +113,13 @@ return [
         4 =>'60',
         5 =>'75',
         6 =>'90',
+    ],
+    'zipcodes' => [
+        0 => '62365',
+        1 => '52869',
+        2 => '12345',
+        3 => '12234',
+        4 => '78451',
+        5 => '16006',
     ]
 ];
