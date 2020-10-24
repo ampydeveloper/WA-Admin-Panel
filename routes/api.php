@@ -37,6 +37,8 @@ Route::group(['prefix' => 'auth'], function () {
 
     Route::post('start-time', 'TrackDriverTimeController@startJobTimer');
     Route::post('stop-time', 'TrackDriverTimeController@stopJobTimer');
+    
+    Route::post('job-chat', 'ChatController@jobChat');
 
     //Auth full routes
     Route::group(['middleware' => 'auth:api'], function () {
@@ -243,4 +245,4 @@ Route::group(['prefix' => 'auth'], function () {
     });
 });
 
-Route::post('job-chat', [ChatController::class, 'jobChat']);
+

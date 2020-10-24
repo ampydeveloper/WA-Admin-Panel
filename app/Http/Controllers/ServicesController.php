@@ -147,20 +147,10 @@ class ServicesController extends Controller
                         'data' => $validator->errors()
                             ], 422);
         }
-        
-        $getAllServices = Service::skip($request->offset)->take($request->take)->get();
-        if (count($getAllServices) > 0) {
-            foreach ($getAllServices as $key => $service) {
-                if ($service->slot_type !== null) {
-                    $slot_type = json_decode($service->slot_type);
-                    $getAllServices[$key]["slot_type"] = $slot_type;
-                }
-            }
-        }
         return response()->json([
             'status' => true,
             'message' => 'Service Listing.',
-            'data' => $getAllServices
+            'data' => Service::skip($request->offset)->take($request->take)->get()
         ], 200);
     }
 

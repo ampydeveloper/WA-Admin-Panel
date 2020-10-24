@@ -28,6 +28,9 @@ class Job extends Model
     public function getCreatedAtAttribute($date) {
         return Carbon::parse($date)->format('d-M-y');
     }
+    public function getRepeatingDaysAttribute($data) {
+        return json_decode($data);
+    }
 
     public function customer()
     {
