@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests;
+use LRedis;
+use App\Job;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Request;
-use LRedis;
 
 class ChatController extends Controller {
 
@@ -48,11 +48,15 @@ class ChatController extends Controller {
         curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
         $output = curl_exec($ch);
         curl_close($ch);
-
-        // dd($output);
         $messages = json_decode($output);
         $messages = array_reverse($messages);
-        dd($messages);
+        
+            return response()->json([
+                    'status' => true,
+                    'message' => 'Chat messages',
+                    'data' => $messages
+                        ], 200);
+            
     }
 
     public function privateChat() {
@@ -118,6 +122,26 @@ class ChatController extends Controller {
             return $a . "-" . $b;
         else
             return $b . "-" . $a;
+    }
+    
+    public function chatMembers(Request $request) {
+        $chatMembers = Job::whereId($request->job_id)->select('id', 'customer_id', 'manager_id', 'truck_driver_id', 'skidsteer_driver_id')->with(['customer' => function($q) {
+            $q->select('id', 'first_name', 'user_image');
+        }]) ->with(['manager' => function($q) {
+        
+            $q->select('id', 'first_name', 'user_image');
+        }])->with(['truck_driver' => function($q) {
+        
+            $q->select('id', 'first_name', 'user_image');
+        }])->with(['skidsteer_driver' => function($q) {
+        
+            $q->select('id', 'first_name', 'user_image');
+        }])->first();
+        return response()->json([
+                    'status' => true,
+                    'message' => 'Chat members',
+                    'data' => $chatMembers
+                        ], 200);
     }
 
 }
