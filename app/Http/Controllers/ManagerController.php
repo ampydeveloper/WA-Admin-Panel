@@ -15,11 +15,28 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Bioudi\LaravelMetaWeatherApi\Weather;
 
 class ManagerController extends Controller {
     
     
     public function dashboard(Request $request) {
+        
+        $weather = new Weather();
+        $weatherDetails = $weather->getByCityName('miami');
+        $data['weather']['weather_state_name'] = $weatherDetails->consolidated_weather[0]->weather_state_name;
+        $data['weather']['wind_direction_compass'] = $weatherDetails->consolidated_weather[0]->wind_direction_compass;
+        $data['weather']['min_temp'] = $weatherDetails->consolidated_weather[0]->min_temp;
+        $data['weather']['max_temp'] = $weatherDetails->consolidated_weather[0]->max_temp;
+        $data['weather']['the_temp'] = $weatherDetails->consolidated_weather[0]->the_temp;
+        $data['weather']['wind_speed'] = $weatherDetails->consolidated_weather[0]->wind_speed." mph";
+        $data['weather']['air_pressure'] = $weatherDetails->consolidated_weather[0]->air_pressure." mbar";
+        $data['weather']['humidity'] = $weatherDetails->consolidated_weather[0]->humidity."%";
+        $data['weather']['visibility'] = $weatherDetails->consolidated_weather[0]->visibility." miles";
+        $data['weather']['predictability'] = $weatherDetails->consolidated_weather[0]->predictability."%";
+        $data['weather']['weather_icon'] = "https://www.metaweather.com/static/img/weather/".$weatherDetails->consolidated_weather[0]->weather_state_abbr.".svg";
+        
+        
         $startDate = date('Y-m-d', strtotime('-7 days'));
         
         $data['count']['services'] = Service::get()->count();
@@ -80,15 +97,6 @@ class ManagerController extends Controller {
         })->where('payment_status', config('constant.payment_status.unpaid'))->where(function($q) {
             $q->where('payment_mode', config('constant.payment_mode.cheque'))->orWhere('payment_mode', config('constant.payment_mode.cash'));
         })->whereBetween('created_at', [$startDate,date('Y-m-d')])->sum('amount');
-        
-        
-        //Dumy data
-//        $data['graphs']['revenueGeneratedByNewCustomers'] = 25987;
-//        $data['graphs']['revenueGeneratedByNewHaulers'] = 12967;
-//        $data['invoiceGraphs']['customerInvoices'] = 54789;
-//        $data['invoiceGraphs']['haulerInvoices'] = 45698;
-//        $data['invoiceGraphs']['outstandingInvoices'] = 23658;
-        
         
         
         return response()->json([
@@ -196,17 +204,17 @@ class ManagerController extends Controller {
         $confirmed = 1;
         $manager = User::whereId($request->user()->id)->first();
         if ($request->email != '' && $request->email != null) {
-            $checkEmail = User::where('email', $request->email)->first();
-            if ($checkEmail !== null) {
-                if ($checkEmail->id !== $manager->id) {
-                    return response()->json([
-                                'status' => false,
-                                'message' => 'Email is already taken.',
-                                'data' => []
-                                    ], 422);
-                }
-            }
             if ($manager->email !== $request->email) {
+                $checkEmail = User::where('email', $request->email)->first();
+                if ($checkEmail !== null) {
+                    if ($checkEmail->id !== $manager->id) {
+                        return response()->json([
+                                    'status' => false,
+                                    'message' => 'Email is already taken.',
+                                    'data' => []
+                                        ], 422);
+                    }
+                }
                 $confirmed = 0;
             }
         }
@@ -535,7 +543,7 @@ class ManagerController extends Controller {
                     ]);
                 }
                 DB::commit();
-                if ($confirmed == 0) {
+                if (isset($confirmed)) {
                     $this->_updateEmail($manager, $request->email);
                     if ($request->user()->id == $request->manager_id) {
                         $request->user()->token()->revoke();

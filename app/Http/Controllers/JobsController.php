@@ -76,9 +76,10 @@ class JobsController extends Controller {
     public function createJob(Request $request) {
 //        dump($request->all());
 //        dd($request->is_repeating_job == 'false');
-        
+       
         $validator = Validator::make($request->all(), [
                     'customer_id' => 'required',
+                    'manager_id' => 'required',
                     'service_id' => 'required',
                     'job_providing_date' => 'required',
                     'is_repeating_job' => 'required',
@@ -95,7 +96,7 @@ class JobsController extends Controller {
         $checkService = Service::where('id', $request->service_id)->first();
         if ($checkService->service_for == config('constant.roles.Customer')) {
             
-            if ((!isset($request->manager_id) && $request->manager_id == null && $request->manager_id == '') || (!isset($request->farm_id) && $request->farm_id == null && $request->farm_id == '') || (!isset($request->time_slots_id) && $request->time_slots_id == null && $request->time_slots_id == '')) {
+            if ((!isset($request->farm_id) && $request->farm_id == null && $request->farm_id == '') || (!isset($request->time_slots_id) && $request->time_slots_id == null && $request->time_slots_id == '')) {
                 return response()->json([
                             'status' => false,
                             'message' => 'The given data was invalid.',
@@ -120,7 +121,7 @@ class JobsController extends Controller {
                 'job_providing_date' => $request->job_providing_date,
                 'weight' => (isset($request->weight) && $request->weight != '' && $request->weight != null) ? $request->weight : null,
                 'is_repeating_job' => ($request->is_repeating_job == false) ? 1 : 2,
-                'repeating_days' => (isset($request->repeating_days) && $request->repeating_days != '' && $request->repeating_days != null) ? $request->repeating_days : null,
+                'repeating_days' => (isset($request->repeating_days) && $request->repeating_days != '' && $request->repeating_days != null) ? json_encode($request->repeating_days) : null,
                 'payment_mode' => $request->payment_mode,
                 'images' => (isset($request->images) && $request->images != '' && $request->images != null) ? json_encode($request->images) : null,
                 'notes' => (isset($request->notes) && $request->notes != '' && $request->notes != null) ? $request->notes : null,
