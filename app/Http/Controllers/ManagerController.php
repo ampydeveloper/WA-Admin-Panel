@@ -23,16 +23,17 @@ class ManagerController extends Controller {
     public function dashboard(Request $request) {
         
         $weather = new Weather();
+        $weatherDetails = $weather->getByCoordinates(36.96, -122.02, '2018/01/01');
         $weatherDetails = $weather->getByCityName('miami');
         $data['weather']['weather_state_name'] = $weatherDetails->consolidated_weather[0]->weather_state_name;
         $data['weather']['wind_direction_compass'] = $weatherDetails->consolidated_weather[0]->wind_direction_compass;
         $data['weather']['min_temp'] = $weatherDetails->consolidated_weather[0]->min_temp;
-        $data['weather']['max_temp'] = $weatherDetails->consolidated_weather[0]->max_temp;
+        $data['weather']['max_temp'] = bcdiv($weatherDetails->consolidated_weather[0]->max_temp, 1, 2);
         $data['weather']['the_temp'] = $weatherDetails->consolidated_weather[0]->the_temp;
-        $data['weather']['wind_speed'] = $weatherDetails->consolidated_weather[0]->wind_speed." mph";
+        $data['weather']['wind_speed'] = bcdiv($weatherDetails->consolidated_weather[0]->wind_speed, 1, 2)." miles";
         $data['weather']['air_pressure'] = $weatherDetails->consolidated_weather[0]->air_pressure." mbar";
         $data['weather']['humidity'] = $weatherDetails->consolidated_weather[0]->humidity."%";
-        $data['weather']['visibility'] = $weatherDetails->consolidated_weather[0]->visibility." miles";
+        $data['weather']['visibility'] = bcdiv($weatherDetails->consolidated_weather[0]->visibility, 1, 2)." miles";
         $data['weather']['predictability'] = $weatherDetails->consolidated_weather[0]->predictability."%";
         $data['weather']['weather_icon'] = "https://www.metaweather.com/static/img/weather/".$weatherDetails->consolidated_weather[0]->weather_state_abbr.".svg";
         
@@ -295,7 +296,6 @@ class ManagerController extends Controller {
                 'user_image' => (isset($request->user_image) && $request->user_image != '' && $request->user_image != null) ? $request->user_image : null,
                 'role_id' => config('constant.roles.Admin'),
                 'created_from_id' => $request->user()->id,
-                'is_confirmed' => 1,
                 'is_active' => 1,
                 'password' => bcrypt($newPassword)
             ]);
@@ -334,25 +334,23 @@ class ManagerController extends Controller {
                         'data' => $validator->errors()
                             ], 422);
         }
-        $confirmed = 1;
         $admin = User::whereId($request->admin_id)->first();
         if ($admin) {
             if ($request->email != '' && $request->email != null) {
-                $checkEmail = User::where('email', $request->email)->first();
-                if ($checkEmail !== null) {
-                    if ($checkEmail->id !== $admin->id) {
-                        return response()->json([
-                                    'status' => false,
-                                    'message' => 'Email is already taken.',
-                                    'data' => []
-                                        ], 422);
-                    }
-                }
                 if ($admin->email !== $request->email) {
+                    $checkEmail = User::where('email', $request->email)->first();
+                    if ($checkEmail !== null) {
+                        if ($checkEmail->id !== $admin->id) {
+                            return response()->json([
+                                        'status' => false,
+                                        'message' => 'Email is already taken.',
+                                        'data' => []
+                                            ], 422);
+                        }
+                    }
                     $confirmed = 0;
                 }
             }
-//            dd($confirmed);
             try {
                 if ($request->password != '' && $request->password != null) {
                     $admin->password = bcrypt($request->password);
@@ -361,18 +359,21 @@ class ManagerController extends Controller {
                 $admin->last_name = $request->admin_last_name;
                 $admin->email = $request->email;
                 $admin->user_image = (isset($request->user_image) && $request->user_image != '' && $request->user_image != null) ? $request->user_image : null;
-                $admin->is_confirmed = $confirmed;
+                if(isset($confirmed)) {
+                    $admin->is_confirmed = $confirmed;
+                }
+                    
                 $admin->save();
-                if ($confirmed == 0) {
+                if (isset($confirmed)) {
                     $this->_updateEmail($admin, $request->email);
-//                    if ($request->user()->id == $request->admin_id) {
-//                        $request->user()->token()->revoke();
-//                        return response()->json([
-//                                    'status' => true,
-//                                    'message' => 'Successfully logged out',
-//                                    'data' => []
-//                        ]);
-//                    }
+                    if ($request->user()->id == $request->manager_id) {
+                        $request->user()->token()->revoke();
+                        return response()->json([
+                                    'status' => true,
+                                    'message' => 'Successfully logged out',
+                                    'data' => []
+                        ]);
+                    }
                 }
                 return response()->json([
                             'status' => true,
@@ -438,7 +439,6 @@ class ManagerController extends Controller {
                 'user_image' => (isset($request->user_image) && $request->user_image != '' && $request->user_image != null) ? $request->user_image : null,
                 'role_id' => config('constant.roles.Admin_Manager'),
                 'created_from_id' => $request->user()->id,
-                'is_confirmed' => 1,
                 'is_active' => 1,
                 'password' => bcrypt($newPassword)
             ]);
@@ -489,7 +489,6 @@ class ManagerController extends Controller {
                     'id_photo' => 'required',
                     'salary' => 'required',
                     'joining_date' => 'required',
-//             'releaving_date' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -498,20 +497,19 @@ class ManagerController extends Controller {
                         'data' => $validator->errors()
                             ], 422);
         }
-        $confirmed = 1;
         $manager = User::whereId($request->manager_id)->first();
         if ($request->email != '' && $request->email != null) {
-            $checkEmail = User::where('email', $request->email)->first();
-            if ($checkEmail !== null) {
-                if ($checkEmail->id !== $manager->id) {
-                    return response()->json([
-                                'status' => false,
-                                'message' => 'Email is already taken.',
-                                'data' => []
-                                    ], 422);
-                }
-            }
             if ($manager->email !== $request->email) {
+                $checkEmail = User::where('email', $request->email)->first();
+                if ($checkEmail !== null) {
+                    if ($checkEmail->id !== $manager->id) {
+                        return response()->json([
+                                    'status' => false,
+                                    'message' => 'Email is already taken.',
+                                    'data' => []
+                                        ], 422);
+                    }
+                }
                 $confirmed = 0;
             }
         }
@@ -531,7 +529,9 @@ class ManagerController extends Controller {
             $manager->zip_code = $request->zipcode;
             $manager->user_image = (isset($request->user_image) && $request->user_image != '' && $request->user_image != null) ? $request->user_image : null;
             $manager->is_active = $request->is_active;
-            $manager->is_confirmed = $confirmed;
+            if(isset($confirmed)) {
+                $manager->is_confirmed = $confirmed;
+            }
             if ($manager->save()) {
                 if ($manager->role_id != config('constant.roles.Admin')) {
                     ManagerDetail::whereUserId($request->manager_id)->update([

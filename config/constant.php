@@ -121,5 +121,14 @@ return [
         3 => '12234',
         4 => '78451',
         5 => '16006',
+    ],
+    'days' => [
+        1 => 'monday',
+        2 => 'tuesday',
+        3 => 'wednesday',
+        4 => 'thusday',
+        5 => 'friday',
+        6 => 'saturday',
+        7 => 'sunday',
     ]
 ];

@@ -136,21 +136,20 @@ class CompanyController extends Controller {
                         'data' => $validator->errors()
                             ], 422);
         }
-        $confirmed = 1;
         $haulerDetails = User::whereId($request->hauler_id)->first();
         if ($request->email != '' && $request->email != null) {
-            $checkEmail = User::where('email', $request->email)->first();
-            if ($checkEmail !== null) {
-                if ($checkEmail->id !== $haulerDetails->id) {
-                    return response()->json([
-                                'status' => false,
-                                'message' => 'Email is already taken.',
-                                'data' => []
-                                    ], 422);
-                }
-            }
             if ($haulerDetails->email !== $request->email) {
                 $confirmed = 0;
+                $checkEmail = User::where('email', $request->email)->first();
+                if ($checkEmail !== null) {
+                    if ($checkEmail->id !== $haulerDetails->id) {
+                        return response()->json([
+                                    'status' => false,
+                                    'message' => 'Email is already taken.',
+                                    'data' => []
+                                        ], 422);
+                    }
+                }
             }
         }
         try {
@@ -170,10 +169,12 @@ class CompanyController extends Controller {
             $haulerDetails->zip_code = $request->zipcode;
             $haulerDetails->user_image = (isset($request->user_image) && $request->user_image != '' && $request->user_image != null) ? $request->user_image : null;
             $haulerDetails->is_active = $request->is_active;
-            $haulerDetails->is_confirmed = $confirmed;
+            if (isset($confirmed)) {
+                $haulerDetails->is_confirmed = $confirmed;
+            }
             $haulerDetails->save();
             DB::commit();
-            if ($confirmed == 0) {
+            if (isset($confirmed)) {
                 $this->_updateEmail($haulerDetails, $request->email);
             }
             return response()->json([
@@ -362,20 +363,19 @@ class CompanyController extends Controller {
                         'data' => $validator->errors()
                             ], 422);
         }
-        $confirmed = 1;
         $driver = User::whereId($request->driver_id)->first();
         if ($request->email != '' && $request->email != null) {
-            $checkEmail = User::where('email', $request->email)->first();
-            if ($checkEmail !== null) {
-                if ($checkEmail->id !== $driver->id) {
-                    return response()->json([
-                                'status' => false,
-                                'message' => 'Email is already taken.',
-                                'data' => []
-                                    ], 422);
-                }
-            }
             if ($driver->email !== $request->email) {
+                $checkEmail = User::where('email', $request->email)->first();
+                if ($checkEmail !== null) {
+                    if ($checkEmail->id !== $driver->id) {
+                        return response()->json([
+                                    'status' => false,
+                                    'message' => 'Email is already taken.',
+                                    'data' => []
+                                        ], 422);
+                    }
+                }
                 $confirmed = 0;
             }
         }
@@ -407,10 +407,12 @@ class CompanyController extends Controller {
             $driver->user_image = (isset($request->user_image) && $request->user_image != '' && $request->user_image != null) ? $request->user_image : null;
             $driver->hauler_driver_licence = $request->driver_licence;
             $driver->hauler_driver_licence_image = $request->driver_licence_image;
-            
+            if(isset($confirmed)) {
+                $driver->is_confirmed = $confirmed;
+            }
             if ($driver->save()) {
                 DB::commit();
-                if ($confirmed == 0) {
+                if (isset($confirmed)) {
                     $this->_updateEmail($driver, $request->email);
                 }
                 return response()->json([

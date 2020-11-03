@@ -120,7 +120,8 @@ Route::group(['prefix' => 'auth'], function () {
 
             //jobs
             Route::get('job-list', 'JobsController@getAllJob');
-            Route::post('job-list-mobile', 'JobsController@getAllJobMobile');
+            Route::post('job-list-mobile-all-jobs', 'JobsController@getAllJobMobile');
+            Route::post('job-list-mobile-repeating-jobs', 'JobsController@getRepeatingJobMobile');
             Route::post('job-filter', 'JobsController@jobFilter');
             Route::post('create-job', 'JobsController@createJob');
             Route::get('job-customer', 'JobsController@getCustomers');

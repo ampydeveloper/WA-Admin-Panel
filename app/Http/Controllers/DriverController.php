@@ -86,7 +86,6 @@ class DriverController extends Controller {
                 'user_image' => (isset($request->user_image) && $request->user_image != '' && $request->user_image != null) ? $request->user_image : null,
                 'role_id' => config('constant.roles.Driver'),
                 'created_from_id' => $request->user()->id,
-                'is_confirmed' => 1,
                 'is_active' => 1,
                 'password' => bcrypt($newPassword)
             ]);
@@ -151,20 +150,19 @@ class DriverController extends Controller {
                         'data' => $validator->errors()
                             ], 422);
         }
-        $confirmed = 1;
         $driver = User::whereId($request->driver_id)->first();
         if ($request->email != '' && $request->email != null) {
-            $checkEmail = User::where('email', $request->email)->first();
-            if ($checkEmail !== null) {
-                if ($checkEmail->id !== $driver->id) {
-                    return response()->json([
-                                'status' => false,
-                                'message' => 'Email is already taken.',
-                                'data' => []
-                                    ], 422);
-                }
-            }
             if ($driver->email !== $request->email) {
+                $checkEmail = User::where('email', $request->email)->first();
+                if ($checkEmail !== null) {
+                    if ($checkEmail->id !== $driver->id) {
+                        return response()->json([
+                                    'status' => false,
+                                    'message' => 'Email is already taken.',
+                                    'data' => []
+                                        ], 422);
+                    }
+                }
                 $confirmed = 0;
             }
         }
@@ -195,6 +193,9 @@ class DriverController extends Controller {
             $driver->zip_code = $request->driver_zipcode;
             $driver->user_image = (isset($request->user_image) && $request->user_image != '' && $request->user_image != null) ? $request->user_image : null;
             $driver->is_active = $request->status;
+            if(isset($confirmed)) {
+                $driver->is_confirmed = $confirmed;
+            }
             if ($driver->save()) {
                 if ($driver->role_id != config('constant.roles.Admin')) {
                     Driver::whereUserId($request->driver_id)->update([
@@ -208,7 +209,7 @@ class DriverController extends Controller {
                     ]);
                 }
                 DB::commit();
-                if ($confirmed == 0) {
+                if (isset($confirmed)) {
                     $this->_updateEmail($driver, $request->email);
                 }
                 return response()->json([

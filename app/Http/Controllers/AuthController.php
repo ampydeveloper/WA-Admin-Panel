@@ -356,6 +356,7 @@ class AuthController extends Controller
         $user = $request->user();
         $user->password = bcrypt($request->password);
         $user->password_changed_at = Carbon::now();
+        $user->is_confirmed = 1;
         if ($user->save()) {
             $message = "Password changed successfully.";
             $status = true;

@@ -27,4 +27,10 @@ class CustomerFarm extends Model
     {
         return $this->hasMany('App\User', 'farm_id');
     }
+    public function totalJobs() {
+        return $this->hasMany('App\Job', 'farm_id');
+    }
+    public function latestJob() {
+        return $this->hasOne('App\Job', 'farm_id')->latest();
+    }
 }

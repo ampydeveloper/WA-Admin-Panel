@@ -2,31 +2,33 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 use Mail;
+use App\Job;
+use App\User;
+use App\Payment;
 use App\Service;
 use App\TimeSlots;
-use App\ServicesTimeSlot;
-use App\User;
-use App\ManagerDetail;
-use App\CustomerFarm;
-use App\CustomerCardDetail;
-use App\Payment;
-use App\Job;
 use Carbon\Carbon;
+use App\CustomerFarm;
+use App\ManagerDetail;
+use App\ServicesTimeSlot;
+use App\CustomerCardDetail;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class CustomerController extends Controller {
     /**
      * list customer
      */
     public function listCustomer() {
-        $getCustomer = User::with('farmlist.farmManager')
-                        ->whereRoleId(config('constant.roles.Customer'))->get();
+        
+        $getCustomer = User::where('role_id',config('constant.roles.Customer'))->with(['farmlist' => function($q) {
+                        $q->with('farmManager')->withCount('totalJobs')->with('latestJob');
+                    }])->get();
         return response()->json([
                     'status' => true,
                     'message' => 'Customer Listing.',
@@ -46,8 +48,9 @@ class CustomerController extends Controller {
                         'data' => $validator->errors()
                             ], 422);
         }
-        $getCustomer = User::with('farmlist.farmManager')
-                        ->whereRoleId(config('constant.roles.Customer'))->skip($request->offset)->take($request->take)->get();
+        $getCustomer = User::where('role_id',config('constant.roles.Customer'))->with(['farmlist' => function($q) {
+                        $q->with('farmManager')->withCount('totalJobs')->with('latestJob');
+                    }])->skip($request->offset)->take($request->take)->get();
         return response()->json([
                     'status' => true,
                     'message' => 'Customer Listing.',
@@ -58,7 +61,6 @@ class CustomerController extends Controller {
      * create customer
      */
     public function createCustomer(Request $request) {
-//        dd($request->all());
         $validator = Validator::make($request->all(), [
                     'customer_first_name' => 'required|string',
                     'customer_last_name' => 'required|string',
@@ -116,7 +118,7 @@ class CustomerController extends Controller {
                 'role_id' => config('constant.roles.Customer'),
                 'created_from_id' => $request->user()->id,
                 'is_confirmed' => 1,
-                'is_active' => $request->customer_is_active,
+                'is_active' => 1,
                 'password' => bcrypt($newPassword)
             ]);
             if ($user->save()) {
@@ -214,7 +216,7 @@ class CustomerController extends Controller {
                     'manager_details.*.manager_zipcode' => 'required',
                     'manager_details.*.manager_card_image' => 'required',
                     'manager_details.*.manager_id_card' => 'required',
-                    'manager_details.*.salary' => 'required',
+//                    'manager_details.*.salary' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -267,7 +269,7 @@ class CustomerController extends Controller {
                             'user_id' => $saveManger->id,
                             'identification_number' => $manager['manager_id_card'],
                             'document' => $manager['manager_card_image'],
-                            'salary' => $manager['salary'],
+//                            'salary' => $manager['salary'],
                             'joining_date' => date('Y/m/d'),
                         ]);
                         if ($mangerDetails->save()) {
@@ -310,7 +312,7 @@ class CustomerController extends Controller {
                     'manager_zipcode' => 'required',
                     'manager_card_image' => 'required',
                     'manager_id_card' => 'required',
-                    'salary' => 'required',
+//                    'salary' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -348,7 +350,7 @@ class CustomerController extends Controller {
                     'user_id' => $saveManager->id,
                     'identification_number' => $request->manager_id_card,
                     'document' => $request->manager_card_image,
-                    'salary' => $request->salary,
+//                    'salary' => $request->salary,
                     'joining_date' => date('Y/m/d'),
                 ]);
                 if ($managerDetails->save()) {
@@ -485,17 +487,17 @@ class CustomerController extends Controller {
         $confirmed = 1;
         $customerDetails = User::whereId($request->customer_id)->first();
         if ($request->email != '' && $request->email != null) {
-            $checkEmail = User::where('email', $request->email)->first();
-            if ($checkEmail !== null) {
-                if ($checkEmail->id !== $customerDetails->id) {
-                    return response()->json([
-                                'status' => false,
-                                'message' => 'Email is already taken.',
-                                'data' => []
-                                    ], 422);
-                }
-            }
             if ($customerDetails->email !== $request->email) {
+                $checkEmail = User::where('email', $request->email)->first();
+                if ($checkEmail !== null) {
+                    if ($checkEmail->id !== $customerDetails->id) {
+                        return response()->json([
+                                    'status' => false,
+                                    'message' => 'Email is already taken.',
+                                    'data' => []
+                                        ], 422);
+                    }
+                }
                 $confirmed = 0;
             }
         }
@@ -515,7 +517,10 @@ class CustomerController extends Controller {
             $customerDetails->zip_code = $request->customer_zipcode;
             $customerDetails->user_image = (isset($request->customer_image) && $request->customer_image != '' && $request->customer_image != null) ? $request->customer_image : null;
             $customerDetails->is_active = $request->customer_is_active;
-            $customerDetails->is_confirmed = $confirmed;
+            if (isset($confirmed)) {
+                $customerDetails->is_confirmed = $confirmed;
+            }
+
             if ($customerDetails->save()) {
                 DB::commit();
                 if ($confirmed == 0) {
@@ -612,17 +617,17 @@ class CustomerController extends Controller {
         $confirmed = 1;
         $manager = User::whereId($request->manager_id)->first();
         if ($request->email != '' && $request->email != null) {
-            $checkEmail = User::where('email', $request->email)->first();
-            if ($checkEmail !== null) {
-                if ($checkEmail->id !== $manager->id) {
-                    return response()->json([
-                                'status' => false,
-                                'message' => 'Email is already taken.',
-                                'data' => []
-                                    ], 422);
-                }
-            }
             if ($manager->email !== $request->email) {
+                $checkEmail = User::where('email', $request->email)->first();
+                if ($checkEmail !== null) {
+                    if ($checkEmail->id !== $manager->id) {
+                        return response()->json([
+                                    'status' => false,
+                                    'message' => 'Email is already taken.',
+                                    'data' => []
+                                        ], 422);
+                    }
+                }
                 $confirmed = 0;
             }
         }
@@ -643,6 +648,9 @@ class CustomerController extends Controller {
             $manager->user_image = (isset($request->manager_image) && $request->manager_image != '' && $request->manager_image != null) ? $request->manager_image : null;
             $manager->is_active = $request->manager_is_active;
             $manager->farm_id = $request->farm_id;
+            if (isset($confirmed)) {
+                $manager->is_confirmed = $confirmed;
+            }
             if ($manager->save()) {
                 $managerDetail = ManagerDetail::where('user_id', $request->manager_id)->first();
                 $managerDetail->salary = $request->salary;
