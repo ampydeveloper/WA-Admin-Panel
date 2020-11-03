@@ -24,7 +24,8 @@ return [
         'unavailable' => 2
     ],
     'payment_methods' => [
-        'stripe' => 1
+        'stripe' => 1,
+        'authorizenet' => 2
     ],
     'payment_status_reverse' => [
         'succeeded' => 1
@@ -72,7 +73,7 @@ return [
     ],
     'quick_book' => [
         'Not_Sync' => 0,
-        'Sync' => 0,
+        'Sync' => 1,
     ],
     'driver_type' => [
         'truck_driver' => 1,
@@ -130,5 +131,10 @@ return [
         5 => 'friday',
         6 => 'saturday',
         7 => 'sunday',
-    ]
+    ],
+    'warehouse' => [
+        'lat' => '31.23',
+        'lon' => '34.34'
+    ],
+    'repeating_days' => ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'],
 ];

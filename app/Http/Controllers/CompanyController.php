@@ -379,10 +379,9 @@ class CompanyController extends Controller {
                 $confirmed = 0;
             }
         }
-        $checkDriverLicence = User::where('hauler_driver_licence', $request->driver_licence)->first();
-        $driverDetail = User::where('id', $request->driver_id)->first();
+        $checkDriverLicence = User::where('driver_licence', $request->driver_licence)->first();
         if ($checkDriverLicence !== null) {
-            if ($checkDriverLicence->id !== $driverDetail->id) {
+            if ($checkDriverLicence->id !== $driver->id) {
                 return response()->json([
                             'status' => false,
                             'message' => 'Driver lecience is already taken.',
