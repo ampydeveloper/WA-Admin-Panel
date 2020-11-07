@@ -12,6 +12,7 @@ const currentUserSubject = new BehaviorSubject(
 export const jobService = {
   getCustomer,
   getJobChatMessages,
+  chatUsers,
   getManager,
   getFrams,
   listService,
@@ -288,6 +289,17 @@ function singleJob(job_id) {
 function chatList() {
   return fetch(
     this.apiUrl + `admin/message`,
+    requestOptions.get()
+  )
+    .then(handleResponse)
+    .then(chat => {
+      return chat;
+    });
+}
+
+function chatUsers(data) {
+  return fetch(
+    this.apiUrl + `chat-members/`+data,
     requestOptions.get()
   )
     .then(handleResponse)

@@ -131,13 +131,13 @@
                         <span class="basic-info">{{job.start_date | formatDateLic}}</span>
                         <span class="basic-big">#JOB100{{job.id}}</span>
                         <span class="basic-grey">${{(job.job_amount)?job.job_amount:0}}</span>
-                        <span class="basic-grey">{{job.service.service_name}}</span>
+                        <span class="basic-grey">{{ (job.service?job.service.service_name:'') }}</span>
                       </td>
                       <td>
-                        <span class="basic-big">{{job.customer.first_name}}</span>
-                        <span class="basic-grey">{{job.manager.first_name}} ({{job.manager.email}})</span>
+                        <span class="basic-big">{{ (job.customer?job.customer.first_name:'') }}</span>
+                        <span class="basic-grey">{{ (job.manager?job.manager.first_name:'') }} ({{ (job.manager?job.manager.email:'') }})</span>
                         <span
-                          class="basic-grey"
+                          class="basic-grey" v-if="job.manager"
                         >{{job.manager.address}} {{job.manager.city}} {{job.manager.state}} {{job.manager.country}} {{job.manager.zip_code}}</span>
                       </td>
                       <td class="job-col-body">
@@ -145,7 +145,7 @@
                         <span
                           class="basic-info-half"
                           v-if="job.truck_driver"
-                        >{{job.truck_driver.first_name}}</span>
+                        >{{ (job.truck_driver?job.truck_driver.first_name:'') }}</span>
                         <span class="basic-info-half" v-if="!job.truck_driver">Not Assigned</span>
                         <div class="clearfix"></div>
                         <span class="basic-grey-label-half">Truck</span>
@@ -156,7 +156,7 @@
                         <span
                           class="basic-info-half"
                           v-if="job.skidsteer_driver"
-                        >{{job.skidsteer_driver.first_name}}</span>
+                        >{{ (job.skidsteer_driver?job.skidsteer_driver.first_name:'') }}</span>
                         <span class="basic-info-half" v-if="!job.skidsteer_driver">Not Assigned</span>
                         <div class="clearfix"></div>
                         <span class="basic-grey-label-half">Skidsteer</span>

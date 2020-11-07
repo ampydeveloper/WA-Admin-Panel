@@ -52,23 +52,21 @@
 
         <v-col cols="12" md="12" class="main_box chat-area-outer">
           <div class="chat-area" id="message-container">
-       
-              <!-- <div class="chat-receiver mb-6">
+            <!-- <div class="chat-receiver mb-6">
               <div class="chat-msg">Lorem ipsum dolor sit amet</div>
               <div class="chat-img"></div>
             </div> -->
-              <div class="empty-message">
-                <p>
-                  Lets start conversing <br />
-                  & <br />
-                  find solutions.
-                </p>
-              </div>
-              <div class="uploading-image-out">
-                <loader-icon size="1.5x" class="custom-class"></loader-icon>
-                <p>Uploading image</p>
-              </div>
-       
+            <div class="empty-message">
+              <p>
+                Lets start conversing <br />
+                & <br />
+                find solutions.
+              </p>
+            </div>
+            <div class="uploading-image-out">
+              <loader-icon size="1.5x" class="custom-class"></loader-icon>
+              <p>Uploading image</p>
+            </div>
           </div>
         </v-col>
 
@@ -131,6 +129,7 @@ export default {
       manager: "",
       farm: "",
       userdata: "",
+      chatUsers: "",
       baseUrl: environment.baseUrl,
     };
   },
@@ -140,7 +139,12 @@ export default {
   },
   mounted() {
     this.getResults();
-    this.getChatMessages();
+    this.getChatMembers();
+  
+    setTimeout(() => {
+           this.getChatMessages();
+        }, 500);
+    
     let socketScript = document.createElement("script");
     socketScript.setAttribute(
       "src",
@@ -161,187 +165,187 @@ export default {
     scrollScript2.setAttribute("rel", "stylesheet");
     document.head.appendChild(scrollScript2);
 
-    mapboxgl.accessToken =
-      "pk.eyJ1IjoibG9jb25lIiwiYSI6ImNrYmZkMzNzbDB1ZzUyenM3empmbXE3ODQifQ.SiBnr9-6jpC1Wa8OTAmgVA";
-    var map = new mapboxgl.Map({
-      container: "map",
-      style: "mapbox://styles/mapbox/light-v9",
-      center: [-122.662323, 45.523751], // starting position
-      zoom: 12,
-    });
-    // set the bounds of the map
-    var bounds = [
-      [-123.069003, 45.395273],
-      [-122.303707, 45.612333],
-    ];
-    map.setMaxBounds(bounds);
+    // mapboxgl.accessToken =
+    //   "pk.eyJ1IjoibG9jb25lIiwiYSI6ImNrYmZkMzNzbDB1ZzUyenM3empmbXE3ODQifQ.SiBnr9-6jpC1Wa8OTAmgVA";
+    // var map = new mapboxgl.Map({
+    //   container: "map",
+    //   style: "mapbox://styles/mapbox/light-v9",
+    //   center: [-122.662323, 45.523751], // starting position
+    //   zoom: 12,
+    // });
+    // // set the bounds of the map
+    // var bounds = [
+    //   [-123.069003, 45.395273],
+    //   [-122.303707, 45.612333],
+    // ];
+    // map.setMaxBounds(bounds);
 
-    // initialize the map canvas to interact with later
-    var canvas = map.getCanvasContainer();
+    // // initialize the map canvas to interact with later
+    // var canvas = map.getCanvasContainer();
 
-    // an arbitrary start will always be the same
-    // only the end or destination will change
-    var start = [-122.662323, 45.523751];
+    // // an arbitrary start will always be the same
+    // // only the end or destination will change
+    // var start = [-122.662323, 45.523751];
 
-    // create a function to make a directions request
-    function getRoute(start, end) {
-      // make a directions request using cycling profile
-      // an arbitrary start will always be the same
-      // only the end or destination will change
-      var url =
-        "https://api.mapbox.com/directions/v5/mapbox/cycling/" +
-        start[0] +
-        "," +
-        start[1] +
-        ";" +
-        end[0] +
-        "," +
-        end[1] +
-        "?steps=true&geometries=geojson&access_token=" +
-        mapboxgl.accessToken;
+    // // create a function to make a directions request
+    // function getRoute(start, end) {
+    //   // make a directions request using cycling profile
+    //   // an arbitrary start will always be the same
+    //   // only the end or destination will change
+    //   var url =
+    //     "https://api.mapbox.com/directions/v5/mapbox/cycling/" +
+    //     start[0] +
+    //     "," +
+    //     start[1] +
+    //     ";" +
+    //     end[0] +
+    //     "," +
+    //     end[1] +
+    //     "?steps=true&geometries=geojson&access_token=" +
+    //     mapboxgl.accessToken;
 
-      // make an XHR request https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
-      var req = new XMLHttpRequest();
-      req.open("GET", url, true);
-      req.onload = function () {
-        var json = JSON.parse(req.response);
-        var data = json.routes[0];
-        var route = data.geometry.coordinates;
-        var geojson = {
-          type: "Feature",
-          properties: {},
-          geometry: {
-            type: "LineString",
-            coordinates: route,
-          },
-        };
-        // if the route already exists on the map, reset it using setData
-        if (map.getSource("route")) {
-          console.log(geojson);
-          map.getSource("route").setData(geojson);
-        } else {
-          // otherwise, make a new request
-          map.addLayer({
-            id: "route",
-            type: "line",
-            source: {
-              type: "geojson",
-              data: {
-                type: "Feature",
-                properties: {},
-                geometry: {
-                  type: "LineString",
-                  coordinates: geojson,
-                },
-              },
-            },
-            layout: {
-              "line-join": "round",
-              "line-cap": "round",
-            },
-            paint: {
-              "line-color": "#3887be",
-              "line-width": 5,
-              "line-opacity": 0.75,
-            },
-          });
-        }
-        // add turn instructions here at the end
-      };
-      req.send();
-    }
+    //   // make an XHR request https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
+    //   var req = new XMLHttpRequest();
+    //   req.open("GET", url, true);
+    //   req.onload = function () {
+    //     var json = JSON.parse(req.response);
+    //     var data = json.routes[0];
+    //     var route = data.geometry.coordinates;
+    //     var geojson = {
+    //       type: "Feature",
+    //       properties: {},
+    //       geometry: {
+    //         type: "LineString",
+    //         coordinates: route,
+    //       },
+    //     };
+    //     // if the route already exists on the map, reset it using setData
+    //     if (map.getSource("route")) {
+    //       console.log(geojson);
+    //       map.getSource("route").setData(geojson);
+    //     } else {
+    //       // otherwise, make a new request
+    //       map.addLayer({
+    //         id: "route",
+    //         type: "line",
+    //         source: {
+    //           type: "geojson",
+    //           data: {
+    //             type: "Feature",
+    //             properties: {},
+    //             geometry: {
+    //               type: "LineString",
+    //               coordinates: geojson,
+    //             },
+    //           },
+    //         },
+    //         layout: {
+    //           "line-join": "round",
+    //           "line-cap": "round",
+    //         },
+    //         paint: {
+    //           "line-color": "#3887be",
+    //           "line-width": 5,
+    //           "line-opacity": 0.75,
+    //         },
+    //       });
+    //     }
+    //     // add turn instructions here at the end
+    //   };
+    //   req.send();
+    // }
 
-    // this is where the code for the next step will go
-    map.on("load", function () {
-      // make an initial directions request that
-      // starts and ends at the same location
-      getRoute(start, [-122.61365699963287, 45.51773726437733]);
+    // // this is where the code for the next step will go
+    // map.on("load", function () {
+    //   // make an initial directions request that
+    //   // starts and ends at the same location
+    //   getRoute(start, [-122.61365699963287, 45.51773726437733]);
 
-      map.addSource("truck", {
-        type: "geojson",
-        data: {
-          type: "FeatureCollection",
-          features: [
-            {
-              type: "Feature",
-              properties: {},
-              geometry: {
-                type: "Point",
-                coordinates: start,
-              },
-            },
-          ],
-        },
-      });
-      // Add starting point to the map
-      map.addLayer({
-        id: "truck",
-        type: "symbol",
-        source: "truck",
-        layout: {
-          "icon-image": "bus-15",
-        },
-      });
-      // this is where the code from the next step will go
+    //   map.addSource("truck", {
+    //     type: "geojson",
+    //     data: {
+    //       type: "FeatureCollection",
+    //       features: [
+    //         {
+    //           type: "Feature",
+    //           properties: {},
+    //           geometry: {
+    //             type: "Point",
+    //             coordinates: start,
+    //           },
+    //         },
+    //       ],
+    //     },
+    //   });
+    //   // Add starting point to the map
+    //   map.addLayer({
+    //     id: "truck",
+    //     type: "symbol",
+    //     source: "truck",
+    //     layout: {
+    //       "icon-image": "bus-15",
+    //     },
+    //   });
+    //   // this is where the code from the next step will go
 
-      map.addLayer({
-        id: "end",
-        type: "circle",
-        source: {
-          type: "geojson",
-          data: {
-            type: "FeatureCollection",
-            features: [
-              {
-                type: "Feature",
-                properties: {},
-                geometry: {
-                  type: "Point",
-                  coordinates: [-122.61365699963287, 45.51773726437733],
-                },
-              },
-            ],
-          },
-        },
-        paint: {
-          "circle-radius": 10,
-          "circle-color": "#f30",
-        },
-      });
+    //   map.addLayer({
+    //     id: "end",
+    //     type: "circle",
+    //     source: {
+    //       type: "geojson",
+    //       data: {
+    //         type: "FeatureCollection",
+    //         features: [
+    //           {
+    //             type: "Feature",
+    //             properties: {},
+    //             geometry: {
+    //               type: "Point",
+    //               coordinates: [-122.61365699963287, 45.51773726437733],
+    //             },
+    //           },
+    //         ],
+    //       },
+    //     },
+    //     paint: {
+    //       "circle-radius": 10,
+    //       "circle-color": "#f30",
+    //     },
+    //   });
 
-      getRoute(start, [-122.61365699963287, 45.51773726437733]);
-    });
-    window.lo = 45.523751;
-    window.setInterval(function () {
-      // reqest to get new cordinates
-      // request.open('GET', url, true);
-      // request.onload = function () {
-      //   if (this.status >= 200 && this.status < 400) {
-      //     // retrieve the JSON from the response
-      //     var json = JSON.parse(this.response);
+    //   getRoute(start, [-122.61365699963287, 45.51773726437733]);
+    // });
+    // window.lo = 45.523751;
+    // window.setInterval(function () {
+    //   // reqest to get new cordinates
+    //   // request.open('GET', url, true);
+    //   // request.onload = function () {
+    //   //   if (this.status >= 200 && this.status < 400) {
+    //   //     // retrieve the JSON from the response
+    //   //     var json = JSON.parse(this.response);
 
-      //     // update the drone symbol's location on the map
+    //   //     // update the drone symbol's location on the map
 
-      //   }
-      // };
-      // request.send();
-      lo = lo - 0.0001;
-      start = [-122.662453, lo];
+    //   //   }
+    //   // };
+    //   // request.send();
+    //   lo = lo - 0.0001;
+    //   start = [-122.662453, lo];
 
-      map.getSource("truck").setData({
-        type: "Feature",
-        properties: {},
-        geometry: {
-          type: "Point",
-          coordinates: start,
-        },
-      });
-      map.flyTo({
-        center: start,
-        speed: 0.5,
-      });
-      getRoute(start, [-122.61365699963287, 45.51773726437733]);
-    }, 2000);
+    //   map.getSource("truck").setData({
+    //     type: "Feature",
+    //     properties: {},
+    //     geometry: {
+    //       type: "Point",
+    //       coordinates: start,
+    //     },
+    //   });
+    //   map.flyTo({
+    //     center: start,
+    //     speed: 0.5,
+    //   });
+    //   getRoute(start, [-122.61365699963287, 45.51773726437733]);
+    // }, 2000);
   },
   methods: {
     getResults() {
@@ -361,17 +365,47 @@ export default {
         }
       });
     },
+    getChatMembers() {
+      jobService.chatUsers(this.$route.params.id).then((response) => {
+        //handle response
+        if (response.status) {
+          // this.job = response.data;
+          console.log(response.data);
+          var users = [];
+          users[response.data.customer_id] = response.data.customer;
+          users[response.data.manager_id] = response.data.manager;
+          users[response.data.skidsteer_driver_id] =
+            response.data.skidsteer_driver;
+          users[response.data.truck_driver_id] = response.data.truck_driver;
+
+          this.chatUsers = users;
+        }
+      });
+    },
     getChatMessages() {
+      //${this.chatUsers[val.username].user_image}
       jobService
         .getJobChatMessages({ jobId: this.$route.params.id })
         .then((response) => {
           if (response) {
-            console.log(response);
+            response.data.forEach(function (val, index) {
+              const messageElement = document.createElement("div");
+              messageElement.className = "chat-receiver";
+              messageElement.innerHTML =
+                '<div class="chat-msg">' +
+                `${val.message}` +
+                '</div><div class="chat-img"><img src="' +
+                `${environment.baseUrl + "/images/avatar.png"}` +
+                '"></div>';
+              $(document).find("#message-container").prepend(messageElement);
+              $("#message-container .empty-message").remove();
+            });
           }
         });
     },
   },
   updated() {
+
     var messageContainerScroll;
     setTimeout(function () {
       messageContainerScroll = OverlayScrollbars(
@@ -387,23 +421,28 @@ export default {
       const jobId = document.getElementById("job-id");
 
       socket.emit("new-user", name._value);
+      messageContainerScroll.scroll([0, "100%"], 50, { x: "", y: "linear" });
+
       socket.on("chat-message", (data) => {
-        if (data.name == name) {
+        const userImage = $("#current-user-image").val();
+        if (data.name == name._value) {
           appendMessage(
-            '<span class="each-username">' +
-              `You:` +
-              "</span> " +
-              `${data.message}`
+            '<div class="chat-msg">' +
+              `${data.message.message}` +
+              '</div><div class="chat-img"><img src="' +
+              `${userImage}` +
+              '"></div>'
           );
         } else {
           appendMessage(
-            '<span class="each-username">' +
-              `${data.name}:` +
-              "</span> " +
-              `${data.message}`
+            '<div class="chat-msg">' +
+              `${data.message.message}` +
+              '</div><div class="chat-img"><img src="' +
+              `${environment.baseUrl + "/images/avatar.png"}` +
+              '"></div>'
           );
         }
-        // messageContainerScroll.scroll([0, "100%"], 50, { x: "", y: "linear" });
+        messageContainerScroll.scroll([0, "100%"], 50, { x: "", y: "linear" });
       });
       $(document).on("submit", "#send-container", function (e) {
         const message = messageInput.value;

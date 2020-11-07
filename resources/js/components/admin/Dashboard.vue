@@ -9,7 +9,7 @@
             size="2x"
             class="custom-class icons_custom dashboard-icons service-icon"
           ></grid-icon>
-          <h2>144</h2>
+          <h2>{{ count.services }}</h2>
           <span class="employees">Services</span>
           <div class="services-chart-outer">
             <canvas id="services-chart"></canvas>
@@ -24,7 +24,7 @@
             size="2x"
             class="custom-class icons_custom dashboard-icons employee-icon"
           ></user-check-icon>
-          <h2>13</h2>
+          <h2>{{ count.managers }}</h2>
           <span class="employees">Managers</span>
           <div class="services-chart-outer">
             <canvas id="services-chart2"></canvas>
@@ -38,7 +38,7 @@
             size="2x"
             class="custom-class icons_custom dashboard-icons driver-icon"
           ></users-icon>
-          <h2>22</h2>
+          <h2>{{ count.drivers }}</h2>
           <span class="employees">Drivers</span>
           <div class="services-chart-outer">
             <canvas id="services-chart3"></canvas>
@@ -54,24 +54,13 @@
             class="custom-class icons_custom dashboard-icons fleet-icon"
           ></truck-icon>
 
-          <h2>15</h2>
+          <h2>{{ count.trucks + count.skidsteers }}</h2>
           <span class="employees">Fleet</span>
           <div class="services-chart-outer">
             <canvas id="services-chart4"></canvas>
           </div>
         </div>
       </div>
-      <!-- <div class="col">
-        <div class="services">
-          <div class="image-bg-color skid-bg-color"></div>
-          <user-icon size="2x" class="custom-class icons_custom dashboard-icons skid-icon"></user-icon>
-          <h2>100</h2>
-          <span class="employees">SkidSteers</span>
-          <div class="services-chart-outer">
-            <canvas id="services-chart5"></canvas>
-          </div>
-        </div>
-      </div> -->
     </v-row>
 
     <v-row class="dashboard-graps">
@@ -92,17 +81,19 @@
           <div class="customer-graph-details-outer">
             <div class="customer-graph-details">
               <h5>New</h5>
-              <p class="green-text">86,589</p>
+              <p class="green-text">{{ graphs.newCustomersCount }}</p>
             </div>
             <div class="customer-graph-details">
               <h5>All</h5>
-              <p>86,589</p>
+              <p>{{ graphs.allCustomersCount }}</p>
             </div>
 
             <div class="customer-graph-para">
               <p>
                 Your have
-                <span>20</span> new customers generating <span>$2500</span> this
+                <span>{{ graphs.newCustomersCount }}</span> new customers
+                generating
+                <span>${{ graphs.revenueGeneratedByNewCustomers }}</span> this
                 week.
               </p>
             </div>
@@ -131,15 +122,17 @@
           <div class="customer-graph-details-outer pie-data-outer row">
             <div class="customer-graph-details col-sm-4">
               <h5>Customers</h5>
-              <p><span>$</span> 86,589</p>
+              <p><span>$</span> {{ invoiceGraphs.customerInvoices }}</p>
             </div>
             <div class="customer-graph-details col-sm-4">
               <h5>Haulers</h5>
-              <p><span>$</span>86,589</p>
+              <p><span>$</span>{{ invoiceGraphs.haulerInvoices }}</p>
             </div>
             <div class="customer-graph-details col-sm-4">
               <h5>Outstanding</h5>
-              <p class="green-text"><span>$</span>86,59</p>
+              <p class="green-text">
+                <span>$</span>{{ invoiceGraphs.outstandingInvoices }}
+              </p>
             </div>
           </div>
         </div>
@@ -154,7 +147,7 @@
             <mapbox
               access-token="pk.eyJ1IjoibG9jb25lIiwiYSI6ImNrYmZkMzNzbDB1ZzUyenM3empmbXE3ODQifQ.SiBnr9-6jpC1Wa8OTAmgVA"
               :map-options="{
-                style: 'mapbox://styles/mapbox/light-v9',
+                style: 'mapbox://styles/mapbox/dark-v9',
                 center: [-80.2853179, 26.6094155],
                 zoom: 7,
               }"
@@ -187,47 +180,40 @@
                 <p class="mb-6">Florida</p>
                 <div class="flex justify-around mb-12">
                   <span class="feather-icon">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24px"
-                      height="24px"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      class="feather feather-cloud-snow w-24 h-24 text-white"
-                    >
-                      <path
-                        d="M20 17.58A5 5 0 0 0 18 8h-1.26A8 8 0 1 0 4 16.25"
-                      />
-                      <line x1="8" y1="16" x2="8" y2="16" />
-                      <line x1="8" y1="20" x2="8" y2="20" />
-                      <line x1="12" y1="18" x2="12" y2="18" />
-                      <line x1="12" y1="22" x2="12" y2="22" />
-                      <line x1="16" y1="16" x2="16" y2="16" />
-                      <line x1="16" y1="20" x2="16" y2="20" />
-                    </svg>
+                    <img :src="weather.weather_icon" alt="" width="90" />
                   </span>
                   <h2 class="text-white text-big">
-                    -6
+                    {{ weather.the_temp }}
                     <sup class="text-2xl">o</sup>
                   </h2>
                 </div>
               </div>
               <div class="text-center w-full">
                 <div class="flex justify-between px-8 mb-8 text-xl">
-                  <span>Precipitation</span>
-                  <span>48%</span>
+                  <span
+                    >{{ weather.min_temp }} <sup class="text-2xl">o</sup><br />
+                    <small>MIN</small></span
+                  >
+                  <span
+                    >{{ weather.max_temp }} <sup class="text-2xl">o</sup><br />
+                    <small>MAX</small></span
+                  >
+                </div>
+                <div class="flex justify-between px-8 mb-8 text-xl">
+                  <span>Predictability</span>
+                  <span>{{ weather.predictability }}</span>
                 </div>
                 <div class="flex justify-between px-8 mb-8 text-xl">
                   <span>Humidity</span>
-                  <span>60%</span>
+                  <span>{{ weather.humidity }}</span>
                 </div>
                 <div class="flex justify-between px-8 mb-8 text-xl">
-                  <span>Wind</span>
-                  <span>4823 km/h</span>
+                  <span>Air Pressure</span>
+                  <span>{{ weather.air_pressure }}</span>
+                </div>
+                <div class="flex justify-between px-8 mb-8 text-xl">
+                  <span>Wind Speed</span>
+                  <span>{{ weather.wind_speed }}</span>
                 </div>
               </div>
             </div>
@@ -507,6 +493,8 @@ import servicesData from "./chart/services-data.js";
 import servicesData2 from "./chart/services-data2.js";
 import servicesData3 from "./chart/services-data3.js";
 import servicesData4 from "./chart/services-data4.js";
+import { adminService } from "../../_services/admin.service";
+
 import {
   UserIcon,
   LockIcon,
@@ -530,6 +518,10 @@ export default {
     return {
       prefixSelected: ["Last 7 Days"],
       prefixs: ["Last 7 Days", "Last Month", "Last Year"],
+            count: "",
+      graphs: "",
+      invoiceGraphs: "",
+      weather: "",
       planetChartData: planetChartData,
       pieChartData: pieChartData,
       servicesData: servicesData,
@@ -539,19 +531,22 @@ export default {
     };
   },
   mounted() {
+    this.dashboardData();
     // this.gradient = this.$refs.canvas.getContext('2d').createLinearGradient(0, 0, 0, 450);
     this.gradient = null;
-    
-        // this.gradient.addColorStop(0, 'rgba(255, 0,0, 0.5)')
-        // this.gradient.addColorStop(0.5, 'rgba(255, 0, 0, 0.25)');
-        // this.gradient.addColorStop(1, 'rgba(255, 0, 0, 0)');
 
-    this.createChart("planet-chart", this.planetChartData, this.gradient);
+    // this.gradient.addColorStop(0, 'rgba(255, 0,0, 0.5)')
+    // this.gradient.addColorStop(0.5, 'rgba(255, 0, 0, 0.25)');
+    // this.gradient.addColorStop(1, 'rgba(255, 0, 0, 0)');
+// setTimeout(function(){
+this.createChart("planet-chart", this.planetChartData, this.gradient);
     this.createChart("pie-chart", this.pieChartData, this.gradient);
     this.createChart("services-chart", this.servicesData, this.gradient);
     this.createChart("services-chart2", this.servicesData4, this.gradient);
     this.createChart("services-chart3", this.servicesData2, this.gradient);
     this.createChart("services-chart4", this.servicesData3, this.gradient);
+// }, 1000);
+    
   },
   methods: {
     createChart(chartId, chartData, gradient) {
@@ -566,7 +561,24 @@ export default {
         options: chartData.options,
       });
     },
+    dashboardData() {
+      adminService.dashboardData().then((response) => {
+        if (response.status) {
+          this.count = response.data.count;
+          this.graphs = response.data.graphs;
+          this.invoiceGraphs = response.data.invoiceGraphs;
+          this.weather = response.data.weather;
+        } else {
+          this.$toast.open({
+            message: response.message,
+            type: "error",
+            position: "top-right",
+          });
+        }
+      });
+    },
   },
+
   created() {},
 };
 </script>

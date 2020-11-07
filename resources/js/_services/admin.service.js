@@ -15,6 +15,7 @@ export const adminService = {
   Delete,
   getAdmin,
   listAdmin,
+  dashboardData,
   apiUrl: environment.apiUrl,
   currentUrl: '',
   currentUser: currentUserSubject.asObservable(),
@@ -26,7 +27,7 @@ export const adminService = {
 function add(data) {
 
   return fetch(
-    this.apiUrl+`admin/create-admin`,
+    this.apiUrl + `admin/create-admin`,
     requestOptions.post(data)
   )
     .then(handleResponse)
@@ -39,7 +40,7 @@ function add(data) {
 
 function edit(data, managerId) {
   return fetch(
-    this.apiUrl+`admin/edit-admin-profile`,
+    this.apiUrl + `admin/edit-admin-profile`,
     requestOptions.post(data)
   )
     .then(handleResponse)
@@ -51,7 +52,7 @@ function edit(data, managerId) {
 }
 function Delete(data) {
   return fetch(
-    this.apiUrl+`admin/delete-manager/`+data,
+    this.apiUrl + `admin/delete-manager/` + data,
     requestOptions.delete()
   )
     .then(handleResponse)
@@ -62,9 +63,21 @@ function Delete(data) {
     });
 }
 
-function listAdmin(){
-      return fetch(
-    this.apiUrl+`admin/list-admin`,
+function listAdmin() {
+  return fetch(
+    this.apiUrl + `admin/list-admin`,
+    requestOptions.get()
+  )
+    .then(handleResponse)
+    .then(user => {
+      // store user details and passport token in local storage to keep user logged in between page refreshes
+
+      return user;
+    });
+}
+function dashboardData() {
+  return fetch(
+    this.apiUrl + `admin/dashboard`,
     requestOptions.get()
   )
     .then(handleResponse)
@@ -76,7 +89,7 @@ function listAdmin(){
 }
 function getAdmin(data) {
   return fetch(
-    this.apiUrl+`admin/get-admin/`+data,
+    this.apiUrl + `admin/get-admin/` + data,
     requestOptions.get()
   )
     .then(handleResponse)
