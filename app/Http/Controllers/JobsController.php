@@ -229,26 +229,21 @@ class JobsController extends Controller {
                     'data' => User::where('farm_id', $request->farm_id)->where('is_confirmed', '1')->get()
                         ], 200);
     }
-    /**
-     * get service time slots
-     */
-//    public function getServiceSlots(Request $request) {
-//        $service = Service::whereId($request->service_id)->first();
-//        if ($service != null) {
-//            $timeSlots = TimeSlots::whereIn('id', json_decode($service->slot_time))->get();
-//            return response()->json([
-//                        'status' => true,
-//                        'message' => 'Service Slot Details',
-//                        'data' => $timeSlots
-//                            ], 200);
-//        } else {
-//            return response()->json([
-//                        'status' => true,
-//                        'message' => 'No time slot available',
-//                        'data' => []
-//                            ], 500);
-//        }
-//    }
+    
+    
+    public function getServiceForCustomer(Request $request) {
+        $customer = User::whereId($request->customer_id)->first();
+        if($customer->role_id == config('constant.roles.Customer') || $customer->role_id == config('constant.roles.Customer_Manager')) {
+            $service = Service::where('service_for',config('constant.roles.Customer'))->get();
+        } else {
+            $service = Service::where('service_for',config('constant.roles.Haulers'))->get();
+        }
+        return response()->json([
+                        'status' => true,
+                        'message' => 'Service list',
+                        'data' => $service
+                            ], 200);
+    }
     /**
      * get single jobs
      */

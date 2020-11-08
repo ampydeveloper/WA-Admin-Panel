@@ -177,65 +177,7 @@
                           ></v-text-field>
                         </v-col>
                       </div>
-                      <div class="custom-col row">
-                        <v-col sm="4" class="label-align pt-0">
-                          <label>Address</label>
-                        </v-col>
-                        <v-col sm="8" class="pt-0 pb-0">
-                          <v-text-field
-                            v-model="addForm.driver_address"
-                            :rules="[v => !!v || 'Address is required.']"
-                            required
-                            label="Enter Address"
-                            placeholder
-                          ></v-text-field>
-                        </v-col>
-                      </div>
-                      <div class="custom-col row">
-                        <v-col sm="4" class="label-align pt-0">
-                          <label>City</label>
-                        </v-col>
-                        <v-col sm="8" class="pt-0 pb-0">
-                          <v-text-field
-                            v-model="addForm.driver_city"
-                            :rules="[v => !!v || 'City is required.']"
-                            required
-                            label="Enter City"
-                            placeholder
-                          ></v-text-field>
-                        </v-col>
-                      </div>
-                      <div class="custom-col row">
-                        <v-col sm="4" class="label-align pt-0">
-                          <label>Province</label>
-                        </v-col>
-                        <v-col sm="8" class="pt-0 pb-0">
-                          <v-text-field
-                            v-model="addForm.driver_province"
-                            :rules="[v => !!v || 'Province is required.']"
-                            required
-                            label="Enter Province"
-                            placeholder
-                          ></v-text-field>
-                        </v-col>
-                      </div>
-                      <div class="custom-col row">
-                        <v-col sm="4" class="label-align pt-0">
-                          <label>Zipcode</label>
-                        </v-col>
-                        <v-col sm="8" class="pt-0 pb-0">
-                          <v-text-field
-                            v-model="addForm.driver_zipcode"
-                            :rules="[v => !!v || 'Zip code is required.']"
-                            required
-                            label="Enter Zipcode"
-                            placeholder
-                          ></v-text-field>
-                        </v-col>
-                      </div>
-                    </v-col>
-
-                    <v-col cols="6" md="6" class="pl-0 manager-cols">
+                      
                       <div class="custom-col row">
                         <v-col sm="4" class="label-align pt-0">
                           <label>Mobile Number</label>
@@ -251,51 +193,7 @@
                           ></v-text-field>
                         </v-col>
                       </div>
-                      <div class="custom-col row">
-                        <v-col sm="4" class="label-align pt-0">
-                          <label>Licence Number</label>
-                        </v-col>
-                        <v-col sm="8" class="pt-0 pb-0">
-                          <v-text-field
-                            v-model="addForm.driver_licence"
-                            :rules="[v => !!v || 'Driver licence number is required.']"
-                            required
-                            label="Enter Licence Number"
-                            placeholder
-                          ></v-text-field>
-                        </v-col>
-                      </div>
-                      <div class="custom-col row custom-img-holder">
-                        <v-col sm="4" class="label-align pt-0 image-upload-label">
-                          <label>Licence Image</label>
-                        </v-col>
-                        <v-col sm="8" class="pt-0 pb-0">
-                          <file-pond
-                            name="uploadImage"
-                            ref="pond"
-                            label-idle="Drop or Browse your files"
-                            v-bind:allow-multiple="false"
-                            v-bind:server="serverOptions"
-                            v-bind:files="myFiles"
-                            v-on:addfilestart="setUploadIndex"
-                            v-on:processfile="handleProcessFile1"
-                            allow-file-type-validation="true"
-                            accepted-file-types="image/jpeg, image/png"
-                            :rules="[v => !!v || 'Licence Image is required']"
-                            v-on:processfilerevert="handleRemoveFile1"
-                          />
-                          <div
-                            class="v-messages theme--light error--text"
-                            role="alert"
-                            v-if="docError"
-                          >
-                            <div class="v-messages__wrapper">
-                              <div class="v-messages__message">Licence Image is required.</div>
-                            </div>
-                          </div>
-                        </v-col>
-                      </div>
-
+                      
                       <div class="custom-col row">
                         <v-col sm="4" class="label-align pt-0">
                           <label>Select Haulers</label>
@@ -311,6 +209,8 @@
                               ></v-select>
                         </v-col>
                       </div>
+                      
+                      
                     </v-col>
 
                     <v-col class="pt-0 pb-0" cols="12" md="12">
@@ -370,14 +270,7 @@ export default {
         driver_first_name: "",
         driver_last_name:"",
         email: "",
-        driver_licence: "",
-        driver_licence_image: "",
         user_image: "",
-        driver_address: "",
-        driver_city: "",
-        driver_province: "",
-        driver_country: "",
-        driver_zipcode: "",
         driver_phone: "",
       },
       emailRules: [

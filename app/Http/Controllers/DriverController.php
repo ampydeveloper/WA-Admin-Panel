@@ -87,6 +87,7 @@ class DriverController extends Controller {
                 'role_id' => config('constant.roles.Driver'),
                 'created_from_id' => $request->user()->id,
                 'is_active' => 1,
+                'is_confirmed' => 1,
                 'password' => bcrypt($newPassword)
             ]);
             if ($user->save()) {

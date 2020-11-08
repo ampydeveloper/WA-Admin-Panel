@@ -409,7 +409,7 @@ class ManagerController extends Controller {
                     'city' => 'required',
                     'province' => 'required',
                     'manager_zipcode' => 'required',
-                    'identification_number' => 'required',
+                    'identification_number' => 'required|unique:manager_details',
                     'id_photo' => 'required',
                     'salary' => 'required',
         ]);
@@ -440,6 +440,7 @@ class ManagerController extends Controller {
                 'role_id' => config('constant.roles.Admin_Manager'),
                 'created_from_id' => $request->user()->id,
                 'is_active' => 1,
+                'is_confirmed' => 1,
                 'password' => bcrypt($newPassword)
             ]);
             if ($user->save()) {
@@ -594,6 +595,13 @@ class ManagerController extends Controller {
      * delete manager
      */
     public function deleteManager(Request $request) {
+        if($request->manager_id == 1) {
+            return response()->json([
+                        'status' => false,
+                        'message' => 'You cannot delete super admin.',
+                        'data' => []
+                            ], 421);
+        }
         try {
             User::whereId($request->manager_id)->delete();
             return response()->json([
