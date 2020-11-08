@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Driver;
 
 use App\Http\Controllers\Controller;
 
+use Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -29,15 +30,19 @@ class DriverController extends Controller {
     
     public function editProfile(Request $request) {
         $validator = Validator::make($request->all(), [
-                    'driver_first_name' => 'required|string',
-                    'driver_last_name' => 'required|string',
-                    'driver_email' => 'required|string|email|unique:users,email' . $request->user()->id,
-                    'driver_phone' => 'required',
-                    'driver_address' => 'required',
-                    'driver_city' => 'required',
-                    'driver_province' => 'required',
-                    'driver_zipcode' => 'required',
-                    'driver_is_active' => 'required',
+                    'first_name' => 'required|string',
+                    'last_name' => 'required|string',
+                    'email' => 'required|string|email|unique:users,email' . $request->user()->id,
+                    'image' => 'sometimes|required',
+                    'phone' => 'required',
+                    'address' => 'required',
+                    'city' => 'required',
+                    'province' => 'required',
+                    'zipcode' => 'required',
+                    'is_active' => 'required',
+                    'licence_no' => 'required|unique:drivers,driver_licence' . $request->user()->id,
+                    'expiry_date' => 'required',
+                    'licence_image' => 'sometimes|required',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -46,24 +51,46 @@ class DriverController extends Controller {
                         'data' => $validator->errors()
                             ], 422);
         }
+        $driver = $request->user();
+        
+        if($driver->role_id != config('constant.roles.Driver')) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Unauthorized access.',
+                'data' => []
+            ], 421);
+        }
+        dd($request->all());
         try {
             DB::beginTransaction();
-            $driverDetails = User::whereId($request->user()->id)->first();
             if ($request->password != '' && $request->password != null) {
-                $driverDetails->password = bcrypt($request->password);
+                $driver->password = bcrypt($request->password);
             }
-            $driverDetails->prefix = (isset($request->driver_prefix) && $request->driver_prefix != '' && $request->driver_prefix != null) ? $request->driver_prefix : null;
-            $driverDetails->first_name = $request->driver_first_name;
-            $driverDetails->last_name = $request->driver_last_name;
-            $driverDetails->email = $request->driver_email;
-            $driverDetails->phone = $request->driver_phone;
-            $driverDetails->address = $request->driver_address;
-            $driverDetails->city = $request->driver_city;
-            $driverDetails->state = $request->driver_province;
-            $driverDetails->zip_code = $request->driver_zipcode;
-            $driverDetails->user_image = (isset($request->driver_image) && $request->driver_image != '' && $request->driver_image != null) ? $request->driver_image : null;
-            $driverDetails->is_active = $request->driver_is_active;
-            if ($driverDetails->save()) {
+            $driver->prefix = (isset($request->driver_prefix) && $request->driver_prefix != '' && $request->driver_prefix != null) ? $request->driver_prefix : null;
+            $driver->first_name = $request->driver_first_name;
+            $driver->last_name = $request->driver_last_name;
+            $driver->email = $request->driver_email;
+            $driver->phone = $request->driver_phone;
+            $driver->address = $request->driver_address;
+            $driver->city = $request->driver_city;
+            $driver->state = $request->driver_province;
+            $driver->zip_code = $request->driver_zipcode;
+            $driver->is_active = $request->driver_is_active;
+            
+            if (is_file($request->image)) {
+                $imageName = rand() . time() . '.' . $request->image->extension();
+                (Storage::disk('user_images')->put($driver->id . '/' . $imageName, file_get_contents($request->image))) ? $imageName : false;
+                $driver->user_image = $imageName;
+            }
+            $driverDetails = Driver::where('user_id', $driver->id)->first();
+            $driverDetails->expiry_date = $request->expiry_date;
+            $driverDetails->driver_licence = $request->licence_no;
+            if (is_file($request->licence_image)) {
+                $imageName = rand() . time() . '.' . $request->licence_image->extension();
+                (Storage::disk('user_images')->put($driver->id . '/' . $imageName, file_get_contents($request->licence_image))) ? $imageName : false;
+                $driverDetails->document = $imageName;
+            }
+            if ($driver->save() && $driverDetails->save()) {
                 DB::commit();
                 return response()->json([
                             'status' => true,

@@ -159,10 +159,7 @@ class ServicesController extends Controller
      */
     public function getService(Request $request) {
         $fetchService = Service::whereId($request->service_id)->first();
-        
         if($fetchService != null) {
-            $slot_type = json_decode($fetchService->slot_type);
-            $fetchService["slot_type"] = $slot_type;
             $status = true;
             $message = "Service Found.";
             $statusCode = 200;
@@ -171,7 +168,6 @@ class ServicesController extends Controller
             $message = "Service not found.";
             $statusCode = 400;
         }
-        
         return response()->json([
             'status' => $status,
             'message' => $message,

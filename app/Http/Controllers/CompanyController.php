@@ -61,7 +61,7 @@ class CompanyController extends Controller {
         if ($validator->fails()) {
             return response()->json([
                         'status' => false,
-                        'message' => 'The given data was invalid.',
+                        'message' => $validator->errors(),
                         'data' => $validator->errors()
                             ], 422);
         }
