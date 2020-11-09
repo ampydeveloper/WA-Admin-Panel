@@ -4,35 +4,43 @@ namespace App\Http\Controllers\Driver;
 
 use App\Http\Controllers\Controller;
 
-use Storage;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 use Mail;
+use Storage;
+use App\Job;
+use App\User;
+use App\Driver;
+use App\Payment;
 use App\Service;
 use App\TimeSlots;
-use App\ServicesTimeSlot;
-use App\User;
-use App\ManagerDetail;
-use App\CustomerFarm;
-use App\CustomerCardDetail;
-use App\Payment;
-use App\Job;
 use Carbon\Carbon;
+use App\CustomerFarm;
+use App\ManagerDetail;
+use App\ServicesTimeSlot;
+use Illuminate\Support\Str;
+use App\CustomerCardDetail;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class DriverController extends Controller {
-    public function dashboard(Request $request) {
-        dd('dashboard');
+    
+    public function getDriver(Request $request) {
+        return response()->json([
+                            'status' => true,
+                            'message' => 'Driver details.',
+                            'data' => User::whereId($request->user()->id)->with('driver')->first()
+                                ], 200);
     }
     
+    
     public function editProfile(Request $request) {
+        
         $validator = Validator::make($request->all(), [
                     'first_name' => 'required|string',
                     'last_name' => 'required|string',
-                    'email' => 'required|string|email|unique:users,email' . $request->user()->id,
+                    'email' => 'required|email',
                     'image' => 'sometimes|required',
                     'phone' => 'required',
                     'address' => 'required',
@@ -40,15 +48,15 @@ class DriverController extends Controller {
                     'province' => 'required',
                     'zipcode' => 'required',
                     'is_active' => 'required',
-                    'licence_no' => 'required|unique:drivers,driver_licence' . $request->user()->id,
+                    'licence_no' => 'required',
                     'expiry_date' => 'required',
                     'licence_image' => 'sometimes|required',
         ]);
         if ($validator->fails()) {
             return response()->json([
                         'status' => false,
-                        'message' => 'The given data was invalid.',
-                        'data' => $validator->errors()
+                        'message' => $validator->errors(),
+                        'data' => []
                             ], 422);
         }
         $driver = $request->user();
@@ -60,23 +68,52 @@ class DriverController extends Controller {
                 'data' => []
             ], 421);
         }
-        dd($request->all());
+        
+            if ($request->email != '' && $request->email != null) {
+                if ($driver->email !== $request->email) {
+                    $checkEmail = User::where('email', $request->email)->first();
+                    if ($checkEmail !== null) {
+                        if ($checkEmail->id !== $driver->id) {
+                            return response()->json([
+                                        'status' => false,
+                                        'message' => 'Email is already taken.',
+                                        'data' => []
+                                            ], 422);
+                        }
+                    }
+                    $confirmed = 0;
+                }
+            }
+            $checkDriverLicence = Driver::where('driver_licence', $request->licence_no)->first();
+            $driverDetail = $driver->driver;
+            if ($checkDriverLicence !== null) {
+                if ($checkDriverLicence->id !== $driverDetail->id) {
+                    return response()->json([
+                                'status' => false,
+                                'message' => 'Driver lecience is already taken.',
+                                'data' => []
+                                    ], 422);
+                }
+            }
+        
         try {
             DB::beginTransaction();
             if ($request->password != '' && $request->password != null) {
                 $driver->password = bcrypt($request->password);
             }
             $driver->prefix = (isset($request->driver_prefix) && $request->driver_prefix != '' && $request->driver_prefix != null) ? $request->driver_prefix : null;
-            $driver->first_name = $request->driver_first_name;
-            $driver->last_name = $request->driver_last_name;
-            $driver->email = $request->driver_email;
-            $driver->phone = $request->driver_phone;
-            $driver->address = $request->driver_address;
-            $driver->city = $request->driver_city;
-            $driver->state = $request->driver_province;
-            $driver->zip_code = $request->driver_zipcode;
-            $driver->is_active = $request->driver_is_active;
-            
+            $driver->first_name = $request->first_name;
+            $driver->last_name = $request->last_name;
+            $driver->email = $request->email;
+            $driver->phone = $request->phone;
+            $driver->address = $request->address;
+            $driver->city = $request->city;
+            $driver->state = $request->province;
+            $driver->zip_code = $request->zipcode;
+            $driver->is_active = $request->is_active;
+            if(isset($confirmed)) {
+                $driver->is_confirmed = $confirmed;
+            }
             if (is_file($request->image)) {
                 $imageName = rand() . time() . '.' . $request->image->extension();
                 (Storage::disk('user_images')->put($driver->id . '/' . $imageName, file_get_contents($request->image))) ? $imageName : false;
@@ -90,8 +127,18 @@ class DriverController extends Controller {
                 (Storage::disk('user_images')->put($driver->id . '/' . $imageName, file_get_contents($request->licence_image))) ? $imageName : false;
                 $driverDetails->document = $imageName;
             }
+            
             if ($driver->save() && $driverDetails->save()) {
                 DB::commit();
+                if (isset($confirmed)) {
+                    $this->_updateEmail($driver, $request->email);
+                        $request->user()->token()->revoke();
+                        return response()->json([
+                                    'status' => true,
+                                    'message' => 'Successfully logged out',
+                                    'data' => []
+                        ]);
+                }
                 return response()->json([
                             'status' => true,
                             'message' => 'Driver updated successfully.',
@@ -107,6 +154,73 @@ class DriverController extends Controller {
                         'data' => []
                             ], 500);
         }
+    }
+    
+    public function _updateEmail($user, $email) {
+        $name = $user->first_name . ' ' . $user->last_name;
+        $data = array(
+            'name' => $name,
+            'email' => $email,
+            'verificationLink' => env('APP_URL') . 'confirm-update-email/' . base64_encode($email) . '/' . base64_encode($user->id)
+        );
+
+        Mail::send('email_templates.welcome_email', $data, function ($message) use ($name, $email) {
+            $message->to($email, $name)->subject('Email Address Confirmation');
+            $message->from(env('MAIL_USERNAME'), env('MAIL_USERNAME'));
+        });
+    }
+    
+    public function deliveredJobs(Request $request) {
+        $driver = $request->user();
+        if($driver->role_id != config('constant.roles.Driver')) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Unauthorized access.',
+                'data' => []
+            ], 421);
+        }
+        return response()->json([
+                            'status' => true,
+                            'message' => 'delivered jobs.',
+                            'data' => Job::where('truck_driver_id', $driver->id)->whereIn('job_status', [config('constant.job_status.completed'),config('constant.job_status.close')])->get()
+                                ], 200);
+        
+    }
+    
+    public function ongoingJobs(Request $request) {
+        $driver = $request->user();
+        if($driver->role_id != config('constant.roles.Driver')) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Unauthorized access.',
+                'data' => []
+            ], 421);
+        }
+        
+        return response()->json([
+                            'status' => true,
+                            'message' => 'ongoing jobs.',
+                            'data' => Job::where('truck_driver_id', $driver->id)->where('job_status', config('constant.job_status.assigned'))->get()
+                                ], 200);
+        
+    }
+    
+    public function jobDetail(Request $request) {
+        $driver = $request->user();
+        if($driver->role_id != config('constant.roles.Driver')) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Unauthorized access.',
+                'data' => []
+            ], 421);
+        }
+        
+        return response()->json([
+                            'status' => true,
+                            'message' => 'job details.',
+                            'data' => Job::whereId($request->job_id)->first()
+                                ], 200);
+        
     }
     
     public function earnings(Request $request) {
