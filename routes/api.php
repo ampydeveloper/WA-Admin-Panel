@@ -22,8 +22,8 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix' => 'auth'], function () {
     //Auth free routes
 //    dd('here');
-    Route::post('signup', 'AuthController@signup');
-    Route::post('social-signup', 'AuthController@SocialSignup');
+//    Route::post('signup', 'AuthController@signup');
+//    Route::post('social-signup', 'AuthController@SocialSignup');
     Route::post('login', 'AuthController@login');
     Route::post('forgot-password', 'AuthController@forgotPassword');
     Route::post('change-password', 'AuthController@changePassword');

@@ -7,20 +7,17 @@ use App\User;
 use Socialite;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
-use Illuminate\Support\Str;
+//use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\URL;
+//use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
-use GuzzleHttp\Exception\GuzzleException;
+//use GuzzleHttp\Exception\GuzzleException;
 
 class AuthController extends Controller
 {
-    /**
-     * Create user
-     */
     public function signup(Request $request) {
         $validator = Validator::make($request->all(), [
                     'first_name' => 'required|string',
@@ -37,8 +34,8 @@ class AuthController extends Controller
         if ($validator->fails()) {
             return response()->json([
                         'status' => false,
-                        'message' => 'The given data was invalid.',
-                        'data' => $validator->errors()
+                        'message' => $validator->errors(),
+                        'data' => []
                             ], 422);
         }
         if ($request->role_id == config('constant.roles.Customer') || $request->role_id == config('constant.roles.haulers')) {
@@ -83,89 +80,85 @@ class AuthController extends Controller
                     'data' => []
                         ], 500);
     }
-    /**
-     * social login
-     */
-    public function SocialSignup($provider, Request $request) {
-        $validator = Validator::make($request->all(), [
-                    'role_id' => 'required'
-        ]);
-        if ($validator->fails()) {
-            return response()->json([
-                        'status' => false,
-                        'message' => 'The given data was invalid.',
-                        'data' => $validator->errors()
-                            ], 422);
-        }
-        try {
-            $user = Socialite::driver($provider)->stateless()->user();
-            $checkIfExist = User::whereEmail($user->user['email'])->first();
-            if ($checkIfExist == null) {
-                if ($provider == config('constant.login_providers.google')) {
-                    $user = new User([
-                        'first_name' => $user->user['given_name'],
-                        'last_name' => $user->user['family_name'],
-                        'email' => $user->user['email'],
-                        'role_id' => $request->role_id,
-                        'is_active' => 1,
-                        'is_confirmed' => 1,
-                        'provider' => $provider,
-                        'token' => $user->token,
-                        'password_changed_at' => Carbon::now()
-                    ]);
-                } else if ($provider == config('constant.login_providers.facebook')) {
-                    $user = new User([
-                        'first_name' => $user['name'],
-                        'email' => $user['email'],
-                        'role_id' => $request->role_id,
-                        'is_active' => 1,
-                        'is_confirmed' => 1,
-                        'provider' => $provider,
-                        'token' => $user->token,
-                        'password_changed_at' => Carbon::now()
-                    ]);
-                }
-                $user->save();
-                $this->_welcomeEmail($user);
-                $this->_saveUserToHubSpot($user);
-            } else {
-                if ($checkIfExist->provider == null) {
-                    $checkIfExist->provider == $provider;
-                    $checkIfExist->token == $user->token;
-                }
-                if ($checkIfExist->password_changed_at == null || $checkIfExist->password_changed_at == '') {
-                    $checkIfExist->password_changed_at = Carbon::now();
-                }
-                $checkIfExist->save();
-                $user = $checkIfExist;
-            }
-            $tokenResult = $user->createToken('Personal Access Token');
-            $token = $tokenResult->token;
-            $token->save();
-            return response()->json([
-                        'status' => true,
-                        'message' => 'Login Successful',
-                        'data' => array(
-                            'access_token' => $tokenResult->accessToken,
-                            'token_type' => 'Bearer',
-                            'expires_at' => Carbon::parse(
-                                    $tokenResult->token->expires_at
-                            )->toDateTimeString(),
-                            'user' => $user
-                        )
-            ]);
-        } catch (\Exception $e) {
-            Log::error(json_encode($e->getMessage()));
-            return response()->json([
-                        'status' => false,
-                        'message' => $e->getMessage(),
-                        'data' => []
-                            ], 500);
-        }
-    }
-    /**
-     * email for new account email confirmation
-     */
+//    public function SocialSignup($provider, Request $request) {
+//        $validator = Validator::make($request->all(), [
+//                    'role_id' => 'required'
+//        ]);
+//        if ($validator->fails()) {
+//            return response()->json([
+//                        'status' => false,
+//                        'message' => 'The given data was invalid.',
+//                        'data' => $validator->errors()
+//                            ], 422);
+//        }
+//        try {
+//            $user = Socialite::driver($provider)->stateless()->user();
+//            $checkIfExist = User::whereEmail($user->user['email'])->first();
+//            if ($checkIfExist == null) {
+//                if ($provider == config('constant.login_providers.google')) {
+//                    $user = new User([
+//                        'first_name' => $user->user['given_name'],
+//                        'last_name' => $user->user['family_name'],
+//                        'email' => $user->user['email'],
+//                        'role_id' => $request->role_id,
+//                        'is_active' => 1,
+//                        'is_confirmed' => 1,
+//                        'provider' => $provider,
+//                        'token' => $user->token,
+//                        'password_changed_at' => Carbon::now()
+//                    ]);
+//                } else if ($provider == config('constant.login_providers.facebook')) {
+//                    $user = new User([
+//                        'first_name' => $user['name'],
+//                        'email' => $user['email'],
+//                        'role_id' => $request->role_id,
+//                        'is_active' => 1,
+//                        'is_confirmed' => 1,
+//                        'provider' => $provider,
+//                        'token' => $user->token,
+//                        'password_changed_at' => Carbon::now()
+//                    ]);
+//                }
+//                $user->save();
+//                $this->_welcomeEmail($user);
+//                $this->_saveUserToHubSpot($user);
+//            } else {
+//                if ($checkIfExist->provider == null) {
+//                    $checkIfExist->provider == $provider;
+//                    $checkIfExist->token == $user->token;
+//                }
+//                if ($checkIfExist->password_changed_at == null || $checkIfExist->password_changed_at == '') {
+//                    $checkIfExist->password_changed_at = Carbon::now();
+//                }
+//                $checkIfExist->save();
+//                $user = $checkIfExist;
+//            }
+//            $tokenResult = $user->createToken('Personal Access Token');
+//            $token = $tokenResult->token;
+//            $token->save();
+//            return response()->json([
+//                        'status' => true,
+//                        'message' => 'Login Successful',
+//                        'data' => array(
+//                            'access_token' => $tokenResult->accessToken,
+//                            'token_type' => 'Bearer',
+//                            'expires_at' => Carbon::parse(
+//                                    $tokenResult->token->expires_at
+//                            )->toDateTimeString(),
+//                            'user' => $user
+//                        )
+//            ]);
+//        } catch (\Exception $e) {
+//            Log::error(json_encode($e->getMessage()));
+//            return response()->json([
+//                        'status' => false,
+//                        'message' => $e->getMessage(),
+//                        'data' => []
+//                            ], 500);
+//        }
+//    }
+    
+    
     public function _welcomeEmail($user) {
         $name = $user->first_name . ' ' . $user->last_name;
         $data = array(
@@ -182,62 +175,60 @@ class AuthController extends Controller
     /**
      * save user to hubspot
      */
-    public function _saveUserToHubSpot($request) {
-        if ($request->role_id == config('constant.roles.Customer')) {
-            $userType = 'Customer';
-        } else {
-            $userType = 'Hauler';
-        }
-        $arr = [
-            'properties' => [
-                    [
-                    'property' => 'firstname',
-                    'value' => $request->first_name
-                ],
-                    [
-                    'property' => 'lastname',
-                    'value' => $request->last_name
-                ],
-                    [
-                    'property' => 'email',
-                    'value' => $request->email
-                ],
-                    [
-                    'property' => 'phone',
-                    'value' => $request->phone
-                ],
-                    [
-                    'property' => 'address',
-                    'value' => $request->address
-                ],
-                    [
-                    'property' => 'province',
-                    'value' => $request->province
-                ],
-                    [
-                    'property' => 'zipcode',
-                    'value' => $request->zipcode
-                ],
-                    [
-                    'property' => 'User type',
-                    'value' => $userType
-                ],
-            ]
-        ];
-        $post_json = json_encode($arr);
-        $endpoint = config('constant.hubspot.api_url') . env('HUBSPOT_API_KEY');
-        $client = new Client();
-        $res = $client->request('POST', $endpoint, [
-            'headers' => [
-                'Content-Type' => 'application/json'
-            ],
-            'body' => $post_json
-        ]);
-        return true;
-    }
-    /**
-     * Login user and create token
-     */
+//    public function _saveUserToHubSpot($request) {
+//        if ($request->role_id == config('constant.roles.Customer')) {
+//            $userType = 'Customer';
+//        } else {
+//            $userType = 'Hauler';
+//        }
+//        $arr = [
+//            'properties' => [
+//                    [
+//                    'property' => 'firstname',
+//                    'value' => $request->first_name
+//                ],
+//                    [
+//                    'property' => 'lastname',
+//                    'value' => $request->last_name
+//                ],
+//                    [
+//                    'property' => 'email',
+//                    'value' => $request->email
+//                ],
+//                    [
+//                    'property' => 'phone',
+//                    'value' => $request->phone
+//                ],
+//                    [
+//                    'property' => 'address',
+//                    'value' => $request->address
+//                ],
+//                    [
+//                    'property' => 'province',
+//                    'value' => $request->province
+//                ],
+//                    [
+//                    'property' => 'zipcode',
+//                    'value' => $request->zipcode
+//                ],
+//                    [
+//                    'property' => 'User type',
+//                    'value' => $userType
+//                ],
+//            ]
+//        ];
+//        $post_json = json_encode($arr);
+//        $endpoint = config('constant.hubspot.api_url') . env('HUBSPOT_API_KEY');
+//        $client = new Client();
+//        $res = $client->request('POST', $endpoint, [
+//            'headers' => [
+//                'Content-Type' => 'application/json'
+//            ],
+//            'body' => $post_json
+//        ]);
+//        return true;
+//    }
+
     public function login(Request $request) {
         $validator = Validator::make($request->all(), [
                     'email' => 'required|string|email',
@@ -246,8 +237,8 @@ class AuthController extends Controller
         if ($validator->fails()) {
             return response()->json([
                         'status' => false,
-                        'message' => 'The given data was invalid.',
-                        'data' => $validator->errors()
+                        'message' => $validator->errors(),
+                        'data' => []
                             ], 422);
         }
         try {
@@ -291,9 +282,6 @@ class AuthController extends Controller
         }
     }
     
-    /**
-     * forgot password
-     */
     public function forgotPassword(Request $request) {
         $validator = Validator::make($request->all(), [
                     'email' => 'required',
@@ -301,8 +289,8 @@ class AuthController extends Controller
         if ($validator->fails()) {
             return response()->json([
                         'status' => false,
-                        'message' => 'The given data was invalid.',
-                        'data' => $validator->errors()
+                        'message' => $validator->errors(),
+                        'data' => []
                             ], 422);
         }
         try {
@@ -342,15 +330,14 @@ class AuthController extends Controller
     }
     
     public function changePassword(Request $request) {
-//        dd($request->all());
         $validator = Validator::make($request->all(), [
                     'password' => 'required|confirmed'
         ]);
         if ($validator->fails()) {
             return response()->json([
                         'status' => false,
-                        'message' => 'The given data was invalid.',
-                        'data' => $validator->errors()
+                        'message' => $validator->errors(),
+                        'data' => []
                             ], 422);
         }
         $user = $request->user();
@@ -366,16 +353,13 @@ class AuthController extends Controller
             $message = "Something went wrong.";
             $errCode = 400;
         }
-//        dd('sdcsd');
         return response()->json([
                     'status' => $status,
                     'message' => $message,
                     'data' => []
                         ], $errCode);
     }
-    /**
-     * recover password
-     */
+    
     public function recoverPassword(Request $request) {
         $validator = Validator::make($request->all(), [
                     'password' => 'required|confirmed'
@@ -383,8 +367,8 @@ class AuthController extends Controller
         if ($validator->fails()) {
             return response()->json([
                         'status' => false,
-                        'message' => 'The given data was invalid.',
-                        'data' => $validator->errors()
+                        'message' => $validator->errors(),
+                        'data' => []
                             ], 422);
         }
         $user = User::whereEmail(base64_decode($request->hash_code))->first();
@@ -405,6 +389,7 @@ class AuthController extends Controller
                             ], 200);
         }
     }
+    
     public function confirmEmail(Request $request, $email) {
         $userEmail = base64_decode($email);
         $getUser = User::where('email', $userEmail)->first();
@@ -439,11 +424,7 @@ class AuthController extends Controller
         }
         return redirect()->route('/');
     }
-    /**
-     * Get the authenticated User
-     *
-     * @return [json] user object
-     */
+    
     public function user(Request $request)
     {
         return response()->json([
@@ -452,11 +433,7 @@ class AuthController extends Controller
             'data' => $request->user()
         ]);
     }
-    /**
-     * Logout user (Revoke the token)
-     *
-     * @return [string] message
-     */
+    
     public function logout(Request $request)
     {
         $request->user()->token()->revoke();
@@ -466,26 +443,5 @@ class AuthController extends Controller
             'data' => []
         ]);
     }
-    /**
-     * Edit Admin Profile
-     */
-    
-
-//
-//    
-//
-//    /**
-//     * email for email address confirmation
-//     */
-//    
-
-    
-
-    
-
-    
-
-    
-    
 
 }
