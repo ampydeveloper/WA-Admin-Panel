@@ -107,7 +107,12 @@
           <v-tabs-items v-model="tab" class="custom-tab-content">
             <v-tab-item v-for="item in items" :key="item">
               <!-- customer info tabs -->
-              <v-card class="jobs-aj" color="basil" flat v-if="item == 'All Jobs'">
+              <v-card
+                class="jobs-aj"
+                color="basil"
+                flat
+                v-if="item == 'All Jobs'"
+              >
                 <table
                   id="all-jobs-table"
                   class="table table-striped table-bordered table-main all_jobs"
@@ -120,7 +125,6 @@
                       <th class="time-col">Est. Time</th>
                       <!-- <th>Distance</th> -->
                       <th>Payment Status</th>
-                      <!-- <th>Chat</th> -->
                       <th>Job Status</th>
                       <th>Actions</th>
                     </tr>
@@ -128,43 +132,74 @@
                   <tbody>
                     <tr v-for="(job, index) in alljobs">
                       <td>
-                        <span class="basic-info">{{job.start_date | formatDateLic}}</span>
-                        <span class="basic-big">#JOB100{{job.id}}</span>
-                        <span class="basic-grey">${{(job.job_amount)?job.job_amount:0}}</span>
-                        <span class="basic-grey">{{ (job.service?job.service.service_name:'') }}</span>
+                        <span class="basic-info">{{
+                          job.start_date | formatDateLic
+                        }}</span>
+                        <span class="basic-big">#JOB100{{ job.id }}</span>
+                        <span class="basic-grey"
+                          >${{ job.job_amount ? job.job_amount : 0 }}</span
+                        >
+                        <span class="basic-grey">{{
+                          job.service ? job.service.service_name : ""
+                        }}</span>
                       </td>
                       <td>
-                        <span class="basic-big">{{ (job.customer?job.customer.first_name:'') }}</span>
-                        <span class="basic-grey">{{ (job.manager?job.manager.first_name:'') }} ({{ (job.manager?job.manager.email:'') }})</span>
-                        <span
-                          class="basic-grey" v-if="job.manager"
-                        >{{job.manager.address}} {{job.manager.city}} {{job.manager.state}} {{job.manager.country}} {{job.manager.zip_code}}</span>
+                        <span class="basic-big">{{
+                          job.customer ? job.customer.first_name : ""
+                        }}</span>
+                        <span class="basic-grey"
+                          >{{ job.manager ? job.manager.first_name : "" }} ({{
+                            job.manager ? job.manager.email : ""
+                          }})</span
+                        >
+                        <span class="basic-grey" v-if="job.manager"
+                          >{{ job.manager.address }} {{ job.manager.city }}
+                          {{ job.manager.state }} {{ job.manager.country }}
+                          {{ job.manager.zip_code }}</span
+                        >
                       </td>
                       <td class="job-col-body">
                         <span class="basic-grey-label-half">Truck Driver</span>
-                        <span
-                          class="basic-info-half"
-                          v-if="job.truck_driver"
-                        >{{ (job.truck_driver?job.truck_driver.first_name:'') }}</span>
-                        <span class="basic-info-half" v-if="!job.truck_driver">Not Assigned</span>
+                        <span class="basic-info-half" v-if="job.truck_driver">{{
+                          job.truck_driver ? job.truck_driver.first_name : ""
+                        }}</span>
+                        <span class="basic-info-half" v-if="!job.truck_driver"
+                          >Not Assigned</span
+                        >
                         <div class="clearfix"></div>
                         <span class="basic-grey-label-half">Truck</span>
-                        <span class="basic-info-half" v-if="job.truck">{{job.truck.truck_number}}</span>
-                        <span class="basic-info-half" v-if="!job.truck">Not Assigned</span>
+                        <span class="basic-info-half" v-if="job.truck">{{
+                          job.truck.truck_number
+                        }}</span>
+                        <span class="basic-info-half" v-if="!job.truck"
+                          >Not Assigned</span
+                        >
                         <div class="clearfix"></div>
-                        <span class="basic-grey-label-half">Skidsteer Driver</span>
+                        <span class="basic-grey-label-half"
+                          >Skidsteer Driver</span
+                        >
                         <span
                           class="basic-info-half"
                           v-if="job.skidsteer_driver"
-                        >{{ (job.skidsteer_driver?job.skidsteer_driver.first_name:'') }}</span>
-                        <span class="basic-info-half" v-if="!job.skidsteer_driver">Not Assigned</span>
-                        <div class="clearfix"></div>
-                        <span class="basic-grey-label-half">Skidsteer</span>
+                          >{{
+                            job.skidsteer_driver
+                              ? job.skidsteer_driver.first_name
+                              : ""
+                          }}</span
+                        >
                         <span
                           class="basic-info-half"
-                          v-if="job.skidsteer"
-                        >{{job.skidsteer.truck_number}}</span>
-                        <span class="basic-info-half" v-if="!job.skidsteer">Not Assigned</span>
+                          v-if="!job.skidsteer_driver"
+                          >Not Assigned</span
+                        >
+                        <div class="clearfix"></div>
+                        <span class="basic-grey-label-half">Skidsteer</span>
+                        <span class="basic-info-half" v-if="job.skidsteer">{{
+                          job.skidsteer.truck_number
+                        }}</span>
+                        <span class="basic-info-half" v-if="!job.skidsteer"
+                          >Not Assigned</span
+                        >
                       </td>
                       <td class="job-col-body">
                         <span class="basic-grey-label-full">Start Time</span>
@@ -185,18 +220,6 @@
                           <span class="badges-item">Unpaid</span>
                         </template>
                       </td>
-                      <!-- <td>
-                        <router-link
-                          v-if="isAdmin"
-                          :to="'/admin/jobs/chat/' + job.id"
-                          class="nav-item nav-link"
-                        >View chat</router-link>
-                        <router-link
-                          v-if="!isAdmin"
-                          :to="'/manager/jobs/chat/' + job.id"
-                          class="nav-item nav-link"
-                        >View chat</router-link>
-                      </td>-->
                       <td>
                         <template v-if="!job.job_status">
                           <span class="badges-item">Open</span>
@@ -206,44 +229,39 @@
                         </template>
                       </td>
                       <td>
-                        <router-link v-if="isAdmin" :to="'/admin/jobs/chat/' + job.id" class>
-                          <v-btn color="success" class="btn-outline-green">View chat</v-btn>
+                        <router-link
+                          v-if="isAdmin"
+                          :to="'/admin/jobs/chat/' + job.id"
+                          class
+                        >
+                          <v-btn color="success" class="btn-outline-green"
+                            >View chat</v-btn
+                          >
                         </router-link>
-                        <router-link v-if="!isAdmin" :to="'/manager/jobs/chat/' + job.id" class>
-                          <v-btn color="success" class="btn-outline-green">View chat</v-btn>
+                        <router-link
+                          v-if="!isAdmin"
+                          :to="'/manager/jobs/chat/' + job.id"
+                          class
+                        >
+                          <v-btn color="success" class="btn-outline-green"
+                            >View chat</v-btn
+                          >
                         </router-link>
                       </td>
                       <!-- <td>
-                        <div class="dropdown" v-bind:class="{ 'show': triggerDropdown }">
-                          <more-vertical-icon
-                            size="1.5x"
-                            class="custom-class dropdown-trigger"
-                            v-on:click="dropdownToggle"
-                          ></more-vertical-icon>
-                          <span class="dropdown-menu">
-                            <router-link
-                              v-if="isAdmin"
-                              :to="'/admin/jobs/chat/' + job.id"
-                              class="nav-item nav-link"
-                            >View chat</router-link>
-                            <router-link
-                              v-if="!isAdmin"
-                              :to="'/manager/jobs/chat/' + job.id"
-                              class="nav-item nav-link"
-                            >View chat</router-link>
-                           <button class="btn dropdown-item">Edit</button>
-                            <button class="btn dropdown-item">Delete</button>
-                          </span>
-                        </div>
-                      </td>-->
+                        <button class="btn dropdown-item">Edit</button>
+                        <button class="btn dropdown-item">Delete</button>
+                      </td> -->
                     </tr>
-                    <!-- <tr v-if="alljobs.length == 0">
-                      <td colspan="9">No jobs till now.</td>
-                    </tr>-->
                   </tbody>
                 </table>
               </v-card>
-              <v-card class="jobs-aj" color="basil" flat v-if="item == 'Repeating Jobs'">
+              <v-card
+                class="jobs-aj"
+                color="basil"
+                flat
+                v-if="item == 'Repeating Jobs'"
+              >
                 <repeating-jobs />
               </v-card>
             </v-tab-item>
@@ -347,10 +365,11 @@ export default {
     },
   },
   updated() {
+    var jobsTable; 
     setTimeout(function () {
       $(document).ready(function () {
         if (!$.fn.dataTable.isDataTable("#all-jobs-table")) {
-          $("#all-jobs-table").DataTable({
+          jobsTable = $("#all-jobs-table").DataTable({
             aoColumnDefs: [
               {
                 bSortable: false,
@@ -387,6 +406,10 @@ export default {
         $("#all-jobs-table").css({ opacity: 1 });
       });
     }, 1000);
+
+    setTimeout(function () {
+$('#all-jobs-table').DataTable().ajax.reload();
+          }, 8000);
   },
 };
 </script>

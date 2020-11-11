@@ -1,37 +1,45 @@
 <template>
   <!-- all jobs -->
-  <table id="repeating-table" class="table table-striped table-bordered table-main">
+  <table
+    id="repeating-table"
+    class="table table-striped table-bordered table-main"
+  >
     <thead>
       <tr>
         <th>#</th>
         <th>Job Summary</th>
         <th>Customer / Manager / Farm Location</th>
         <th>Payment Status</th>
-        <!-- <th>Actions</th> -->
+        <th>Actions</th>
       </tr>
     </thead>
     <tbody>
       <tr v-for="(job, index) in alljobs">
-        <td>{{index+1}}</td>
+        <td>{{ index + 1 }}</td>
         <td>
-          {{job.start_date}}
-          <br />
-          #{{job.id}}
-          <br />
-          ${{job.job_amount}}
-          <br />
-          {{job.service.service_name}}
+          <span class="basic-info">{{ job.start_date | formatDateLic }}</span>
+          <span class="basic-big">#JOB100{{ job.id }}</span>
+          <span class="basic-grey"
+            >${{ job.job_amount ? job.job_amount : 0 }}</span
+          >
+          <span class="basic-grey">{{
+            job.service ? job.service.service_name : ""
+          }}</span>
         </td>
         <td>
-          {{job.customer.first_name}}
-          <br />
-          {{job.manager.first_name}}
-          <br />
-          {{job.manager.phone}}
-          <br />
-          {{job.manager.email}}
-          <br />
-          {{job.manager.address}} {{job.manager.city}} {{job.manager.state}} {{job.manager.country}} {{job.manager.zip_code}}
+          <span class="basic-big">{{
+            job.customer ? job.customer.first_name : ""
+          }}</span>
+          <span class="basic-grey"
+            >{{ job.manager ? job.manager.first_name : "" }} ({{
+              job.manager ? job.manager.email : ""
+            }})</span
+          >
+          <span class="basic-grey" v-if="job.manager"
+            >{{ job.manager.address }} {{ job.manager.city }}
+            {{ job.manager.state }} {{ job.manager.country }}
+            {{ job.manager.zip_code }}</span
+          >
         </td>
         <td>
           <template v-if="job.payment_status">
@@ -41,22 +49,21 @@
             <span class="badges-item">Unpaid</span>
           </template>
         </td>
-        <!-- <td>
-                <router-link
-                  v-if="isAdmin"
-                  :to="'/admin/jobs/chat/' + job.id"
-                  class="nav-item nav-link"
-                >View chat</router-link>
-                <router-link
-                  v-if="!isAdmin"
-                  :to="'/manager/jobs/chat/' + job.id"
-                  class="nav-item nav-link"
-                >View chat</router-link>
-        </td>-->
+        <td>
+          <router-link
+            v-if="isAdmin"
+            :to="'/admin/jobs/chat/' + job.id"
+            class="nav-item nav-link"
+            >View chat</router-link
+          >
+          <router-link
+            v-if="!isAdmin"
+            :to="'/manager/jobs/chat/' + job.id"
+            class="nav-item nav-link"
+            >View chat</router-link
+          >
+        </td>
       </tr>
-      <!-- <tr v-if="alljobs.length == 0">
-              <td colspan="4">No jobs till now.</td>
-      </tr>-->
     </tbody>
   </table>
 </template>
@@ -65,7 +72,7 @@
 import { router } from "../../../../_helpers/router";
 import { jobService } from "../../../../_services/job.service";
 import { environment } from "../../../../config/test.env";
-import { PlusCircleIcon,SearchIcon, } from "vue-feather-icons";
+import { PlusCircleIcon, SearchIcon } from "vue-feather-icons";
 import { authenticationService } from "../../../../_services/authentication.service";
 export default {
   components: {

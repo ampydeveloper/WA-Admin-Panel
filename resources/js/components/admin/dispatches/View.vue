@@ -51,11 +51,11 @@
     <div class="main_box">
       <v-container fluid class>
         <v-row>
-          <v-col cols="12" md="12" class="">
+          <!--<v-col cols="12" md="12" class="">
             <div id="app">
               <div id="map" class="contain"></div>
             </div>
-          </v-col>
+          </v-col>-->
           <v-col cols="12" md="12">
             <div class="dispatch-top">
               <div class="form-group">

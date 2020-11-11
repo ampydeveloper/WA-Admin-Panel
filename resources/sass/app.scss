@@ -3464,3 +3464,11 @@ div#example_info {
 #all-dispatch-table_wrapper{
     padding: 0 0 0 10px;
 }
+.map-marker {
+    background-image: url('images/map-marker.png');
+    background-size: 36px,50px;
+    width: 36px;
+    height: 50px;
+    cursor: pointer;
+    top: -27px !important;
+  }

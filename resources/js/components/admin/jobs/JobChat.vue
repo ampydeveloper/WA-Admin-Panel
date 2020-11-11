@@ -14,11 +14,11 @@
             </div>
             <div class="clearfix">
               <span class="basic-grey-label-half">Price</span>
-              <span class="det-half"> ${{ job.job_amount }}</span>
+              <span class="det-half"> ${{ (job.job_amount?job.job_amount:'0') }}</span>
             </div>
             <div class="clearfix">
               <span class="basic-grey-label-half">Service Date</span>
-              <span class="det-half">{{ job.start_date }} </span>
+              <span class="det-half">{{ job.start_date | formatDateLic}} </span>
             </div>
           </div>
 
@@ -112,15 +112,15 @@ import { router } from "../../../_helpers/router";
 import { jobService } from "../../../_services/job.service";
 import { environment } from "../../../config/test.env";
 import { SendIcon, ImageIcon, LoaderIcon } from "vue-feather-icons";
-import Mapbox from "mapbox-gl-vue";
-import mapboxgl from "mapbox-gl";
+// import Mapbox from "mapbox-gl-vue";
+// import mapboxgl from "mapbox-gl";
 
 export default {
   components: {
     SendIcon,
     ImageIcon,
     LoaderIcon,
-    Mapbox,
+    // Mapbox,
   },
   data() {
     return {
@@ -165,187 +165,164 @@ export default {
     scrollScript2.setAttribute("rel", "stylesheet");
     document.head.appendChild(scrollScript2);
 
-    // mapboxgl.accessToken =
-    //   "pk.eyJ1IjoibG9jb25lIiwiYSI6ImNrYmZkMzNzbDB1ZzUyenM3empmbXE3ODQifQ.SiBnr9-6jpC1Wa8OTAmgVA";
-    // var map = new mapboxgl.Map({
-    //   container: "map",
-    //   style: "mapbox://styles/mapbox/light-v9",
-    //   center: [-122.662323, 45.523751], // starting position
-    //   zoom: 12,
-    // });
-    // // set the bounds of the map
-    // var bounds = [
-    //   [-123.069003, 45.395273],
-    //   [-122.303707, 45.612333],
-    // ];
-    // map.setMaxBounds(bounds);
 
-    // // initialize the map canvas to interact with later
-    // var canvas = map.getCanvasContainer();
+let scrollScript3 = document.createElement("script");
+    scrollScript3.setAttribute(
+      "src",
+      "https://api.tiles.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"
+    );
+    document.head.appendChild(scrollScript3);
+    let scrollScript4 = document.createElement("link");
+    scrollScript4.setAttribute(
+      "href",
+      "https://api.tiles.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css"
+    );
+    scrollScript4.setAttribute("rel", "stylesheet");
+    document.head.appendChild(scrollScript4);
 
-    // // an arbitrary start will always be the same
-    // // only the end or destination will change
-    // var start = [-122.662323, 45.523751];
+    mapboxgl.accessToken =
+      "pk.eyJ1IjoibG9jb25lIiwiYSI6ImNrYmZkMzNzbDB1ZzUyenM3empmbXE3ODQifQ.SiBnr9-6jpC1Wa8OTAmgVA";
+    var map = new mapboxgl.Map({
+      container: "map",
+      style: "mapbox://styles/mapbox/dark-v9",
+      center: [-122.662323, 45.523751], // starting position
+      zoom: 12,
+    });
 
-    // // create a function to make a directions request
-    // function getRoute(start, end) {
-    //   // make a directions request using cycling profile
-    //   // an arbitrary start will always be the same
-    //   // only the end or destination will change
-    //   var url =
-    //     "https://api.mapbox.com/directions/v5/mapbox/cycling/" +
-    //     start[0] +
-    //     "," +
-    //     start[1] +
-    //     ";" +
-    //     end[0] +
-    //     "," +
-    //     end[1] +
-    //     "?steps=true&geometries=geojson&access_token=" +
-    //     mapboxgl.accessToken;
+    var canvas = map.getCanvasContainer();
+    var start = [-122.662323, 45.523751];
 
-    //   // make an XHR request https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
-    //   var req = new XMLHttpRequest();
-    //   req.open("GET", url, true);
-    //   req.onload = function () {
-    //     var json = JSON.parse(req.response);
-    //     var data = json.routes[0];
-    //     var route = data.geometry.coordinates;
-    //     var geojson = {
-    //       type: "Feature",
-    //       properties: {},
-    //       geometry: {
-    //         type: "LineString",
-    //         coordinates: route,
-    //       },
-    //     };
-    //     // if the route already exists on the map, reset it using setData
-    //     if (map.getSource("route")) {
-    //       console.log(geojson);
-    //       map.getSource("route").setData(geojson);
-    //     } else {
-    //       // otherwise, make a new request
-    //       map.addLayer({
-    //         id: "route",
-    //         type: "line",
-    //         source: {
-    //           type: "geojson",
-    //           data: {
-    //             type: "Feature",
-    //             properties: {},
-    //             geometry: {
-    //               type: "LineString",
-    //               coordinates: geojson,
-    //             },
-    //           },
-    //         },
-    //         layout: {
-    //           "line-join": "round",
-    //           "line-cap": "round",
-    //         },
-    //         paint: {
-    //           "line-color": "#3887be",
-    //           "line-width": 5,
-    //           "line-opacity": 0.75,
-    //         },
-    //       });
-    //     }
-    //     // add turn instructions here at the end
-    //   };
-    //   req.send();
-    // }
+    function getRoute(start, end) {
+      var url =
+        "https://api.mapbox.com/directions/v5/mapbox/cycling/" +
+        start[0] +
+        "," +
+        start[1] +
+        ";" +
+        end[0] +
+        "," +
+        end[1] +
+        "?steps=true&geometries=geojson&access_token=pk.eyJ1IjoibG9jb25lIiwiYSI6ImNrYmZkMzNzbDB1ZzUyenM3empmbXE3ODQifQ.SiBnr9-6jpC1Wa8OTAmgVA";
+        
+      var req = new XMLHttpRequest();
+      req.open("GET", url, true);
+      req.onload = function () {
+        var json = JSON.parse(req.response);
+        var data = json.routes[0];
+        var route = data.geometry.coordinates;
+        var geojson = {
+          type: "Feature",
+          properties: {},
+          geometry: {
+            type: "LineString",
+            coordinates: route,
+          },
+        };
+        // if the route already exists on the map, reset it using setData
+        if (map.getSource("route")) {
+          console.log(geojson);
+          map.getSource("route").setData(geojson);
+        } else {
+          // otherwise, make a new request
+          map.addLayer({
+            id: "route",
+            type: "line",
+            source: {
+              type: "geojson",
+              data: {
+                type: "Feature",
+                properties: {},
+                geometry: {
+                  type: "LineString",
+                  coordinates: geojson,
+                },
+              },
+            },
+            layout: {
+              "line-join": "round",
+              "line-cap": "round",
+            },
+            paint: {
+                 "line-color": "#3c3b3b",
+              "line-width": 4,
+              "line-opacity": 0.75,
+            },
+          });
+        }
+        // add turn instructions here at the end
+      };
+      req.send();
+    }
 
-    // // this is where the code for the next step will go
-    // map.on("load", function () {
-    //   // make an initial directions request that
-    //   // starts and ends at the same location
-    //   getRoute(start, [-122.61365699963287, 45.51773726437733]);
+    // this is where the code for the next step will go
+    map.on("load", function () {
+      // make an initial directions request that
+      // starts and ends at the same location
+      getRoute(start, [-122.61365699963287, 45.51773726437733]);
 
-    //   map.addSource("truck", {
-    //     type: "geojson",
-    //     data: {
-    //       type: "FeatureCollection",
-    //       features: [
-    //         {
-    //           type: "Feature",
-    //           properties: {},
-    //           geometry: {
-    //             type: "Point",
-    //             coordinates: start,
-    //           },
-    //         },
-    //       ],
-    //     },
-    //   });
-    //   // Add starting point to the map
-    //   map.addLayer({
-    //     id: "truck",
-    //     type: "symbol",
-    //     source: "truck",
-    //     layout: {
-    //       "icon-image": "bus-15",
-    //     },
-    //   });
-    //   // this is where the code from the next step will go
+      map.addSource("truck", {
+        type: "geojson",
+        data: {
+          type: "FeatureCollection",
+          features: [
+            {
+              type: "Feature",
+              properties: {},
+              geometry: {
+                type: "Point",
+                coordinates: start,
+              },
+            },
+          ],
+        },
+      });
 
-    //   map.addLayer({
-    //     id: "end",
-    //     type: "circle",
-    //     source: {
-    //       type: "geojson",
-    //       data: {
-    //         type: "FeatureCollection",
-    //         features: [
-    //           {
-    //             type: "Feature",
-    //             properties: {},
-    //             geometry: {
-    //               type: "Point",
-    //               coordinates: [-122.61365699963287, 45.51773726437733],
-    //             },
-    //           },
-    //         ],
-    //       },
-    //     },
-    //     paint: {
-    //       "circle-radius": 10,
-    //       "circle-color": "#f30",
-    //     },
-    //   });
+      map.loadImage(
+        `http://wa.customer.leagueofclicks.com/img/car-marker2.png`,
+        function (error, image) {
+          if (error) throw error;
+          map.addImage("car-marker", image);
+        }
+      );
 
-    //   getRoute(start, [-122.61365699963287, 45.51773726437733]);
-    // });
-    // window.lo = 45.523751;
-    // window.setInterval(function () {
-    //   // reqest to get new cordinates
-    //   // request.open('GET', url, true);
-    //   // request.onload = function () {
-    //   //   if (this.status >= 200 && this.status < 400) {
-    //   //     // retrieve the JSON from the response
-    //   //     var json = JSON.parse(this.response);
+      // Add starting point to the map
+      map.addLayer({
+        id: "truck",
+        type: "symbol",
+        source: "truck",
+        layout: {
+          "icon-image": "car-marker",
+        },
+      });
 
-    //   //     // update the drone symbol's location on the map
+      var el = document.createElement("div");
+      el.className = "map-marker";
+      new mapboxgl.Marker(el)
+        .setLngLat([-122.61365699963287, 45.51773726437733])
+        .addTo(map);
 
-    //   //   }
-    //   // };
-    //   // request.send();
-    //   lo = lo - 0.0001;
-    //   start = [-122.662453, lo];
+      getRoute(start, [-122.61365699963287, 45.51773726437733]);
+    });
 
-    //   map.getSource("truck").setData({
-    //     type: "Feature",
-    //     properties: {},
-    //     geometry: {
-    //       type: "Point",
-    //       coordinates: start,
-    //     },
-    //   });
-    //   map.flyTo({
-    //     center: start,
-    //     speed: 0.5,
-    //   });
-    //   getRoute(start, [-122.61365699963287, 45.51773726437733]);
-    // }, 2000);
+    window.lo = 45.523751;
+    window.setInterval(function () {
+      lo = lo - 0.0001;
+      start = [-122.662453, lo];
+
+      map.getSource("truck").setData({
+        type: "Feature",
+        properties: {},
+        geometry: {
+          type: "Point",
+          coordinates: start,
+        },
+      });
+      map.flyTo({
+        center: start,
+        speed: 0.5,
+      });
+      getRoute(start, [-122.61365699963287, 45.51773726437733]);
+    }, 2000);
   },
   methods: {
     getResults() {
