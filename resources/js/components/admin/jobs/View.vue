@@ -348,6 +348,7 @@ export default {
         //handle response
         if (response.status) {
           this.alljobs = response.data.allJobs;
+          this.tableAdd();
         } else {
           this.$toast.open({
             message: response.message,
@@ -363,13 +364,8 @@ export default {
     dropdownToggle: function () {
       this.triggerDropdown = !this.triggerDropdown;
     },
-  },
-  updated() {
-    var jobsTable; 
-    setTimeout(function () {
-      $(document).ready(function () {
-        if (!$.fn.dataTable.isDataTable("#all-jobs-table")) {
-          jobsTable = $("#all-jobs-table").DataTable({
+    tableAdd(){
+       $("#all-jobs-table").DataTable({
             aoColumnDefs: [
               {
                 bSortable: false,
@@ -402,14 +398,50 @@ export default {
           $("#all-jobs-table_paginate .paginate_button.next").html(
             $("#table-chevron-right").html()
           );
-        }
-        $("#all-jobs-table").css({ opacity: 1 });
-      });
-    }, 1000);
+          $("#all-jobs-table").css({ opacity: 1 });
+    }
+  },
+  updated() {
+    // setTimeout(function () {
+    //   $(document).ready(function () {
+    //     if (!$.fn.dataTable.isDataTable("#all-jobs-table")) {
+    //        $("#all-jobs-table").DataTable({
+    //         aoColumnDefs: [
+    //           {
+    //             bSortable: false,
+    //             aTargets: [-1, -2, -3, -4, -5],
+    //           },
+    //         ],
+    //         oLanguage: {
+    //           sSearch: "",
+    //           sEmptyTable: "No jobs till now.",
+    //           infoEmpty: "No jobs found.",
+    //         },
+    //         drawCallback: function (settings) {
+    //           $("#all-jobs-table_paginate .paginate_button.previous").html(
+    //             $("#table-chevron-left").html()
+    //           );
+    //           $("#all-jobs-table_paginate .paginate_button.next").html(
+    //             $("#table-chevron-right").html()
+    //           );
+    //         },
+    //       });
 
-    setTimeout(function () {
-$('#all-jobs-table').DataTable().ajax.reload();
-          }, 8000);
+    //       $("#all-jobs-table_filter").append($("#search-input-icon").html());
+    //       $("#all-jobs-table_filter input").attr(
+    //         "placeholder",
+    //         "Search Jobs by Job ID / Customer / Service"
+    //       );
+    //       $("#all-jobs-table_paginate .paginate_button.previous").html(
+    //         $("#table-chevron-left").html()
+    //       );
+    //       $("#all-jobs-table_paginate .paginate_button.next").html(
+    //         $("#table-chevron-right").html()
+    //       );
+    //     }
+    //     $("#all-jobs-table").css({ opacity: 1 });
+    //   });
+    // }, 1000);
   },
 };
 </script>

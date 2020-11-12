@@ -287,6 +287,7 @@ export default {
   updated() {
     setTimeout(function () {
       $(document).ready(function () {
+        if (!$.fn.dataTable.isDataTable(".table-main")) {
         $(".table-main").DataTable({
           aoColumnDefs: [
             {
@@ -312,6 +313,7 @@ export default {
         $(".dataTables_paginate .paginate_button.next").html(
           $("#table-chevron-right").html()
         );
+        }
         $(".table-main").css({ opacity: 1 });
       });
     }, 1000);

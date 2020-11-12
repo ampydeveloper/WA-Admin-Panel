@@ -472,6 +472,7 @@ export default {
       jobService.servicesTimeSlots(val).then((response) => {
         //handle response
         if (response.status) {
+          console.log(response);
           this.servicetime = response.data;
         } else {
           this.$toast.open({

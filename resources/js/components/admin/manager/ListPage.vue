@@ -93,7 +93,7 @@
                   <th class="text-left">Email</th>
                   <th class="text-left">Salary</th>
                   <th class="text-left">Active</th>
-                  <th class="text-left">Actions</th>
+                  <th class="text-left" style="padding: 0 !important;width: 71px;">Actions</th>
                 </tr>
               </thead>
               <tbody>

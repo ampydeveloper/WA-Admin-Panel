@@ -160,7 +160,7 @@
                         type="checkbox"
                         class="pr-6"
                         v-model="addForm.slot_type"
-                        value="2"
+                        value="3"
                         id="eveningJob"
                       />
                       <label for="eveningJob"></label>

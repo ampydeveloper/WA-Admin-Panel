@@ -698,7 +698,7 @@ class ManagerController extends Controller {
                         ], 421);
     }
 
-    public function listAdmin() {
+    public function listAdmin(Request $request) {
         if ($request->user()->role_id == config('constant.roles.Admin')) {
             return response()->json([
                         'status' => true,

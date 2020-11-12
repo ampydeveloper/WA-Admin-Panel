@@ -189,9 +189,6 @@
                         </a>
                       </td>
                     </tr>
-                    <tr v-if="insurance.length == 0">
-                      <td colspan="5">No insurance till now.</td>
-                    </tr>
                   </tbody>
                 </table>
               </v-card>

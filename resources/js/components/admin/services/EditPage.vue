@@ -3,7 +3,9 @@
     <div class="bread_crum">
       <ul>
         <li>
-          <h4 class="main-title text-left top_heading">Update Service  <span class="right-bor"></span></h4>
+          <h4 class="main-title text-left top_heading">
+            Update Service <span class="right-bor"></span>
+          </h4>
         </li>
         <li>
           <router-link to="/admin/dashboard" class="home_svg">
@@ -63,9 +65,7 @@
             </span>
           </router-link>
         </li>
-        <li>
-          Update
-        </li>
+        <li>Update</li>
       </ul>
     </div>
     <div class="main_box">
@@ -131,7 +131,7 @@
                         type="checkbox"
                         class="pr-6"
                         v-model="editForm.slot_type"
-                        :checked="editForm.slot_type.includes(1) ? true:false"
+                        :checked="editForm.slot_type.includes(1) ? true : false"
                         @change="getTime(1)"
                         value="1"
                         id="morningJob"
@@ -145,9 +145,23 @@
                         type="checkbox"
                         class="pr-6"
                         v-model="editForm.slot_type"
-                        :checked="editForm.slot_type.includes(2) ? true:false"
+                        :checked="editForm.slot_type.includes(2) ? true : false"
                         @change="getTime(2)"
                         value="2"
+                        id="afternoonJob"
+                      />
+                      <label for="afternoonJob"></label>
+                      <span class="checkbox-title mor_eve">Afternoon</span>
+                    </div>
+
+                    <div class="custom-checkbox d-ib">
+                      <input
+                        type="checkbox"
+                        class="pr-6"
+                        v-model="editForm.slot_type"
+                        :checked="editForm.slot_type.includes(3) ? true : false"
+                        @change="getTime(3)"
+                        value="3"
                         id="eveningJob"
                       />
                       <label for="eveningJob"></label>
@@ -159,19 +173,30 @@
                       v-if="!timeSlotErr"
                     >
                       <div class="v-messages__wrapper">
-                        <div class="v-messages__message">Service Time is required.</div>
+                        <div class="v-messages__message">
+                          Service Time is required.
+                        </div>
                       </div>
                     </div>
                   </v-col>
                 </v-col>
 
-                <v-col class="time-slots pt-0" cols="12" md="12" v-if="morningSlots.length">
+                <v-col
+                  class="time-slots pt-0"
+                  cols="12"
+                  md="12"
+                  v-if="morningSlots.length"
+                >
                   <v-col sm="2" class="pt-0"></v-col>
                   <v-col sm="8" class="pt-0 pb-0">
                     <template v-for="timeSlot in morningSlots">
                       <span
                         class="checkbox"
-                        v-bind:class="[editForm.slot_time.includes(timeSlot.id) ? 'activeClass' : '']"
+                        v-bind:class="[
+                          editForm.slot_time.includes(timeSlot.id)
+                            ? 'activeClass'
+                            : '',
+                        ]"
                       >
                         <input
                           type="checkbox"
@@ -179,24 +204,37 @@
                           :value="timeSlot.id"
                           :id="timeSlot.id"
                           required
-                          :checked="editForm.slot_time.includes(timeSlot.id) ? true:false"
+                          :checked="
+                            editForm.slot_time.includes(timeSlot.id)
+                              ? true
+                              : false
+                          "
                         />
-                        <label
-                          v-bind:for="timeSlot.id"
-                        >{{timeSlot.slot_start+'-'+timeSlot.slot_end}}</label>
+                        <label v-bind:for="timeSlot.id">{{
+                          timeSlot.slot_start + "-" + timeSlot.slot_end
+                        }}</label>
                       </span>
                       <!-- <v-checkbox v-model="editForm.slot_time" :value="timeSlot.id" class="mx-2" :label="timeSlot.slot_start+'-'+timeSlot.slot_end"></v-checkbox> -->
                     </template>
                   </v-col>
                 </v-col>
 
-                <v-col class="time-slots pt-0 pb-0" cols="12" md="12" v-if="eveningSlots.length">
+                <v-col
+                  class="time-slots pt-0 pb-0"
+                  cols="12"
+                  md="12"
+                  v-if="eveningSlots.length"
+                >
                   <v-col sm="2" class="pt-0"></v-col>
                   <v-col sm="8" class="pt-0 pb-0">
                     <template v-for="timeSlot in eveningSlots">
                       <span
                         class="checkbox"
-                        v-bind:class="[editForm.slot_time.includes(timeSlot.id) ? 'activeClass' : '']"
+                        v-bind:class="[
+                          editForm.slot_time.includes(timeSlot.id)
+                            ? 'activeClass'
+                            : '',
+                        ]"
                       >
                         <input
                           type="checkbox"
@@ -204,17 +242,44 @@
                           :value="timeSlot.id"
                           :id="timeSlot.id"
                           required
-                          :checked="editForm.slot_time.includes(timeSlot.id) ? true:false"
+                          :checked="
+                            editForm.slot_time.includes(timeSlot.id)
+                              ? true
+                              : false
+                          "
                         />
-                        <label
-                          v-bind:for="timeSlot.id"
-                        >{{timeSlot.slot_start+'-'+timeSlot.slot_end}}</label>
+                        <label v-bind:for="timeSlot.id">{{
+                          timeSlot.slot_start + "-" + timeSlot.slot_end
+                        }}</label>
                       </span>
                       <!-- <v-checkbox v-model="editForm.slot_time" :value="timeSlot.id" class="mx-2" :label="timeSlot.slot_start+'-'+timeSlot.slot_end"></v-checkbox> -->
                     </template>
                   </v-col>
                 </v-col>
               </div>
+
+              <v-col
+                cols="12"
+                md="12"
+                class="pt-0 pb-0"
+                v-if="selectedType == 4"
+              >
+                <v-col sm="2" class="label-align pt-0">
+                  <label class="label_text"
+                    >Complete Time <small>(in mins)</small></label
+                  >
+                </v-col>
+                <v-col sm="4" class="pt-0 pb-0">
+                  <v-select
+                    v-model="editForm.time_taken_to_complete_service"
+                    :items="completeTime"
+                    item-text="value"
+                    item-value="id"
+                    label="Select Complete Time"
+                    :rules="[(v) => !!v || 'Complete Time is required.']"
+                  ></v-select>
+                </v-col>
+              </v-col>
 
               <v-col cols="12" md="12" class="pt-0 pb-0">
                 <v-col sm="2" class="label-align pt-0">
@@ -266,17 +331,31 @@
                     allow-file-type-validation="true"
                     accepted-file-types="image/jpeg, image/png"
                   />
-                  <div class="v-messages theme--light error--text" role="alert" v-if="docError">
+                  <div
+                    class="v-messages theme--light error--text"
+                    role="alert"
+                    v-if="docError"
+                  >
                     <div class="v-messages__wrapper">
-                      <div class="v-messages__message">Document upload is required.</div>
+                      <div class="v-messages__message">
+                        Document upload is required.
+                      </div>
                     </div>
                   </div>
                   <v-col sm="12" class="p-0">
-                    <div class="service-image-outer" v-if="editForm.service_image">
-                      <button type="button" class="close" v-if="cross" @click="Remove()">
+                    <div
+                      class="service-image-outer"
+                      v-if="editForm.service_image"
+                    >
+                      <button
+                        type="button"
+                        class="close"
+                        v-if="cross"
+                        @click="Remove()"
+                      >
                         <span>&times;</span>
                       </button>
-                      <img :src="baseUrl+editForm.service_image" alt />
+                      <img :src="baseUrl + editForm.service_image" alt />
                     </div>
                   </v-col>
                 </v-col>
@@ -293,11 +372,23 @@
                       v-model="editForm.service_type"
                       :mandatory="false"
                       required
-                      :rules="[v => !!v || 'Service type is required.']"
+                      :rules="[(v) => !!v || 'Service type is required.']"
                     >
-                      <v-radio label="Per Load" value="perload" class="mor_eve"></v-radio>
-                      <v-radio label="Round" value="trip" class="mor_eve"></v-radio>
-                      <v-radio label="Bucket" value="bucket" class="mor_eve"></v-radio>
+                      <v-radio
+                        label="Per Load"
+                        :value="1"
+                        class="mor_eve"
+                      ></v-radio>
+                      <v-radio
+                        label="Trip"
+                        :value="2"
+                        class="mor_eve"
+                      ></v-radio>
+                      <v-radio
+                        label="Bucket"
+                        :value="3"
+                        class="mor_eve"
+                      ></v-radio>
                     </v-radio-group>
                   </v-col>
                 </div>
@@ -314,8 +405,13 @@
                         class="custom-save-btn mt-4"
                         @click="update"
                         id="submit_btn"
-                      >Update</v-btn>
-                      <router-link to="/admin/services" class="btn-custom-danger mt-4">Cancel</router-link>
+                        >Update</v-btn
+                      >
+                      <router-link
+                        to="/admin/services"
+                        class="btn-custom-danger mt-4"
+                        >Cancel</router-link
+                      >
                     </v-col>
                   </v-row>
                 </v-col>
@@ -340,6 +436,14 @@ export default {
   },
   data() {
     return {
+      completeTime: [
+        { id: 1, value: "15 Mins" },
+        { id: 2, value: "30 Mins" },
+        { id: 3, value: "45 Mins" },
+        { id: 4, value: "60 Mins" },
+        { id: 5, value: "75 Mins" },
+        { id: 6, value: "90 Mins" },
+      ],
       valid: true,
       loading: false,
       avatar: null,
@@ -358,7 +462,7 @@ export default {
         service_image: "",
         service_type: "",
         slot_type: [],
-        slot_time: [],
+        time_taken_to_complete_service: [],
       },
       checkedSlot: {
         slot_type: "",
@@ -409,8 +513,14 @@ export default {
         this.editForm.price = response.data.price;
         this.editForm.description = response.data.description;
         this.editForm.service_image = response.data.service_image;
-        this.editForm.slot_time = JSON.parse(response.data.slot_time);
-        this.editForm.slot_type = JSON.parse(response.data.slot_type);
+        this.editForm.time_taken_to_complete_service =
+          response.data.time_taken_to_complete_service;
+        this.editForm.slot_time = JSON.parse(
+          JSON.stringify(response.data.slot_time)
+        );
+        this.editForm.slot_type = JSON.parse(
+          JSON.stringify(response.data.slot_type)
+        );
 
         this.editForm.service_for = response.data.service_for;
 
@@ -420,20 +530,14 @@ export default {
         if (response.data.service_image) {
           this.cross = true;
         }
-        if (response.data.service_type == 1) {
-          this.editForm.service_type = "perload";
-        } else if(response.data.service_type == 2) {
-          this.editForm.service_type = "trip";
-        } else {
-          this.editForm.service_type = "bucket";
-        }
+        this.editForm.service_type = response.data.service_type;
 
-        if (this.editForm.slot_type.includes("1")) {
-          this.getTime(1);
-        }
-        if (this.editForm.slot_type.includes("2")) {
-          this.getTime(2);
-        }
+        // if (this.editForm.slot_type.includes("1")) {
+        //   this.getTime(1);
+        // }
+        // if (this.editForm.slot_type.includes("2")) {
+        //   this.getTime(2);
+        // }
       } else {
         router.push("/admin/services");
         this.$toast.open({
@@ -452,53 +556,53 @@ export default {
       this.cross = false;
       this.editForm.service_image = "";
     },
-    getTime(choosenCheckbox) {
-      this.checkedSlot.slot_type = choosenCheckbox;
+    // getTime(choosenCheckbox) {
+    //   this.checkedSlot.slot_type = choosenCheckbox;
 
-      serviceService.getTimeSlots(this.checkedSlot).then((response) => {
-        //handle response
-        if (response.status) {
-          if (choosenCheckbox == 1) {
-            if (this.morningSlots.length > 0) {
-              for (var i = 0; i < this.morningSlots.length; i++) {
-                if (this.editForm.slot_time.includes(this.morningSlots[i].id)) {
-                  this.editForm.slot_time.splice(
-                    this.editForm.slot_time.indexOf(this.morningSlots[i].id),
-                    1
-                  );
-                }
-              }
-              this.morningSlots = [];
-            } else {
-              this.morningSlots = [];
-              this.morningSlots = response.data;
-            }
-          } else {
-            if (this.eveningSlots.length > 0) {
-              for (var i = 0; i < this.eveningSlots.length; i++) {
-                if (this.editForm.slot_time.includes(this.eveningSlots[i].id)) {
-                  this.editForm.slot_time.splice(
-                    this.editForm.slot_time.indexOf(this.eveningSlots[i].id),
-                    1
-                  );
-                }
-              }
-              this.eveningSlots = [];
-            } else {
-              this.eveningSlots = [];
-              this.eveningSlots = response.data;
-            }
-          }
-        } else {
-          this.timeSlotErr = false;
-          this.$toast.open({
-            message: response.message,
-            type: "error",
-            position: "top-right",
-          });
-        }
-      });
-    },
+    //   serviceService.getTimeSlots(this.checkedSlot).then((response) => {
+    //     //handle response
+    //     if (response.status) {
+    //       if (choosenCheckbox == 1) {
+    //         if (this.morningSlots.length > 0) {
+    //           for (var i = 0; i < this.morningSlots.length; i++) {
+    //             if (this.editForm.slot_time.includes(this.morningSlots[i].id)) {
+    //               this.editForm.slot_time.splice(
+    //                 this.editForm.slot_time.indexOf(this.morningSlots[i].id),
+    //                 1
+    //               );
+    //             }
+    //           }
+    //           this.morningSlots = [];
+    //         } else {
+    //           this.morningSlots = [];
+    //           this.morningSlots = response.data;
+    //         }
+    //       } else {
+    //         if (this.eveningSlots.length > 0) {
+    //           for (var i = 0; i < this.eveningSlots.length; i++) {
+    //             if (this.editForm.slot_time.includes(this.eveningSlots[i].id)) {
+    //               this.editForm.slot_time.splice(
+    //                 this.editForm.slot_time.indexOf(this.eveningSlots[i].id),
+    //                 1
+    //               );
+    //             }
+    //           }
+    //           this.eveningSlots = [];
+    //         } else {
+    //           this.eveningSlots = [];
+    //           this.eveningSlots = response.data;
+    //         }
+    //       }
+    //     } else {
+    //       this.timeSlotErr = false;
+    //       this.$toast.open({
+    //         message: response.message,
+    //         type: "error",
+    //         position: "top-right",
+    //       });
+    //     }
+    //   });
+    // },
     getSelectedType(checkType) {
       this.selectedType = checkType;
     },
@@ -532,65 +636,65 @@ export default {
         });
         return false;
       }
-      if (this.editForm.service_type == "perload") {
-        this.editForm.service_type = 1;
-      } else if (this.editForm.service_type == "trip") {
-        this.editForm.service_type = 2;
-      } else {
-        this.editForm.service_type = 3;
-      }
+      // if (this.editForm.service_type == "perload") {
+      //   this.editForm.service_type = 1;
+      // } else if (this.editForm.service_type == "trip") {
+      //   this.editForm.service_type = 2;
+      // } else {
+      //   this.editForm.service_type = 3;
+      // }
 
       //time slot validation if customer service selected
-      if (this.selectedType == 4) {
-        //time slots validation
-        if (this.editForm.slot_time.length > 0) {
-          //morning check
-          if (this.morningSlots.length > 0) {
-            var checkMorning = 0;
-            for (var i = 0; i < this.morningSlots.length; i++) {
-              if (this.editForm.slot_time.includes(this.morningSlots[i].id)) {
-                checkMorning++;
-              }
-            }
-            //check if any morning selected
-            if (checkMorning == 0) {
-              this.$toast.open({
-                message: "Please select at least one morning time slot.",
-                type: "error",
-                position: "top-right",
-              });
-              return false;
-            }
-          }
+      // if (this.selectedType == 4) {
+      //   //time slots validation
+      //   if (this.editForm.slot_time.length > 0) {
+      //     //morning check
+      //     if (this.morningSlots.length > 0) {
+      //       var checkMorning = 0;
+      //       for (var i = 0; i < this.morningSlots.length; i++) {
+      //         if (this.editForm.slot_time.includes(this.morningSlots[i].id)) {
+      //           checkMorning++;
+      //         }
+      //       }
+      //       //check if any morning selected
+      //       if (checkMorning == 0) {
+      //         this.$toast.open({
+      //           message: "Please select at least one morning time slot.",
+      //           type: "error",
+      //           position: "top-right",
+      //         });
+      //         return false;
+      //       }
+      //     }
 
-          //check for time slots
-          if (this.eveningSlots.length > 0) {
-            var checkEvening = 0;
-            for (var i = 0; i < this.eveningSlots.length; i++) {
-              if (this.editForm.slot_time.includes(this.eveningSlots[i].id)) {
-                checkEvening++;
-              }
-            }
-            //check if any morning selected
-            if (checkEvening == 0) {
-              this.$toast.open({
-                message: "Please select at least one evening time slot.",
-                type: "error",
-                position: "top-right",
-              });
-              return false;
-            }
-          }
-        } else {
-          this.$toast.open({
-            message: "Please select at least one time slot.",
-            type: "error",
-            position: "top-right",
-          });
-          return false;
-        }
-        //time slots validation
-      }
+      //     //check for time slots
+      //     if (this.eveningSlots.length > 0) {
+      //       var checkEvening = 0;
+      //       for (var i = 0; i < this.eveningSlots.length; i++) {
+      //         if (this.editForm.slot_time.includes(this.eveningSlots[i].id)) {
+      //           checkEvening++;
+      //         }
+      //       }
+      //       //check if any morning selected
+      //       if (checkEvening == 0) {
+      //         this.$toast.open({
+      //           message: "Please select at least one evening time slot.",
+      //           type: "error",
+      //           position: "top-right",
+      //         });
+      //         return false;
+      //       }
+      //     }
+      //   } else {
+      //     this.$toast.open({
+      //       message: "Please select at least one time slot.",
+      //       type: "error",
+      //       position: "top-right",
+      //     });
+      //     return false;
+      //   }
+      //   //time slots validation
+      // }
 
       if (
         this.editForm.service_image == "" ||
@@ -599,7 +703,7 @@ export default {
         this.docError = true;
       }
 
-      if (this.$refs.form.validate() && this.timeSlotErr && !this.docError) {
+      if (this.$refs.form.validate() && !this.docError) {
         if (this.loading) {
           return false;
         }

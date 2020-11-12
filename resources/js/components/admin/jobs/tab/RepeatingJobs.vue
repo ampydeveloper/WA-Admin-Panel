@@ -6,7 +6,6 @@
   >
     <thead>
       <tr>
-        <th>#</th>
         <th>Job Summary</th>
         <th>Customer / Manager / Farm Location</th>
         <th>Payment Status</th>
@@ -15,7 +14,6 @@
     </thead>
     <tbody>
       <tr v-for="(job, index) in alljobs">
-        <td>{{ index + 1 }}</td>
         <td>
           <span class="basic-info">{{ job.start_date | formatDateLic }}</span>
           <span class="basic-big">#JOB100{{ job.id }}</span>
@@ -54,13 +52,17 @@
             v-if="isAdmin"
             :to="'/admin/jobs/chat/' + job.id"
             class="nav-item nav-link"
-            >View chat</router-link
+            ><v-btn color="success" class="btn-outline-green"
+                            >View chat</v-btn
+                          ></router-link
           >
           <router-link
             v-if="!isAdmin"
             :to="'/manager/jobs/chat/' + job.id"
             class="nav-item nav-link"
-            >View chat</router-link
+            ><v-btn color="success" class="btn-outline-green"
+                            >View chat</v-btn
+                          ></router-link
           >
         </td>
       </tr>
@@ -101,6 +103,7 @@ export default {
         //handle response
         if (response.status) {
           this.alljobs = response.data.repeatingJobs;
+          this.tableAdd();
         } else {
           this.$toast.open({
             message: response.message,
@@ -110,12 +113,8 @@ export default {
         }
       });
     },
-  },
-  updated() {
-    setTimeout(function () {
-      $(document).ready(function () {
-        if (!$.fn.dataTable.isDataTable("#repeating-table")) {
-          $("#repeating-table").DataTable({
+    tableAdd(){
+      $("#repeating-table").DataTable({
             aoColumnDefs: [
               {
                 bSortable: false,
@@ -147,10 +146,49 @@ export default {
           $("#repeating-table_paginate .paginate_button.next").html(
             $("#table-chevron-right").html()
           );
-        }
-        $("#repeating-table").css({ opacity: 1 });
-      });
-    }, 1000);
+          $("#repeating-table").css({ opacity: 1 });
+    }
+  },
+  updated() {
+    // setTimeout(function () {
+    //   $(document).ready(function () {
+    //     if (!$.fn.dataTable.isDataTable("#repeating-table")) {
+    //       $("#repeating-table").DataTable({
+    //         aoColumnDefs: [
+    //           {
+    //             bSortable: false,
+    //             aTargets: [-1, -2, -3],
+    //           },
+    //         ],
+    //         oLanguage: {
+    //           sSearch: "",
+    //           sEmptyTable: "No job till now.",
+    //           infoEmpty: "No job found.",
+    //         },
+    //         drawCallback: function (settings) {
+    //           $("#repeating-table_paginate .paginate_button.previous").html(
+    //             $("#table-chevron-left").html()
+    //           );
+    //           $("#repeating-table_paginate .paginate_button.next").html(
+    //             $("#table-chevron-right").html()
+    //           );
+    //         },
+    //       });
+    //       $("#repeating-table_filter").append($("#search-input-icon2").html());
+    //       $("#repeating-table_filter input").attr(
+    //         "placeholder",
+    //         "Search Jobs by Job ID / Customer"
+    //       );
+    //       $("#repeating-table_paginate .paginate_button.previous").html(
+    //         $("#table-chevron-left").html()
+    //       );
+    //       $("#repeating-table_paginate .paginate_button.next").html(
+    //         $("#table-chevron-right").html()
+    //       );
+    //     }
+    //     $("#repeating-table").css({ opacity: 1 });
+    //   });
+    // }, 1000);
   },
 };
 </script>

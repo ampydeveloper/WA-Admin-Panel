@@ -705,6 +705,7 @@ h6,
                 color: #c2c6dc;
                 border-top-left-radius: 5px;
                 border-top-right-radius: 5px;
+                padding: 0 10px;
             }
 
             .v-text-field .v-label--active {
@@ -1866,9 +1867,9 @@ h4.top_heading {
             }
 
             td.action-col {
-                display: flex;
-                align-items: center;
-                padding-top: 6px !important;
+                // display: flex;
+                // align-items: center;
+                padding: 6px 0 0 0 !important;
 
                 a {
                     // background-color: #dff7ea;
@@ -1878,6 +1879,8 @@ h4.top_heading {
                     border-radius: 5px;
                     margin-right: 5px;
                     background: rgba(40, 199, 111, 0.15);
+                    display: inline-block;
+    float: left;
                 }
 
                 svg {
@@ -1939,6 +1942,7 @@ h4.top_heading {
             font-weight: 300;
             vertical-align: middle;
             font-size: 15px;
+            color: #c2c6dc;
 
             .right-bor {
                 border: 1px solid #dae1e7 !important;
