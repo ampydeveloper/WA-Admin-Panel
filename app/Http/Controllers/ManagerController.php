@@ -184,7 +184,6 @@ class ManagerController extends Controller {
                     'first_name' => 'required',
                     'last_name' => 'required',
                     'email' => 'required',
-                    'role_id' => 'required',
                     'phone' => 'required_if:role_id,==,config("constant.roles.Admin_Manager")',
                     'address' => 'required_if:role_id,==,config("constant.roles.Admin_Manager")',
                     'city' => 'required_if:role_id,==,config("constant.roles.Admin_Manager")',
@@ -193,7 +192,6 @@ class ManagerController extends Controller {
                     'is_active' => 'required_if:role_id,==,config("constant.roles.Admin_Manager")',
                     'identification_number' => 'required_if:role_id,==,config("constant.roles.Admin_Manager")',
                     'id_photo' => 'required_if:role_id,==,config("constant.roles.Admin_Manager")',
-                    'joining_date' => 'required_if:role_id,==,config("constant.roles.Admin_Manager")',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -202,8 +200,7 @@ class ManagerController extends Controller {
                         'data' => []
                             ], 422);
         }
-        $confirmed = 1;
-        $manager = User::whereId($request->user()->id)->first();
+        $manager = $request->user();
         if ($request->email != '' && $request->email != null) {
             if ($manager->email !== $request->email) {
                 $checkEmail = User::where('email', $request->email)->first();
@@ -235,26 +232,26 @@ class ManagerController extends Controller {
             $manager->zip_code = (isset($request->zipcode) && $request->zipcode != '' && $request->zipcode != null) ? $request->zipcode : null;
             $manager->user_image = (isset($request->user_image) && $request->user_image != '' && $request->user_image != null) ? $request->user_image : null;
             $manager->is_active = (isset($request->is_active) && $request->is_active != '' && $request->is_active != null) ? $request->is_active : null;
-            $manager->is_confirmed = $confirmed;
+            if(isset($confirmed)) {
+                $manager->is_confirmed = $confirmed;
+            }
             if ($manager->save()) {
                 if ($manager->role_id != config('constant.roles.Admin')) {
-                    ManagerDetail::whereUserId($request->user()->id)->update([
+                    ManagerDetail::whereUserId($manager->id)->update([
                         'identification_number' => (isset($request->identification_number) && $request->identification_number != '' && $request->identification_number != null) ? $request->identification_number : null,
                         'joining_date' => (isset($request->joining_date) && $request->joining_date != '' && $request->joining_date != null) ? $request->joining_date : null,
                         'document' => (isset($request->id_photo) && $request->id_photo != '' && $request->id_photo != null) ? $request->id_photo : null,
                     ]);
                 }
                 DB::commit();
-                if ($confirmed == 0) {
+                if (isset($confirmed)) {
                     $this->_updateEmail($manager, $request->email);
-                    if ($request->user()->id == $request->manager_id) {
                         $request->user()->token()->revoke();
                         return response()->json([
                                     'status' => true,
                                     'message' => 'Successfully logged out',
                                     'data' => []
                         ]);
-                    }
                 }
                 return response()->json([
                             'status' => true,

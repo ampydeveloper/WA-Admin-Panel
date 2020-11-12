@@ -95,7 +95,7 @@ class DriverController extends Controller {
                                     ], 422);
                 }
             }
-        
+//        dd('here');
         try {
             DB::beginTransaction();
             if ($request->password != '' && $request->password != null) {
@@ -182,7 +182,7 @@ class DriverController extends Controller {
         return response()->json([
                             'status' => true,
                             'message' => 'delivered jobs.',
-                            'data' => Job::where('truck_driver_id', $driver->id)->whereIn('job_status', [config('constant.job_status.completed'),config('constant.job_status.close')])->get()
+                            'data' => Job::where('truck_driver_id', $driver->id)->whereIn('job_status', [config('constant.job_status.completed'),config('constant.job_status.close')])->with("customer", "manager", "farm", "service")->get()
                                 ], 200);
         
     }
@@ -200,7 +200,7 @@ class DriverController extends Controller {
         return response()->json([
                             'status' => true,
                             'message' => 'ongoing jobs.',
-                            'data' => Job::where('truck_driver_id', $driver->id)->where('job_status', config('constant.job_status.assigned'))->get()
+                            'data' => Job::where('truck_driver_id', $driver->id)->where('job_status', config('constant.job_status.assigned'))->with("customer", "manager", "farm", "service")->get()
                                 ], 200);
         
     }
@@ -218,7 +218,7 @@ class DriverController extends Controller {
         return response()->json([
                             'status' => true,
                             'message' => 'job details.',
-                            'data' => Job::whereId($request->job_id)->first()
+                            'data' => Job::whereId($request->job_id)->with("customer", "manager", "farm", "service")->first()
                                 ], 200);
         
     }
