@@ -100,7 +100,7 @@
                   class="v-form custom_form_field divide-50"
                   id="form_field"
                   lazy-validation
-                  @submit="save"
+                  @submit="update"
                 >
                 <input type="hidden" name="hauler_driver_id" value="">
                   <v-row>
@@ -132,6 +132,19 @@
                               <div class="v-messages__message">Profile image is required.</div>
                             </div>
                           </div>
+                          <div
+                       class="service-image-outer"
+                      >
+                        <button
+                          type="submit"
+                          class="close"
+                          v-if="cross"
+                          @click="Remove()"
+                        >
+                          <span>&times;</span>
+                        </button>
+                        <img :src="avatar" />
+                      </div>
                         </v-col>
                       </div>
                       <div class="custom-col row">
@@ -228,7 +241,7 @@
                           :disabled="loading"
                           color="success"
                           class="custom-save-btn"
-                          @click="save"
+                          @click="update"
                           id="submit_btn"
                         >Update Hauler Driver</v-btn>
                         <router-link to="/admin/hauler" class="btn-custom-danger">Cancel</router-link>
@@ -263,6 +276,7 @@ export default {
       valid: true,
       uploadInProgress: false,
       apiUrl: environment.apiUrl,
+      imgUrl: environment.imgUrl,
       avatar: null,
       date: "",
       user_image: "",
@@ -271,6 +285,7 @@ export default {
       hauler_id:"",
       hauler_driver_id: "",
       HaulerName: [],
+        cross: false,
       addForm: {
         hauler_id:"",
         hauler_driver_id: "",
@@ -326,6 +341,7 @@ export default {
     this.customer_img = "/images/avatar.png";
   },
   mounted: function () {
+    this.getHaulers();
     companyService.getHaulerDriver(this.$route.params.id).then((response) => {
       //handle response
       if (response.status) {
@@ -362,6 +378,20 @@ export default {
     });
   },
   methods: {
+    getHaulers() {
+      companyService.listHauler().then((response) => {
+        //handle response
+        if (response.status) {
+          this.HaulerName = response.data;
+        } else {
+          this.$toast.open({
+            message: response.message,
+            type: "error",
+            position: "top-right",
+          });
+        }
+      });
+    },
     Remove() {
       this.avatar = "";
       this.cross = false;
@@ -402,7 +432,7 @@ export default {
         //start loading
         this.loading = true;
         companyService
-          .edit(this.addForm, this.$route.params.id)
+          .editHaulerDriver(this.addForm, this.$route.params.id)
           .then((response) => {
             //stop loading
             this.loading = false;

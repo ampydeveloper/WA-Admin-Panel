@@ -104,7 +104,7 @@
                   <td>{{ index + 1 }}</td>
                   <td>
                     <div class="v-avatar v-list-item__avatar">
-                      <img class="small-img" :src="'../' + customer.image" />
+                      <img class="small-img" :src="imgUrl+ customer.image" />
                     </div>
                   </td>
                   <td>{{ customer.heading }}</td>
@@ -164,6 +164,7 @@
 import { required } from "vuelidate/lib/validators";
 import { newsService } from "../../../_services/news.service";
 import { authenticationService } from "../../../_services/authentication.service";
+import { environment } from "../../../config/test.env";
 import {
   UserIcon,
   Edit3Icon,
@@ -189,6 +190,7 @@ export default {
     return {
       customers: [],
       isAdmin: true,
+       imgUrl: environment.imgUrl,
     };
   },
   getList() {},
@@ -274,7 +276,7 @@ export default {
             aoColumnDefs: [
               {
                 bSortable: false,
-                aTargets: [-1, -2, -3, -4, -5, -6],
+                aTargets: [-1, -2, -3, -4],
               },
             ],
             oLanguage: {

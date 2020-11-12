@@ -391,7 +391,7 @@ class CompanyController extends Controller {
 
     public function editHaulerDriver(Request $request) {
         $validator = Validator::make($request->all(), [
-                    'driver_id' => 'required',
+                    'hauler_driver_id' => 'required',
                     'driver_first_name' => 'required',
                     'driver_last_name' => 'required',
                     'email' => 'required',
@@ -401,8 +401,8 @@ class CompanyController extends Controller {
                     'driver_province' => 'required',
                     'driver_zipcode' => 'required',
 //                    'driver_type' => 'required',
-                    'driver_licence' => 'required',
-                    'driver_licence_image' => 'required',
+//                    'driver_licence' => 'required',
+//                    'driver_licence_image' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -413,7 +413,7 @@ class CompanyController extends Controller {
         }
 
         if ($request->user()->role_id == config('constant.roles.Admin') || $request->user()->role_id == config('constant.roles.Admin_Manager')) {
-            $driver = User::whereId($request->driver_id)->first();
+            $driver = User::whereId($request->hauler_driver_id)->first();
             if ($request->email != '' && $request->email != null) {
                 if ($driver->email !== $request->email) {
                     $checkEmail = User::where('email', $request->email)->first();
@@ -429,16 +429,16 @@ class CompanyController extends Controller {
                     $confirmed = 0;
                 }
             }
-            $checkDriverLicence = User::where('driver_licence', $request->driver_licence)->first();
-            if ($checkDriverLicence !== null) {
-                if ($checkDriverLicence->id !== $driver->id) {
-                    return response()->json([
-                                'status' => false,
-                                'message' => 'Driver lecience is already taken.',
-                                'data' => []
-                                    ], 422);
-                }
-            }
+//            $checkDriverLicence = User::where('driver_licence', $request->driver_licence)->first();
+//            if ($checkDriverLicence !== null) {
+//                if ($checkDriverLicence->id !== $driver->id) {
+//                    return response()->json([
+//                                'status' => false,
+//                                'message' => 'Driver lecience is already taken.',
+//                                'data' => []
+//                                    ], 422);
+//                }
+//            }
             try {
                 DB::beginTransaction();
                 if ($request->password != '' && $request->password != null) {
@@ -454,8 +454,8 @@ class CompanyController extends Controller {
                 $driver->state = $request->driver_province;
                 $driver->zip_code = $request->driver_zipcode;
                 $driver->user_image = (isset($request->user_image) && $request->user_image != '' && $request->user_image != null) ? $request->user_image : null;
-                $driver->hauler_driver_licence = $request->driver_licence;
-                $driver->hauler_driver_licence_image = $request->driver_licence_image;
+//                $driver->hauler_driver_licence = $request->driver_licence;
+//                $driver->hauler_driver_licence_image = $request->driver_licence_image;
                 if (isset($confirmed)) {
                     $driver->is_confirmed = $confirmed;
                 }

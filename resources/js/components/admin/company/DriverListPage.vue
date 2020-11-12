@@ -124,8 +124,8 @@
                     <div
                       class="v-avatar v-list-item__avatar"
                     >
-                      <img v-if="customer.user_image" class="small-img" :src="'../'+customer.user_image" />
-                      <img v-if="!customer.user_image" class="small-img" src="/images/avatar.png" />
+                      <img v-if="customer.user_image" class="small-img" :src="imgUrl+customer.user_image" />
+                      <img v-if="!customer.user_image" class="small-img" :src="imgUrl+'images/avatar.png'" />
                     </div>
 
                     {{customer.prefix}} {{customer.first_name}}
@@ -181,6 +181,7 @@
 import { required } from "vuelidate/lib/validators";
 import { companyService } from "../../../_services/company.service";
 import { authenticationService } from "../../../_services/authentication.service";
+import { environment } from "../../../config/test.env";
 import {
   UserIcon,
   Edit3Icon,
@@ -206,6 +207,7 @@ export default {
     return {
       customers: [],
       isAdmin: true,
+      imgUrl: environment.imgUrl,
     };
   },
   getList() {},

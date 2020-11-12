@@ -123,10 +123,9 @@
                       <th>Customer / Manager / Farm Location</th>
                       <th class="tech-col">Techs / Vehicles</th>
                       <th class="time-col">Est. Time</th>
-                      <!-- <th>Distance</th> -->
                       <th>Payment Status</th>
                       <th>Job Status</th>
-                      <th>Actions</th>
+                      <th style="padding: 0 !important;">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -228,29 +227,26 @@
                           <span class="badges-item">Close</span>
                         </template>
                       </td>
-                      <td>
+                      <td class="action-col">
                         <router-link
                           v-if="isAdmin"
                           :to="'/admin/jobs/chat/' + job.id"
-                          class
-                        >
-                          <v-btn color="success" class="btn-outline-green"
-                            >View chat</v-btn
-                          >
+                          class="btn-outline-green-top"
+                          style="width: 75px;"
+                        >View chat
                         </router-link>
                         <router-link
                           v-if="!isAdmin"
                           :to="'/manager/jobs/chat/' + job.id"
-                          class
-                        >
-                          <v-btn color="success" class="btn-outline-green"
-                            >View chat</v-btn
-                          >
+                         class="btn-outline-green-top" style="width: 75px;"
+                        >View chat
                         </router-link>
+                        <a href="javascript:void(0);" text @click="Delete(job.id)">
+                        <trash-icon size="1.5x" class="custom-class"></trash-icon>
+                      </a>
                       </td>
                       <!-- <td>
                         <button class="btn dropdown-item">Edit</button>
-                        <button class="btn dropdown-item">Delete</button>
                       </td> -->
                     </tr>
                   </tbody>
@@ -295,6 +291,7 @@ import {
   ChevronRightIcon,
   MoreVerticalIcon,
   SearchIcon,
+    TrashIcon,
 } from "vue-feather-icons";
 import { jobService } from "../../../_services/job.service";
 import { environment } from "../../../config/test.env";
@@ -306,6 +303,7 @@ export default {
     ChevronLeftIcon,
     ChevronRightIcon,
     SearchIcon,
+      TrashIcon,
     AllJobs: () => import("./tab/AllJobs"),
     AssignedJobs: () => import("./tab/AssignedJobs"),
     CompletedJobs: () => import("./tab/CompletedJobs"),
@@ -363,6 +361,52 @@ export default {
     },
     dropdownToggle: function () {
       this.triggerDropdown = !this.triggerDropdown;
+    },
+    Delete(e) {
+      this.$swal({
+        title: "Are you sure?",
+        text: "Are you sure you want to delete this Job?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes Delete it!",
+        cancelButtonText: "No, Keep it!",
+        showCloseButton: true,
+        showLoaderOnConfirm: true,
+      }).then((result) => {
+        if (result.value) {
+          this.deleteJob(e);
+        }
+      });
+
+      return false;
+    },
+    deleteJob(e) {
+      if (e) {
+        this.loading = true;
+        jobService.deleteJob(e).then((response) => {
+          //handle response
+          if (response.status) {
+            this.$toast.open({
+              message: 'Job deleted successfully.',
+              type: "success",
+              position: "top-right",
+            });
+            //redirect to login
+            this.dialog = false;
+
+            //reload table
+            this.getResults();
+          } else {
+            this.dialog = false;
+            this.$toast.open({
+              message: response.message,
+              type: "error",
+              position: "top-right",
+            });
+          }
+          this.loading = false;
+        });
+      }
     },
     tableAdd(){
        $("#all-jobs-table").DataTable({

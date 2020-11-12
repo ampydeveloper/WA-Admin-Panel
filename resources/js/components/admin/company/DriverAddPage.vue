@@ -205,7 +205,7 @@
                                 :rules="[v => !!v || 'Hauler is required.']"
                                 item-text="first_name"
                                 item-value="id"
-                                @change="getHaulers"
+                                label="Select Haulers"
                               ></v-select>
                         </v-col>
                       </div>

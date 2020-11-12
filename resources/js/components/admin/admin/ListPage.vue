@@ -102,8 +102,8 @@
                     <td>{{index+1}}</td>
                     <td>
                       <div class="v-avatar v-list-item__avatar">
-                        <img v-if="item.user_image" :src="'../'+item.user_image" class="small-img" />
-                        <img v-if="!item.user_image" src="/images/avatar.png" class="small-img" />
+                        <img v-if="item.user_image" :src="imgUrl+item.user_image" class="small-img" />
+                        <img v-if="!item.user_image" :src="imgUrl+'images/avatar.png'" class="small-img" />
                       </div>
                       {{ item.first_name }} {{ item.last_name }}
                     </td>
@@ -156,7 +156,7 @@
 import { required } from "vuelidate/lib/validators";
 import { adminService } from "../../../_services/admin.service";
 import { authenticationService } from "../../../_services/authentication.service";
-
+import { environment } from "../../../config/test.env";
 import {
   UserIcon,
   Edit3Icon,
@@ -188,6 +188,7 @@ export default {
       currentUser: "",
       triggerDropdown: null,
       isActive: false,
+      imgUrl: environment.imgUrl,
     };
   },
   getList() {},

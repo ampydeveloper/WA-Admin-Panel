@@ -357,7 +357,7 @@ export default {
       menu2: false,
       menu1: false,
       valid: true,
-      apiUrl: environment.apiUrl,
+      apiUrl: environment.api,
       avatar: null,
       uploadInProgress: false,
       date: "",

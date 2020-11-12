@@ -112,11 +112,10 @@
                     <div class="v-avatar v-list-item__avatar">
                       <img
                         v-if="item.user_image"
-                        :src="'../../'+item.user_image"
-                        alt
+                        :src="imgUrl+item.user_image"
                         class="small-img"
                       />
-                      <img v-if="!item.user_image" src="/images/avatar.png" alt class="small-img" />
+                      <img v-if="!item.user_image" :src="imgUrl+'images/avatar.png'" alt class="small-img" />
                     </div>
                     {{ item.first_name }} {{ item.last_name }}
                   </td>
@@ -165,6 +164,7 @@
 import { required } from "vuelidate/lib/validators";
 import { driverService } from "../../../_services/driver.service";
 import { authenticationService } from "../../../_services/authentication.service";
+import { environment } from "../../../config/test.env";
 import {
   UserIcon,
   Edit3Icon,
@@ -195,6 +195,7 @@ export default {
       drivers: [],
       isAdmin: true,
       triggerDropdown: null,
+      imgUrl: environment.imgUrl,
     };
   },
   mounted() {

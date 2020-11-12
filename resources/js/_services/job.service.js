@@ -32,6 +32,7 @@ export const jobService = {
   jobopned,
   jobrepeating,
   jobunpaid,
+  deleteJob,
   apiUrl: environment.apiUrl,
   // chatUrl: 'http://13.235.151.113:3100/',
   chatUrl: 'http://wa.customer.leagueofclicks.com/',
@@ -157,6 +158,17 @@ function joblist() {
 
       return user;
     });
+}
+function deleteJob(data) {
+    return fetch(
+      this.apiUrl + `admin/cancel-booked-job`,
+      requestOptions.post({job_id:data})
+    )
+      .then(handleResponse)
+      .then(user => {
+        return user;
+      });
+
 }
 function dispatchAllJoblist() {
   return fetch(

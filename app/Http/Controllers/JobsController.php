@@ -131,7 +131,7 @@ class JobsController extends Controller {
             $checkService = Service::where('id', $request->service_id)->first();
             if ($checkService->service_for == config('constant.roles.Customer')) {
 
-                if ((!isset($request->farm_id) && $request->farm_id == null && $request->farm_id == '') || (!isset($request->time_slots_id) && $request->time_slots_id == null && $request->time_slots_id == '')) {
+                if ((!isset($request->farm_id) && $request->farm_id == null && $request->farm_id == '')) {
                     return response()->json([
                                 'status' => false,
                                 'message' => 'The given data was invalid.',

@@ -109,11 +109,10 @@
                       <div class="v-avatar v-list-item__avatar">
                         <img
                           v-if="item.user_image"
-                          :src="'../'+item.user_image"
-                          alt
+                          :src="imgUrl+item.user_image"
                           class="small-img"
                         />
-                        <img v-if="!item.user_image" src="/images/avatar.png" alt class="small-img" />
+                        <img v-if="!item.user_image" :src="imgUrl+'images/avatar.png'" alt class="small-img" />
                       </div>
                       {{ item.first_name }} {{ item.last_name }}
                     </td>
@@ -138,9 +137,6 @@
                     </td>
                   </template>
                 </tr>
-                <!-- <tr v-if="managers.length == 0">
-                  <td colspan="8">No manager till now.</td>
-                </tr> -->
               </tbody>
             </table>
           </v-col>
@@ -165,6 +161,7 @@
 import { required } from "vuelidate/lib/validators";
 import { managerService } from "../../../_services/manager.service";
 import { authenticationService } from "../../../_services/authentication.service";
+import { environment } from "../../../config/test.env";
 import {
   UserIcon,
   Edit3Icon,
@@ -196,6 +193,7 @@ export default {
       managers: [],
       isAdmin: true,
       checkuser: "",
+      imgUrl: environment.imgUrl,
     };
   },
   mounted() {

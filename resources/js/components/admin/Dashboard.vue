@@ -141,7 +141,7 @@
 
     <v-row class="dashboard-graps">
       <v-col cols="12" md="12">
-        <div class="grap">
+        <div class="grap" style="    height: 594px;">
           <div class="customer-graph-headings">
             <h4 class="active">Dispatches</h4>
             <mapbox
@@ -183,7 +183,7 @@
                     <img :src="weather.weather_icon" alt="" width="90" />
                   </span>
                   <h2 class="text-white text-big">
-                    {{ weather.the_temp }}
+                    {{ weather.main_temp }}
                     <sup class="text-2xl">o</sup>
                   </h2>
                 </div>
@@ -545,7 +545,7 @@ this.createChart("planet-chart", this.planetChartData, this.gradient);
     this.createChart("services-chart2", this.servicesData4, this.gradient);
     this.createChart("services-chart3", this.servicesData2, this.gradient);
     this.createChart("services-chart4", this.servicesData3, this.gradient);
-// }, 1000);
+// }, 2000);
     
   },
   methods: {
@@ -568,6 +568,10 @@ this.createChart("planet-chart", this.planetChartData, this.gradient);
           this.graphs = response.data.graphs;
           this.invoiceGraphs = response.data.invoiceGraphs;
           this.weather = response.data.weather;
+          this.weather.main_temp = response.data.weather.the_temp.toFixed(2);
+
+           this.pieChartData.data.datasets.data = this.invoiceGraphs;
+           this.createChart("pie-chart", this.pieChartData, this.gradient);
         } else {
           this.$toast.open({
             message: response.message,
