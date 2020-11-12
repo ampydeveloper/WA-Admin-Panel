@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use GuzzleHttp\Client;
 //use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\ChangePasswordMobile;
 //use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -243,35 +244,43 @@ class AuthController extends Controller
         }
         try {
             $user = User::where('email', $request->email)->first();
-            if ($user->is_confirmed == 0) {
+            if ($user) {
+                if ($user->is_confirmed == 0) {
+                    return response()->json([
+                                'status' => false,
+                                'message' => 'Your account is not confirmed. Please click the confirmation link in your e-mail box.',
+                                'data' => []
+                                    ], 401);
+                }
+                $credentials = request(['email', 'password']);
+                if (!Auth::attempt($credentials))
+                    return response()->json([
+                                'status' => false,
+                                'message' => 'These credentials do not match our records.',
+                                'data' => []
+                                    ], 401);
+                $tokenResult = $user->createToken('Personal Access Token');
+                $token = $tokenResult->token;
+                $token->save();
+                return response()->json([
+                            'status' => true,
+                            'message' => 'Login Successful',
+                            'data' => array(
+                                'access_token' => $tokenResult->accessToken,
+                                'token_type' => 'Bearer',
+                                'expires_at' => Carbon::parse(
+                                        $tokenResult->token->expires_at
+                                )->toDateTimeString(),
+                                'user' => $user
+                            )
+                ]);
+            } else {
                 return response()->json([
                             'status' => false,
-                            'message' => 'Your account is not confirmed. Please click the confirmation link in your e-mail box.',
+                            'message' => 'No user with this email id',
                             'data' => []
                                 ], 401);
             }
-            $credentials = request(['email', 'password']);
-            if (!Auth::attempt($credentials))
-                return response()->json([
-                            'status' => false,
-                            'message' => 'These credentials do not match our records.',
-                            'data' => []
-                                ], 401);
-            $tokenResult = $user->createToken('Personal Access Token');
-            $token = $tokenResult->token;
-            $token->save();
-            return response()->json([
-                        'status' => true,
-                        'message' => 'Login Successful',
-                        'data' => array(
-                            'access_token' => $tokenResult->accessToken,
-                            'token_type' => 'Bearer',
-                            'expires_at' => Carbon::parse(
-                                    $tokenResult->token->expires_at
-                            )->toDateTimeString(),
-                            'user' => $user
-                        )
-            ]);
         } catch (\Exception $e) {
             Log::error(json_encode($e->getMessage()));
             return response()->json([
@@ -282,6 +291,136 @@ class AuthController extends Controller
         }
     }
     
+    public function sendOtp(Request $request) {
+        $validator = Validator::make($request->all(), [
+                    'email' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                        'status' => false,
+                        'message' => $validator->errors(),
+                        'data' => []
+                            ], 422);
+        }
+        if(User::where('email', $request->email)->exists()) {
+            $otp = rand(100000,999999);
+            $otpDetails = new ChangePasswordMobile(); 
+            $otpDetails->email = $request->email;
+            $otpDetails->otp = $otp;
+            if($otpDetails->save()) {
+                $data = [
+                    'otp' => $otp
+                ];
+                Mail::send('email_templates.forgot_password_otp', $data, function ($message) use ($request, $otp) {
+                        $message->to($request->email, $otp)->subject('Otp pin');
+                        $message->from(env('MAIL_USERNAME'), env('MAIL_USERNAME'));
+                    });
+                    return response()->json([
+                        'status' => true,
+                        'message' => 'Otp is sent on register email.',
+                        'data' => [
+                            'email' => $request->email
+                        ]
+            ], 200);
+                    
+            } else {
+                return response()->json([
+                        'status' => false,
+                        'message' => 'Error while sending otp. Please try again later.',
+                        'data' => []
+                            ], 500);
+            }
+        }
+        return response()->json([
+                            'status' => false,
+                            'message' => 'No user with this email id',
+                            'data' => []
+                                ], 401);
+    }
+    
+    public function checkOtp(Request $request) {
+        $validator = Validator::make($request->all(), [
+                    'email' => 'required',
+                    'otp' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                        'status' => false,
+                        'message' => $validator->errors(),
+                        'data' => []
+                            ], 422);
+        }
+
+        $checkOtp = ChangePasswordMobile::where('otp', $request->otp)->where('email', $request->email)->where('expired', 0)->latest()->first();
+        if ($checkOtp) {
+            if ($checkOtp->expired == 1) {
+                return response()->json([
+                            'status' => false,
+                            'message' => 'Otp has expired.',
+                            'data' => []
+                                ], 401);
+            } else {
+                if ($checkOtp->otp == $request->otp) {
+                    if (ChangePasswordMobile::whereId($checkOtp->id)->update(['expired' => 1])) {
+                        return response()->json([
+                                    'status' => true,
+                                    'message' => 'otp matched.',
+                                    'data' => [
+                                        'email' => $request->email
+                                    ]
+                                        ], 200);
+                    } else {
+                        return response()->json([
+                                    'status' => true,
+                                    'message' => 'Please try again later.',
+                                    'data' => []
+                                        ], 500);
+                    }
+                } else {
+                    return response()->json([
+                                'status' => false,
+                                'message' => 'Wrong otp.',
+                                'data' => []
+                                    ], 401);
+                }
+            }
+        } else {
+            return response()->json([
+                        'status' => false,
+                        'message' => 'Unable to fetch the information',
+                        'data' => []
+                            ], 401);
+        }
+    }
+
+    public function forgotPasswordMobile(Request $request) {
+        $validator = Validator::make($request->all(), [
+                    'email' => 'required',
+                    'password' => 'required|confirmed'
+        ]);
+        
+        if ($validator->fails()) {
+            return response()->json([
+                        'status' => false,
+                        'message' => $validator->errors(),
+                        'data' => []
+                            ], 422);
+        }
+
+        if (User::where('email', $request->email)->update(['password' => bcrypt($request->password)])) {
+            return response()->json([
+                        'status' => true,
+                        'message' => 'Password reset sucessfully.',
+                        'data' => []
+                            ], 200);
+        }
+        return response()->json([
+                    'status' => true,
+                    'message' => 'Please try again later.',
+                    'data' => []
+                        ], 500);
+    }
+
     public function forgotPassword(Request $request) {
         $validator = Validator::make($request->all(), [
                     'email' => 'required',
@@ -341,6 +480,7 @@ class AuthController extends Controller
                             ], 422);
         }
         $user = $request->user();
+        dd($user->toArray());
         $user->password = bcrypt($request->password);
         $user->password_changed_at = Carbon::now();
         $user->is_confirmed = 1;

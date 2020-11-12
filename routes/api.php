@@ -25,8 +25,11 @@ Route::group(['prefix' => 'auth'], function () {
 //    Route::post('signup', 'AuthController@signup');
 //    Route::post('social-signup', 'AuthController@SocialSignup');
     Route::post('login', 'AuthController@login');
+    Route::post('send-otp', 'AuthController@sendOtp');
+    Route::post('check-otp', 'AuthController@checkOtp');
+    Route::post('forget-password-mobile', 'AuthController@forgotPasswordMobile');
     Route::post('forgot-password', 'AuthController@forgotPassword');
-    Route::post('change-password', 'AuthController@changePassword');
+    
     Route::post('recover-password', 'AuthController@recoverPassword');
     Route::get('confirm-update-email/{email}/{id}', 'AuthController@confirmUpdateEmail');
 
@@ -43,6 +46,7 @@ Route::group(['prefix' => 'auth'], function () {
 
     //Auth full routes
     Route::group(['middleware' => 'auth:api'], function () {
+        Route::post('change-password', 'AuthController@changePassword');
         Route::get('logout', 'AuthController@logout');
 
         Route::get('user-details', 'AuthController@user');
@@ -210,6 +214,7 @@ Route::group(['prefix' => 'auth'], function () {
             Route::get('ongoing-jobs', 'Driver\DriverController@ongoingJobs');
             Route::get('job-detail/{job_id}', 'Driver\DriverController@jobDetail');
             Route::get('earnings', 'Driver\DriverController@earnings');
+            
             Route::get('dashboard', 'Driver\DriverController@dashboard');
             Route::get('routes', 'Driver\DriverController@routes');
             Route::get('start-route', 'Driver\DriverController@startRoute');

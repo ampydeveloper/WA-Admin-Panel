@@ -49,10 +49,39 @@ class CronController extends Controller
 
             $all_jobs = Job::where([
                             ['job_providing_date', '=', date("Y-m-d")],
-                            ['is_repeating_job', '=', config('constant.repeating_job.no')],
+//                            ['is_repeating_job', '=', config('constant.repeating_job.no')],
+                            ['weight', '=', null],
                             ['job_status', '=', config('constant.job_status.open')]
                     ])->select('id', 'farm_id', 'service_id', 'time_slots_id', 'weight', 'is_repeating_job')->with('farm', 'service')->get()->groupBy('farm.farm_zipcode');
-
+dump($all_jobs->toArray());
+            
+            
+//            $todayDay = config('constant.days.'.date('w'));
+////            dd($todayDay);
+//            $all_jobs_by_weight = Job::whereHas('service', function($q){
+//                $q->where('service_for', config('constant.service_for.customer'));
+//            })->where('weight', '!=', null)->where(function($q) {
+//                $q->where('job_providing_date', '=', date("Y-m-d"))->orWhere('is_repeating_job', '=', config('constant.repeating_job.yes'));
+//            })->select('id', 'farm_id', 'service_id', 'job_providing_date', 'time_slots_id', 'weight', 'is_repeating_job', 'repeating_days')->get();
+//            dump($all_jobs_by_weight->toArray());
+//            if($all_jobs_by_weight->count()) {
+//                foreach($all_jobs_by_weight as $key => $job_by_weight) {
+////                    dd();
+//                    if($job_by_weight->is_repeating_job == config('constant.repeating_job.yes')) {
+//                        $todayJob = 0;
+//                        foreach($job_by_weight->repeating_days as $day) {
+//                            if($day == $todayDay) {
+//                                $todayJob = 1;
+//                                break;
+//                            }
+//                        }
+//                        if($todayJob == 0) {
+//                            unset($all_jobs_by_weight[$key]);
+//                        }
+//                    }
+//                } 
+//            }
+//            dd($all_jobs_by_weight->toArray());
             if ($all_jobs->count() && count($iArrDriverTruckIdMapping)) {
 
                 // Making route according to zip code.
@@ -390,6 +419,7 @@ class CronController extends Controller
                 }
             }
 
+            dd($route_details);
             foreach ($route_details as $detail) {
                 $daily_route_details = new DailyRouteDetail();
                 $daily_route_details->date = date("Y-m-d");
