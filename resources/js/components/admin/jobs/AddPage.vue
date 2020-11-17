@@ -6,7 +6,7 @@
           <ul>
             <li>
               <h4 class="main-title text-left top_heading">
-                Create Job
+                Create Pickup
                 <span class="right-bor"></span>
               </h4>
             </li>
@@ -48,7 +48,7 @@
             </li>
             <li>
               <router-link to="/admin/jobs">
-                Jobs
+                Pickups
                 <span>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

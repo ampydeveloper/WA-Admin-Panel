@@ -6,7 +6,7 @@
           <ul>
             <li>
               <h4 class="main-title text-left top_heading">
-                Create Manager
+                Create Dispatcher
                 <span class="right-bor"></span>
               </h4>
             </li>
@@ -47,7 +47,7 @@
               </router-link>
             </li>
             <li>
-              <router-link to="/admin/services">
+              <router-link to="/admin/manager">
                 List
                 <span>
                   <svg
@@ -383,7 +383,7 @@
                           class="custom-save-btn"
                           @click="update"
                           id="submit_btn"
-                        >Add Manager</v-btn>
+                        >Add Dispatcher</v-btn>
                       </div>
                     </v-col>
                   </v-row>

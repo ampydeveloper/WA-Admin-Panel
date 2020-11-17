@@ -4,7 +4,7 @@
       <ul>
         <li>
           <h4 class="main-title text-left top_heading">
-            Hauler
+            Haulers
             <span class="right-bor"></span>
           </h4>
         </li>
@@ -46,7 +46,7 @@
         </li>
         <li>
           <router-link to="/admin/hauler">
-            Hauler
+            Haulers
             <span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -90,7 +90,7 @@
               <thead>
                 <tr>
                   <th class="text-left">#</th>
-                  <th class="text-left">Hauler Name</th>
+                  <th class="text-left">Haulers Name</th>
                   <th class="text-left">Email</th>
                   <th class="text-left">Phone</th>
                   <th class="text-left">Address</th>

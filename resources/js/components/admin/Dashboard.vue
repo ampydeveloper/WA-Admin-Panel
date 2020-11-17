@@ -143,7 +143,7 @@
       <v-col cols="12" md="12">
         <div class="grap" style="    height: 594px;">
           <div class="customer-graph-headings">
-            <h4 class="active">Dispatches</h4>
+            <h4 class="active">Dispatched Fleet</h4>
             <mapbox
               access-token="pk.eyJ1IjoibG9jb25lIiwiYSI6ImNrYmZkMzNzbDB1ZzUyenM3empmbXE3ODQifQ.SiBnr9-6jpC1Wa8OTAmgVA"
               :map-options="{

@@ -202,8 +202,8 @@
             active: true,
             items: [
               { title: 'Overview', url: '/admin/dashboard', icon: "<img src='/images/home.svg' />" },
-              { title: 'Jobs', url: '/admin/jobs', icon: "<img src='/images/briefcase.svg' />" },
-              { title: 'Dispatches', url: '/admin/dispatches', icon: "<img src='/images/package.svg' />" },
+              { title: 'Pickups', url: '/admin/jobs', icon: "<img src='/images/briefcase.svg' />" },
+              { title: 'Dispatch', url: '/admin/dispatches', icon: "<img src='/images/package.svg' />" },
               { title: 'Services', url: '/admin/services', icon: "<img src='/images/grid.svg' />" },
             ]
           },
@@ -212,8 +212,8 @@
             title: 'Customer',
             active: true,
             items: [
-              { title: 'Customer', url: '/admin/customer', icon: "<img src='/images/user.svg' />" },
-              { title: 'Hauler', url: '/admin/hauler', icon: "<img src='/images/user-plus.svg' />" }
+              { title: 'Customers', url: '/admin/customer', icon: "<img src='/images/user.svg' />" },
+              { title: 'Haulers', url: '/admin/hauler', icon: "<img src='/images/user-plus.svg' />" }
             ]
           },
           {
@@ -222,7 +222,7 @@
             active: true,
             items: [
               { title: 'Admin', url: '/admin/admin', icon: "<img src='/images/user.svg' />" },
-              { title: 'Managers', url: '/admin/manager', icon: "<img src='/images/user-check.svg' />" },
+              { title: 'Dispatchers', url: '/admin/manager', icon: "<img src='/images/user-check.svg' />" },
 	      { title: 'Drivers', url: '/admin/truckdrivers', icon: "<img src='/images/users.svg' />" },
               { title: 'Mechanic',url: '/admin/mechanic', icon: "<img src='/images/users.svg' />" },
             ]

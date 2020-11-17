@@ -4,7 +4,7 @@
       <ul>
         <li>
           <h4 class="main-title top_heading">
-            Managers
+            Dispatchers
             <span class="right-bor"></span>
           </h4>
         </li>
@@ -44,7 +44,7 @@
             </span>
           </router-link>
         </li>
-        <li>Managers</li>
+        <li>Dispatchers</li>
         <li>
           <span>
             <svg
@@ -87,7 +87,7 @@
               <thead>
                 <tr>
                   <th class="text-left">#</th>
-                  <th class="text-left">Manager Name</th>
+                  <th class="text-left">Dispatcher Name</th>
                   <th class="text-left mgr-add-col">Address</th>
                   <th class="text-left">Mobile</th>
                   <th class="text-left">Email</th>

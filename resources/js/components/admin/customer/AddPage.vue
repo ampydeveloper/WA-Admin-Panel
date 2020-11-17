@@ -46,7 +46,7 @@
         </li>
         <li>
           <router-link to="/admin/customer">
-            Customer
+            Customers
             <span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
