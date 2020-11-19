@@ -22,6 +22,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 
 class DriverController extends Controller {
@@ -61,6 +62,7 @@ class DriverController extends Controller {
         }
         $driver = $request->user();
         
+        
         if($driver->role_id != config('constant.roles.Driver')) {
             return response()->json([
                 'status' => false,
@@ -95,7 +97,6 @@ class DriverController extends Controller {
                                     ], 422);
                 }
             }
-//        dd('here');
         try {
             DB::beginTransaction();
             if ($request->password != '' && $request->password != null) {
@@ -115,17 +116,40 @@ class DriverController extends Controller {
                 $driver->is_confirmed = $confirmed;
             }
             if (is_file($request->image)) {
-                $imageName = rand() . time() . '.' . $request->image->extension();
-                (Storage::disk('user_images')->put($driver->id . '/' . $imageName, file_get_contents($request->image))) ? $imageName : false;
-                $driver->user_image = $imageName;
+                $file = "";
+                $path = public_path() . '/uploads';
+                if (!file_exists($path)) {
+                    mkdir($path, 0777, true);
+                }
+                $cover = $request->file('image');
+                $extension = $cover->getClientOriginalExtension();
+                $file = $cover->getFilename() . '.' . $extension;
+                if (!Storage::disk('public')->put($cover->getFilename() . '.' . $extension, File::get($cover))) {
+                    $file = "";
+                } else {
+                    $file = 'uploads/' . $file;
+                }
+                $driver->user_image = $file;
             }
             $driverDetails = Driver::where('user_id', $driver->id)->first();
             $driverDetails->expiry_date = $request->expiry_date;
             $driverDetails->driver_licence = $request->licence_no;
             if (is_file($request->licence_image)) {
-                $imageName = rand() . time() . '.' . $request->licence_image->extension();
-                (Storage::disk('user_images')->put($driver->id . '/' . $imageName, file_get_contents($request->licence_image))) ? $imageName : false;
-                $driverDetails->document = $imageName;
+                
+                $file = "";
+                $path = public_path() . '/uploads';
+                if (!file_exists($path)) {
+                    mkdir($path, 0777, true);
+                }
+                $cover = $request->file('licence_image');
+                $extension = $cover->getClientOriginalExtension();
+                $file = $cover->getFilename() . '.' . $extension;
+                if (!Storage::disk('public')->put($cover->getFilename() . '.' . $extension, File::get($cover))) {
+                    $file = "";
+                } else {
+                    $file = 'uploads/' . $file;
+                }
+                $driverDetails->document = $file;
             }
             
             if ($driver->save() && $driverDetails->save()) {
@@ -139,10 +163,14 @@ class DriverController extends Controller {
                                     'data' => []
                         ]);
                 }
+                unset($driver['driver']);
+                $driver['driverDetails'] = $driverDetails;
                 return response()->json([
                             'status' => true,
                             'message' => 'Driver updated successfully.',
-                            'data' => []
+                            'data' => [
+                                        'driver' => $driver,
+                                    ]
                                 ], 200);
             }
         } catch (\Exception $e) {

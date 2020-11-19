@@ -480,7 +480,6 @@ class AuthController extends Controller
                             ], 422);
         }
         $user = $request->user();
-        dd($user->toArray());
         $user->password = bcrypt($request->password);
         $user->password_changed_at = Carbon::now();
         $user->is_confirmed = 1;
