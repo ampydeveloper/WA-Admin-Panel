@@ -168,9 +168,7 @@ class DriverController extends Controller {
                 return response()->json([
                             'status' => true,
                             'message' => 'Driver updated successfully.',
-                            'data' => [
-                                        'driver' => $driver,
-                                    ]
+                            'data' => $driver
                                 ], 200);
             }
         } catch (\Exception $e) {

@@ -99,8 +99,8 @@ class CustomerController extends Controller {
                     'manager_details.*.manager_city' => 'required',
                     'manager_details.*.manager_province' => 'required',
                     'manager_details.*.manager_zipcode' => 'required',
-                    'manager_details.*.manager_card_image' => 'required',
-                    'manager_details.*.manager_id_card' => 'required',
+//                    'manager_details.*.manager_card_image' => 'required',
+//                    'manager_details.*.manager_id_card' => 'required',
 //                    'manager_details.*.salary' => 'required',
         ]);
 
@@ -172,13 +172,13 @@ class CustomerController extends Controller {
                             ]);
 
                             if ($saveManger->save()) {
-                                $mangerDetails = new ManagerDetail([
-                                    'user_id' => $saveManger->id,
-                                    'identification_number' => $manager['manager_id_card'],
-                                    'document' => $manager['manager_card_image'],
-//                                'salary' => $manager['salary'],
-                                    'joining_date' => date('Y/m/d'),
-                                ]);
+//                                $mangerDetails = new ManagerDetail([
+//                                    'user_id' => $saveManger->id,
+//                                    'identification_number' => $manager['manager_id_card'],
+//                                    'document' => $manager['manager_card_image'],
+////                                'salary' => $manager['salary'],
+//                                    'joining_date' => date('Y/m/d'),
+//                                ]);
                                 if ($mangerDetails->save()) {
                                     $this->_confirmPassword($saveManger, $newPassword);
                                 }
