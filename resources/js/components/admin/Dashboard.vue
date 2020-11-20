@@ -54,7 +54,13 @@
             class="custom-class icons_custom dashboard-icons fleet-icon"
           ></truck-icon>
 
-          <h2>{{ count.trucks + count.skidsteers }}</h2>
+          <h2>
+            {{
+              typeof count.trucks != undefined
+                ? count.trucks + count.skidsteers
+                : "0"
+            }}
+          </h2>
           <span class="employees">Fleet</span>
           <div class="services-chart-outer">
             <canvas id="services-chart4"></canvas>
@@ -141,7 +147,7 @@
 
     <v-row class="dashboard-graps">
       <v-col cols="12" md="12">
-        <div class="grap" style="    height: 594px;">
+        <div class="grap" style="height: 594px">
           <div class="customer-graph-headings">
             <h4 class="active">Dispatched Fleet</h4>
             <mapbox
@@ -191,11 +197,13 @@
               <div class="text-center w-full">
                 <div class="flex justify-between px-8 mb-8 text-xl">
                   <span
-                    >{{ weather.min_temp }} <sup class="text-2xl">o</sup><br />
+                    >{{ weather.min_temp_val }} <sup class="text-2xl">o</sup
+                    ><br />
                     <small>MIN</small></span
                   >
                   <span
-                    >{{ weather.max_temp }} <sup class="text-2xl">o</sup><br />
+                    >{{ weather.max_temp_val }} <sup class="text-2xl">o</sup
+                    ><br />
                     <small>MAX</small></span
                   >
                 </div>
@@ -223,7 +231,7 @@
       <v-col cols="12" md="4">
         <div class="grap timeline-grap">
           <div class="customer-graph-headings">
-            <h4 class="active">Activity</h4>
+            <h4 class="active">Notifications</h4>
           </div>
           <div class="vx-card__collapsible-content">
             <div class="vx-card__body">
@@ -231,58 +239,32 @@
                 <li>
                   <div class="timeline-icon">
                     <span class>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24px"
-                        height="24px"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        class
-                      >
-                        <line x1="12" y1="5" x2="12" y2="19" />
-                        <line x1="5" y1="12" x2="19" y2="12" />
-                      </svg>
+                      <message-square-icon
+                        size="1.5x"
+                        class="custom-class"
+                      ></message-square-icon>
                     </span>
                   </div>
                   <div class="timeline-info">
-                    <p class="font-semibold">Client Meeting</p>
-                    <span class="activity-desc"
-                      >Bonbon macaroon jelly beans gummi bears jelly lollipop
-                      apple</span
-                    >
+                    <p class="font-semibold">PICKUP100656</p>
+                    <span class="activity-desc">Pickup has been started.</span>
                   </div>
                   <small class="text-grey activity-e-time">25 mins Ago</small>
                 </li>
                 <li>
                   <div class="timeline-icon">
                     <span class>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24px"
-                        height="24px"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        class
-                      >
-                        <path
-                          d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
-                        />
-                        <polyline points="22,6 12,13 2,6" />
-                      </svg>
+                      <message-square-icon
+                        size="1.5x"
+                        class="custom-class"
+                      ></message-square-icon>
                     </span>
                   </div>
                   <div class="timeline-info">
-                    <p class="font-semibold">Email Newsletter</p>
+                    <p class="font-semibold">PICKUP100656</p>
                     <span class="activity-desc"
-                      >Cupcake gummi bears soufflé caramels candy</span
+                      >Payment has been initated and invoice has been
+                      created.</span
                     >
                   </div>
                   <small class="text-grey activity-e-time">15 Days Ago</small>
@@ -290,29 +272,16 @@
                 <li>
                   <div class="timeline-icon">
                     <span class>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24px"
-                        height="24px"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        class
-                      >
-                        <path
-                          d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
-                        />
-                        <polyline points="22,6 12,13 2,6" />
-                      </svg>
+                      <message-square-icon
+                        size="1.5x"
+                        class="custom-class"
+                      ></message-square-icon>
                     </span>
                   </div>
                   <div class="timeline-info">
-                    <p class="font-semibold">Plan Webinar</p>
+                    <p class="font-semibold">PICKUP100656</p>
                     <span class="activity-desc"
-                      >Candy ice cream cake. Halvah gummi bears</span
+                      >Pickup has been cancelled.</span
                     >
                   </div>
                   <small class="text-grey activity-e-time">20 days ago</small>
@@ -320,31 +289,74 @@
                 <li>
                   <div class="timeline-icon">
                     <span class>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24px"
-                        height="24px"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        class
-                      >
-                        <path
-                          d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
-                        />
-                        <polyline points="22,6 12,13 2,6" />
-                      </svg>
+                      <message-square-icon
+                        size="1.5x"
+                        class="custom-class"
+                      ></message-square-icon>
                     </span>
                   </div>
                   <div class="timeline-info">
-                    <p class="font-semibold">Marketing</p>
+                    <p class="font-semibold">PICKUP100656</p>
                     <span class="activity-desc"
-                      >Candy ice cream cake. Halvah gummi bears Cupcake gummi
-                      bears.</span
+                      >Pickup has been rescheduled.</span
                     >
+                  </div>
+                  <small class="text-grey activity-e-time">28 days ago</small>
+                </li>
+                <li>
+                  <div class="timeline-icon">
+                    <span class>
+                      <message-square-icon
+                        size="1.5x"
+                        class="custom-class"
+                      ></message-square-icon>
+                    </span>
+                  </div>
+                  <div class="timeline-info">
+                    <p class="font-semibold">PICKUP100656</p>
+                    <span class="activity-desc">Pickup has been declined.</span>
+                  </div>
+                  <small class="text-grey activity-e-time">28 days ago</small>
+                </li>
+                <li>
+                  <div class="timeline-icon">
+                    <span class>
+                      <message-square-icon
+                        size="1.5x"
+                        class="custom-class"
+                      ></message-square-icon>
+                    </span>
+                  </div>
+                  <div class="timeline-info">
+                    <p class="font-semibold">PICKUP100656</p>
+                    <span class="activity-desc">Pickup has been declined.</span>
+                  </div>
+                  <small class="text-grey activity-e-time">28 days ago</small>
+                </li>
+                <li>
+                  <div class="timeline-icon">
+                    <span class>
+                      <message-square-icon
+                        size="1.5x"
+                        class="custom-class"
+                      ></message-square-icon>
+                    </span>
+                  </div>
+                  <div class="timeline-info">
+                    <p class="font-semibold">PICKUP100656</p>
+                    <span class="activity-desc">Pickup has been declined.</span>
+                  </div>
+                  <small class="text-grey activity-e-time">28 days ago</small>
+                </li>
+                <li>
+                  <div class="timeline-icon">
+                    <span class>
+                      <alert-circle-icon size="1.5x" class="custom-class"></alert-circle-icon>
+                    </span>
+                  </div>
+                  <div class="timeline-info">
+                    <p class="font-semibold">Dispatch Issue</p>
+                    <span class="activity-desc">Shortage of trucks or drivers.</span>
                   </div>
                   <small class="text-grey activity-e-time">28 days ago</small>
                 </li>
@@ -353,133 +365,6 @@
           </div>
         </div>
       </v-col>
-      <!-- <v-col cols="12" md="4">
-        <div class="grap timeline-grap">
-          <div class="customer-graph-headings">
-            <h4 class="active">Dispatch Notifications</h4>
-          </div>
-          <div class="vx-card__collapsible-content">
-            <div class="vx-card__body">
-              <ul class="vx-timeline">
-                <li>
-                  <div class="timeline-icon">
-                    <span class>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24px"
-                        height="24px"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        class
-                      >
-                        <line x1="12" y1="5" x2="12" y2="19" />
-                        <line x1="5" y1="12" x2="19" y2="12" />
-                      </svg>
-                    </span>
-                  </div>
-                  <div class="timeline-info">
-                    <p class="font-semibold">Client Meeting</p>
-                    <span
-                      class="activity-desc"
-                    >Bonbon macaroon jelly beans gummi bears jelly lollipop apple</span>
-                  </div>
-                  <small class="text-grey activity-e-time">25 mins Ago</small>
-                </li>
-                <li>
-                  <div class="timeline-icon">
-                    <span class>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24px"
-                        height="24px"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        class
-                      >
-                        <path
-                          d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
-                        />
-                        <polyline points="22,6 12,13 2,6" />
-                      </svg>
-                    </span>
-                  </div>
-                  <div class="timeline-info">
-                    <p class="font-semibold">Email Newsletter</p>
-                    <span class="activity-desc">Cupcake gummi bears soufflé caramels candy</span>
-                  </div>
-                  <small class="text-grey activity-e-time">15 Days Ago</small>
-                </li>
-                <li>
-                  <div class="timeline-icon">
-                    <span class>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24px"
-                        height="24px"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        class
-                      >
-                        <path
-                          d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
-                        />
-                        <polyline points="22,6 12,13 2,6" />
-                      </svg>
-                    </span>
-                  </div>
-                  <div class="timeline-info">
-                    <p class="font-semibold">Plan Webinar</p>
-                    <span class="activity-desc">Candy ice cream cake. Halvah gummi bears</span>
-                  </div>
-                  <small class="text-grey activity-e-time">20 days ago</small>
-                </li>
-                <li>
-                  <div class="timeline-icon">
-                    <span class>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24px"
-                        height="24px"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        class
-                      >
-                        <path
-                          d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
-                        />
-                        <polyline points="22,6 12,13 2,6" />
-                      </svg>
-                    </span>
-                  </div>
-                  <div class="timeline-info">
-                    <p class="font-semibold">Marketing</p>
-                    <span
-                      class="activity-desc"
-                    >Candy ice cream cake. Halvah gummi bears Cupcake gummi bears.</span>
-                  </div>
-                  <small class="text-grey activity-e-time">28 days ago</small>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </v-col>-->
     </v-row>
   </v-container>
 </template>
@@ -502,6 +387,8 @@ import {
   UserCheckIcon,
   TruckIcon,
   UsersIcon,
+  AlertCircleIcon,
+  MessageSquareIcon,
 } from "vue-feather-icons";
 
 export default {
@@ -513,12 +400,20 @@ export default {
     UserCheckIcon,
     TruckIcon,
     UsersIcon,
+    AlertCircleIcon,
+    MessageSquareIcon,
   },
   data() {
     return {
       prefixSelected: ["Last 7 Days"],
       prefixs: ["Last 7 Days", "Last Month", "Last Year"],
-            count: "",
+      count: {
+        drivers: 0,
+        managers: 0,
+        services: 0,
+        skidsteers: 0,
+        trucks: 0,
+      },
       graphs: "",
       invoiceGraphs: "",
       weather: "",
@@ -538,15 +433,14 @@ export default {
     // this.gradient.addColorStop(0, 'rgba(255, 0,0, 0.5)')
     // this.gradient.addColorStop(0.5, 'rgba(255, 0, 0, 0.25)');
     // this.gradient.addColorStop(1, 'rgba(255, 0, 0, 0)');
-// setTimeout(function(){
-this.createChart("planet-chart", this.planetChartData, this.gradient);
+    // setTimeout(function(){
+    this.createChart("planet-chart", this.planetChartData, this.gradient);
     this.createChart("pie-chart", this.pieChartData, this.gradient);
     this.createChart("services-chart", this.servicesData, this.gradient);
     this.createChart("services-chart2", this.servicesData4, this.gradient);
     this.createChart("services-chart3", this.servicesData2, this.gradient);
     this.createChart("services-chart4", this.servicesData3, this.gradient);
-// }, 2000);
-    
+    // }, 2000);
   },
   methods: {
     createChart(chartId, chartData, gradient) {
@@ -569,9 +463,11 @@ this.createChart("planet-chart", this.planetChartData, this.gradient);
           this.invoiceGraphs = response.data.invoiceGraphs;
           this.weather = response.data.weather;
           this.weather.main_temp = response.data.weather.the_temp.toFixed(2);
+          this.weather.min_temp_val = response.data.weather.min_temp.toFixed(2);
+          this.weather.max_temp_val = response.data.weather.max_temp.toFixed(2);
 
-           this.pieChartData.data.datasets.data = this.invoiceGraphs;
-           this.createChart("pie-chart", this.pieChartData, this.gradient);
+          //  this.pieChartData.data.datasets.data = this.invoiceGraphs;
+          //  this.createChart("pie-chart", this.pieChartData, this.gradient);
         } else {
           this.$toast.open({
             message: response.message,

@@ -18,12 +18,12 @@
             <router-link
               v-if="isAdmin"
               :to="'/admin/truckdriver/edit/' + salaryJob.id"
-              class="nav-item nav-link"
+              class="nav-black-link"
             >{{salaryJob.first_name}}</router-link>
             <router-link
               v-if="!isAdmin"
               :to="'/manager/truckdriver/edit/' + salaryJob.id"
-              class="nav-item nav-link"
+              class="nav-black-link"
             >{{salaryJob.first_name}}</router-link>
           </td>
           <td>{{salaryJob.phone}}</td>
@@ -35,7 +35,7 @@
             <router-link
               v-if="salaryJob.driver.salary.is_settled === 0"
               :to="'/admin/accounting/details/' + salaryJob.driver.salary.id"
-              class="nav-item nav-link"
+              class="btn-outline-green-top"
             >Pay Now</router-link>
           </td>
         </tr>

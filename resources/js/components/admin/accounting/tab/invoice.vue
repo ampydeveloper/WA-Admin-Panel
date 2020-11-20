@@ -20,32 +20,32 @@
             <router-link
               v-if="isAdmin"
               :to="'/admin/customer/details/'+invoice.id"
-              class="nav-item nav-link"
+              class="nav-black-link"
             >{{invoice.customer.first_name}}</router-link>
             <router-link
               v-if="!isAdmin"
               :to="'/manager/customer/details/'+invoice.id"
-              class="nav-item nav-link"
+              class="nav-black-link"
             >{{invoice.customer.first_name}}</router-link>
           </td>
           <td>
-            <router-link v-if="isAdmin" :to="'/admin/jobs'" class="nav-item nav-link">{{invoice.id}}</router-link>
+            <router-link v-if="isAdmin" :to="'/admin/jobs'" class="nav-black-link">{{invoice.id}}</router-link>
             <router-link
               v-if="!isAdmin"
               :to="'/manager/jobs'"
-              class="nav-item nav-link"
+              class="nav-black-link"
             >{{invoice.id}}</router-link>
           </td>
           <td>
             <router-link
               v-if="isAdmin"
               :to="'/admin/service/edit/'+invoice.service.id"
-              class="nav-item nav-link"
+              class="nav-black-link"
             >{{invoice.service.service_name}}</router-link>
             <router-link
               v-if="!isAdmin"
               :to="'/manager/service/edit/'+invoice.service.id"
-              class="nav-item nav-link"
+              class="nav-black-link"
             >{{invoice.service.service_name}}</router-link>
           </td>
           <td>${{invoice.amount}}</td>
@@ -58,11 +58,8 @@
             </template>
           </td>
           <td>{{invoice.customer.email}}</td>
-          <td>Download</td>
+          <td><a href="#" class="btn-outline-green-top">Download</a></td>
         </tr>
-        <!-- <tr v-if="invoiceJobs.length == 0">
-                      <td colspan="7">No jobs till now.</td>
-        </tr>-->
       </tbody>
     </table>
     <span id="table-chevron-left" class="d-none">

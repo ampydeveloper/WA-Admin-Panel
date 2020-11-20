@@ -79,6 +79,11 @@
     <span id="table-chevron-right" class="d-none">
       <chevron-right-icon size="1.5x" class="custom-class"></chevron-right-icon>
     </span>
+      <span id="search-input-icon" class="d-none">
+      <span class="search-input-outer">
+        <search-icon size="1.5x" class="custom-class"></search-icon>
+      </span>
+    </span>
   </v-app>
 </template>
 
@@ -90,12 +95,14 @@ import {
   PlusCircleIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+   SearchIcon,
 } from "vue-feather-icons";
 export default {
   components: {
     PlusCircleIcon,
     ChevronLeftIcon,
     ChevronRightIcon,
+     SearchIcon,
   },
   data() {
     return {
@@ -137,7 +144,11 @@ export default {
               aTargets: [-1, -2, -3, -4, -5, -6],
             },
           ],
-          oLanguage: { sSearch: "" },
+          oLanguage: {
+              sSearch: "",
+              sEmptyTable: "No records till now.",
+              infoEmpty: "No records found.",
+            },
           drawCallback: function (settings) {
             $("#c-records-table_paginate .paginate_button.previous").html(
               $("#table-chevron-left").html()
@@ -147,6 +158,7 @@ export default {
             );
           },
         });
+        $("#c-records-table_filter").append($("#search-input-icon").html());
         $("#c-records-table_filter input").attr("placeholder", "Search Records");
         $("#c-records-table_paginate .paginate_button.previous").html(
           $("#table-chevron-left").html()

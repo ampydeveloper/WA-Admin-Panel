@@ -92,12 +92,16 @@ Vue.use(Vuebar);
 Vue.filter('formatDateLic', function(value) {
     if (value) {
         return moment(String(value)).format('DD MMMM, YYYY')
+    }else{
+      return moment().format('DD MMMM, YYYY')
     }
 });
 
 Vue.filter('formatDate', function(value) {
     if (value) {
         return moment(String(value)).format('MM/DD/YYYY')
+    }else{
+      return moment().format('MM/DD/YYYY')
     }
 });
 

@@ -111,7 +111,7 @@
                 class="jobs-aj"
                 color="basil"
                 flat
-                v-if="item == 'All Jobs'"
+                v-if="item == 'All Pickups'"
               >
                 <table
                   id="all-jobs-table"
@@ -119,12 +119,12 @@
                 >
                   <thead>
                     <tr>
-                      <th class="job-summ">Job Summary</th>
+                      <th class="job-summ">Pickup Summary</th>
                       <th>Customer / Manager / Farm Location</th>
                       <th class="tech-col">Techs / Vehicles</th>
                       <th class="time-col">Est. Time</th>
                       <th>Payment Status</th>
-                      <th>Job Status</th>
+                      <th>Pickup Status</th>
                       <th style="padding: 0 !important;">Actions</th>
                     </tr>
                   </thead>
@@ -134,7 +134,7 @@
                         <span class="basic-info">{{
                           job.start_date | formatDateLic
                         }}</span>
-                        <span class="basic-big">#JOB100{{ job.id }}</span>
+                        <span class="basic-big">#PICKUP100{{ job.id }}</span>
                         <span class="basic-grey"
                           >${{ job.job_amount ? job.job_amount : 0 }}</span
                         >
@@ -256,7 +256,7 @@
                 class="jobs-aj"
                 color="basil"
                 flat
-                v-if="item == 'Repeating Jobs'"
+                v-if="item == 'Repeating Pickups'"
               >
                 <repeating-jobs />
               </v-card>
@@ -317,7 +317,7 @@ export default {
       tab: null,
       isAdmin: true,
       triggerDropdown: false,
-      items: ["All Jobs", "Repeating Jobs"],
+      items: ["All Pickups", "Repeating Pickups"],
       dropdown: [
         "All Jobs",
         "Assigned Jobs",
@@ -327,7 +327,8 @@ export default {
         "Open",
       ],
       alljobs: "",
-      selected: "All Jobs",
+      selected: "All Pickups",
+      // jobsTable: ''
     };
   },
   mounted() {
@@ -365,7 +366,7 @@ export default {
     Delete(e) {
       this.$swal({
         title: "Are you sure?",
-        text: "Are you sure you want to delete this Job?",
+        text: "Are you sure you want to delete this Pickup?",
         type: "warning",
         showCancelButton: true,
         confirmButtonText: "Yes Delete it!",
@@ -387,7 +388,7 @@ export default {
           //handle response
           if (response.status) {
             this.$toast.open({
-              message: 'Job deleted successfully.',
+              message: 'Pickup deleted successfully.',
               type: "success",
               position: "top-right",
             });
@@ -409,7 +410,8 @@ export default {
       }
     },
     tableAdd(){
-       $("#all-jobs-table").DataTable({
+      if (!$.fn.dataTable.isDataTable("#all-jobs-table")) {
+      $("#all-jobs-table").DataTable({
             aoColumnDefs: [
               {
                 bSortable: false,
@@ -418,8 +420,8 @@ export default {
             ],
             oLanguage: {
               sSearch: "",
-              sEmptyTable: "No jobs till now.",
-              infoEmpty: "No jobs found.",
+              sEmptyTable: "No pickups till now.",
+              infoEmpty: "No pickups found.",
             },
             drawCallback: function (settings) {
               $("#all-jobs-table_paginate .paginate_button.previous").html(
@@ -434,7 +436,7 @@ export default {
           $("#all-jobs-table_filter").append($("#search-input-icon").html());
           $("#all-jobs-table_filter input").attr(
             "placeholder",
-            "Search Jobs by Job ID / Customer / Service"
+            "Search Pickups by Pickup ID / Customer / Service"
           );
           $("#all-jobs-table_paginate .paginate_button.previous").html(
             $("#table-chevron-left").html()
@@ -442,6 +444,7 @@ export default {
           $("#all-jobs-table_paginate .paginate_button.next").html(
             $("#table-chevron-right").html()
           );
+      }
           $("#all-jobs-table").css({ opacity: 1 });
     }
   },
@@ -449,7 +452,7 @@ export default {
     // setTimeout(function () {
     //   $(document).ready(function () {
     //     if (!$.fn.dataTable.isDataTable("#all-jobs-table")) {
-    //        $("#all-jobs-table").DataTable({
+    //        this.jobsTable = $("#all-jobs-table").DataTable({
     //         aoColumnDefs: [
     //           {
     //             bSortable: false,
@@ -485,7 +488,7 @@ export default {
     //     }
     //     $("#all-jobs-table").css({ opacity: 1 });
     //   });
-    // }, 1000);
+    // }, 100);
   },
 };
 </script>

@@ -1003,10 +1003,11 @@ h6,
                         float: left;
 
                         .s-r-inner {
-                            background: #fff;
+                            background: #19191a;
                             border-radius: 7px;
                             box-shadow: 0 4px 25px 0 rgba(0, 0, 0, .1);
                             padding: 18px 20px 17px 20px;
+                            min-height: 93px;
 
                             h2 {
                                 font-size: 24.36px;
@@ -3475,4 +3476,13 @@ div#example_info {
     height: 50px;
     cursor: pointer;
     top: -27px !important;
+  }
+  #all-jobs-table .dataTables_empty,
+   #repeating-table .dataTables_empty,
+   #truck-service-table .dataTables_empty
+   {
+    display:none;
+  }
+  .nav-black-link{
+    color: #c2c6dc !important;
   }

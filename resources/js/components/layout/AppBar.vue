@@ -142,6 +142,7 @@ export default {
     isDriver: false,
     isAdmin: false,
     userdata: '',
+    imgUrl: environment.imgUrl,
   }),
 
   created() {
@@ -179,9 +180,9 @@ export default {
     loadProfileImage() {
       const currentUser = JSON.parse(localStorage.getItem("currentUser"));
       if (currentUser.data.user.user_image) {
-        this.profileImage = "../../" + currentUser.data.user.user_image;
+        this.profileImage = this.imgUrl + currentUser.data.user.user_image;
       } else {
-        this.profileImage = "/images/avatar.png";
+        this.profileImage = this.imgUrl + "/images/avatar.png";
       }
     },
     logout() {

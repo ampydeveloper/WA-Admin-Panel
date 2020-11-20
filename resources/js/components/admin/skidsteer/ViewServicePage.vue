@@ -140,9 +140,6 @@
                         </a>
                       </td>
                     </tr>
-                    <tr v-if="truck.length == 0">
-                      <td colspan="4">No service till now.</td>
-                    </tr>
                   </tbody>
                 </table>
               </v-card>
@@ -190,9 +187,6 @@
                           <trash-icon size="1.5x" class="custom-class"></trash-icon>
                         </a>
                       </td>
-                    </tr>
-                    <tr v-if="insurance.length == 0">
-                      <td colspan="5">No insurance till now.</td>
                     </tr>
                   </tbody>
                 </table>
