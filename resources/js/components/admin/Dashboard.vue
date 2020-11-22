@@ -1,7 +1,7 @@
 <template>
   <v-container id="dashboard" fluid tag="section">
     <v-row class="dashboard-columns">
-      <div class="col-3">
+      <div class="col-sm-6 col-md-6 col-lg-3">
         <div class="services">
           <div class="image-bg-color service-bg-color"></div>
 
@@ -16,7 +16,7 @@
           </div>
         </div>
       </div>
-      <div class="col-3">
+      <div class="col-sm-6 col-md-6 col-lg-3">
         <div class="services">
           <div class="image-bg-color employee-bg-color"></div>
 
@@ -31,7 +31,7 @@
           </div>
         </div>
       </div>
-      <div class="col-3">
+      <div class="col-sm-6 col-md-6 col-lg-3">
         <div class="services">
           <div class="image-bg-color driver-bg-color"></div>
           <users-icon
@@ -45,10 +45,9 @@
           </div>
         </div>
       </div>
-      <div class="col-3">
+      <div class="col-sm-6 col-md-6 col-lg-3">
         <div class="services">
           <div class="image-bg-color fleet-bg-color"></div>
-
           <truck-icon
             size="2x"
             class="custom-class icons_custom dashboard-icons fleet-icon"

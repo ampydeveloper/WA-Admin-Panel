@@ -148,9 +148,6 @@
                           </td>
                           <td>{{'2020-06-23' | formatDateLic}}</td>
                         </tr>
-                        <!-- <tr v-if="customer.farmlist.length == 0">
-                          <td colspan="4">No farms till now.</td>
-                        </tr> -->
                       </tbody>
                     </v-simple-table>
                   </td>

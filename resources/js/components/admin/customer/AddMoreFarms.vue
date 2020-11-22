@@ -9,7 +9,7 @@
                      <v-col cols="12" md="12">
                         <h4 class="main-title">Farm Section</h4>
                         <v-row>
-                          <v-col cols="12" md="12">
+                          <div class="col-xs-12 col-sm-6 col-md-4">
                             <file-pond
                               name="uploadImage"
                               ref="pond"
@@ -28,8 +28,9 @@
                                 <div class="v-messages__message">Farm image is required</div>
                               </div>
                             </div>
-                          </v-col>
+                           </div>
                           <v-col cols="3" md="3" class="mt-4">
+                            <div class="col-xs-12 col-sm-6 col-md-4">
                             <v-text-field
                               type="text"
                               class="mt-m11"
@@ -47,42 +48,42 @@
                                 class="autocomplete-result"
                               >{{ result.place_name }}</li>
                             </ul>
-                          </v-col>
-                          <v-col cols="3" md="3">
+                           </div>
+                          <div class="col-xs-12 col-sm-6 col-md-4">
                             <v-text-field
                               v-model="addForm.farm_unit"
                               label="Apt/Unit"
                               required
                               :rules="[v => !!v || 'Farm apt/unit is required']"
                             ></v-text-field>
-                          </v-col>
-                          <v-col cols="3" md="3">
+                          </div>
+                          <div class="col-xs-12 col-sm-6 col-md-4">
                             <v-text-field
                               v-model="addForm.farm_city"
                               label="City"
                               required
                               :rules="[v => !!v || 'Farm city is required']"
                             ></v-text-field>
-                          </v-col>
-                          <v-col cols="3" md="3">
+                        </div>
+                       <div class="col-xs-12 col-sm-6 col-md-4">
                             <v-text-field
                               v-model="addForm.farm_province"
                               label="Province"
                               required
                               :rules="[v => !!v || 'Farm province is required']"
                             ></v-text-field>
-                          </v-col>
-                          <v-col cols="3" md="3">
+                       </div>
+                         <div class="col-xs-12 col-sm-6 col-md-4">
                             <v-text-field
                               v-model="addForm.farm_zipcode"
                               label="Zip Code"
                               required
                               :rules="[v => !!v || 'Farm zip code is required']"
                             ></v-text-field>
-                          </v-col>
-                          <v-col cols="3" md="3">
+                        </div>
+                          <div class="col-xs-12 col-sm-6 col-md-4">
                             <v-switch v-model="addForm.farm_active" class="mx-2" label="Is Active"></v-switch>
-                          </v-col>
+                        </div>
                         </v-row>
                       </v-col>
   
@@ -120,24 +121,24 @@
                               v-on:processfile="handleProcessFile2"
                               v-on:processfilerevert="handleRemoveFile2"
                             />
-                          </v-col>
-                          <v-col cols="3" md="3">
+                           </div>
+                          <div class="col-xs-12 col-sm-6 col-md-4">
                             <v-select
                               v-model="input.manager_prefix"
                               :items="prefixs"
                               label="Prefix"
                               :rules="[v => !!v || 'Prefix is required']"
                             ></v-select>
-                          </v-col>
-                          <v-col cols="3" md="3">
+                           </div>
+                          <v<div class="col-xs-12 col-sm-6 col-md-4">
                             <v-text-field
                               v-model="input.manager_name"
                               label="Name"
                               required
                               :rules="[v => !!v || 'Manager name is required']"
                             ></v-text-field>
-                          </v-col>
-                          <v-col cols="3" md="3">
+                           </div>
+                         <div class="col-xs-12 col-sm-6 col-md-4">
                             <v-text-field
                               v-model="input.email"
                               :rules="emailRules"
@@ -145,8 +146,8 @@
                               label="E-mail"
                               required
                             ></v-text-field>
-                          </v-col>
-                          <v-col cols="3" md="3">
+                           </div>
+                          <div class="col-xs-12 col-sm-6 col-md-4">
                             <v-text-field
                               v-model="input.manager_phone"
                               :rules="phoneRules"
@@ -154,48 +155,48 @@
                               required
                               maxlength="10"
                             ></v-text-field>
-                          </v-col>
-                          <v-col cols="3" md="3">
+                           </div>
+                     <div class="col-xs-12 col-sm-6 col-md-4">
                             <v-text-field
                               v-model="input.manager_address"
                               label="Address"
                               required
                               :rules="[v => !!v || 'address is required']"
                             ></v-text-field>
-                          </v-col>
-                          <v-col cols="3" md="3">
+                          </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4">
                             <v-text-field
                               v-model="input.manager_city"
                               label="City"
                               required
                               :rules="[v => !!v || 'City is required']"
                             ></v-text-field>
-                          </v-col>
-                          <v-col cols="3" md="3">
+                         </div>
+                         <div class="col-xs-12 col-sm-6 col-md-4">
                             <v-text-field
                               v-model="input.manager_province"
                               label="State"
                               required
                               :rules="[v => !!v || 'Province is required']"
                             ></v-text-field>
-                          </v-col>
-                          <v-col cols="3" md="3">
+                        </div>
+                          <div class="col-xs-12 col-sm-6 col-md-4">
                             <v-text-field
                               v-model="input.manager_zipcode"
                               :rules="[v => !!v || 'Zip code is required']"
                               label="zipcode"
                               required
                             ></v-text-field>
-                          </v-col>
-                          <v-col cols="3" md="3">
+                          </div>
+                         <div class="col-xs-12 col-sm-6 col-md-4">
                             <v-text-field
                               v-model="input.manager_id_card"
                               :rules="[v => !!v || 'Card Id number is required']"
                               label="Id CradNo"
                               required
                             ></v-text-field>
-                          </v-col>
-                          <v-col cols="4" md="4">
+                      </div>
+                          <div class="col-xs-12 col-sm-6 col-md-4">
                             <file-pond
                               name="uploadImage"
                               ref="pond"
@@ -211,7 +212,7 @@
                               required
                               :rules="[v => !!v || 'Upload id card is required']"
                             />
-                          </v-col>
+                         </div>
                             <div class="v-messages theme--light error--text" role="alert" v-if="docError">
                               <div class="v-messages__wrapper">
                                 <div class="v-messages__message">Id card image is required</div>

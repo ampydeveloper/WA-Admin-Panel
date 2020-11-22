@@ -1001,6 +1001,14 @@ h6,
                         padding: 0 7.5px;
                         width: 20%;
                         float: left;
+                        @media only screen and (max-width: 992px) {
+                            width: 33.33333333%;
+                            margin-bottom: 15px;
+                        }
+                        @media only screen and (max-width: 768px) {
+                            width: 100%;
+                            margin-bottom: 15px;
+                        }
 
                         .s-r-inner {
                             background: #19191a;
@@ -1881,7 +1889,7 @@ h4.top_heading {
                     margin-right: 5px;
                     background: rgba(40, 199, 111, 0.15);
                     display: inline-block;
-    float: left;
+                    float: left;
                 }
 
                 svg {
@@ -1977,6 +1985,24 @@ h4.top_heading {
                 width: 18px;
                 height: 18px;
             }
+        }
+    }
+
+    @media only screen and (max-width: 768px) {
+        ul {
+            li:first-child {
+                display: block;
+
+                .main-title {
+                    text-align: left;
+                    .right-bor {
+                        display: none;
+                    }
+                }
+            }
+            li {
+                display: none;
+            }  
         }
     }
 }
@@ -2584,6 +2610,22 @@ div#example_info {
 
 .c-tabs-50 .v-item-group {
     width: 50%;
+
+    @media only screen and (max-width: 992px) {
+        width: 100%;
+    }
+}
+
+.c-tabs-50 {
+    .v-slide-group__prev--disabled {
+        display: none;
+    }
+
+    @media only screen and (max-width: 992px) {
+        .v-tab {
+            width: 50%;
+        }
+    }
 }
 
 #all-jobs-table_wrapper,
@@ -3461,28 +3503,38 @@ div#example_info {
 
     cursor: pointer;
 }
-.dispatch-top{
+
+.dispatch-top {
     position: absolute;
     top: 33px;
     right: 20px;
 }
-#all-dispatch-table_wrapper{
+
+#all-dispatch-table_wrapper {
     padding: 0 0 0 10px;
 }
+
 .map-marker {
     background-image: url('images/map-marker.png');
-    background-size: 36px,50px;
+    background-size: 36px, 50px;
     width: 36px;
     height: 50px;
     cursor: pointer;
     top: -27px !important;
-  }
-  #all-jobs-table .dataTables_empty,
-   #repeating-table .dataTables_empty,
-   #truck-service-table .dataTables_empty
-   {
-    display:none;
-  }
-  .nav-black-link{
+}
+
+#all-jobs-table .dataTables_empty,
+#repeating-table .dataTables_empty,
+#truck-service-table .dataTables_empty {
+    display: none;
+}
+
+.nav-black-link {
     color: #c2c6dc !important;
-  }
+}
+
+@media only screen and (max-width: 768px) {
+    #app-bar{
+        width: 100%;
+    }
+}

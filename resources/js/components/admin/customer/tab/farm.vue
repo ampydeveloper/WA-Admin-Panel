@@ -18,7 +18,8 @@
                     <v-row>
                       <v-col cols="12" md="12" class="pt-0">
                         <v-row>
-                          <v-col cols="4" md="4" class="pt-0">
+                      
+                            <div class="col-xs-12 col-sm-6 col-md-4 pt-0">
                             <file-pond
                               name="uploadImage"
                               ref="pond"
@@ -35,11 +36,11 @@
                             <!-- <div class="service-image-outer" v-if="manager.manager_image">
                             <img :src="'../../../'+manager.manager_image" /> farm_images
                             </div>-->
-                          </v-col>
+                          </div>
                         </v-row>
                       </v-col>
 
-                      <v-col cols="4" md="4" class="pb-0 basic-select2">
+                        <div class="col-xs-12 col-sm-6 col-md-4 pb-0 basic-select2">
                         <v-text-field
                           type="text"
                           @input="onChange(updateForm.farm.farm_address)"
@@ -57,43 +58,43 @@
                             class="autocomplete-result"
                           >{{ result.place_name }}</li>
                         </ul>
-                      </v-col>
+                       </div>
 
-                      <v-col cols="4" md="4" class="pt-0 pb-0">
+                        <div class="col-xs-12 col-sm-6 col-md-4 pt-0 pb-0">
                         <v-text-field
                           label="Enter Apt/Unit"
                           v-model="updateForm.farm.farm_unit"
                           required
                           :rules="[v => !!v || 'Farm Apt/Unit is required.']"
                         ></v-text-field>
-                      </v-col>
-                      <v-col cols="4" md="4" class="pt-0 pb-0">
+                   </div>
+                     <div class="col-xs-12 col-sm-6 col-md-4 pt-0 pb-0">
                         <v-text-field
                           label="Enter City"
                           v-model="updateForm.farm.farm_city"
                           required
                           :rules="[v => !!v || 'Farm City is required.']"
                         ></v-text-field>
-                      </v-col>
-                      <v-col cols="4" md="4" class="pt-0 pb-0">
+                          </div>
+                     <div class="col-xs-12 col-sm-6 col-md-4 pt-0 pb-0">
                         <v-text-field
                           label="Enter Province"
                           v-model="updateForm.farm.farm_province"
                           required
                           :rules="[v => !!v || 'Farm Province is required.']"
                         ></v-text-field>
-                      </v-col>
-                      <v-col cols="4" md="4" class="pt-0 pb-0">
+                          </div>
+                     <div class="col-xs-12 col-sm-6 col-md-4 pt-0 pb-0">
                         <v-text-field
                           label="Enter Zipcode"
                           v-model="updateForm.farm.farm_zipcode"
                           required
                           :rules="[v => !!v || 'Farm Zipcode is required.']"
                         ></v-text-field>
-                      </v-col>
-                      <v-col cols="4" md="4" class="pt-0 pb-0">
+                           </div>
+                      <div class="col-xs-12 col-sm-6 col-md-4 pt-0 pb-0">
                         <v-switch v-model="updateForm.farm.farm_active" class="mx-2" label="Status"></v-switch>
-                      </v-col>
+                           </div>
                     </v-row>
                   </v-col>
                 </div>
@@ -105,7 +106,7 @@
                       <v-row>
                         <v-col cols="12" md="12" class="pt-0">
                           <v-row>
-                            <v-col cols="4" md="4" class="pt-0 pb-0">
+                           <div class="col-xs-12 col-sm-6 col-md-4 pt-0 pb-0">
                               <file-pond
                                 name="uploadImage"
                                 ref="pond"
@@ -122,27 +123,27 @@
                               <div class="service-image-outer" v-if="manager.manager_image">
                                 <img :src="'../../../'+manager.manager_image" />
                               </div>
-                            </v-col>
+                                 </div>
                           </v-row>
                         </v-col>
                         <div class="clearfix"></div>
-                        <v-col cols="4" md="4" class="pt-0 pb-0">
+                        <div class="col-xs-12 col-sm-6 col-md-4 pt-0 pb-0">
                           <v-select
                             v-model="manager.manager_prefix"
                             :items="prefixs"
                             label="Select Prefix"
                             :rules="[v => !!v || 'Prefix is required.']"
                           ></v-select>
-                        </v-col>
-                        <v-col cols="4" md="4" class="pt-0 pb-0">
+                             </div>
+                       <div class="col-xs-12 col-sm-6 col-md-4 pt-0 pb-0">
                           <v-text-field
                             v-model="manager.manager_name"
                             required
                             label="Enter Manager Name"
                             :rules="[v => !!v || 'Manager Name is required.']"
                           ></v-text-field>
-                        </v-col>
-                        <v-col cols="4" md="4" class="pt-0 pb-0">
+                            </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4 pt-0 pb-0">
                           <v-text-field
                             v-model="manager.manager_email"
                             :rules="emailRules"
@@ -150,8 +151,8 @@
                             name="email"
                             required
                           ></v-text-field>
-                        </v-col>
-                        <v-col cols="4" md="4" class="pt-0 pb-0">
+                            </div>
+                      <div class="col-xs-12 col-sm-6 col-md-4 pt-0 pb-0">
                           <v-text-field
                             v-model="manager.manager_phone"
                             :rules="phoneRules"
@@ -159,48 +160,48 @@
                             required
                             maxlength="10"
                           ></v-text-field>
-                        </v-col>
-                        <v-col cols="4" md="4" class="pt-0 pb-0">
+                             </div>
+                      <div class="col-xs-12 col-sm-6 col-md-4 pt-0 pb-0">
                           <v-text-field
                             v-model="manager.manager_address"
                             required
                             label="Enter Address"
                             :rules="[v => !!v || 'Address is required.']"
                           ></v-text-field>
-                        </v-col>
-                        <v-col cols="4" md="4" class="pt-0 pb-0">
+                             </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4 pt-0 pb-0">
                           <v-text-field
                             v-model="manager.manager_city"
                             required
                             label="Enter City"
                             :rules="[v => !!v || 'City is required.']"
                           ></v-text-field>
-                        </v-col>
-                        <v-col cols="4" md="4" class="pt-0 pb-0">
+                             </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4 pt-0 pb-0">
                           <v-text-field
                             v-model="manager.manager_province"
                             required
                             label="Enter Province"
                             :rules="[v => !!v || 'Province is required.']"
                           ></v-text-field>
-                        </v-col>
-                        <v-col cols="4" md="4" class="pt-0 pb-0">
+                             </div>
+                       <div class="col-xs-12 col-sm-6 col-md-4 pt-0 pb-0">
                           <v-text-field
                             v-model="manager.manager_zipcode"
                             :rules="[v => !!v || 'Zipcode is required.']"
                             label="Enter Zipcode"
                             required
                           ></v-text-field>
-                        </v-col>
-                        <v-col cols="4" md="4" class="pt-0 pb-0">
+                             </div>
+                       <div class="col-xs-12 col-sm-6 col-md-4 pt-0 pb-0">
                           <v-text-field
                             label="Enter Card ID Number"
                             v-model="manager.manager_id_card"
                             :rules="[v => !!v || 'Card Id number is required.']"
                             required
                           ></v-text-field>
-                        </v-col>
-                        <v-col cols="4" md="4" class="pt-0 pb-0">
+                             </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4 pt-0 pb-0">
                           <file-pond
                             name="uploadImage"
                             ref="pond"
@@ -217,7 +218,7 @@
                           <!-- <div class="service-image-outer" v-if="manager.manager_image">
                             <img :src="'../../../'+manager.manager_image" />
                           </div>-->
-                        </v-col>
+                             </div>
                       </v-row>
                     </v-col>
                   </div>

@@ -12,126 +12,127 @@
           >
             <v-row>
               <v-col cols="12" md="12" class="customer-edit-first pt-0 pb-0">
-                 <v-row>
-                <v-col cols="4" md="4" class="pt-0 pb-0">
-                <file-pond
-                  name="uploadImage"
-                  ref="pond"
-                  label-idle="Update Profile Photo"
-                  allow-multiple="false"
-                  v-bind:server="serverOptions"
-                  v-bind:files="myFiles"
-                  v-on:addfilestart="setUploadIndex"
-                  allow-file-type-validation="true"
-                  accepted-file-types="image/jpeg, image/png"
-                  v-on:processfile="handleProcessFile"
-                  v-on:processfilerevert="handleRemoveFile"
-                  :disabled="disabled == 0"
-                />
-                <div class="service-image-outer" v-if="avatar">
-                  <button type="button" class="close" v-if="cross" @click="Remove()">
-                    <span>&times;</span>
-                  </button>
-                  <img :src="avatar" />
-                </div>
+                <v-row>
+                  <div class="col-xs-12 col-sm-6 col-md-4 pt-0 pb-0">
+                    <file-pond
+                      name="uploadImage"
+                      ref="pond"
+                      label-idle="Update Profile Photo"
+                      allow-multiple="false"
+                      v-bind:server="serverOptions"
+                      v-bind:files="myFiles"
+                      v-on:addfilestart="setUploadIndex"
+                      allow-file-type-validation="true"
+                      accepted-file-types="image/jpeg, image/png"
+                      v-on:processfile="handleProcessFile"
+                      v-on:processfilerevert="handleRemoveFile"
+                      :disabled="disabled == 0"
+                    />
+                    <div class="service-image-outer" v-if="avatar">
+                      <button
+                        type="button"
+                        class="close"
+                        v-if="cross"
+                        @click="Remove()"
+                      >
+                        <span>&times;</span>
+                      </button>
+                      <img :src="avatar" />
+                    </div>
+                  </div>
+                </v-row>
               </v-col>
-               </v-row>
-              </v-col>
-              <v-col cols="4" md="4" class="pt-0 pb-0">
+
+              <div class="col-xs-12 col-sm-6 col-md-4 pt-0 pb-0">
                 <v-select
                   v-model="addForm.prefix"
-                
                   :items="prefixs"
                   label="Select Prefix"
-                  :rules="[v => !!v || 'Prefix is required.']"
+                  :rules="[(v) => !!v || 'Prefix is required.']"
                   :disabled="disabled == 0"
                 ></v-select>
-              </v-col>
-              <v-col cols="4" sm="4" class="pt-0 pb-0">
+              </div>
+              <div class="col-xs-12 col-sm-6 col-md-4 pt-0 pb-0">
                 <v-text-field
                   v-model="addForm.customer_first_name"
                   required
                   :disabled="disabled == 0"
                   label="Enter First Name"
-                  
-                  :rules="[v => !!v || 'Customer First Name is required.']"
+                  :rules="[(v) => !!v || 'Customer First Name is required.']"
                 ></v-text-field>
-              </v-col>
-              <v-col cols="4" sm="4" class="pt-0 pb-0">
+              </div>
+              <div class="col-xs-12 col-sm-6 col-md-4 pt-0 pb-0">
                 <v-text-field
                   v-model="addForm.customer_last_name"
                   required
                   :disabled="disabled == 0"
                   label="Enter Last Name"
-                 
-                  :rules="[v => !!v || 'Customer Last Name is required.']"
+                  :rules="[(v) => !!v || 'Customer Last Name is required.']"
                 ></v-text-field>
-              </v-col>
-              <v-col cols="4" md="4" class="pt-0 pb-0">
+              </div>
+              <div class="col-xs-12 col-sm-6 col-md-4 pt-0 pb-0">
                 <v-text-field
                   v-model="addForm.email"
                   :rules="emailRules"
                   name="email"
                   label="Email"
                   :disabled="disabled == 0"
-                 
                   required
                 ></v-text-field>
-              </v-col>
-              <v-col cols="4" md="4" class="pt-0 pb-0">
+              </div>
+              <div class="col-xs-12 col-sm-6 col-md-4 pt-0 pb-0">
                 <v-text-field
                   v-model="addForm.customer_phone"
                   :rules="phoneRules"
                   :disabled="disabled == 0"
                   label="Phone"
-                 
                   required
                   maxlength="10"
                 ></v-text-field>
-              </v-col>
-              <v-col cols="4" md="4" class="pt-0 pb-0">
+              </div>
+              <div class="col-xs-12 col-sm-6 col-md-4 pt-0 pb-0">
                 <v-text-field
                   v-model="addForm.customer_address"
                   :disabled="disabled == 0"
-                
                   label="Address"
                   required
-                  :rules="[v => !!v || 'Address is required.']"
+                  :rules="[(v) => !!v || 'Address is required.']"
                 ></v-text-field>
-              </v-col>
-              <v-col cols="4" md="4" class="pt-0 pb-0">
+              </div>
+              <div class="col-xs-12 col-sm-6 col-md-4 pt-0 pb-0">
                 <v-text-field
                   v-model="addForm.customer_city"
                   :disabled="disabled == 0"
-                
                   label="City"
                   required
-                  :rules="[v => !!v || 'City is required.']"
+                  :rules="[(v) => !!v || 'City is required.']"
                 ></v-text-field>
-              </v-col>
-              <v-col cols="4" md="4" class="pt-0 pb-0">
+              </div>
+              <div class="col-xs-12 col-sm-6 col-md-4 pt-0 pb-0">
                 <v-text-field
                   v-model="addForm.customer_province"
                   :disabled="disabled == 0"
-                
                   label="Province"
                   required
-                  :rules="[v => !!v || 'Province is required.']"
+                  :rules="[(v) => !!v || 'Province is required.']"
                 ></v-text-field>
-              </v-col>
-              <v-col cols="4" md="4" class="pt-0 pb-0">
+              </div>
+              <div class="col-xs-12 col-sm-6 col-md-4 pt-0 pb-0">
                 <v-text-field
                   v-model="addForm.customer_zipcode"
                   label="Zipcode"
-                  :rules="[v => !!v || 'Zipcode is required.']"
+                  :rules="[(v) => !!v || 'Zipcode is required.']"
                   :disabled="disabled == 0"
-              
                   required
                 ></v-text-field>
-              </v-col>
-              <v-col cols="2" md="2">
-                <v-switch v-model="addForm.customer_is_active" class="mx-2" label="Status"></v-switch>
-              </v-col>
+              </div>
+              <div class="col-xs-12 col-sm-6 col-md-4 pt-0 pb-0">
+                <v-switch
+                  v-model="addForm.customer_is_active"
+                  class="mx-2"
+                  label="Status"
+                ></v-switch>
+              </div>
               <!-- <v-col cols="2" md="2">
                 <v-switch
                   v-model="editSwitch"
@@ -151,7 +152,8 @@
                     class="custom-save-btn"
                     @click="update"
                     id="submit_btn"
-                  >Update</v-btn>
+                    >Update</v-btn
+                  >
                 </div>
               </v-col>
             </v-row>
@@ -307,7 +309,7 @@ export default {
     handleProcessFile: function (error, file) {
       this.avatar = this.imgUrl + file.serverId;
       this.addForm.user_image = file.serverId;
-       this.uploadInProgress = false;
+      this.uploadInProgress = false;
     },
     handleRemoveFile: function (file) {
       this.addForm.user_image = "";
