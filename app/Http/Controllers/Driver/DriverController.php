@@ -43,23 +43,26 @@ class DriverController extends Controller {
                     'last_name' => 'required|string',
                     'email' => 'required|email',
                     'image' => 'sometimes|required',
-                    'phone' => 'required',
+                    'phone' => 'required|numeric',
                     'address' => 'required',
                     'city' => 'required',
                     'province' => 'required',
-                    'zipcode' => 'required',
+                    'zipcode' => 'required|numeric',
                     'is_active' => 'required',
                     'licence_no' => 'required',
                     'expiry_date' => 'required',
                     'licence_image' => 'sometimes|required',
         ]);
         if ($validator->fails()) {
+            
             return response()->json([
                         'status' => false,
                         'message' => $validator->errors(),
                         'data' => []
                             ], 422);
         }
+        
+        dd('here');
         $driver = $request->user();
         
         
@@ -198,39 +201,41 @@ class DriverController extends Controller {
     
     public function deliveredJobs(Request $request) {
         $driver = $request->user();
-        if($driver->role_id != config('constant.roles.Driver')) {
+        if ($driver->role_id != config('constant.roles.Driver')) {
             return response()->json([
-                'status' => false,
-                'message' => 'Unauthorized access.',
-                'data' => []
-            ], 421);
+                        'status' => false,
+                        'message' => 'Unauthorized access.',
+                        'data' => []
+                            ], 421);
         }
+
         return response()->json([
-                            'status' => true,
-                            'message' => 'delivered jobs.',
-                            'data' => Job::where('truck_driver_id', $driver->id)->whereIn('job_status', [config('constant.job_status.completed'),config('constant.job_status.close')])->with("customer", "manager", "farm", "service")->get()
-                                ], 200);
-        
+                    'status' => true,
+                    'message' => 'delivered jobs.',
+                    'data' => Job::whereIn('job_status', [config('constant.job_status.completed'), config('constant.job_status.close')])->where(function($q) use($driver) {
+                                $q->where('truck_driver_id', $driver->id)->orWhere('skidsteer_driver_id', $driver->id);
+                            })->with("customer", "manager", "farm", "service")->get()
+                        ], 200);
     }
-    
+
     public function ongoingJobs(Request $request) {
         $driver = $request->user();
-        if($driver->role_id != config('constant.roles.Driver')) {
+        if ($driver->role_id != config('constant.roles.Driver')) {
             return response()->json([
-                'status' => false,
-                'message' => 'Unauthorized access.',
-                'data' => []
-            ], 421);
+                        'status' => false,
+                        'message' => 'Unauthorized access.',
+                        'data' => []
+                            ], 421);
         }
-        
         return response()->json([
-                            'status' => true,
-                            'message' => 'ongoing jobs.',
-                            'data' => Job::where('truck_driver_id', $driver->id)->where('job_status', config('constant.job_status.assigned'))->with("customer", "manager", "farm", "service")->get()
-                                ], 200);
-        
+                    'status' => true,
+                    'message' => 'ongoing jobs.',
+                    'data' => Job::where('job_status', config('constant.job_status.assigned'))->where(function($q) use($driver) {
+                                $q->where('truck_driver_id', $driver->id)->orWhere('skidsteer_driver_id', $driver->id);
+                            })->with("customer", "manager", "farm", "service")->get()
+                        ], 200);
     }
-    
+
     public function jobDetail(Request $request) {
         $driver = $request->user();
         if($driver->role_id != config('constant.roles.Driver')) {
