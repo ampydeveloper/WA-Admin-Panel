@@ -84,7 +84,7 @@
             >
               <input type="hidden" name="vehicle_type" value="1" />
               <v-row>
-                <v-col cols="6" md="6" class="pl-0 pt-0 manager-cols">
+                <div class="col-xs-12 col-sm-6 pl-0 pt-0 manager-cols">
                   <div class="custom-col row">
                     <v-col sm="4" class="label-align pt-0">
                       <label>Company Name</label>
@@ -92,7 +92,7 @@
                     <v-col sm="8" class="pt-0 pb-0">
                       <v-text-field
                         v-model="addForm.company_name"
-                        :rules="[v => !!v || 'Company Name is required.']"
+                        :rules="[(v) => !!v || 'Company Name is required.']"
                         label="Enter Company Name"
                         required
                       ></v-text-field>
@@ -105,7 +105,7 @@
                     <v-col sm="8" class="pt-0 pb-0">
                       <v-text-field
                         v-model="addForm.truck_number"
-                        :rules="[v => !!v || 'Truck Number is required.']"
+                        :rules="[(v) => !!v || 'Truck Number is required.']"
                         label="Enter Truck Number"
                         required
                       ></v-text-field>
@@ -118,7 +118,7 @@
                     <v-col sm="8" class="pt-0 pb-0">
                       <v-text-field
                         v-model="addForm.chaase_number"
-                        :rules="[v => !!v || 'Chassis Number is required.']"
+                        :rules="[(v) => !!v || 'Chassis Number is required.']"
                         label="Enter Chassis Number"
                         required
                       ></v-text-field>
@@ -148,14 +148,13 @@
                         v-model="addForm.capacity"
                         label="Enter Truck Capacity"
                         required
-                        :rules="[v => !!v || 'Truck capacity is required.']"
+                        :rules="[(v) => !!v || 'Truck capacity is required.']"
                       ></v-text-field>
                     </v-col>
                   </div>
-                  
-                </v-col>
+                </div>
 
-                <v-col cols="6" md="6" class="pl-0 pt-0 manager-cols">
+                <div class="col-xs-12 col-sm-6 pl-0 pt-0 manager-cols">
                   <div class="custom-col row">
                     <v-col sm="4" class="label-align pt-0 image-upload-label">
                       <label>RC</label>
@@ -173,13 +172,24 @@
                         allow-file-type-validation="true"
                         accepted-file-types="image/jpeg, image/png"
                       />
-                      <div class="v-messages theme--light error--text" role="alert" v-if="docError">
+                      <div
+                        class="v-messages theme--light error--text"
+                        role="alert"
+                        v-if="docError"
+                      >
                         <div class="v-messages__wrapper">
-                          <div class="v-messages__message">RC document is required.</div>
+                          <div class="v-messages__message">
+                            RC document is required.
+                          </div>
                         </div>
                       </div>
                       <div class="service-image-outer" v-if="rc">
-                        <button type="button" class="close" v-if="rc_cross" @click="RemoveRc()">
+                        <button
+                          type="button"
+                          class="close"
+                          v-if="rc_cross"
+                          @click="RemoveRc()"
+                        >
                           <span>&times;</span>
                         </button>
                         <img :src="rc" alt />
@@ -188,13 +198,15 @@
                   </div>
                   <div class="custom-col row">
                     <v-col sm="4" class="label-align pt-0">
-                      <label class="label_text label-check-half">Availabilty</label>
+                      <label class="label_text label-check-half"
+                        >Availabilty</label
+                      >
                     </v-col>
                     <v-col sm="8" class="pt-0 pb-0">
                       <v-switch v-model="addForm.is_active"></v-switch>
                     </v-col>
                   </div>
-                </v-col>
+                </div>
 
                 <v-col class="pt-0 pb-0" cols="12" md="12">
                   <div class="p-0 float-right">
@@ -206,7 +218,8 @@
                       class="custom-save-btn"
                       @click="save"
                       id="submit_btn"
-                    >Update</v-btn>
+                      >Update</v-btn
+                    >
                   </div>
                 </v-col>
               </v-row>
@@ -305,8 +318,7 @@ export default {
         this.addForm.capacity = response.data.capacity;
         this.addForm.rc_document = response.data.document;
         this.addForm.is_active = response.data.status;
-        
-        
+
         if (response.data.document) {
           this.rc_cross = true;
           this.rc = this.imgUrl + response.data.document;
@@ -349,7 +361,7 @@ export default {
       if (this.addForm.document == "") {
         this.docError = true;
       }
-      
+
       if (this.$refs.form.validate() && !this.insdocError && !this.docError) {
         if (this.loading) {
           return false;

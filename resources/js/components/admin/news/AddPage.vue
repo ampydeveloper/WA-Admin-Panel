@@ -82,8 +82,7 @@
               id="form_field"
             >
               <v-row>
-                <v-col cols="6" md="6" class="pl-0 manager-cols">
-                  
+                  <div class="col-xs-12 col-sm-6 pl-0 manager-cols">
                   <div class="custom-col row">
                     <v-col sm="4" class="label-align pt-0">
                       <label>News Heading</label>
@@ -110,8 +109,8 @@
                       ></v-textarea>
                     </v-col>
                   </div>
-                </v-col>
-                <v-col cols="6" md="6" class="pl-0 manager-cols">
+                </div>
+                  <div class="col-xs-12 col-sm-6 pl-0 manager-cols">
                     <div class="custom-col row custom-img-holder">
                     <v-col sm="4" class="label-align pt-0 image-upload-label">
                       <label>Image</label>
@@ -132,7 +131,7 @@
                       />
                     </v-col>
                   </div>
-                </v-col>
+                </div>
 
                 <v-col class="pt-0 pb-0" cols="12" md="12">
                   <div class="p-0 float-right">

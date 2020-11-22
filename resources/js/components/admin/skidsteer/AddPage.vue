@@ -74,248 +74,265 @@
 
         <div class="main_box">
           <v-container fluid>
-       
-                <v-form
-                  ref="form"
-                  v-model="valid"
-                  class="v-form custom_form_field divide-50"
-                  id="form_field"
-                  lazy-validation
-                  @submit="save"
-                >
-                  <input type="hidden" name="vehicle_type" value="2" />
-                  <v-row>
-                    <v-col cols="6" md="6" class="pl-0 pt-0 manager-cols">
-                      <div class="custom-col row">
-                        <v-col sm="4" class="label-align pt-0">
-                          <label>Company Name</label>
-                        </v-col>
-                        <v-col sm="8" class="pt-0 pb-0">
-                          <v-text-field
-                            v-model="addForm.company_name"
-                            :rules="[v => !!v || 'Company Name is required.']"
-                            required
-                            label="Enter Company Name"
-                            placeholder
-                          ></v-text-field>
-                        </v-col>
-                      </div>
-                      <div class="custom-col row">
-                        <v-col sm="4" class="label-align pt-0">
-                          <label>Skidsteer Number</label>
-                        </v-col>
-                        <v-col sm="8" class="pt-0 pb-0">
-                          <v-text-field
-                            v-model="addForm.truck_number"
-                            :rules="[v => !!v || 'Skidsteer Number is required.']"
-                            required
-                            label="Enter Skidsteer Number"
-                            placeholder
-                          ></v-text-field>
-                        </v-col>
-                      </div>
-                      <div class="custom-col row">
-                        <v-col sm="4" class="label-align pt-0">
-                          <label>Chassis Number</label>
-                        </v-col>
-                        <v-col sm="8" class="pt-0 pb-0">
-                          <v-text-field
-                            v-model="addForm.chaase_number"
-                            :rules="[v => !!v || 'Chassis Number is required.']"
-                            required
-                            label="Enter Chassis Number"
-                            placeholder
-                          ></v-text-field>
-                        </v-col>
-                      </div>
-                      <div class="custom-col row">
-                        <v-col sm="4" class="label-align pt-0">
-                          <label>Insurance Number</label>
-                        </v-col>
-                        <v-col sm="8" class="pt-0 pb-0">
-                          <v-text-field
-                            v-model="addForm.insurance_number"
-                            :rules="[v => !!v || 'Insurance Number is required.']"
-                            required
-                            label="Enter Insurance Number"
-                            placeholder
-                          ></v-text-field>
-                        </v-col>
-                      </div>
-                      <div class="custom-col row">
-                        <v-col sm="4" class="label-align pt-0">
-                          <label>Insurance Date</label>
-                        </v-col>
-                        <v-col sm="8" class="pt-0 pb-0">
-                          <v-menu
-                            v-model="menu2"
-                            :close-on-content-click="false"
-                            :nudge-right="40"
-                            transition="scale-transition"
-                            offset-y
-                            min-width="290px"
-                          >
-                            <template v-slot:activator="{ on }">
-                              <v-text-field
-                                v-model="date"
-                                prepend-icon="event"
-                                readonly
-                                v-on="on"
-                                required
-                                label="Select Insurance Date"
-                                placeholder
-                                :rules="[v => !!v || 'Insurance Date is required.']"
-                              ></v-text-field>
-                            </template>
-                            <v-date-picker v-model="date" @input="menu2 = false"></v-date-picker>
-                          </v-menu>
-                        </v-col>
-                      </div>
-                      <div class="custom-col row">
-                        <v-col sm="4" class="label-align pt-0">
-                          <label>Insurance Expiry Date</label>
-                        </v-col>
-                        <v-col sm="8" class="pt-0 pb-0">
-                          <v-menu
-                            v-model="menu1"
-                            :close-on-content-click="false"
-                            :nudge-right="40"
-                            transition="scale-transition"
-                            offset-y
-                            min-width="290px"
-                          >
-                            <template v-slot:activator="{ on }">
-                              <v-text-field
-                                v-model="date1"
-                                prepend-icon="event"
-                                readonly
-                                v-on="on"
-                                required
-                                label="Select Insurance Expiry Date"
-                                placeholder
-                                :rules="[v => !!v || 'Insurance Expiry Date is required.']"
-                              ></v-text-field>
-                            </template>
-                            <v-date-picker v-model="date1" @input="menu1 = false" :min="setDate"></v-date-picker>
-                          </v-menu>
-                        </v-col>
-                      </div>
+            <v-form
+              ref="form"
+              v-model="valid"
+              class="v-form custom_form_field divide-50"
+              id="form_field"
+              lazy-validation
+              @submit="save"
+            >
+              <input type="hidden" name="vehicle_type" value="2" />
+              <v-row>
+                <div class="col-xs-12 col-sm-6 pl-0 pt-0 manager-cols">
+                  <div class="custom-col row">
+                    <v-col sm="4" class="label-align pt-0">
+                      <label>Company Name</label>
                     </v-col>
+                    <v-col sm="8" class="pt-0 pb-0">
+                      <v-text-field
+                        v-model="addForm.company_name"
+                        :rules="[(v) => !!v || 'Company Name is required.']"
+                        required
+                        label="Enter Company Name"
+                        placeholder
+                      ></v-text-field>
+                    </v-col>
+                  </div>
+                  <div class="custom-col row">
+                    <v-col sm="4" class="label-align pt-0">
+                      <label>Skidsteer Number</label>
+                    </v-col>
+                    <v-col sm="8" class="pt-0 pb-0">
+                      <v-text-field
+                        v-model="addForm.truck_number"
+                        :rules="[(v) => !!v || 'Skidsteer Number is required.']"
+                        required
+                        label="Enter Skidsteer Number"
+                        placeholder
+                      ></v-text-field>
+                    </v-col>
+                  </div>
+                  <div class="custom-col row">
+                    <v-col sm="4" class="label-align pt-0">
+                      <label>Chassis Number</label>
+                    </v-col>
+                    <v-col sm="8" class="pt-0 pb-0">
+                      <v-text-field
+                        v-model="addForm.chaase_number"
+                        :rules="[(v) => !!v || 'Chassis Number is required.']"
+                        required
+                        label="Enter Chassis Number"
+                        placeholder
+                      ></v-text-field>
+                    </v-col>
+                  </div>
+                  <div class="custom-col row">
+                    <v-col sm="4" class="label-align pt-0">
+                      <label>Insurance Number</label>
+                    </v-col>
+                    <v-col sm="8" class="pt-0 pb-0">
+                      <v-text-field
+                        v-model="addForm.insurance_number"
+                        :rules="[(v) => !!v || 'Insurance Number is required.']"
+                        required
+                        label="Enter Insurance Number"
+                        placeholder
+                      ></v-text-field>
+                    </v-col>
+                  </div>
+                  <div class="custom-col row">
+                    <v-col sm="4" class="label-align pt-0">
+                      <label>Insurance Date</label>
+                    </v-col>
+                    <v-col sm="8" class="pt-0 pb-0">
+                      <v-menu
+                        v-model="menu2"
+                        :close-on-content-click="false"
+                        :nudge-right="40"
+                        transition="scale-transition"
+                        offset-y
+                        min-width="290px"
+                      >
+                        <template v-slot:activator="{ on }">
+                          <v-text-field
+                            v-model="date"
+                            prepend-icon="event"
+                            readonly
+                            v-on="on"
+                            required
+                            label="Select Insurance Date"
+                            placeholder
+                            :rules="[
+                              (v) => !!v || 'Insurance Date is required.',
+                            ]"
+                          ></v-text-field>
+                        </template>
+                        <v-date-picker
+                          v-model="date"
+                          @input="menu2 = false"
+                        ></v-date-picker>
+                      </v-menu>
+                    </v-col>
+                  </div>
+                  <div class="custom-col row">
+                    <v-col sm="4" class="label-align pt-0">
+                      <label>Insurance Expiry Date</label>
+                    </v-col>
+                    <v-col sm="8" class="pt-0 pb-0">
+                      <v-menu
+                        v-model="menu1"
+                        :close-on-content-click="false"
+                        :nudge-right="40"
+                        transition="scale-transition"
+                        offset-y
+                        min-width="290px"
+                      >
+                        <template v-slot:activator="{ on }">
+                          <v-text-field
+                            v-model="date1"
+                            prepend-icon="event"
+                            readonly
+                            v-on="on"
+                            required
+                            label="Select Insurance Expiry Date"
+                            placeholder
+                            :rules="[
+                              (v) =>
+                                !!v || 'Insurance Expiry Date is required.',
+                            ]"
+                          ></v-text-field>
+                        </template>
+                        <v-date-picker
+                          v-model="date1"
+                          @input="menu1 = false"
+                          :min="setDate"
+                        ></v-date-picker>
+                      </v-menu>
+                    </v-col>
+                  </div>
+                </div>
 
-                    <v-col cols="6" md="6" class="pl-0 pt-0 manager-cols">
-                      <div class="custom-col row">
-                        <v-col sm="4" class="label-align pt-0">
-                          <label>Total Miles</label>
-                        </v-col>
-                        <v-col sm="8" class="pt-0 pb-0">
-                          <v-text-field
-                            v-model="addForm.killometer"
-                            required
-                            label="Enter Total Miles"
-                            placeholder
-                            :rules="killometerRules"
-                          ></v-text-field>
-                        </v-col>
-                      </div>
-                      <div class="custom-col row">
-                        <v-col sm="4" class="label-align pt-0">
-                          <label class="label_text">Notes</label>
-                        </v-col>
-                        <v-col sm="8" class="pt-0 pb-0">
-                          <v-textarea
-                            label="Enter Notes"
-                            placeholder
-                            rows="3"
-                            auto-grow
-                            v-model="addForm.notes"
-                            required
-                          ></v-textarea>
-                        </v-col>
-                      </div>
-                      <div class="custom-col row">
-                        <v-col sm="4" class="label-align pt-0 image-upload-label">
-                          <label>RC</label>
-                        </v-col>
-                        <v-col sm="8" class="pt-0 pb-0">
-                          <file-pond
-                            name="uploadImage"
-                            ref="pond"
-                            label-idle="Drop or Browse your files"
-                            v-bind:allow-multiple="false"
-                            v-bind:server="serverOptions"
-                            v-bind:files="myFiles"
-                            v-on:addfilestart="setUploadIndex"
-                            v-on:processfile="handleProcessFile1"
-                            v-on:processfilerevert="handleRemoveFile1"
-                            allow-file-type-validation="true"
-                            accepted-file-types="image/jpeg, image/png"
-                          />
-                          <div
-                            class="v-messages theme--light error--text"
-                            role="alert"
-                            v-if="docError"
-                          >
-                            <div class="v-messages__wrapper">
-                              <div class="v-messages__message">RC document is required.</div>
-                            </div>
+                <div class="col-xs-12 col-sm-6 pl-0 pt-0 manager-cols">
+                  <div class="custom-col row">
+                    <v-col sm="4" class="label-align pt-0">
+                      <label>Total Miles</label>
+                    </v-col>
+                    <v-col sm="8" class="pt-0 pb-0">
+                      <v-text-field
+                        v-model="addForm.killometer"
+                        required
+                        label="Enter Total Miles"
+                        placeholder
+                        :rules="killometerRules"
+                      ></v-text-field>
+                    </v-col>
+                  </div>
+                  <div class="custom-col row">
+                    <v-col sm="4" class="label-align pt-0">
+                      <label class="label_text">Notes</label>
+                    </v-col>
+                    <v-col sm="8" class="pt-0 pb-0">
+                      <v-textarea
+                        label="Enter Notes"
+                        placeholder
+                        rows="3"
+                        auto-grow
+                        v-model="addForm.notes"
+                        required
+                      ></v-textarea>
+                    </v-col>
+                  </div>
+                  <div class="custom-col row">
+                    <v-col sm="4" class="label-align pt-0 image-upload-label">
+                      <label>RC</label>
+                    </v-col>
+                    <v-col sm="8" class="pt-0 pb-0">
+                      <file-pond
+                        name="uploadImage"
+                        ref="pond"
+                        label-idle="Drop or Browse your files"
+                        v-bind:allow-multiple="false"
+                        v-bind:server="serverOptions"
+                        v-bind:files="myFiles"
+                        v-on:addfilestart="setUploadIndex"
+                        v-on:processfile="handleProcessFile1"
+                        v-on:processfilerevert="handleRemoveFile1"
+                        allow-file-type-validation="true"
+                        accepted-file-types="image/jpeg, image/png"
+                      />
+                      <div
+                        class="v-messages theme--light error--text"
+                        role="alert"
+                        v-if="docError"
+                      >
+                        <div class="v-messages__wrapper">
+                          <div class="v-messages__message">
+                            RC document is required.
                           </div>
-                        </v-col>
-                      </div>
-                      <div class="custom-col row">
-                        <v-col sm="4" class="label-align pt-0 image-upload-label">
-                          <label>Insurance</label>
-                        </v-col>
-                        <v-col sm="8" class="pt-0 pb-0">
-                          <file-pond
-                            name="uploadImage"
-                            ref="pond"
-                            label-idle="Drop or Browse your files"
-                            v-bind:allow-multiple="false"
-                            v-bind:server="serverOptions"
-                            v-bind:files="myFiles"
-                            v-on:addfilestart="setUploadIndex"
-                            v-on:processfile="handleProcessFile2"
-                            v-on:processfilerevert="handleRemoveFile2"
-                            allow-file-type-validation="true"
-                            accepted-file-types="image/jpeg, image/png"
-                          />
-                          <div
-                            class="v-messages theme--light error--text"
-                            role="alert"
-                            v-if="insdocError"
-                          >
-                            <div class="v-messages__wrapper">
-                              <div class="v-messages__message">Insurance document is required.</div>
-                            </div>
-                          </div>
-                        </v-col>
-                      </div>
-                      <div class="custom-col row">
-                        <v-col sm="4" class="label-align pt-0">
-                          <label class="label_text label-check-half">Availabilty</label>
-                        </v-col>
-                        <v-col sm="8" class="pt-0 pb-0">
-                          <v-switch v-model="addForm.is_active"></v-switch>
-                        </v-col>
+                        </div>
                       </div>
                     </v-col>
+                  </div>
+                  <div class="custom-col row">
+                    <v-col sm="4" class="label-align pt-0 image-upload-label">
+                      <label>Insurance</label>
+                    </v-col>
+                    <v-col sm="8" class="pt-0 pb-0">
+                      <file-pond
+                        name="uploadImage"
+                        ref="pond"
+                        label-idle="Drop or Browse your files"
+                        v-bind:allow-multiple="false"
+                        v-bind:server="serverOptions"
+                        v-bind:files="myFiles"
+                        v-on:addfilestart="setUploadIndex"
+                        v-on:processfile="handleProcessFile2"
+                        v-on:processfilerevert="handleRemoveFile2"
+                        allow-file-type-validation="true"
+                        accepted-file-types="image/jpeg, image/png"
+                      />
+                      <div
+                        class="v-messages theme--light error--text"
+                        role="alert"
+                        v-if="insdocError"
+                      >
+                        <div class="v-messages__wrapper">
+                          <div class="v-messages__message">
+                            Insurance document is required.
+                          </div>
+                        </div>
+                      </div>
+                    </v-col>
+                  </div>
+                  <div class="custom-col row">
+                    <v-col sm="4" class="label-align pt-0">
+                      <label class="label_text label-check-half"
+                        >Availabilty</label
+                      >
+                    </v-col>
+                    <v-col sm="8" class="pt-0 pb-0">
+                      <v-switch v-model="addForm.is_active"></v-switch>
+                    </v-col>
+                  </div>
+                </div>
 
-                    <v-col class="pt-0 pb-0" cols="12" md="12">
-                      <div class="p-0 float-right">
-                        <v-btn
-                          type="submit"
-                          :loading="loading"
-                          :disabled="loading"
-                          color="success"
-                          class="custom-save-btn"
-                          @click="save"
-                          id="submit_btn"
-                        >Add Skidsteer</v-btn>
-                      </div>
-                    </v-col>
-                  </v-row>
-                </v-form>
-          
+                <v-col class="pt-0 pb-0" cols="12" md="12">
+                  <div class="p-0 float-right">
+                    <v-btn
+                      type="submit"
+                      :loading="loading"
+                      :disabled="loading"
+                      color="success"
+                      class="custom-save-btn"
+                      @click="save"
+                      id="submit_btn"
+                      >Add Skidsteer</v-btn
+                    >
+                  </div>
+                </v-col>
+              </v-row>
+            </v-form>
           </v-container>
         </div>
       </v-row>

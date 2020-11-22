@@ -85,9 +85,12 @@
                   @submit="update"
                 >
                   <v-row>
-                    <v-col cols="6" md="6" class="pl-0 manager-cols">
+                    <div class="col-xs-12 col-sm-6 pl-0 manager-cols">
                       <div class="custom-col row custom-img-holder">
-                        <v-col sm="4" class="label-align pt-0 image-upload-label">
+                        <v-col
+                          sm="4"
+                          class="label-align pt-0 image-upload-label"
+                        >
                           <label>Profile Image</label>
                         </v-col>
                         <v-col sm="8" class="pt-0 pb-0">
@@ -110,12 +113,19 @@
                             v-if="profileImgError"
                           >
                             <div class="v-messages__wrapper">
-                              <div class="v-messages__message">Profile image is required.</div>
+                              <div class="v-messages__message">
+                                Profile image is required.
+                              </div>
                             </div>
                           </div>
                           <v-col sm="12" class="p-0">
                             <div class="service-image-outer" v-if="avatar">
-                              <button type="button" class="close" v-if="cross" @click="Remove()">
+                              <button
+                                type="button"
+                                class="close"
+                                v-if="cross"
+                                @click="Remove()"
+                              >
                                 <span>&times;</span>
                               </button>
                               <img :src="avatar" alt />
@@ -132,7 +142,9 @@
                             v-model="addForm.first_name"
                             label="Enter First Name"
                             required
-                            :rules="[v => !!v || 'Manager Fast name is required.']"
+                            :rules="[
+                              (v) => !!v || 'Manager Fast name is required.',
+                            ]"
                           ></v-text-field>
                         </v-col>
                       </div>
@@ -145,7 +157,9 @@
                             v-model="addForm.last_name"
                             label="Enter Last Name"
                             required
-                            :rules="[v => !!v || 'Manager Last name is required.']"
+                            :rules="[
+                              (v) => !!v || 'Manager Last name is required.',
+                            ]"
                           ></v-text-field>
                         </v-col>
                       </div>
@@ -172,7 +186,7 @@
                             v-model="addForm.address"
                             label="Enter Address"
                             required
-                            :rules="[v => !!v || 'Address is required.']"
+                            :rules="[(v) => !!v || 'Address is required.']"
                           ></v-text-field>
                         </v-col>
                       </div>
@@ -185,7 +199,7 @@
                             v-model="addForm.city"
                             label="Enter City"
                             required
-                            :rules="[v => !!v || 'City is required.']"
+                            :rules="[(v) => !!v || 'City is required.']"
                           ></v-text-field>
                         </v-col>
                       </div>
@@ -198,7 +212,7 @@
                             v-model="addForm.province"
                             label="Enter Province"
                             required
-                            :rules="[v => !!v || 'Province is required.']"
+                            :rules="[(v) => !!v || 'Province is required.']"
                           ></v-text-field>
                         </v-col>
                       </div>
@@ -215,9 +229,9 @@
                           ></v-text-field>
                         </v-col>
                       </div>-->
-                    </v-col>
+                    </div>
 
-                    <v-col cols="6" md="6" class="pl-0 manager-cols">
+                    <div class="col-xs-12 col-sm-6 pl-0 manager-cols">
                       <div class="custom-col row">
                         <v-col sm="4" class="label-align pt-0">
                           <label>Zipcode</label>
@@ -225,7 +239,7 @@
                         <v-col sm="8" class="pt-0">
                           <v-text-field
                             v-model="addForm.zipcode"
-                            :rules="[v => !!v || 'Zipcode is required.']"
+                            :rules="[(v) => !!v || 'Zipcode is required.']"
                             label="Enter Zipcode"
                             required
                           ></v-text-field>
@@ -254,7 +268,9 @@
                             v-model="addForm.identification_number"
                             label="Enter Licence Number"
                             required
-                            :rules="[v => !!v || 'Licence number is required.']"
+                            :rules="[
+                              (v) => !!v || 'Licence number is required.',
+                            ]"
                           ></v-text-field>
                         </v-col>
                       </div>
@@ -279,10 +295,15 @@
                                 readonly
                                 v-on="on"
                                 required
-                                :rules="[v => !!v || 'Joining date is required.']"
+                                :rules="[
+                                  (v) => !!v || 'Joining date is required.',
+                                ]"
                               ></v-text-field>
                             </template>
-                            <v-date-picker v-model="date" @input="menu1 = false"></v-date-picker>
+                            <v-date-picker
+                              v-model="date"
+                              @input="menu1 = false"
+                            ></v-date-picker>
                           </v-menu>
                         </v-col>
                       </div>
@@ -312,7 +333,10 @@
                                 v-on="on"
                               ></v-text-field>
                             </template>
-                            <v-date-picker v-model="date1" @input="menu2 = false"></v-date-picker>
+                            <v-date-picker
+                              v-model="date1"
+                              @input="menu2 = false"
+                            ></v-date-picker>
                           </v-menu>
                         </v-col>
                       </div>
@@ -325,12 +349,17 @@
                             v-model="addForm.salary"
                             label="Enter Manager Salary"
                             required
-                            :rules="[v => !!v || 'Manager salary is required.']"
+                            :rules="[
+                              (v) => !!v || 'Manager salary is required.',
+                            ]"
                           ></v-text-field>
                         </v-col>
                       </div>
                       <div class="custom-col row custom-img-holder">
-                        <v-col sm="4" class="label-align pt-0 image-upload-label">
+                        <v-col
+                          sm="4"
+                          class="label-align pt-0 image-upload-label"
+                        >
                           <label>Licence Document</label>
                         </v-col>
                         <v-col sm="8" class="pt-0 pb-0">
@@ -355,12 +384,19 @@
                               v-if="docError"
                             >
                               <div class="v-messages__wrapper">
-                                <div class="v-messages__message">Licence upload is required.</div>
+                                <div class="v-messages__message">
+                                  Licence upload is required.
+                                </div>
                               </div>
                             </div>
                           </div>
                           <div class="service-image-outer" v-if="documentImg">
-                            <button type="button" class="close" v-if="cross" @click="Remove()">
+                            <button
+                              type="button"
+                              class="close"
+                              v-if="cross"
+                              @click="Remove()"
+                            >
                               <span>&times;</span>
                             </button>
                             <img :src="documentImg" alt />
@@ -369,13 +405,15 @@
                       </div>
                       <div class="custom-col row">
                         <v-col sm="4" class="label-align pt-0">
-                          <label class="label_text label-check-half">Availabilty</label>
+                          <label class="label_text label-check-half"
+                            >Availabilty</label
+                          >
                         </v-col>
                         <v-col sm="8" class="pt-0 pb-0">
                           <v-switch v-model="addForm.is_active"></v-switch>
                         </v-col>
                       </div>
-                    </v-col>
+                    </div>
 
                     <v-col class="pt-0 pb-0" cols="12" md="12">
                       <div class="p-0 float-right">
@@ -387,7 +425,8 @@
                           class="custom-save-btn"
                           @click="update"
                           id="submit_btn"
-                        >Update</v-btn>
+                          >Update</v-btn
+                        >
                       </div>
                     </v-col>
                   </v-row>

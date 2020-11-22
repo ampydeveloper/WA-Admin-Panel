@@ -103,7 +103,7 @@
                 <tr v-for="(customer, index) in customers">
                   <td>{{ index + 1 }}</td>
                   <td>
-                    <div class="v-avatar v-list-item__avatar">
+                    <div class="small-img-outer">
                       <img class="small-img" :src="imgUrl+ customer.image" />
                     </div>
                   </td>

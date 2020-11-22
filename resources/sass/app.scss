@@ -667,8 +667,14 @@ h6,
                     margin-top: 23px;
                     left: 0 !important;
                 }
+                @media only screen and (max-width: 768px) {
+                    padding-bottom: 5px;
+                    label {
+                        margin: 0;
+                    }
+                }
             }
-
+            
             .custom-col {
                 padding-top: 4px;
                 padding-bottom: 4px;
@@ -3536,5 +3542,10 @@ div#example_info {
 @media only screen and (max-width: 768px) {
     #app-bar{
         width: 100%;
+    }
+}
+.small-img-outer{
+    .small-img{
+        width: 100px;
     }
 }

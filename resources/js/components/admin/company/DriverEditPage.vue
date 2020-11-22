@@ -67,74 +67,74 @@
           </router-link>
         </li>
         <li>
-            Driver
-            <span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16px"
-                height="16px"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="feather feather-chevrons-right w-4 h-4"
-              >
-                <polyline points="13 17 18 12 13 7" />
-                <polyline points="6 17 11 12 6 7" />
-              </svg>
-            </span>
+          Driver
+          <span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16px"
+              height="16px"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="feather feather-chevrons-right w-4 h-4"
+            >
+              <polyline points="13 17 18 12 13 7" />
+              <polyline points="6 17 11 12 6 7" />
+            </svg>
+          </span>
         </li>
         <li>Update</li>
       </ul>
     </div>
 
     <div class="main_box">
-          <v-container fluid>
-            <v-row>
-              <v-col cols="12" md="12">
-                <v-form
-                  ref="form"
-                  v-model="valid"
-                  class="v-form custom_form_field divide-50"
-                  id="form_field"
-                  lazy-validation
-                  @submit="update"
-                >
-                <input type="hidden" name="hauler_driver_id" value="">
-                  <v-row>
-                    <v-col cols="6" md="6" class="pl-0 manager-cols">
-                      <div class="custom-col row custom-img-holder">
-                        <v-col sm="4" class="label-align pt-0 image-upload-label">
-                          <label>Profile Image</label>
-                        </v-col>
-                        <v-col sm="8" class="pt-0 pb-0">
-                          <file-pond
-                            name="uploadImage"
-                            ref="pond"
-                            label-idle="Drop or Browse your files"
-                            v-bind:allow-multiple="false"
-                            v-bind:server="serverOptions"
-                            v-bind:files="user_image"
-                            v-on:addfilestart="setUploadIndex"
-                            allow-file-type-validation="true"
-                            accepted-file-types="image/jpeg, image/png"
-                            v-on:processfile="handleProcessFile"
-                            v-on:processfilerevert="handleRemoveFile"
-                          />
-                          <div
-                            class="v-messages theme--light error--text"
-                            role="alert"
-                            v-if="profileImgError"
-                          >
-                            <div class="v-messages__wrapper">
-                              <div class="v-messages__message">Profile image is required.</div>
-                            </div>
-                          </div>
-                          <div
-                       class="service-image-outer"
+      <v-container fluid>
+        <v-row>
+          <v-col cols="12" md="12">
+            <v-form
+              ref="form"
+              v-model="valid"
+              class="v-form custom_form_field divide-50"
+              id="form_field"
+              lazy-validation
+              @submit="update"
+            >
+              <input type="hidden" name="hauler_driver_id" value="" />
+              <v-row>
+                <div class="col-xs-12 col-sm-6 pl-0 manager-cols">
+                  <div class="custom-col row custom-img-holder">
+                    <v-col sm="4" class="label-align pt-0 image-upload-label">
+                      <label>Profile Image</label>
+                    </v-col>
+                    <v-col sm="8" class="pt-0 pb-0">
+                      <file-pond
+                        name="uploadImage"
+                        ref="pond"
+                        label-idle="Drop or Browse your files"
+                        v-bind:allow-multiple="false"
+                        v-bind:server="serverOptions"
+                        v-bind:files="user_image"
+                        v-on:addfilestart="setUploadIndex"
+                        allow-file-type-validation="true"
+                        accepted-file-types="image/jpeg, image/png"
+                        v-on:processfile="handleProcessFile"
+                        v-on:processfilerevert="handleRemoveFile"
+                      />
+                      <div
+                        class="v-messages theme--light error--text"
+                        role="alert"
+                        v-if="profileImgError"
                       >
+                        <div class="v-messages__wrapper">
+                          <div class="v-messages__message">
+                            Profile image is required.
+                          </div>
+                        </div>
+                      </div>
+                      <div class="service-image-outer">
                         <button
                           type="submit"
                           class="close"
@@ -145,114 +145,121 @@
                         </button>
                         <img :src="avatar" />
                       </div>
-                        </v-col>
-                      </div>
-                      <div class="custom-col row">
-                        <v-col sm="4" class="label-align pt-0">
-                          <label>First Name</label>
-                        </v-col>
-                        <v-col sm="8" class="pt-0 pb-0">
-                          <v-text-field
-                            v-model="addForm.driver_first_name"
-                            :rules="[v => !!v || 'Driver First Name is required.']"
-                            required
-                            label="Enter First Name"
-                            placeholder
-                          ></v-text-field>
-                        </v-col>
-                      </div>
-                      <div class="custom-col row">
-                        <v-col sm="4" class="label-align pt-0">
-                          <label>Last Name</label>
-                        </v-col>
-                        <v-col sm="8" class="pt-0 pb-0">
-                          <v-text-field
-                            v-model="addForm.driver_last_name"
-                            :rules="[v => !!v || 'Driver Last Name is required.']"
-                            required
-                            label="Enter Last Name"
-                            placeholder
-                          ></v-text-field>
-                        </v-col>
-                      </div>
-                      <div class="custom-col row">
-                        <v-col sm="4" class="label-align pt-0">
-                          <label>Email</label>
-                        </v-col>
-                        <v-col sm="8" class="pt-0 pb-0">
-                          <v-text-field
-                            v-model="addForm.email"
-                            :rules="emailRules"
-                            name="email"
-                            required
-                            label="Enter Email"
-                            placeholder
-                          ></v-text-field>
-                        </v-col>
-                      </div>
+                    </v-col>
+                  </div>
+                  <div class="custom-col row">
+                    <v-col sm="4" class="label-align pt-0">
+                      <label>First Name</label>
+                    </v-col>
+                    <v-col sm="8" class="pt-0 pb-0">
+                      <v-text-field
+                        v-model="addForm.driver_first_name"
+                        :rules="[
+                          (v) => !!v || 'Driver First Name is required.',
+                        ]"
+                        required
+                        label="Enter First Name"
+                        placeholder
+                      ></v-text-field>
+                    </v-col>
+                  </div>
+                  <div class="custom-col row">
+                    <v-col sm="4" class="label-align pt-0">
+                      <label>Last Name</label>
+                    </v-col>
+                    <v-col sm="8" class="pt-0 pb-0">
+                      <v-text-field
+                        v-model="addForm.driver_last_name"
+                        :rules="[(v) => !!v || 'Driver Last Name is required.']"
+                        required
+                        label="Enter Last Name"
+                        placeholder
+                      ></v-text-field>
+                    </v-col>
+                  </div>
+                  <div class="custom-col row">
+                    <v-col sm="4" class="label-align pt-0">
+                      <label>Email</label>
+                    </v-col>
+                    <v-col sm="8" class="pt-0 pb-0">
+                      <v-text-field
+                        v-model="addForm.email"
+                        :rules="emailRules"
+                        name="email"
+                        required
+                        label="Enter Email"
+                        placeholder
+                      ></v-text-field>
+                    </v-col>
+                  </div>
 
-                      <div class="custom-col row">
-                        <v-col sm="4" class="label-align pt-0">
-                          <label>Mobile Number</label>
-                        </v-col>
-                        <v-col sm="8" class="pt-0 pb-0">
-                          <v-text-field
-                            v-model="addForm.driver_phone"
-                            :rules="phoneRules"
-                            required
-                            label="Enter Number"
-                            placeholder
-                            maxlength="10"
-                          ></v-text-field>
-                        </v-col>
-                      </div>
+                  <div class="custom-col row">
+                    <v-col sm="4" class="label-align pt-0">
+                      <label>Mobile Number</label>
+                    </v-col>
+                    <v-col sm="8" class="pt-0 pb-0">
+                      <v-text-field
+                        v-model="addForm.driver_phone"
+                        :rules="phoneRules"
+                        required
+                        label="Enter Number"
+                        placeholder
+                        maxlength="10"
+                      ></v-text-field>
+                    </v-col>
+                  </div>
 
-                      <div class="custom-col row">
-                        <v-col sm="4" class="label-align pt-0">
-                          <label>Select Haulers</label>
-                        </v-col>
-                        <v-col sm="8" class="pt-0 pb-0">
-                          <v-select
-                                v-model="addForm.hauler_id"
-                                :items="HaulerName"
-                                :rules="[v => !!v || 'Hauler is required.']"
-                                item-text="first_name"
-                                item-value="id"
-                                @change="getHaulers"
-                              ></v-select>
-                        </v-col>
-                      </div>
-                      <div class="custom-col row">
+                  <div class="custom-col row">
+                    <v-col sm="4" class="label-align pt-0">
+                      <label>Select Haulers</label>
+                    </v-col>
+                    <v-col sm="8" class="pt-0 pb-0">
+                      <v-select
+                        v-model="addForm.hauler_id"
+                        :items="HaulerName"
+                        :rules="[(v) => !!v || 'Hauler is required.']"
+                        item-text="first_name"
+                        item-value="id"
+                        @change="getHaulers"
+                      ></v-select>
+                    </v-col>
+                  </div>
+                  <div class="custom-col row">
                     <v-col sm="4" class="label-align pt-0">
                       <label class="label_text label-check-half">Status</label>
                     </v-col>
                     <v-col sm="8" class="pt-0 pb-0">
-                      <v-switch v-model="addForm.is_active" class="mx-2"></v-switch>
+                      <v-switch
+                        v-model="addForm.is_active"
+                        class="mx-2"
+                      ></v-switch>
                     </v-col>
                   </div>
-                      
-                    </v-col>
+                </div>
 
-                    <v-col class="pt-0 pb-0" cols="12" md="12">
-                      <div class="p-0 float-right">
-                        <v-btn
-                          type="submit"
-                          :loading="loading"
-                          :disabled="loading"
-                          color="success"
-                          class="custom-save-btn"
-                          @click="update"
-                          id="submit_btn"
-                        >Update Hauler Driver</v-btn>
-                        <router-link to="/admin/hauler" class="btn-custom-danger">Cancel</router-link>
-                      </div>
-                    </v-col>
-                  </v-row>
-                </v-form>
-              </v-col>
-            </v-row>
-          </v-container>
-        </div>
+                <v-col class="pt-0 pb-0" cols="12" md="12">
+                  <div class="p-0 float-right">
+                    <v-btn
+                      type="submit"
+                      :loading="loading"
+                      :disabled="loading"
+                      color="success"
+                      class="custom-save-btn"
+                      @click="update"
+                      id="submit_btn"
+                      >Update Hauler Driver</v-btn
+                    >
+                    <router-link to="/admin/hauler" class="btn-custom-danger"
+                      >Cancel</router-link
+                    >
+                  </div>
+                </v-col>
+              </v-row>
+            </v-form>
+          </v-col>
+        </v-row>
+      </v-container>
+    </div>
   </v-app>
 </template>
 
@@ -282,15 +289,15 @@ export default {
       user_image: "",
       setDate: new Date().toISOString().substr(0, 10),
       role: 1,
-      hauler_id:"",
+      hauler_id: "",
       hauler_driver_id: "",
       HaulerName: [],
-        cross: false,
+      cross: false,
       addForm: {
-        hauler_id:"",
+        hauler_id: "",
         hauler_driver_id: "",
         driver_first_name: "",
-        driver_last_name:"",
+        driver_last_name: "",
         email: "",
         user_image: "",
         driver_phone: "",
@@ -346,8 +353,8 @@ export default {
       //handle response
       if (response.status) {
         this.addForm = {
-           hauler_driver_id: response.data.id,
-           hauler_id: response.data.created_by,
+          hauler_driver_id: response.data.id,
+          hauler_id: response.data.created_by,
           prefix: response.data.prefix,
           driver_first_name: response.data.first_name,
           driver_last_name: response.data.last_name,
