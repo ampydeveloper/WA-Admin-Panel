@@ -75,57 +75,67 @@
         <v-row>
           <div class="add-icon">
             <router-link v-if="isAdmin" to="/admin/news/add" class="">
-               <v-btn color="success" class="btn-outline-green-top">
+              <v-btn color="success" class="btn-outline-green-top">
                 <plus-icon size="1.5x" class="custom-class"></plus-icon>Add New
               </v-btn>
             </router-link>
             <router-link v-if="!isAdmin" to="/manager/news/add" class="">
-               <v-btn color="success" class="btn-outline-green-top">
+              <v-btn color="success" class="btn-outline-green-top">
                 <plus-icon size="1.5x" class="custom-class"></plus-icon>Add New
               </v-btn>
             </router-link>
           </div>
           <v-col cols="12" md="12" id="manager_wrap" class="main-box-inner">
-            <table id="hauler-table" class="table table-striped table-bordered table-main">
+            <table
+              id="hauler-table"
+              class="table table-striped table-bordered table-main"
+            >
               <thead>
                 <tr>
                   <th class="text-left">#</th>
+                  <th class="text-left">Image</th>
                   <th class="text-left">Heading</th>
                   <th class="text-left">Description</th>
-                  <th class="text-left">Image</th>
                   <th class="text-left">Actions</th>
-                  <th class="text-left">Remove it</th>
-             
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="(customer, index) in customers">
-                  <td>{{index+1}}</td>
-                  <td> {{customer.heading}} </td>
-                  <td>{{customer.description}}</td>
+                  <td>{{ index + 1 }}</td>
                   <td>
-                    <div class="v-avatar v-list-item__avatar">
-                        <img class="small-img" :src="'../'+customer.image" />
+                    <div class="small-img-outer">
+                      <img class="small-img" :src="imgUrl+ customer.image" />
                     </div>
                   </td>
-               
+                  <td>{{ customer.heading }}</td>
+                  <td>{{ customer.description }}</td>
                   <td class="action-col">
                     <router-link
                       v-if="isAdmin"
                       :to="'/admin/news/edit/' + customer.id"
                       class="nav-item nav-link"
                     >
-                      <edit-3-icon size="1.2x" class="custom-class"></edit-3-icon>
+                      <edit-3-icon
+                        size="1.2x"
+                        class="custom-class"
+                      ></edit-3-icon>
                     </router-link>
                     <router-link
                       v-if="!isAdmin"
                       :to="'/manager/news/edit/' + customer.id"
                       class="nav-item nav-link"
                     >
-                      <edit-3-icon size="1.2x" class="custom-class"></edit-3-icon>
+                      <edit-3-icon
+                        size="1.2x"
+                        class="custom-class"
+                      ></edit-3-icon>
                     </router-link>
 
-                    <a href="javascript:void(0);" text @click="Delete(customer.id)">
+                    <a
+                      href="javascript:void(0);"
+                      text
+                      @click="Delete(customer.id)"
+                    >
                       <trash-icon size="1.5x" class="custom-class"></trash-icon>
                     </a>
                   </td>
@@ -142,7 +152,7 @@
     <span id="table-chevron-right" class="d-none">
       <chevron-right-icon size="1.5x" class="custom-class"></chevron-right-icon>
     </span>
-     <span id="search-input-icon" class="d-none">
+    <span id="search-input-icon" class="d-none">
       <span class="search-input-outer">
         <search-icon size="1.5x" class="custom-class"></search-icon>
       </span>
@@ -154,6 +164,7 @@
 import { required } from "vuelidate/lib/validators";
 import { newsService } from "../../../_services/news.service";
 import { authenticationService } from "../../../_services/authentication.service";
+import { environment } from "../../../config/test.env";
 import {
   UserIcon,
   Edit3Icon,
@@ -170,7 +181,7 @@ export default {
     UserIcon,
     Edit3Icon,
     TrashIcon,
-     PlusIcon,
+    PlusIcon,
     ChevronLeftIcon,
     ChevronRightIcon,
     SearchIcon,
@@ -179,6 +190,7 @@ export default {
     return {
       customers: [],
       isAdmin: true,
+       imgUrl: environment.imgUrl,
     };
   },
   getList() {},
@@ -259,31 +271,40 @@ export default {
   updated() {
     setTimeout(function () {
       $(document).ready(function () {
-        $(".table-main").DataTable({
-          aoColumnDefs: [
-            {
-              bSortable: false,
-              aTargets: [-1, -2, -3, -4, -5, -6],
+        if (!$.fn.dataTable.isDataTable(".table-main")) {
+          $(".table-main").DataTable({
+            aoColumnDefs: [
+              {
+                bSortable: false,
+                aTargets: [-1, -2, -3, -4],
+              },
+            ],
+            oLanguage: {
+              sSearch: "",
+              sEmptyTable: "No news till now.",
+              infoEmpty: "No news found.",
             },
-          ],
-          oLanguage: { sSearch: "", "sEmptyTable": "No news till now.", "infoEmpty": "No news found.", },
-          drawCallback: function (settings) {
-            $(".dataTables_paginate .paginate_button.previous").html(
-              $("#table-chevron-left").html()
-            );
-            $(".dataTables_paginate .paginate_button.next").html(
-              $("#table-chevron-right").html()
-            );
-          },
-        });
-               $(".dataTables_filter").append($("#search-input-icon").html());
-        $(".dataTables_filter input").attr("placeholder", "Search News by Heading / Description");
-        $(".dataTables_paginate .paginate_button.previous").html(
-          $("#table-chevron-left").html()
-        );
-        $(".dataTables_paginate .paginate_button.next").html(
-          $("#table-chevron-right").html()
-        );
+            drawCallback: function (settings) {
+              $(".dataTables_paginate .paginate_button.previous").html(
+                $("#table-chevron-left").html()
+              );
+              $(".dataTables_paginate .paginate_button.next").html(
+                $("#table-chevron-right").html()
+              );
+            },
+          });
+          $(".dataTables_filter").append($("#search-input-icon").html());
+          $(".dataTables_filter input").attr(
+            "placeholder",
+            "Search News by Heading / Description"
+          );
+          $(".dataTables_paginate .paginate_button.previous").html(
+            $("#table-chevron-left").html()
+          );
+          $(".dataTables_paginate .paginate_button.next").html(
+            $("#table-chevron-right").html()
+          );
+        }
         $(".table-main").css({ opacity: 1 });
       });
     }, 1000);

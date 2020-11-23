@@ -4,7 +4,7 @@
       <ul>
         <li>
           <h4 class="main-title text-left top_heading">
-            Hauler
+            Haulers
             <span class="right-bor"></span>
           </h4>
         </li>
@@ -46,7 +46,7 @@
         </li>
         <li>
           <router-link to="/admin/hauler">
-            Hauler
+            Haulers
             <span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -90,13 +90,12 @@
               <thead>
                 <tr>
                   <th class="text-left">#</th>
-                  <th class="text-left">Hauler Name</th>
+                  <th class="text-left">Haulers Name</th>
                   <th class="text-left">Email</th>
                   <th class="text-left">Phone</th>
                   <th class="text-left">Address</th>
-             
                   <th class="text-left">Active</th>
-                  <th class="text-left">Actions</th>
+                  <th class="text-left" style="width: 220px;padding: 0 !important;">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -106,8 +105,8 @@
                     <div
                       class="v-avatar v-list-item__avatar"
                     >
-                      <img v-if="customer.user_image" class="small-img" :src="'../'+customer.user_image" />
-                      <img v-if="!customer.user_image" class="small-img" src="/images/avatar.png" />
+                      <img v-if="customer.user_image" class="small-img" :src="imgUrl+customer.user_image" />
+                      <img v-if="!customer.user_image" class="small-img" :src="imgUrl+'images/avatar.png'" />
                     </div>
 
                     {{customer.prefix}} {{customer.first_name}}
@@ -125,13 +124,14 @@
                       v-if="isAdmin"
                       :to="'/admin/hauler/drivers/list/' + customer.id"
                       class="btn-outline-green-top"
+                      style="width: 98px;"
                     >
                       View Drivers
                     </router-link>
                     <router-link
                       v-if="!isAdmin"
                       :to="'/manager/hauler/drivers/list/' + customer.id"
-                      class="btn-outline-green-top"
+                      class="btn-outline-green-top" style="width: 98px;"
                     >
                       View Drivers
                     </router-link>
@@ -179,6 +179,7 @@
 import { required } from "vuelidate/lib/validators";
 import { companyService } from "../../../_services/company.service";
 import { authenticationService } from "../../../_services/authentication.service";
+import { environment } from "../../../config/test.env";
 import {
   UserIcon,
   Edit3Icon,
@@ -204,6 +205,7 @@ export default {
     return {
       customers: [],
       isAdmin: true,
+      imgUrl: environment.imgUrl,
     };
   },
   getList() {},
@@ -285,6 +287,7 @@ export default {
   updated() {
     setTimeout(function () {
       $(document).ready(function () {
+        if (!$.fn.dataTable.isDataTable(".table-main")) {
         $(".table-main").DataTable({
           aoColumnDefs: [
             {
@@ -310,6 +313,7 @@ export default {
         $(".dataTables_paginate .paginate_button.next").html(
           $("#table-chevron-right").html()
         );
+      }
         $(".table-main").css({ opacity: 1 });
       });
     }, 1000);

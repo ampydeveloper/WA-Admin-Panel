@@ -113,7 +113,6 @@
                   <th class="text-left">Driver Name</th>
                   <th class="text-left">Email</th>
                   <th class="text-left">Phone</th>
-                  <th class="text-left">Address</th>
                   <th class="text-left">Active</th>
                   <th class="text-left">Action</th>
                 </tr>
@@ -125,15 +124,14 @@
                     <div
                       class="v-avatar v-list-item__avatar"
                     >
-                      <img v-if="customer.user_image" class="small-img" :src="'../'+customer.user_image" />
-                      <img v-if="!customer.user_image" class="small-img" src="/images/avatar.png" />
+                      <img v-if="customer.user_image" class="small-img" :src="imgUrl+customer.user_image" />
+                      <img v-if="!customer.user_image" class="small-img" :src="imgUrl+'images/avatar.png'" />
                     </div>
 
                     {{customer.prefix}} {{customer.first_name}}
                   </td>
                   <td>{{customer.email}}</td>
                   <td>{{customer.phone}}</td>
-                  <td>{{customer.address}} {{customer.city}} {{customer.state}}, {{customer.zip_code}}</td>
                   <td>
                     <span v-if="!customer.is_active" class="badges-item">No</span>
                     <span v-if="customer.is_active" class="badges-item">Yes</span>
@@ -183,6 +181,7 @@
 import { required } from "vuelidate/lib/validators";
 import { companyService } from "../../../_services/company.service";
 import { authenticationService } from "../../../_services/authentication.service";
+import { environment } from "../../../config/test.env";
 import {
   UserIcon,
   Edit3Icon,
@@ -208,6 +207,7 @@ export default {
     return {
       customers: [],
       isAdmin: true,
+      imgUrl: environment.imgUrl,
     };
   },
   getList() {},
@@ -289,6 +289,7 @@ export default {
   updated() {
     setTimeout(function () {
       $(document).ready(function () {
+        if (!$.fn.dataTable.isDataTable(".table-main")) {
         $(".table-main").DataTable({
           aoColumnDefs: [
             {
@@ -314,6 +315,7 @@ export default {
         $(".dataTables_paginate .paginate_button.next").html(
           $("#table-chevron-right").html()
         );
+        }
         $(".table-main").css({ opacity: 1 });
       });
     }, 1000);

@@ -22,11 +22,14 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix' => 'auth'], function () {
     //Auth free routes
 //    dd('here');
-    Route::post('signup', 'AuthController@signup');
-    Route::post('social-signup', 'AuthController@SocialSignup');
+//    Route::post('signup', 'AuthController@signup');
+//    Route::post('social-signup', 'AuthController@SocialSignup');
     Route::post('login', 'AuthController@login');
+    Route::post('send-otp', 'AuthController@sendOtp');
+    Route::post('check-otp', 'AuthController@checkOtp');
+    Route::post('forget-password-mobile', 'AuthController@forgotPasswordMobile');
     Route::post('forgot-password', 'AuthController@forgotPassword');
-    Route::post('change-password', 'AuthController@changePassword');
+    
     Route::post('recover-password', 'AuthController@recoverPassword');
     Route::get('confirm-update-email/{email}/{id}', 'AuthController@confirmUpdateEmail');
 
@@ -43,6 +46,7 @@ Route::group(['prefix' => 'auth'], function () {
 
     //Auth full routes
     Route::group(['middleware' => 'auth:api'], function () {
+        Route::post('change-password', 'AuthController@changePassword');
         Route::get('logout', 'AuthController@logout');
 
         Route::get('user-details', 'AuthController@user');
@@ -129,7 +133,7 @@ Route::group(['prefix' => 'auth'], function () {
             Route::get('job-customer', 'JobsController@getCustomers');
             Route::get('job-farms/{customer_id}', 'JobsController@getJobFrams');
             Route::get('job-farms-manager/{farm_id}', 'JobsController@getJobFramManagers');
-            Route::get('get-service-slots/{service_id}', 'JobsController@getServiceSlots');
+            Route::get('service-list-customer/{customer_id}', 'JobsController@getServiceForCustomer');
             Route::get('single-job/{job_id}', 'JobsController@getSingleJob');
             Route::post('update-booked-job', 'JobsController@updateBookedJob');
             Route::post('cancel-booked-job', 'JobsController@cancelJob');
@@ -205,40 +209,15 @@ Route::group(['prefix' => 'auth'], function () {
             //stripe
             Route::post('stripe-charge', 'PaymentController@stripeCharge');
         });
-        Route::group(['prefix' => 'user'], function () {
-            Route::get('dashboard', 'User\CustomerController@dashboard');
-
-            Route::post('edit-profile', 'User\CustomerController@editProfile');
-
-            Route::post('create-farm', 'User\CustomerController@createFarm');
-            Route::post('update-farm', 'User\CustomerController@updateFarm');
-            Route::get('get-farms', 'User\CustomerController@getFarms');
-            Route::get('get-farm/{farm_id}', 'User\CustomerController@getSingleFarm');
-            Route::delete('delete-farm/{farm_id}', 'User\CustomerController@deleteFarm');
-//            dd('user');
-            Route::post('create-manager', 'User\CustomerController@createManager');
-            Route::post('update-manager', 'User\CustomerController@updateManager');
-            Route::get('managers-list', 'User\CustomerController@managerLists');
-            Route::get('get-manager/{manager_id}', 'User\CustomerController@getSingleManager');
-            Route::delete('delete-manager/{manager_id}', 'User\CustomerController@deleteManager');
-
-            Route::get('services-list', 'User\ServicesController@listServices');
-            Route::post('book-service', 'User\ServicesController@bookService');
-            Route::get('show-customer-services', 'User\ServicesController@showCustomerServices');
-            Route::post('update-booked-service', 'User\ServicesController@updateBookedService');
-            Route::post('cancel-booked-job', 'User\ServicesController@cancelJob');
-            Route::post('job-filter', 'User\ServicesController@jobFilter');
-
-            Route::get('card-list', 'User\CustomerController@getAllCard');
-            Route::get('record-list', 'User\CustomerController@getAllRecords');
-            Route::get('primary-card', 'User\CustomerController@getPrimaryCard');
-            Route::post('add-card', 'User\CustomerController@addCard');
-            Route::post('change-primary-card', 'User\CustomerController@changePrimaryCard');
-        });
         Route::group(['prefix' => 'driver'], function () {
-            Route::get('dashboard', 'Driver\DriverController@dashboard');
+            Route::get('', 'Driver\DriverController@getDriver');
             Route::post('edit-profile', 'Driver\DriverController@editProfile');
+            Route::get('delivered-jobs', 'Driver\DriverController@deliveredJobs');
+            Route::get('ongoing-jobs', 'Driver\DriverController@ongoingJobs');
+            Route::get('job-detail/{job_id}', 'Driver\DriverController@jobDetail');
             Route::get('earnings', 'Driver\DriverController@earnings');
+            
+            Route::get('dashboard', 'Driver\DriverController@dashboard');
             Route::get('routes', 'Driver\DriverController@routes');
             Route::get('start-route', 'Driver\DriverController@startRoute');
             Route::get('start-job', 'Driver\DriverController@startJob');

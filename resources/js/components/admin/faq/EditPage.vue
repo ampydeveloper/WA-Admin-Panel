@@ -81,32 +81,32 @@
               lazy-validation
               id="form_field"
             >
-            <input type="hidden" name="faq_id" value="">
+              <input type="hidden" name="faq_id" value="" />
               <v-row>
-                <v-col cols="6" md="6" class="pl-0 manager-cols">
-                  <div class="custom-col row">
-                    <v-col sm="4" class="label-align pt-0">
+                <v-col cols="12" md="12" class="pl-0 manager-cols">
+               <div class="custom-col row">
+                    <v-col sm="2" class="label-align pt-0">
                       <label>Question</label>
                     </v-col>
-                    <v-col sm="8" class="pt-0 pb-0">
+                    <v-col sm="4" class="pt-0 pb-0">
                       <v-text-field
                         v-model="addForm.question"
                         label="Enter Question"
                         required
-                        :rules="[v => !!v || 'FAQ Question is required.']"
+                        :rules="[(v) => !!v || 'FAQ Question is required.']"
                       ></v-text-field>
                     </v-col>
                   </div>
                   <div class="custom-col row">
-                    <v-col sm="4" class="label-align pt-0">
+                    <v-col sm="2" class="label-align pt-0">
                       <label>Answer</label>
                     </v-col>
-                    <v-col sm="8" class="pt-0 pb-0">
+                    <v-col sm="4" class="pt-0 pb-0">
                       <v-textarea
                         v-model="addForm.answer"
                         label="Enter Answer"
                         required
-                        :rules="[v => !!v || 'Answer is required.']"
+                        :rules="[(v) => !!v || 'Answer is required.']"
                       ></v-textarea>
                     </v-col>
                   </div>
@@ -121,8 +121,11 @@
                       class="custom-save-btn"
                       @click="update"
                       id="submit_btn"
-                    >Update</v-btn>
-                    <router-link to="/admin/faq" class="btn-custom-danger">Cancel</router-link>
+                      >Update</v-btn
+                    >
+                    <router-link to="/admin/faq" class="btn-custom-danger"
+                      >Cancel</router-link
+                    >
                   </div>
                 </v-col>
               </v-row>
@@ -155,7 +158,7 @@ export default {
       uberMapToken: environment.uberMapToken,
       cross: false,
       addForm: {
-        faq_id:"",
+        faq_id: "",
         question: "",
         answer: "",
         image: null,

@@ -151,9 +151,6 @@
                     </a>
                   </td>
                 </tr>
-                <!-- <tr v-if="trucks.length == 0">
-                  <td colspan="9">No trucks till now.</td>
-                </tr> -->
               </tbody>
             </table>
           </v-col>

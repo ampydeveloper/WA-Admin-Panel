@@ -3,31 +3,6 @@ export const planetChartData = {
     data: {
         labels: ['01', '15', '09', '13', '17', '21', '26', '34'],
         datasets: [
-            // { // one line graph
-            //     label: 'Number of Moons',
-            //     data: [0, 0, 1, 2, 67, 62, 27, 14],
-            //     backgroundColor: [
-            //         'rgba(54,73,93,.5)', // Blue
-            //         'rgba(54,73,93,.5)',
-            //         'rgba(54,73,93,.5)',
-            //         'rgba(54,73,93,.5)',
-            //         'rgba(54,73,93,.5)',
-            //         'rgba(54,73,93,.5)',
-            //         'rgba(54,73,93,.5)',
-            //         'rgba(54,73,93,.5)'
-            //     ],
-            //     borderColor: [
-            //         '#36495d',
-            //         '#36495d',
-            //         '#36495d',
-            //         '#36495d',
-            //         '#36495d',
-            //         '#36495d',
-            //         '#36495d',
-            //         '#36495d',
-            //     ],
-            //     borderWidth: 3
-            // },
             { 
                 label: '',
                 data: [4.8, 60, 120, 50, 130, 80, 140, 70],
@@ -56,7 +31,6 @@ export const planetChartData = {
     },
     options: {
         responsive: true,
-        // lineTension: 0,
         legend: {
             display: false
         },

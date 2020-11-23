@@ -4,7 +4,7 @@
       <ul>
         <li>
           <h4 class="main-title top_heading">
-            Managers
+            Dispatchers
             <span class="right-bor"></span>
           </h4>
         </li>
@@ -44,7 +44,7 @@
             </span>
           </router-link>
         </li>
-        <li>Managers</li>
+        <li>Dispatchers</li>
         <li>
           <span>
             <svg
@@ -87,13 +87,13 @@
               <thead>
                 <tr>
                   <th class="text-left">#</th>
-                  <th class="text-left">Manager Name</th>
+                  <th class="text-left">Dispatcher Name</th>
                   <th class="text-left mgr-add-col">Address</th>
                   <th class="text-left">Mobile</th>
                   <th class="text-left">Email</th>
                   <th class="text-left">Salary</th>
                   <th class="text-left">Active</th>
-                  <th class="text-left">Actions</th>
+                  <th class="text-left" style="padding: 0 !important;width: 71px;">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -109,11 +109,10 @@
                       <div class="v-avatar v-list-item__avatar">
                         <img
                           v-if="item.user_image"
-                          :src="'../'+item.user_image"
-                          alt
+                          :src="imgUrl+item.user_image"
                           class="small-img"
                         />
-                        <img v-if="!item.user_image" src="/images/avatar.png" alt class="small-img" />
+                        <img v-if="!item.user_image" :src="imgUrl+'images/avatar.png'" alt class="small-img" />
                       </div>
                       {{ item.first_name }} {{ item.last_name }}
                     </td>
@@ -138,9 +137,6 @@
                     </td>
                   </template>
                 </tr>
-                <!-- <tr v-if="managers.length == 0">
-                  <td colspan="8">No manager till now.</td>
-                </tr> -->
               </tbody>
             </table>
           </v-col>
@@ -165,6 +161,7 @@
 import { required } from "vuelidate/lib/validators";
 import { managerService } from "../../../_services/manager.service";
 import { authenticationService } from "../../../_services/authentication.service";
+import { environment } from "../../../config/test.env";
 import {
   UserIcon,
   Edit3Icon,
@@ -196,6 +193,7 @@ export default {
       managers: [],
       isAdmin: true,
       checkuser: "",
+      imgUrl: environment.imgUrl,
     };
   },
   mounted() {

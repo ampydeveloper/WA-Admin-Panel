@@ -46,7 +46,7 @@
         </li>
         <li>
           <router-link to="/admin/customer">
-            Customer
+            Customers
             <span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -82,7 +82,10 @@
               shape="circle"
               error-color="#e74c3c"
             >
-              <tab-content title="Customer Details" :before-change="customerValidation">
+              <tab-content
+                title="Customer Details"
+                :before-change="customerValidation"
+              >
                 <v-form
                   ref="customerForm"
                   v-model="valid"
@@ -93,7 +96,7 @@
                   <v-row>
                     <v-col cols="12" md="12">
                       <v-row>
-                        <v-col cols="4" md="4">
+                        <div class="col-xs-12 col-sm-6 col-md-4">
                           <file-pond
                             name="uploadImage"
                             ref="pond"
@@ -113,37 +116,43 @@
                             v-if="profileImgError"
                           >
                             <div class="v-messages__wrapper">
-                              <div class="v-messages__message">Profile image is required.</div>
+                              <div class="v-messages__message">
+                                Profile image is required.
+                              </div>
                             </div>
                           </div>
-                        </v-col>
+                        </div>
                       </v-row>
                     </v-col>
-                    <v-col cols="4" md="4">
+                    <div class="col-xs-12 col-sm-6 col-md-4">
                       <v-select
                         v-model="addForm.prefix"
                         :items="prefixs"
                         label="Select Prefix"
-                        :rules="[v => !!v || 'Prefix is required.']"
+                        :rules="[(v) => !!v || 'Prefix is required.']"
                       ></v-select>
-                    </v-col>
-                    <v-col cols="4" md="4">
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4">
                       <v-text-field
                         v-model="addForm.customer_first_name"
                         label="Enter First Name"
                         required
-                        :rules="[v => !!v || 'Customer First Name is required.']"
+                        :rules="[
+                          (v) => !!v || 'Customer First Name is required.',
+                        ]"
                       ></v-text-field>
-                    </v-col>
-                    <v-col cols="4" md="4">
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4">
                       <v-text-field
                         v-model="addForm.customer_last_name"
                         label="Enter Last Name"
                         required
-                        :rules="[v => !!v || 'Customer Last Name is required.']"
+                        :rules="[
+                          (v) => !!v || 'Customer Last Name is required.',
+                        ]"
                       ></v-text-field>
-                    </v-col>
-                    <v-col cols="4" md="4">
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4">
                       <v-text-field
                         v-model="addForm.email"
                         :rules="emailRules"
@@ -151,8 +160,8 @@
                         label="Enter Email"
                         required
                       ></v-text-field>
-                    </v-col>
-                    <v-col cols="4" md="4">
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4">
                       <v-text-field
                         v-model="addForm.customer_phone"
                         :rules="phoneRules"
@@ -160,42 +169,46 @@
                         required
                         maxlength="10"
                       ></v-text-field>
-                    </v-col>
-                    <v-col cols="4" md="4">
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4">
                       <v-text-field
                         v-model="addForm.customer_address"
                         label="Enter Address"
                         required
-                        :rules="[v => !!v || 'Address is required.']"
+                        :rules="[(v) => !!v || 'Address is required.']"
                       ></v-text-field>
-                    </v-col>
-                    <v-col cols="4" md="4">
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4">
                       <v-text-field
                         v-model="addForm.customer_city"
                         label="Enter City"
                         required
-                        :rules="[v => !!v || 'City is required.']"
+                        :rules="[(v) => !!v || 'City is required.']"
                       ></v-text-field>
-                    </v-col>
-                    <v-col cols="4" md="4">
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4">
                       <v-text-field
                         v-model="addForm.customer_province"
                         label="Enter Province"
                         required
-                        :rules="[v => !!v || 'Province is required.']"
+                        :rules="[(v) => !!v || 'Province is required.']"
                       ></v-text-field>
-                    </v-col>
-                    <v-col cols="4" md="4">
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4">
                       <v-text-field
                         v-model="addForm.customer_zipcode"
-                        :rules="[v => !!v || 'Zipcode is required.']"
+                        :rules="[(v) => !!v || 'Zipcode is required.']"
                         label="Enter Zipcode"
                         required
                       ></v-text-field>
-                    </v-col>
-                    <v-col cols="4" md="4">
-                      <v-switch v-model="addForm.customer_is_active" class="mx-2" label="Status"></v-switch>
-                    </v-col>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4">
+                      <v-switch
+                        v-model="addForm.customer_is_active"
+                        class="mx-2"
+                        label="Status"
+                      ></v-switch>
+                    </div>
                   </v-row>
                 </v-form>
               </tab-content>
@@ -210,7 +223,7 @@
                   <v-row>
                     <v-col cols="12" md="12">
                       <v-row>
-                        <v-col cols="4" md="4">
+                        <div class="col-xs-12 col-sm-6 col-md-4">
                           <file-pond
                             name="uploadImage"
                             ref="pond"
@@ -230,20 +243,22 @@
                             v-if="farmImgError"
                           >
                             <div class="v-messages__wrapper">
-                              <div class="v-messages__message">Farm photos are required.</div>
+                              <div class="v-messages__message">
+                                Farm photos are required.
+                              </div>
                             </div>
                           </div>
-                        </v-col>
+                        </div>
                       </v-row>
                     </v-col>
-                    <v-col cols="4" md="4" class="basic-select2">
+                    <div class="col-xs-12 col-sm-6 col-md-4 basic-select2">
                       <v-text-field
                         type="text"
                         @input="onChange"
                         v-model="search"
                         label="Search Place"
                         required
-                        :rules="[v => !!v || 'Place is required.']"
+                        :rules="[(v) => !!v || 'Place is required.']"
                       ></v-text-field>
                       <ul v-show="isOpen" class="autocomplete-results">
                         <li
@@ -251,44 +266,50 @@
                           :key="i"
                           @click="setResult(result)"
                           class="autocomplete-result"
-                        >{{ result.place_name }}</li>
+                        >
+                          {{ result.place_name }}
+                        </li>
                       </ul>
-                    </v-col>
-                    <v-col cols="4" md="4">
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4">
                       <v-text-field
                         v-model="addForm.farm_unit"
                         label="Enter Apt/Unit"
                         required
-                        :rules="[v => !!v || 'Farm apt/unit is required.']"
+                        :rules="[(v) => !!v || 'Farm apt/unit is required.']"
                       ></v-text-field>
-                    </v-col>
-                    <v-col cols="4" md="4">
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4">
                       <v-text-field
                         v-model="addForm.farm_city"
                         label="Enter City"
                         required
-                        :rules="[v => !!v || 'Farm city is required.']"
+                        :rules="[(v) => !!v || 'Farm city is required.']"
                       ></v-text-field>
-                    </v-col>
-                    <v-col cols="4" md="4">
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4">
                       <v-text-field
                         v-model="addForm.farm_province"
                         label="Enter Province"
                         required
-                        :rules="[v => !!v || 'Farm province is required.']"
+                        :rules="[(v) => !!v || 'Farm province is required.']"
                       ></v-text-field>
-                    </v-col>
-                    <v-col cols="4" md="4">
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4">
                       <v-text-field
                         v-model="addForm.farm_zipcode"
                         label="Enter ZipCode"
                         required
-                        :rules="[v => !!v || 'Farm zipcode is required.']"
+                        :rules="[(v) => !!v || 'Farm zipcode is required.']"
                       ></v-text-field>
-                    </v-col>
-                    <v-col cols="4" md="4">
-                      <v-switch v-model="addForm.farm_active" class="mx-2" label="Status"></v-switch>
-                    </v-col>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4">
+                      <v-switch
+                        v-model="addForm.farm_active"
+                        class="mx-2"
+                        label="Status"
+                      ></v-switch>
+                    </div>
                   </v-row>
                 </v-form>
               </tab-content>
@@ -303,13 +324,16 @@
                   <template v-for="(input, index) in addForm.manager_details">
                     <div class="basic-section">
                       <v-row>
-                        <v-btn class="setPosition close" @click="deleteRow(index)">
+                        <v-btn
+                          class="setPosition close"
+                          @click="deleteRow(index)"
+                        >
                           <span>&times;</span>
                         </v-btn>
 
                         <v-col cols="12" md="12">
                           <v-row>
-                            <v-col cols="4" md="4">
+                            <div class="col-xs-12 col-sm-6 col-md-4">
                               <file-pond
                                 name="uploadImage"
                                 ref="pond"
@@ -321,36 +345,42 @@
                                 allow-file-type-validation="true"
                                 accepted-file-types="image/jpeg, image/png"
                                 v-on:processfile="handleProcessFile2"
-                                v-on:processfilerevert="handleRemoveFile2(index)"
+                                v-on:processfilerevert="
+                                  handleRemoveFile2(index)
+                                "
                               />
-                            </v-col>
+                            </div>
                           </v-row>
                         </v-col>
-                        <v-col cols="4" md="4">
+                        <div class="col-xs-12 col-sm-6 col-md-4">
                           <v-select
                             v-model="input.manager_prefix"
                             :items="prefixs"
                             label="Select Prefix"
-                            :rules="[v => !!v || 'Prefix is required.']"
+                            :rules="[(v) => !!v || 'Prefix is required.']"
                           ></v-select>
-                        </v-col>
-                        <v-col cols="4" md="4">
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4">
                           <v-text-field
                             v-model="input.manager_first_name"
                             label="Enter First Name"
                             required
-                            :rules="[v => !!v || 'Manager First  Name is required.']"
+                            :rules="[
+                              (v) => !!v || 'Manager First  Name is required.',
+                            ]"
                           ></v-text-field>
-                        </v-col>
-                        <v-col cols="4" md="4">
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4">
                           <v-text-field
                             v-model="input.manager_last_name"
                             label="Enter Last Name"
                             required
-                            :rules="[v => !!v || 'Manager Last  Name is required.']"
+                            :rules="[
+                              (v) => !!v || 'Manager Last  Name is required.',
+                            ]"
                           ></v-text-field>
-                        </v-col>
-                        <v-col cols="4" md="4">
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4">
                           <v-text-field
                             v-model="input.email"
                             :rules="emailRules"
@@ -358,8 +388,8 @@
                             label="Enter Email"
                             required
                           ></v-text-field>
-                        </v-col>
-                        <v-col cols="4" md="4">
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4">
                           <v-text-field
                             v-model="input.manager_phone"
                             :rules="phoneRules"
@@ -367,48 +397,50 @@
                             required
                             maxlength="10"
                           ></v-text-field>
-                        </v-col>
-                        <v-col cols="4" md="4">
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4">
                           <v-text-field
                             v-model="input.manager_address"
                             label="Enter Address"
                             required
-                            :rules="[v => !!v || 'Address is required.']"
+                            :rules="[(v) => !!v || 'Address is required.']"
                           ></v-text-field>
-                        </v-col>
-                        <v-col cols="4" md="4">
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4">
                           <v-text-field
                             v-model="input.manager_city"
                             label="Enter City"
                             required
-                            :rules="[v => !!v || 'City is required.']"
+                            :rules="[(v) => !!v || 'City is required.']"
                           ></v-text-field>
-                        </v-col>
-                        <v-col cols="4" md="4">
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4">
                           <v-text-field
                             v-model="input.manager_province"
                             label="Enter State"
                             required
-                            :rules="[v => !!v || 'Province is required.']"
+                            :rules="[(v) => !!v || 'Province is required.']"
                           ></v-text-field>
-                        </v-col>
-                        <v-col cols="4" md="4">
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4">
                           <v-text-field
                             v-model="input.manager_zipcode"
-                            :rules="[v => !!v || 'Zipcode is required.']"
+                            :rules="[(v) => !!v || 'Zipcode is required.']"
                             label="Enter  Zipcode"
                             required
                           ></v-text-field>
-                        </v-col>
-                        <v-col cols="4" md="4">
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4">
                           <v-text-field
                             v-model="input.manager_id_card"
-                            :rules="[v => !!v || 'Card ID number is required.']"
+                            :rules="[
+                              (v) => !!v || 'Card ID number is required.',
+                            ]"
                             label="Enter ID Card Number"
                             required
                           ></v-text-field>
-                        </v-col>
-                        <v-col cols="4" md="4">
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4">
                           <file-pond
                             name="uploadImage"
                             ref="pond"
@@ -422,12 +454,14 @@
                             v-on:processfile="handleProcessFile3"
                             v-on:processfilerevert="handleRemoveFile3(index)"
                           />
-                        </v-col>
+                        </div>
                       </v-row>
                     </div>
                   </template>
 
-                  <v-btn class="mr-4 custom-save-btn mt-4" @click="addRow">Add New Manager</v-btn>
+                  <v-btn class="mr-4 custom-save-btn mt-4" @click="addRow"
+                    >Add New Manager</v-btn
+                  >
 
                   <!-- <v-btn
                     type="button"

@@ -667,8 +667,14 @@ h6,
                     margin-top: 23px;
                     left: 0 !important;
                 }
+                @media only screen and (max-width: 768px) {
+                    padding-bottom: 5px;
+                    label {
+                        margin: 0;
+                    }
+                }
             }
-
+            
             .custom-col {
                 padding-top: 4px;
                 padding-bottom: 4px;
@@ -705,6 +711,7 @@ h6,
                 color: #c2c6dc;
                 border-top-left-radius: 5px;
                 border-top-right-radius: 5px;
+                padding: 0 10px;
             }
 
             .v-text-field .v-label--active {
@@ -1000,12 +1007,21 @@ h6,
                         padding: 0 7.5px;
                         width: 20%;
                         float: left;
+                        @media only screen and (max-width: 992px) {
+                            width: 33.33333333%;
+                            margin-bottom: 15px;
+                        }
+                        @media only screen and (max-width: 768px) {
+                            width: 100%;
+                            margin-bottom: 15px;
+                        }
 
                         .s-r-inner {
-                            background: #fff;
+                            background: #19191a;
                             border-radius: 7px;
                             box-shadow: 0 4px 25px 0 rgba(0, 0, 0, .1);
                             padding: 18px 20px 17px 20px;
+                            min-height: 93px;
 
                             h2 {
                                 font-size: 24.36px;
@@ -1866,9 +1882,9 @@ h4.top_heading {
             }
 
             td.action-col {
-                display: flex;
-                align-items: center;
-                padding-top: 6px !important;
+                // display: flex;
+                // align-items: center;
+                padding: 6px 0 0 0 !important;
 
                 a {
                     // background-color: #dff7ea;
@@ -1878,6 +1894,8 @@ h4.top_heading {
                     border-radius: 5px;
                     margin-right: 5px;
                     background: rgba(40, 199, 111, 0.15);
+                    display: inline-block;
+                    float: left;
                 }
 
                 svg {
@@ -1939,6 +1957,7 @@ h4.top_heading {
             font-weight: 300;
             vertical-align: middle;
             font-size: 15px;
+            color: #c2c6dc;
 
             .right-bor {
                 border: 1px solid #dae1e7 !important;
@@ -1972,6 +1991,24 @@ h4.top_heading {
                 width: 18px;
                 height: 18px;
             }
+        }
+    }
+
+    @media only screen and (max-width: 768px) {
+        ul {
+            li:first-child {
+                display: block;
+
+                .main-title {
+                    text-align: left;
+                    .right-bor {
+                        display: none;
+                    }
+                }
+            }
+            li {
+                display: none;
+            }  
         }
     }
 }
@@ -2579,6 +2616,22 @@ div#example_info {
 
 .c-tabs-50 .v-item-group {
     width: 50%;
+
+    @media only screen and (max-width: 992px) {
+        width: 100%;
+    }
+}
+
+.c-tabs-50 {
+    .v-slide-group__prev--disabled {
+        display: none;
+    }
+
+    @media only screen and (max-width: 992px) {
+        .v-tab {
+            width: 50%;
+        }
+    }
 }
 
 #all-jobs-table_wrapper,
@@ -3456,11 +3509,43 @@ div#example_info {
 
     cursor: pointer;
 }
-.dispatch-top{
+
+.dispatch-top {
     position: absolute;
     top: 33px;
     right: 20px;
 }
-#all-dispatch-table_wrapper{
+
+#all-dispatch-table_wrapper {
     padding: 0 0 0 10px;
+}
+
+.map-marker {
+    background-image: url('images/map-marker.png');
+    background-size: 36px, 50px;
+    width: 36px;
+    height: 50px;
+    cursor: pointer;
+    top: -27px !important;
+}
+
+#all-jobs-table .dataTables_empty,
+#repeating-table .dataTables_empty,
+#truck-service-table .dataTables_empty {
+    display: none;
+}
+
+.nav-black-link {
+    color: #c2c6dc !important;
+}
+
+@media only screen and (max-width: 768px) {
+    #app-bar{
+        width: 100%;
+    }
+}
+.small-img-outer{
+    .small-img{
+        width: 100px;
+    }
 }

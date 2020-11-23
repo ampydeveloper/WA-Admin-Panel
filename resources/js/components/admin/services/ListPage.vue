@@ -94,6 +94,7 @@
                   <th class="text-left">#</th>
                   <th class="text-left">Service Name</th>
                   <th class="text-left">Service Type</th>
+                  <th class="text-left">Service For</th>
                   <th class="text-left">Price</th>
                   <th class="text-left">Day Time</th>
                   <th class="text-left">Complete Time</th>
@@ -111,6 +112,8 @@
                   <td v-if="item.service_type == 1">Per Load</td>
                   <td v-if="item.service_type == 2">Per Trip</td>
                   <td v-if="item.service_type == 3">Per Bucket</td>
+                  <td v-if="item.service_for == 4">Customer</td>
+                  <td v-if="item.service_for == 6">Hauler</td>
                   <td>${{ item.price }}</td>
                   <td>
                     <span v-for="(type, index) in item.slot_type">
@@ -285,6 +288,7 @@ export default {
   updated() {
     setTimeout(function () {
       $(document).ready(function () {
+        if (!$.fn.dataTable.isDataTable(".table-main")) {
         $(".table-main").DataTable({
           aoColumnDefs: [
             {
@@ -313,6 +317,7 @@ export default {
         $(".dataTables_paginate .paginate_button.next").html(
           $("#table-chevron-right").html()
         );
+      }
         $(".table-main").css({ opacity: 1 });
       });
     }, 1000);

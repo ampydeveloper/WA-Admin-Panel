@@ -10,39 +10,41 @@ const currentUserSubject = new BehaviorSubject(
 );
 
 export const jobService = {
-    getCustomer,
-    getJobChatMessages,
-    getManager,
-    getFrams,
-    listService,
-    servicesTimeSlots,
-    createJob,
-    singleJob,
-    getFarm,
-    getFarmManager,
-    chatList,
-    storeMessage,
-    joblist,
-    dispatchlist,
-    dispatchAllJoblist,
-    // dispatchJoblist,
-    jobassigned,
-    jobcomplete,
-    jobopned,
-    jobrepeating,
-    jobunpaid,
-    listDrivers,
-    listTrucks,
-    listSkidsteers,
-    update,
-    apiUrl: environment.apiUrl,
-    // chatUrl: 'http://13.235.151.113:3100/',
-    chatUrl: 'http://wa.customer.leagueofclicks.com/',
-    currentUrl: '',
-    currentUser: currentUserSubject.asObservable(),
-    get currentUserValue() {
-        return currentUserSubject.value;
-    }
+  getCustomer,
+  getJobChatMessages,
+  chatUsers,
+  getManager,
+  getFrams,
+  listService,
+  servicesTimeSlots,
+  createJob,
+  singleJob,
+  getFarm,
+  getFarmManager,
+  chatList,
+  storeMessage,
+  joblist,
+  dispatchlist,
+  dispatchAllJoblist,
+  // dispatchJoblist,
+  jobassigned,
+  jobcomplete,
+  jobopned,
+  jobrepeating,
+  jobunpaid,
+  listDrivers,
+  listTrucks,
+  listSkidsteers,
+  update,
+  deleteJob,
+  apiUrl: environment.apiUrl,
+  // chatUrl: 'http://13.235.151.113:3100/',
+  chatUrl: 'http://wa.customer.leagueofclicks.com/',
+  currentUrl: '',
+  currentUser: currentUserSubject.asObservable(),
+  get currentUserValue() {
+    return currentUserSubject.value;
+  }
 };
 
 function getCustomer() {
@@ -162,7 +164,17 @@ function joblist() {
             return user;
         });
 }
+function deleteJob(data) {
+    return fetch(
+      this.apiUrl + `admin/cancel-booked-job`,
+      requestOptions.post({job_id:data})
+    )
+      .then(handleResponse)
+      .then(user => {
+        return user;
+      });
 
+}
 function dispatchAllJoblist() {
     return fetch(
             this.apiUrl + `admin/dispatches`,
@@ -302,6 +314,17 @@ function chatList() {
         .then(chat => {
             return chat;
         });
+}
+
+function chatUsers(data) {
+  return fetch(
+    this.apiUrl + `chat-members/`+data,
+    requestOptions.get()
+  )
+    .then(handleResponse)
+    .then(chat => {
+      return chat;
+    });
 }
 
 function storeMessage(data) {

@@ -6,7 +6,7 @@
           <ul>
             <li>
               <h4 class="main-title text-left top_heading">
-                Create Manager
+                Create Dispatcher
                 <span class="right-bor"></span>
               </h4>
             </li>
@@ -47,7 +47,7 @@
               </router-link>
             </li>
             <li>
-              <router-link to="/admin/services">
+              <router-link to="/admin/manager">
                 List
                 <span>
                   <svg
@@ -85,7 +85,7 @@
                   @submit="update"
                 >
                   <v-row>
-                    <v-col cols="6" md="6" class="pl-0 manager-cols">
+                      <div class="col-xs-12 col-sm-6 pl-0 manager-cols">
                       <div class="custom-col row custom-img-holder">
                         <v-col sm="4" class="label-align pt-0 image-upload-label">
                           <label>Profile Image</label>
@@ -215,9 +215,9 @@
                           ></v-text-field>
                         </v-col>
                       </div> -->
-                    </v-col>
+                    </div>
 
-                    <v-col cols="6" md="6" class="pl-0 manager-cols">
+                      <div class="col-xs-12 col-sm-6 pl-0 manager-cols">
                       <div class="custom-col row manager-cols">
                         <v-col sm="4" class="label-align pt-0">
                           <label>Zipcode</label>
@@ -249,13 +249,13 @@
                       </div>
                       <div class="custom-col row">
                         <v-col sm="4" class="label-align pt-0">
-                          <label>Licence Number</label>
+                          <label>ID Number</label>
                         </v-col>
                         <v-col sm="8" class="pt-0 pb-0">
                           <v-text-field
                             v-model="addForm.identification_number"
                             required
-                            :rules="[v => !!v || 'Licence number is required.']"
+                            :rules="[v => !!v || 'ID number is required.']"
                             label="Enter Licence Number"
                             placeholder
                           ></v-text-field>
@@ -338,7 +338,7 @@
                       </div>
                       <div class="custom-col row custom-img-holder">
                         <v-col sm="4" class="label-align pt-0 image-upload-label">
-                          <label>Licence Document</label>
+                          <label>ID Document</label>
                         </v-col>
                         <v-col sm="8" class="pt-0 pb-0">
                           <div class="col-img-holder">
@@ -365,21 +365,13 @@
                               <div class="v-messages__wrapper">
                                 <div
                                   class="v-messages__message"
-                                >Licence Document is required.</div>
+                                >ID Document is required.</div>
                               </div>
                             </div>
                           </div>
                         </v-col>
                       </div>
-                      <div class="custom-col row">
-                        <v-col sm="4" class="label-align pt-0">
-                          <label class="label_text label-check-half">Availabilty</label>
-                        </v-col>
-                        <v-col sm="8" class="pt-0 pb-0">
-                          <v-switch v-model="addForm.is_active"></v-switch>
-                        </v-col>
-                      </div>
-                    </v-col>
+                    </div>
 
                     <v-col class="pt-0 pb-0" cols="12" md="12">
                       <div class="p-0 float-right">
@@ -391,7 +383,7 @@
                           class="custom-save-btn"
                           @click="update"
                           id="submit_btn"
-                        >Add Manager</v-btn>
+                        >Add Dispatcher</v-btn>
                       </div>
                     </v-col>
                   </v-row>
@@ -445,7 +437,6 @@ export default {
         manager_phone: "",
         manager_zipcode: "",
         address: "",
-        is_active:""
       },
       emailRules: [
         (v) => !!v || "Email is required.",

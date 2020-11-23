@@ -6,7 +6,7 @@
           <ul>
             <li>
               <h4 class="main-title text-left top_heading">
-                Create Job
+                Create Pickup
                 <span class="right-bor"></span>
               </h4>
             </li>
@@ -48,7 +48,7 @@
             </li>
             <li>
               <router-link to="/admin/jobs">
-                Jobs
+                Pickups
                 <span>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -177,7 +177,7 @@
                 </v-col>
               </v-col>
 
-              <v-col cols="12" md="12" class="t-s-inner pt-0 pb-0">
+              <!-- <v-col cols="12" md="12" class="t-s-inner pt-0 pb-0">
                 <div class="row">
                   <v-col sm="2" class="label-align pt-0 label_text label-full">
                     <label>Time Slots</label>
@@ -199,7 +199,7 @@
                     </v-radio-group>
                   </v-col>
                 </div>
-              </v-col>
+              </v-col> -->
 
               <v-col class="pt-0 pb-0" cols="12" v-if="weightShow">
                 <v-col sm="2" class="label-align pt-0">
@@ -332,7 +332,7 @@ export default {
         farm_add: "",
         farm_id: "",
         images: [],
-        time_slots_id: "",
+        // time_slots_id: "",
         job_providing_date: "",
         weight: "",
         amount: "",
@@ -460,6 +460,7 @@ export default {
       this.serviceName.find((file) => {
         if (file.id == val) {
           this.addForm.amount = file.price;
+          this.servicetime = true;
           if (file.service_type == 1) {
             this.weightShow = true;
           } else {
@@ -469,18 +470,19 @@ export default {
         }
       });
 
-      jobService.servicesTimeSlots(val).then((response) => {
-        //handle response
-        if (response.status) {
-          this.servicetime = response.data;
-        } else {
-          this.$toast.open({
-            message: response.message,
-            type: "error",
-            position: "top-right",
-          });
-        }
-      });
+      // jobService.servicesTimeSlots(val).then((response) => {
+      //   //handle response
+      //   if (response.status) {
+      //     console.log(response);
+      //     this.servicetime = response.data;
+      //   } else {
+      //     this.$toast.open({
+      //       message: response.message,
+      //       type: "error",
+      //       position: "top-right",
+      //     });
+      //   }
+      // });
     },
     submit() {
       //start loading

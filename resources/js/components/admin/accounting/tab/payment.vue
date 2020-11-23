@@ -1,52 +1,61 @@
 <template>
   <v-container id="dashboard" fluid tag="section" class="pl-0">
-   
-        <table id="payment-table" class="table table-striped table-bordered table-main">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Customer</th>
-              <th>Invoice Number</th>
-              <th>Payment</th>
-              <th>Payment Type</th>
-              <th>In QuickBook</th>
-              <th>View</th>
-              <th>Get Payment</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="payment in paymentJobs">
-              <td>{{payment.created_at}}</td>
-              <td>
-                <router-link
-                  v-if="isAdmin"
-                  :to="'/admin/customer/details/'+payment.customer.id"
-                  class="nav-item nav-link"
-                >{{payment.customer.first_name}}</router-link>
-                <router-link
-                  v-if="!isAdmin"
-                  :to="'/manager/customer/details/'+payment.customer.id"
-                  class="nav-item nav-link"
-                >{{payment.customer.first_name}}</router-link>
-              </td>
-              <td>{{payment.id}}</td>
-              <td>${{payment.amount}}</td>
-              <td v-if="payment.payment_mode === 1">Cheque</td>
-              <td v-if="payment.payment_mode === 2">Cash</td>
-              <td>
-                <template v-if="!payment.quick_book">
-                  <span class="badges-item">Not Sync</span>
-                </template>
-                <template v-if="payment.quick_book">
-                  <span class="badges-item">Sync</span>
-                </template>
-              </td>
-              <td>View Details</td>
-              <td>Get Payment</td>
-            </tr>
-          </tbody>
-        </table>
-    
+    <table
+      id="payment-table"
+      class="table table-striped table-bordered table-main"
+    >
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Customer</th>
+          <th>Invoice Number</th>
+          <th>Payment</th>
+          <th>Payment Type</th>
+          <th>In QuickBook</th>
+          <!-- <th>View</th> -->
+          <th>Get Payment</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="payment in paymentJobs">
+          <td>{{ payment.created_at }}</td>
+          <td>
+            <router-link
+              v-if="isAdmin"
+              :to="'/admin/customer/details/' + payment.customer.id"
+              class="nav-black-link"
+              >{{ payment.customer.first_name }}</router-link
+            >
+            <router-link
+              v-if="!isAdmin"
+              :to="'/manager/customer/details/' + payment.customer.id"
+              class="nav-black-link"
+              >{{ payment.customer.first_name }}</router-link
+            >
+          </td>
+          <td>{{ payment.id }}</td>
+          <td>${{ payment.amount }}</td>
+          <td>
+            <span class="badges-item" v-if="payment.payment_mode === 1"
+              >Cheque</span
+            >
+            <span class="badges-item" v-if="payment.payment_mode === 2"
+              >Cash</span
+            >
+          </td>
+          <td>
+            <template v-if="!payment.quick_book">
+              <span class="badges-item">Not Sync</span>
+            </template>
+            <template v-if="payment.quick_book">
+              <span class="badges-item">Sync</span>
+            </template>
+          </td>
+          <!-- <td><a href="#" class="btn-outline-green-top">View Details</td> -->
+          <td><a href="#" class="btn-outline-green-top">Get Payment</a></td>
+        </tr>
+      </tbody>
+    </table>
   </v-container>
 </template>
 
@@ -94,37 +103,41 @@ export default {
   updated() {
     setTimeout(function () {
       $(document).ready(function () {
-         if (!$.fn.dataTable.isDataTable("#payment-table")) {
-         $("#payment-table").DataTable({
-          aoColumnDefs: [
-            {
-              bSortable: false,
-              aTargets: [-1, -2, -3, -5, -6],
+        if (!$.fn.dataTable.isDataTable("#payment-table")) {
+          $("#payment-table").DataTable({
+            aoColumnDefs: [
+              {
+                bSortable: false,
+                aTargets: [-1, -2, -3, -5, -6],
+              },
+            ],
+            oLanguage: {
+              sSearch: "",
+              sEmptyTable: "No payment till now.",
+              sInfoEmpty: "No payment found.",
             },
-          ],
-          oLanguage: { sSearch: "", "sEmptyTable": "No payment till now.", "sInfoEmpty": "No payment found.", },
-          drawCallback: function (settings) {
-            $(
-              "#payment-table_paginate .paginate_button.previous"
-            ).html($("#table-chevron-left").html());
-            $(
-              "#payment-table_paginate .paginate_button.next"
-            ).html($("#table-chevron-right").html());
-          },
-        });
-        $("#payment-table_filter").append($("#search-input-icon").html());
-        $("#payment-table_filter input").attr(
-          "placeholder",
-          "Search Payments by Customer / Invoice Number"
-        );
-        $(
-          "#payment-table_paginate .paginate_button.previous"
-        ).html($("#table-chevron-left").html());
-        $("#payment-table_paginate .paginate_button.next").html(
-          $("#table-chevron-right").html()
-        );
-         }
-         $(".table-main").css({'opacity':1});
+            drawCallback: function (settings) {
+              $("#payment-table_paginate .paginate_button.previous").html(
+                $("#table-chevron-left").html()
+              );
+              $("#payment-table_paginate .paginate_button.next").html(
+                $("#table-chevron-right").html()
+              );
+            },
+          });
+          $("#payment-table_filter").append($("#search-input-icon").html());
+          $("#payment-table_filter input").attr(
+            "placeholder",
+            "Search Payments by Customer / Invoice Number"
+          );
+          $("#payment-table_paginate .paginate_button.previous").html(
+            $("#table-chevron-left").html()
+          );
+          $("#payment-table_paginate .paginate_button.next").html(
+            $("#table-chevron-right").html()
+          );
+        }
+        $(".table-main").css({ opacity: 1 });
       });
     }, 1000);
   },

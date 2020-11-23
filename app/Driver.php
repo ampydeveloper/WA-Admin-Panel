@@ -16,8 +16,12 @@ class Driver extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'driver_type', 'driver_licence', 'expiry_date', 'document', 'salary_type', 'driver_salary', 'route_given'
+        'user_id', 'driver_type', 'driver_licence', 'expiry_date', 'document', 'salary_type', 'driver_salary', 'route_given', 'status'
     ];
+    
+    public function getExpiryDateAttribute($date) {
+        return Carbon::parse($date)->format('Y-m-d');
+    }
 
     public function user()
     {

@@ -35,7 +35,7 @@ class ChatController extends Controller {
 //        session()->flush();
 //        return redirect(route('frontend.enterLiveStreaming'));
         $data = array(
-            'jobId' => 44,
+            'jobId' => 46,
         );
         $postData = json_encode($data);
 
@@ -48,6 +48,8 @@ class ChatController extends Controller {
         curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
         $output = curl_exec($ch);
         curl_close($ch);
+//        print_r($output);
+//        die('re');
         $messages = json_decode($output);
         $messages = array_reverse($messages);
         

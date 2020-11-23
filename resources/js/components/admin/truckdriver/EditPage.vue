@@ -85,9 +85,12 @@
                   @submit="save"
                 >
                   <v-row>
-                    <v-col cols="6" md="6" class="pl-0 manager-cols">
+                    <div class="col-xs-12 col-sm-6 pl-0 manager-cols">
                       <div class="custom-col row custom-img-holder">
-                        <v-col sm="4" class="label-align pt-0 image-upload-label">
+                        <v-col
+                          sm="4"
+                          class="label-align pt-0 image-upload-label"
+                        >
                           <label>Profile Image</label>
                         </v-col>
                         <v-col sm="8" class="pt-0 pb-0">
@@ -107,7 +110,12 @@
 
                           <v-col sm="12" class="p-0">
                             <div class="service-image-outer" v-if="avatar">
-                              <button type="button" class="close" v-if="cross" @click="Remove()">
+                              <button
+                                type="button"
+                                class="close"
+                                v-if="cross"
+                                @click="Remove()"
+                              >
                                 <span>&times;</span>
                               </button>
                               <img :src="avatar" alt />
@@ -122,7 +130,9 @@
                         <v-col sm="8" class="pt-0 pb-0">
                           <v-text-field
                             v-model="addForm.driver_first_name"
-                            :rules="[v => !!v || 'Driver First Name is required.']"
+                            :rules="[
+                              (v) => !!v || 'Driver First Name is required.',
+                            ]"
                             label="Enter First Name"
                             required
                           ></v-text-field>
@@ -135,7 +145,9 @@
                         <v-col sm="8" class="pt-0 pb-0">
                           <v-text-field
                             v-model="addForm.driver_last_name"
-                            :rules="[v => !!v || 'Driver Last Name is required.']"
+                            :rules="[
+                              (v) => !!v || 'Driver Last Name is required.',
+                            ]"
                             label="Enter Last Name"
                             required
                           ></v-text-field>
@@ -162,7 +174,7 @@
                         <v-col sm="8" class="pt-0 pb-0">
                           <v-text-field
                             v-model="addForm.driver_address"
-                            :rules="[v => !!v || 'Address is required.']"
+                            :rules="[(v) => !!v || 'Address is required.']"
                             label="Enter Address"
                             required
                           ></v-text-field>
@@ -175,7 +187,7 @@
                         <v-col sm="8" class="pt-0 pb-0">
                           <v-text-field
                             v-model="addForm.driver_city"
-                            :rules="[v => !!v || 'City is required.']"
+                            :rules="[(v) => !!v || 'City is required.']"
                             label="Enter City"
                             required
                           ></v-text-field>
@@ -188,7 +200,7 @@
                         <v-col sm="8" class="pt-0 pb-0">
                           <v-text-field
                             v-model="addForm.driver_province"
-                            :rules="[v => !!v || 'Province is required.']"
+                            :rules="[(v) => !!v || 'Province is required.']"
                             label="Enter Province"
                             required
                           ></v-text-field>
@@ -201,15 +213,15 @@
                         <v-col sm="8" class="pt-0 pb-0">
                           <v-text-field
                             v-model="addForm.driver_zipcode"
-                            :rules="[v => !!v || 'Zipcode is required.']"
+                            :rules="[(v) => !!v || 'Zipcode is required.']"
                             label="Enter Zipcode"
                             required
                           ></v-text-field>
                         </v-col>
                       </div>
-                    </v-col>
+                    </div>
 
-                    <v-col cols="6" md="6" class="pl-0 manager-cols">
+                    <div class="col-xs-12 col-sm-6 pl-0 manager-cols">
                       <div class="custom-col row">
                         <v-col sm="4" class="label-align pt-0">
                           <label>Mobile Number</label>
@@ -231,14 +243,19 @@
                         <v-col sm="8" class="pt-0 pb-0">
                           <v-text-field
                             v-model="addForm.driver_licence"
-                            :rules="[v => !!v || 'Licence Number is required.']"
+                            :rules="[
+                              (v) => !!v || 'Licence Number is required.',
+                            ]"
                             label="Enter Licence Number"
                             required
                           ></v-text-field>
                         </v-col>
                       </div>
                       <div class="custom-col row custom-img-holder">
-                        <v-col sm="4" class="label-align pt-0 image-upload-label">
+                        <v-col
+                          sm="4"
+                          class="label-align pt-0 image-upload-label"
+                        >
                           <label>Licence Image</label>
                         </v-col>
                         <v-col sm="8" class="pt-0 pb-0">
@@ -253,7 +270,9 @@
                             v-on:processfile="handleProcessFile1"
                             allow-file-type-validation="true"
                             accepted-file-types="image/jpeg, image/png"
-                            :rules="[v => !!v || 'Licence Image is required.']"
+                            :rules="[
+                              (v) => !!v || 'Licence Image is required.',
+                            ]"
                             v-on:processfilerevert="handleRemoveFile1"
                           />
                           <div
@@ -262,11 +281,18 @@
                             v-if="docError"
                           >
                             <div class="v-messages__wrapper">
-                              <div class="v-messages__message">Licence Image is required.</div>
+                              <div class="v-messages__message">
+                                Licence Image is required.
+                              </div>
                             </div>
                           </div>
                           <div class="service-image-outer" v-if="document_img">
-                            <button type="button" class="close" v-if="cross" @click="Remove()">
+                            <button
+                              type="button"
+                              class="close"
+                              v-if="cross"
+                              @click="Remove()"
+                            >
                               <span>&times;</span>
                             </button>
                             <img :src="document_img" alt />
@@ -295,22 +321,34 @@
                                 v-on="on"
                               ></v-text-field>
                             </template>
-                            <v-date-picker v-model="date" @input="menu2 = false" :min="setDate"></v-date-picker>
+                            <v-date-picker
+                              v-model="date"
+                              @input="menu2 = false"
+                              :min="setDate"
+                            ></v-date-picker>
                           </v-menu>
                         </v-col>
                       </div>
                       <div class="custom-col row">
                         <v-col sm="4" class="label-align pt-0">
-                          <label class="label_text label-half">Salary Type</label>
+                          <label class="label_text label-half"
+                            >Salary Type</label
+                          >
                         </v-col>
                         <v-col sm="8" class="pt-0 pb-0">
                           <v-radio-group
                             row
                             v-model="addForm.salary_type"
-                            :rules="[v => !!v || 'Salary Type is required.']"
+                            :rules="[(v) => !!v || 'Salary Type is required.']"
                           >
-                            <v-radio label="Per Hour" value="per_hour"></v-radio>
-                            <v-radio label="Per Month" value="per_load"></v-radio>
+                            <v-radio
+                              label="Per Hour"
+                              value="per_hour"
+                            ></v-radio>
+                            <v-radio
+                              label="Per Month"
+                              value="per_load"
+                            ></v-radio>
                           </v-radio-group>
                         </v-col>
                       </div>
@@ -327,9 +365,11 @@
                           ></v-text-field>
                         </v-col>
                       </div>
-<div class="custom-col row">
+                      <div class="custom-col row">
                         <v-col sm="4" class="label-align pt-0">
-                          <label class="label_text label-check-half">Availabilty</label>
+                          <label class="label_text label-check-half"
+                            >Availabilty</label
+                          >
                         </v-col>
                         <v-col sm="8" class="pt-0 pb-0">
                           <v-switch v-model="addForm.status"></v-switch>
@@ -352,7 +392,7 @@
                           </v-radio-group>
                         </v-col>
                       </div>-->
-                    </v-col>
+                    </div>
                     <v-col class="pt-0 pb-0" cols="12" md="12">
                       <div class="p-0 float-right">
                         <v-btn
@@ -363,8 +403,13 @@
                           class="custom-save-btn"
                           @click="save"
                           id="submit_btn"
-                        >Update</v-btn>
-                        <router-link to="/admin/truckdrivers" class="btn-custom-danger">Cancel</router-link>
+                          >Update</v-btn
+                        >
+                        <router-link
+                          to="/admin/truckdrivers"
+                          class="btn-custom-danger"
+                          >Cancel</router-link
+                        >
                       </div>
                     </v-col>
                   </v-row>
@@ -421,7 +466,7 @@ export default {
         driver_zipcode: "",
         driver_phone: "",
         driver_type: "",
-        status:""
+        status: "",
       },
       emailRules: [
         (v) => !!v || "Email is required.",
@@ -499,7 +544,7 @@ export default {
         this.addForm.driver_type = response.data.driver.driver_type;
         this.addForm.driver_licence = response.data.driver.driver_licence;
         this.addForm.status = response.data.driver.status;
-         
+
         this.date = new Date(response.data.driver.expiry_date)
           .toISOString()
           .substr(0, 10);

@@ -14,11 +14,11 @@
             </div>
             <div class="clearfix">
               <span class="basic-grey-label-half">Price</span>
-              <span class="det-half"> ${{ job.job_amount }}</span>
+              <span class="det-half"> ${{ (job.job_amount?job.job_amount:'0') }}</span>
             </div>
             <div class="clearfix">
               <span class="basic-grey-label-half">Service Date</span>
-              <span class="det-half">{{ job.start_date }} </span>
+              <span class="det-half">{{ job.start_date | formatDateLic}} </span>
             </div>
           </div>
 
@@ -52,23 +52,21 @@
 
         <v-col cols="12" md="12" class="main_box chat-area-outer">
           <div class="chat-area" id="message-container">
-       
-              <!-- <div class="chat-receiver mb-6">
+            <!-- <div class="chat-receiver mb-6">
               <div class="chat-msg">Lorem ipsum dolor sit amet</div>
               <div class="chat-img"></div>
             </div> -->
-              <div class="empty-message">
-                <p>
-                  Lets start conversing <br />
-                  & <br />
-                  find solutions.
-                </p>
-              </div>
-              <div class="uploading-image-out">
-                <loader-icon size="1.5x" class="custom-class"></loader-icon>
-                <p>Uploading image</p>
-              </div>
-       
+            <div class="empty-message">
+              <p>
+                Lets start conversing <br />
+                & <br />
+                find solutions.
+              </p>
+            </div>
+            <div class="uploading-image-out">
+              <loader-icon size="1.5x" class="custom-class"></loader-icon>
+              <p>Uploading image</p>
+            </div>
           </div>
         </v-col>
 
@@ -114,15 +112,15 @@ import { router } from "../../../_helpers/router";
 import { jobService } from "../../../_services/job.service";
 import { environment } from "../../../config/test.env";
 import { SendIcon, ImageIcon, LoaderIcon } from "vue-feather-icons";
-import Mapbox from "mapbox-gl-vue";
-import mapboxgl from "mapbox-gl";
+// import Mapbox from "mapbox-gl-vue";
+// import mapboxgl from "mapbox-gl";
 
 export default {
   components: {
     SendIcon,
     ImageIcon,
     LoaderIcon,
-    Mapbox,
+    // Mapbox,
   },
   data() {
     return {
@@ -131,6 +129,7 @@ export default {
       manager: "",
       farm: "",
       userdata: "",
+      chatUsers: "",
       baseUrl: environment.baseUrl,
     };
   },
@@ -140,7 +139,12 @@ export default {
   },
   mounted() {
     this.getResults();
-    this.getChatMessages();
+    this.getChatMembers();
+  
+    setTimeout(() => {
+           this.getChatMessages();
+        }, 500);
+    
     let socketScript = document.createElement("script");
     socketScript.setAttribute(
       "src",
@@ -161,33 +165,34 @@ export default {
     scrollScript2.setAttribute("rel", "stylesheet");
     document.head.appendChild(scrollScript2);
 
+
+let scrollScript3 = document.createElement("script");
+    scrollScript3.setAttribute(
+      "src",
+      "https://api.tiles.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"
+    );
+    document.head.appendChild(scrollScript3);
+    let scrollScript4 = document.createElement("link");
+    scrollScript4.setAttribute(
+      "href",
+      "https://api.tiles.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css"
+    );
+    scrollScript4.setAttribute("rel", "stylesheet");
+    document.head.appendChild(scrollScript4);
+
     mapboxgl.accessToken =
       "pk.eyJ1IjoibG9jb25lIiwiYSI6ImNrYmZkMzNzbDB1ZzUyenM3empmbXE3ODQifQ.SiBnr9-6jpC1Wa8OTAmgVA";
     var map = new mapboxgl.Map({
       container: "map",
-      style: "mapbox://styles/mapbox/light-v9",
+      style: "mapbox://styles/mapbox/dark-v9",
       center: [-122.662323, 45.523751], // starting position
       zoom: 12,
     });
-    // set the bounds of the map
-    var bounds = [
-      [-123.069003, 45.395273],
-      [-122.303707, 45.612333],
-    ];
-    map.setMaxBounds(bounds);
 
-    // initialize the map canvas to interact with later
     var canvas = map.getCanvasContainer();
-
-    // an arbitrary start will always be the same
-    // only the end or destination will change
     var start = [-122.662323, 45.523751];
 
-    // create a function to make a directions request
     function getRoute(start, end) {
-      // make a directions request using cycling profile
-      // an arbitrary start will always be the same
-      // only the end or destination will change
       var url =
         "https://api.mapbox.com/directions/v5/mapbox/cycling/" +
         start[0] +
@@ -197,10 +202,8 @@ export default {
         end[0] +
         "," +
         end[1] +
-        "?steps=true&geometries=geojson&access_token=" +
-        mapboxgl.accessToken;
-
-      // make an XHR request https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
+        "?steps=true&geometries=geojson&access_token=pk.eyJ1IjoibG9jb25lIiwiYSI6ImNrYmZkMzNzbDB1ZzUyenM3empmbXE3ODQifQ.SiBnr9-6jpC1Wa8OTAmgVA";
+        
       var req = new XMLHttpRequest();
       req.open("GET", url, true);
       req.onload = function () {
@@ -240,8 +243,8 @@ export default {
               "line-cap": "round",
             },
             paint: {
-              "line-color": "#3887be",
-              "line-width": 5,
+                 "line-color": "#3c3b3b",
+              "line-width": 4,
               "line-opacity": 0.75,
             },
           });
@@ -273,58 +276,36 @@ export default {
           ],
         },
       });
+
+      map.loadImage(
+        `http://wa.customer.leagueofclicks.com/img/car-marker2.png`,
+        function (error, image) {
+          if (error) throw error;
+          map.addImage("car-marker", image);
+        }
+      );
+
       // Add starting point to the map
       map.addLayer({
         id: "truck",
         type: "symbol",
         source: "truck",
         layout: {
-          "icon-image": "bus-15",
+          "icon-image": "car-marker",
         },
       });
-      // this is where the code from the next step will go
 
-      map.addLayer({
-        id: "end",
-        type: "circle",
-        source: {
-          type: "geojson",
-          data: {
-            type: "FeatureCollection",
-            features: [
-              {
-                type: "Feature",
-                properties: {},
-                geometry: {
-                  type: "Point",
-                  coordinates: [-122.61365699963287, 45.51773726437733],
-                },
-              },
-            ],
-          },
-        },
-        paint: {
-          "circle-radius": 10,
-          "circle-color": "#f30",
-        },
-      });
+      var el = document.createElement("div");
+      el.className = "map-marker";
+      new mapboxgl.Marker(el)
+        .setLngLat([-122.61365699963287, 45.51773726437733])
+        .addTo(map);
 
       getRoute(start, [-122.61365699963287, 45.51773726437733]);
     });
+
     window.lo = 45.523751;
     window.setInterval(function () {
-      // reqest to get new cordinates
-      // request.open('GET', url, true);
-      // request.onload = function () {
-      //   if (this.status >= 200 && this.status < 400) {
-      //     // retrieve the JSON from the response
-      //     var json = JSON.parse(this.response);
-
-      //     // update the drone symbol's location on the map
-
-      //   }
-      // };
-      // request.send();
       lo = lo - 0.0001;
       start = [-122.662453, lo];
 
@@ -361,17 +342,47 @@ export default {
         }
       });
     },
+    getChatMembers() {
+      jobService.chatUsers(this.$route.params.id).then((response) => {
+        //handle response
+        if (response.status) {
+          // this.job = response.data;
+          console.log(response.data);
+          var users = [];
+          users[response.data.customer_id] = response.data.customer;
+          users[response.data.manager_id] = response.data.manager;
+          users[response.data.skidsteer_driver_id] =
+            response.data.skidsteer_driver;
+          users[response.data.truck_driver_id] = response.data.truck_driver;
+
+          this.chatUsers = users;
+        }
+      });
+    },
     getChatMessages() {
+      //${this.chatUsers[val.username].user_image}
       jobService
         .getJobChatMessages({ jobId: this.$route.params.id })
         .then((response) => {
           if (response) {
-            console.log(response);
+            response.data.forEach(function (val, index) {
+              const messageElement = document.createElement("div");
+              messageElement.className = "chat-receiver";
+              messageElement.innerHTML =
+                '<div class="chat-msg">' +
+                `${val.message}` +
+                '</div><div class="chat-img"><img src="' +
+                `${environment.baseUrl + "/images/avatar.png"}` +
+                '"></div>';
+              $(document).find("#message-container").prepend(messageElement);
+              $("#message-container .empty-message").remove();
+            });
           }
         });
     },
   },
   updated() {
+
     var messageContainerScroll;
     setTimeout(function () {
       messageContainerScroll = OverlayScrollbars(
@@ -387,23 +398,28 @@ export default {
       const jobId = document.getElementById("job-id");
 
       socket.emit("new-user", name._value);
+      messageContainerScroll.scroll([0, "100%"], 50, { x: "", y: "linear" });
+
       socket.on("chat-message", (data) => {
-        if (data.name == name) {
+        const userImage = $("#current-user-image").val();
+        if (data.name == name._value) {
           appendMessage(
-            '<span class="each-username">' +
-              `You:` +
-              "</span> " +
-              `${data.message}`
+            '<div class="chat-msg">' +
+              `${data.message.message}` +
+              '</div><div class="chat-img"><img src="' +
+              `${userImage}` +
+              '"></div>'
           );
         } else {
           appendMessage(
-            '<span class="each-username">' +
-              `${data.name}:` +
-              "</span> " +
-              `${data.message}`
+            '<div class="chat-msg">' +
+              `${data.message.message}` +
+              '</div><div class="chat-img"><img src="' +
+              `${environment.baseUrl + "/images/avatar.png"}` +
+              '"></div>'
           );
         }
-        // messageContainerScroll.scroll([0, "100%"], 50, { x: "", y: "linear" });
+        messageContainerScroll.scroll([0, "100%"], 50, { x: "", y: "linear" });
       });
       $(document).on("submit", "#send-container", function (e) {
         const message = messageInput.value;

@@ -1,11 +1,11 @@
 export const planetChartData = {
     type: 'doughnut',
     data: {
-        // labels: ['0', '1', '2', '3', '4', '5', '6', '7'],
+        labels: ['Customers', 'Haulers', 'Outstanding'],
         datasets: [
             { 
                 label: 'Invoices',
-                data: [116.4, 50.7, 49.2],
+                data: [0, 0, 0],
                 backgroundColor: [
                     '#4DBF7B', // Green
                     '#C9F1E2',

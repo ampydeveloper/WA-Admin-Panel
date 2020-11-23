@@ -4,7 +4,7 @@
       <ul>
         <li>
           <h4 class="main-title top_heading">
-            Jobs
+            Pickups
             <span class="right-bor"></span>
           </h4>
         </li>
@@ -46,7 +46,7 @@
         </li>
         <li>
           <router-link to="/admin/jobs">
-            Jobs
+            Pickups
             <span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -107,64 +107,98 @@
           <v-tabs-items v-model="tab" class="custom-tab-content">
             <v-tab-item v-for="item in items" :key="item">
               <!-- customer info tabs -->
-              <v-card class="jobs-aj" color="basil" flat v-if="item == 'All Jobs'">
+              <v-card
+                class="jobs-aj"
+                color="basil"
+                flat
+                v-if="item == 'All Pickups'"
+              >
                 <table
                   id="all-jobs-table"
                   class="table table-striped table-bordered table-main all_jobs"
                 >
                   <thead>
                     <tr>
-                      <th class="job-summ">Job Summary</th>
+                      <th class="job-summ">Pickup Summary</th>
                       <th>Customer / Manager / Farm Location</th>
                       <th class="tech-col">Techs / Vehicles</th>
                       <th class="time-col">Est. Time</th>
-                      <!-- <th>Distance</th> -->
                       <th>Payment Status</th>
-                      <!-- <th>Chat</th> -->
-                      <th>Job Status</th>
-                      <th>Actions</th>
+                      <th>Pickup Status</th>
+                      <th style="padding: 0 !important;">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr v-for="(job, index) in alljobs">
                       <td>
-                        <span class="basic-info">{{job.start_date | formatDateLic}}</span>
-                        <span class="basic-big">#JOB100{{job.id}}</span>
-                        <span class="basic-grey">${{(job.job_amount)?job.job_amount:0}}</span>
-                        <span class="basic-grey">{{job.service.service_name}}</span>
+                        <span class="basic-info">{{
+                          job.start_date | formatDateLic
+                        }}</span>
+                        <span class="basic-big">#PICKUP100{{ job.id }}</span>
+                        <span class="basic-grey"
+                          >${{ job.job_amount ? job.job_amount : 0 }}</span
+                        >
+                        <span class="basic-grey">{{
+                          job.service ? job.service.service_name : ""
+                        }}</span>
                       </td>
                       <td>
-                        <span class="basic-big">{{job.customer.first_name}}</span>
-                        <span class="basic-grey">{{job.manager.first_name}} ({{job.manager.email}})</span>
-                        <span
-                          class="basic-grey"
-                        >{{job.manager.address}} {{job.manager.city}} {{job.manager.state}} {{job.manager.country}} {{job.manager.zip_code}}</span>
+                        <span class="basic-big">{{
+                          job.customer ? job.customer.first_name : ""
+                        }}</span>
+                        <span class="basic-grey"
+                          >{{ job.manager ? job.manager.first_name : "" }} ({{
+                            job.manager ? job.manager.email : ""
+                          }})</span
+                        >
+                        <span class="basic-grey" v-if="job.manager"
+                          >{{ job.manager.address }} {{ job.manager.city }}
+                          {{ job.manager.state }} {{ job.manager.country }}
+                          {{ job.manager.zip_code }}</span
+                        >
                       </td>
                       <td class="job-col-body">
                         <span class="basic-grey-label-half">Truck Driver</span>
-                        <span
-                          class="basic-info-half"
-                          v-if="job.truck_driver"
-                        >{{job.truck_driver.first_name}}</span>
-                        <span class="basic-info-half" v-if="!job.truck_driver">Not Assigned</span>
+                        <span class="basic-info-half" v-if="job.truck_driver">{{
+                          job.truck_driver ? job.truck_driver.first_name : ""
+                        }}</span>
+                        <span class="basic-info-half" v-if="!job.truck_driver"
+                          >Not Assigned</span
+                        >
                         <div class="clearfix"></div>
                         <span class="basic-grey-label-half">Truck</span>
-                        <span class="basic-info-half" v-if="job.truck">{{job.truck.truck_number}}</span>
-                        <span class="basic-info-half" v-if="!job.truck">Not Assigned</span>
+                        <span class="basic-info-half" v-if="job.truck">{{
+                          job.truck.truck_number
+                        }}</span>
+                        <span class="basic-info-half" v-if="!job.truck"
+                          >Not Assigned</span
+                        >
                         <div class="clearfix"></div>
-                        <span class="basic-grey-label-half">Skidsteer Driver</span>
+                        <span class="basic-grey-label-half"
+                          >Skidsteer Driver</span
+                        >
                         <span
                           class="basic-info-half"
                           v-if="job.skidsteer_driver"
-                        >{{job.skidsteer_driver.first_name}}</span>
-                        <span class="basic-info-half" v-if="!job.skidsteer_driver">Not Assigned</span>
-                        <div class="clearfix"></div>
-                        <span class="basic-grey-label-half">Skidsteer</span>
+                          >{{
+                            job.skidsteer_driver
+                              ? job.skidsteer_driver.first_name
+                              : ""
+                          }}</span
+                        >
                         <span
                           class="basic-info-half"
-                          v-if="job.skidsteer"
-                        >{{job.skidsteer.truck_number}}</span>
-                        <span class="basic-info-half" v-if="!job.skidsteer">Not Assigned</span>
+                          v-if="!job.skidsteer_driver"
+                          >Not Assigned</span
+                        >
+                        <div class="clearfix"></div>
+                        <span class="basic-grey-label-half">Skidsteer</span>
+                        <span class="basic-info-half" v-if="job.skidsteer">{{
+                          job.skidsteer.truck_number
+                        }}</span>
+                        <span class="basic-info-half" v-if="!job.skidsteer"
+                          >Not Assigned</span
+                        >
                       </td>
                       <td class="job-col-body">
                         <span class="basic-grey-label-full">Start Time</span>
@@ -185,18 +219,6 @@
                           <span class="badges-item">Unpaid</span>
                         </template>
                       </td>
-                      <!-- <td>
-                        <router-link
-                          v-if="isAdmin"
-                          :to="'/admin/jobs/chat/' + job.id"
-                          class="nav-item nav-link"
-                        >View chat</router-link>
-                        <router-link
-                          v-if="!isAdmin"
-                          :to="'/manager/jobs/chat/' + job.id"
-                          class="nav-item nav-link"
-                        >View chat</router-link>
-                      </td>-->
                       <td>
                         <template v-if="!job.job_status">
                           <span class="badges-item">Open</span>
@@ -205,45 +227,37 @@
                           <span class="badges-item">Close</span>
                         </template>
                       </td>
-                      <td>
-                        <router-link v-if="isAdmin" :to="'/admin/jobs/chat/' + job.id" class>
-                          <v-btn color="success" class="btn-outline-green">View chat</v-btn>
+                      <td class="action-col">
+                        <router-link
+                          v-if="isAdmin"
+                          :to="'/admin/jobs/chat/' + job.id"
+                          class="btn-outline-green-top"
+                          style="width: 75px;"
+                        >View chat
                         </router-link>
-                        <router-link v-if="!isAdmin" :to="'/manager/jobs/chat/' + job.id" class>
-                          <v-btn color="success" class="btn-outline-green">View chat</v-btn>
+                        <router-link
+                          v-if="!isAdmin"
+                          :to="'/manager/jobs/chat/' + job.id"
+                         class="btn-outline-green-top" style="width: 75px;"
+                        >View chat
                         </router-link>
+                        <a href="javascript:void(0);" text @click="Delete(job.id)">
+                        <trash-icon size="1.5x" class="custom-class"></trash-icon>
+                      </a>
                       </td>
                       <!-- <td>
-                        <div class="dropdown" v-bind:class="{ 'show': triggerDropdown }">
-                          <more-vertical-icon
-                            size="1.5x"
-                            class="custom-class dropdown-trigger"
-                            v-on:click="dropdownToggle"
-                          ></more-vertical-icon>
-                          <span class="dropdown-menu">
-                            <router-link
-                              v-if="isAdmin"
-                              :to="'/admin/jobs/chat/' + job.id"
-                              class="nav-item nav-link"
-                            >View chat</router-link>
-                            <router-link
-                              v-if="!isAdmin"
-                              :to="'/manager/jobs/chat/' + job.id"
-                              class="nav-item nav-link"
-                            >View chat</router-link>
-                           <button class="btn dropdown-item">Edit</button>
-                            <button class="btn dropdown-item">Delete</button>
-                          </span>
-                        </div>
-                      </td>-->
+                        <button class="btn dropdown-item">Edit</button>
+                      </td> -->
                     </tr>
-                    <!-- <tr v-if="alljobs.length == 0">
-                      <td colspan="9">No jobs till now.</td>
-                    </tr>-->
                   </tbody>
                 </table>
               </v-card>
-              <v-card class="jobs-aj" color="basil" flat v-if="item == 'Repeating Jobs'">
+              <v-card
+                class="jobs-aj"
+                color="basil"
+                flat
+                v-if="item == 'Repeating Pickups'"
+              >
                 <repeating-jobs />
               </v-card>
             </v-tab-item>
@@ -277,6 +291,7 @@ import {
   ChevronRightIcon,
   MoreVerticalIcon,
   SearchIcon,
+    TrashIcon,
 } from "vue-feather-icons";
 import { jobService } from "../../../_services/job.service";
 import { environment } from "../../../config/test.env";
@@ -288,6 +303,7 @@ export default {
     ChevronLeftIcon,
     ChevronRightIcon,
     SearchIcon,
+      TrashIcon,
     AllJobs: () => import("./tab/AllJobs"),
     AssignedJobs: () => import("./tab/AssignedJobs"),
     CompletedJobs: () => import("./tab/CompletedJobs"),
@@ -301,7 +317,7 @@ export default {
       tab: null,
       isAdmin: true,
       triggerDropdown: false,
-      items: ["All Jobs", "Repeating Jobs"],
+      items: ["All Pickups", "Repeating Pickups"],
       dropdown: [
         "All Jobs",
         "Assigned Jobs",
@@ -311,7 +327,8 @@ export default {
         "Open",
       ],
       alljobs: "",
-      selected: "All Jobs",
+      selected: "All Pickups",
+      // jobsTable: ''
     };
   },
   mounted() {
@@ -330,6 +347,7 @@ export default {
         //handle response
         if (response.status) {
           this.alljobs = response.data.allJobs;
+          this.tableAdd();
         } else {
           this.$toast.open({
             message: response.message,
@@ -345,12 +363,55 @@ export default {
     dropdownToggle: function () {
       this.triggerDropdown = !this.triggerDropdown;
     },
-  },
-  updated() {
-    setTimeout(function () {
-      $(document).ready(function () {
-        if (!$.fn.dataTable.isDataTable("#all-jobs-table")) {
-          $("#all-jobs-table").DataTable({
+    Delete(e) {
+      this.$swal({
+        title: "Are you sure?",
+        text: "Are you sure you want to delete this Pickup?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes Delete it!",
+        cancelButtonText: "No, Keep it!",
+        showCloseButton: true,
+        showLoaderOnConfirm: true,
+      }).then((result) => {
+        if (result.value) {
+          this.deleteJob(e);
+        }
+      });
+
+      return false;
+    },
+    deleteJob(e) {
+      if (e) {
+        this.loading = true;
+        jobService.deleteJob(e).then((response) => {
+          //handle response
+          if (response.status) {
+            this.$toast.open({
+              message: 'Pickup deleted successfully.',
+              type: "success",
+              position: "top-right",
+            });
+            //redirect to login
+            this.dialog = false;
+
+            //reload table
+            this.getResults();
+          } else {
+            this.dialog = false;
+            this.$toast.open({
+              message: response.message,
+              type: "error",
+              position: "top-right",
+            });
+          }
+          this.loading = false;
+        });
+      }
+    },
+    tableAdd(){
+      if (!$.fn.dataTable.isDataTable("#all-jobs-table")) {
+      $("#all-jobs-table").DataTable({
             aoColumnDefs: [
               {
                 bSortable: false,
@@ -359,8 +420,8 @@ export default {
             ],
             oLanguage: {
               sSearch: "",
-              sEmptyTable: "No jobs till now.",
-              infoEmpty: "No jobs found.",
+              sEmptyTable: "No pickups till now.",
+              infoEmpty: "No pickups found.",
             },
             drawCallback: function (settings) {
               $("#all-jobs-table_paginate .paginate_button.previous").html(
@@ -375,7 +436,7 @@ export default {
           $("#all-jobs-table_filter").append($("#search-input-icon").html());
           $("#all-jobs-table_filter input").attr(
             "placeholder",
-            "Search Jobs by Job ID / Customer / Service"
+            "Search Pickups by Pickup ID / Customer / Service"
           );
           $("#all-jobs-table_paginate .paginate_button.previous").html(
             $("#table-chevron-left").html()
@@ -383,10 +444,51 @@ export default {
           $("#all-jobs-table_paginate .paginate_button.next").html(
             $("#table-chevron-right").html()
           );
-        }
-        $("#all-jobs-table").css({ opacity: 1 });
-      });
-    }, 1000);
+      }
+          $("#all-jobs-table").css({ opacity: 1 });
+    }
+  },
+  updated() {
+    // setTimeout(function () {
+    //   $(document).ready(function () {
+    //     if (!$.fn.dataTable.isDataTable("#all-jobs-table")) {
+    //        this.jobsTable = $("#all-jobs-table").DataTable({
+    //         aoColumnDefs: [
+    //           {
+    //             bSortable: false,
+    //             aTargets: [-1, -2, -3, -4, -5],
+    //           },
+    //         ],
+    //         oLanguage: {
+    //           sSearch: "",
+    //           sEmptyTable: "No jobs till now.",
+    //           infoEmpty: "No jobs found.",
+    //         },
+    //         drawCallback: function (settings) {
+    //           $("#all-jobs-table_paginate .paginate_button.previous").html(
+    //             $("#table-chevron-left").html()
+    //           );
+    //           $("#all-jobs-table_paginate .paginate_button.next").html(
+    //             $("#table-chevron-right").html()
+    //           );
+    //         },
+    //       });
+
+    //       $("#all-jobs-table_filter").append($("#search-input-icon").html());
+    //       $("#all-jobs-table_filter input").attr(
+    //         "placeholder",
+    //         "Search Jobs by Job ID / Customer / Service"
+    //       );
+    //       $("#all-jobs-table_paginate .paginate_button.previous").html(
+    //         $("#table-chevron-left").html()
+    //       );
+    //       $("#all-jobs-table_paginate .paginate_button.next").html(
+    //         $("#table-chevron-right").html()
+    //       );
+    //     }
+    //     $("#all-jobs-table").css({ opacity: 1 });
+    //   });
+    // }, 100);
   },
 };
 </script>
