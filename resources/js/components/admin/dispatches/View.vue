@@ -105,40 +105,80 @@
                   </td>
                   <td class="job-col-body">
                     <span class="basic-grey-label-half">Truck Driver</span>
-                    <span class="basic-info-half" v-if="job.truck_driver">{{
+                    <v-select
+                      :items="truck.drivers"
+                      v-model="job.truck_driver_id"
+                      class="graph-select-sl"
+                      item-text="first_name"
+                      item-value="id"
+                      outlined
+                      dense
+                      @change="update($event, 'truckDriver', job.id)"
+                    ></v-select>
+                    <!-- <span class="basic-info-half" v-if="job.truck_driver">{{
                       job.truck_driver.first_name
-                    }}</span>
-                    <span class="basic-info-half" v-if="!job.truck_driver"
+                    }}</span> -->
+                    <!-- <span class="basic-info-half" v-if="!job.truck_driver"
                       >Not Assigned</span
-                    >
+                    > -->
                     <div class="clearfix"></div>
                     <span class="basic-grey-label-half">Truck</span>
-                    <span class="basic-info-half" v-if="job.truck">{{
+                    <v-select
+                      :items="truck.vehicles"
+                      v-model="job.truck_id"
+                      class="graph-select-sl"
+                      item-text="truck_number"
+                      item-value="id"
+                      outlined
+                      dense
+                      @change="update($event, 'truck', job.id)"
+                    ></v-select>
+                    <!-- <span class="basic-info-half" v-if="job.truck">{{
                       job.truck.truck_number
                     }}</span>
                     <span class="basic-info-half" v-if="!job.truck"
                       >Not Assigned</span
-                    >
+                    > -->
                     <div class="clearfix"></div>
                     <span class="basic-grey-label-half">Skidsteer Driver</span>
-                    <span class="basic-info-half" v-if="job.skidsteer_driver">{{
+                    <v-select
+                      :items="skidsteer.drivers"
+                      v-model="job.skidsteer_driver_id"
+                      class="graph-select-sl"
+                      item-text="first_name"
+                      item-value="id"
+                      outlined
+                      dense
+                      @change="update($event, 'skidsteerDriver', job.id)"
+                    ></v-select>
+                    <!-- <span class="basic-info-half" v-if="job.skidsteer_driver">{{
                       job.skidsteer_driver.first_name
                     }}</span>
                     <span class="basic-info-half" v-if="!job.skidsteer_driver"
                       >Not Assigned</span
-                    >
+                    > -->
                     <div class="clearfix"></div>
                     <span class="basic-grey-label-half">Skidsteer</span>
-                    <span class="basic-info-half" v-if="job.skidsteer">{{
+                    <v-select
+                      :items="skidsteer.vehicles"
+                      v-model="job.skidsteer_id"
+                      class="graph-select-sl"
+                      item-text="truck_number"
+                      item-value="id"
+                      outlined
+                      dense
+                      @change="update($event, 'skidsteer', job.id)"
+                    ></v-select>
+                    <!-- <span class="basic-info-half" v-if="job.skidsteer">{{
                       job.skidsteer.truck_number
                     }}</span>
                     <span class="basic-info-half" v-if="!job.skidsteer"
                       >Not Assigned</span
-                    >
+                    > -->
                   </td>
                   <td class="job-col-body">
-                    <span class="basic-grey-label-full">Start Time</span>
-                    <span class="basic-info-full">9:30 pm</span>
+                    <span class="basic-grey-label-full">{{timeSlotsMapping[job.time_slots_id]}}</span>
+                    <!-- <span class="basic-info-full">9:30 pm</span> -->
                   </td>
                  
                   <td>
@@ -206,8 +246,31 @@ export default {
   SearchIcon, },
   data() {
     return {
+      timeSlotsMapping:{
+        1: 'Morning',
+        2: 'Afternoon',
+        3: 'Evening'
+      },
       alljobs: [],
-      alldispatch: [], 
+      alldispatch: [],
+      selected:{
+        driver:{
+          truck: {},
+          skidsteer: {}
+        },
+        vehicles:{
+          truck: {},
+          skidsteer: {}
+        }
+      },
+      truck: {
+        drivers: [],
+        vehicles: []
+      },
+      skidsteer:{
+        drivers: [],
+        vehicles: []
+      }
     };
   },
   created() {
@@ -220,6 +283,7 @@ export default {
 
     this.getResults();
     this.getDispatch();
+    this.getDriverWVehicles();
   },
   mounted() {
     let scrollScript = document.createElement("script");
@@ -236,7 +300,7 @@ export default {
     scrollScript2.setAttribute("rel", "stylesheet");
     document.head.appendChild(scrollScript2);
 
-  mapboxgl.accessToken = 'pk.eyJ1IjoibG9jb25lIiwiYSI6ImNrYmZkMzNzbDB1ZzUyenM3empmbXE3ODQifQ.SiBnr9-6jpC1Wa8OTAmgVA';
+    mapboxgl.accessToken = 'pk.eyJ1IjoibG9jb25lIiwiYSI6ImNrYmZkMzNzbDB1ZzUyenM3empmbXE3ODQifQ.SiBnr9-6jpC1Wa8OTAmgVA';
       var map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/mapbox/dark-v9',
@@ -390,12 +454,63 @@ export default {
       }, 2000);
   },
   methods: {
+    getDriverWVehicles(){
+      jobService.listDrivers().then((response) => {
+        if (response.status) {
+          // console.log(response.data);
+          this.truck.drivers = response.data; // Pending - Need to apply condition, if driver_type = 1
+          this.skidsteer.drivers = response.data; // Pending - Need to apply condition, if driver_type = 2
+        } else {
+          this.$toast.open({
+            message: response.message,
+            type: "error",
+            position: "top-right",
+          });
+        }
+      });
+      jobService.listTrucks().then((response) => {
+        if (response.status) {
+          // console.log(response.data);
+          this.truck.vehicles = response.data;
+        } else {
+          this.$toast.open({
+            message: response.message,
+            type: "error",
+            position: "top-right",
+          });
+        }
+      });
+      jobService.listSkidsteers().then((response) => {
+        if (response.status) {
+          // console.log(response.data);
+          this.skidsteer.vehicles = response.data;
+        } else {
+          this.$toast.open({
+            message: response.message,
+            type: "error",
+            position: "top-right",
+          });
+        }
+      });
+    },
     getResults() {
       this.alljobs = [];
       jobService.dispatchAllJoblist().then((response) => {
         //handle response
         if (response.status) {
+          console.log(response.data);
           this.alljobs = response.data;
+          // [...response.data].forEach((job) => {
+          //   let did = 0;
+          //   if(job.truck_driver.driver_type == 1){ //Truck Driver
+          //     if(job.truck_driver){ did = job.truck_driver.id };
+          //     this.selected.driver.truck[job.id] = did;
+          //   }
+          //   if(job.truck_driver.driver_type == 1){ // Skidsteer Driver, to be changed to 2 later
+          //     if(job.truck_driver){ did = job.truck_driver.id };
+          //     this.selected.driver.truck[job.id] = did;
+          //   }
+          // });
         } else {
           this.$toast.open({
             message: response.message,
@@ -421,11 +536,28 @@ export default {
         }
       });
     },
+    update(did, type, jid){
+      jobService.update(type, did, jid).then((response) => {
+        if (response.status) {
+          this.$toast.open({
+            message: response.message,
+            type: "success",
+            position: "top-right",
+          });
+        } else {
+          this.$toast.open({
+            message: response.message,
+            type: "error",
+            position: "top-right",
+          });
+        }
+      });
+    }
   },
   updated() {
     setTimeout(function () {
       $(document).ready(function () {
-              if (!$.fn.dataTable.isDataTable(".table-main")) {
+        if (!$.fn.dataTable.isDataTable(".table-main")) {
         $(".table-main").DataTable({
           aoColumnDefs: [
             {

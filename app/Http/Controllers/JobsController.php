@@ -399,4 +399,30 @@ class JobsController extends Controller {
                         ], 200);
     }
 
+    public function updateDriverVehicle($job_id, $type, $id){
+        $fieldMapping = ['truckDriver' => 'truck_driver_id', 'truck' => 'truck_id', 'skidsteerDriver' => 'skidsteer_driver_id', 'skidsteer' => 'skidsteer_id'];
+        try{
+            if(Job::where('id', $job_id)->update([$fieldMapping[$type] => $id])){
+                return response()->json([
+                                'status' => true,
+                                'message' => $type.' updated successfully',
+                                'data' => []
+                                    ], 200);
+            }
+            return response()->json([
+                    'status' => false,
+                    'message' => $type.' cannot be updated, please contact support!',
+                    'data' => []
+                        ], 500);
+        }catch (\Exception $e) {
+            dd($e);
+            Log::error(json_encode($e->getMessage()));
+            return response()->json([
+                        'status' => false,
+                        'message' => $e->getMessage(),
+                        'data' => []
+                            ], 500);
+        }
+    }
+
 }

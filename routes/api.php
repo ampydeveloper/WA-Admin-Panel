@@ -58,6 +58,7 @@ Route::group(['prefix' => 'auth'], function () {
             
             //Dispatch
             Route::get('dispatches', 'JobsController@dispatches');
+            Route::patch('update-driver-vehicle/{job_id}/{type}/{id}', 'JobsController@updateDriverVehicle');
 
             //update admin profile
             Route::post('change-password', 'AuthController@changePassword');
@@ -100,6 +101,7 @@ Route::group(['prefix' => 'auth'], function () {
             Route::post('update-customer', 'CustomerController@updateCustomer');
             Route::post('update-farm', 'CustomerController@updateFarm');
             Route::post('update-manager', 'CustomerController@updateManager');
+            Route::post('update-farm-and-managers', 'CustomerController@updateFarmWManagers');
             Route::post('update-customer-payment-mode', 'CustomerController@updateCustomerPaymentMode');
 
             //CompanyController
