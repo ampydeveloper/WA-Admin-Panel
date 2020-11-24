@@ -19,6 +19,7 @@ export const customerService = {
   getCustomerCard,
   getCustomerRecord,
   updateFarmManager,
+  updateFarmWManagers,
   apiUrl: environment.apiUrl,
   currentUrl: '',
   currentUser: currentUserSubject.asObservable(),
@@ -135,6 +136,19 @@ function updateFarmManager(data) {
 
   return fetch(
     this.apiUrl+`admin/update-farm`,
+    requestOptions.post(data)
+  )
+    .then(handleResponse)
+    .then(user => {
+      // store user details and passport token in local storage to keep user logged in between page refreshes
+      return user;
+    });
+}
+
+function updateFarmWManagers(data) {
+
+  return fetch(
+    this.apiUrl+`admin/update-farm-and-managers`,
     requestOptions.post(data)
   )
     .then(handleResponse)

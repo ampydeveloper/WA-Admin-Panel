@@ -31,59 +31,60 @@
                            </div>
                           <v-col cols="3" md="3" class="mt-4">
                             <div class="col-xs-12 col-sm-6 col-md-4">
-                            <v-text-field
-                              type="text"
-                              class="mt-m11"
-                              @input="onChange"
-                              v-model="search"
-                              label="Search Place"
-                              required
-                              :rules="[v => !!v || 'Place is required']"
-                            ></v-text-field>
-                            <ul v-show="isOpen" class="autocomplete-results">
-                              <li
-                                v-for="(result, i) in items"
-                                :key="i"
-                                @click="setResult(result)"
-                                class="autocomplete-result"
-                              >{{ result.place_name }}</li>
-                            </ul>
-                           </div>
-                          <div class="col-xs-12 col-sm-6 col-md-4">
-                            <v-text-field
-                              v-model="addForm.farm_unit"
-                              label="Apt/Unit"
-                              required
-                              :rules="[v => !!v || 'Farm apt/unit is required']"
-                            ></v-text-field>
-                          </div>
-                          <div class="col-xs-12 col-sm-6 col-md-4">
-                            <v-text-field
-                              v-model="addForm.farm_city"
-                              label="City"
-                              required
-                              :rules="[v => !!v || 'Farm city is required']"
-                            ></v-text-field>
-                        </div>
-                       <div class="col-xs-12 col-sm-6 col-md-4">
-                            <v-text-field
-                              v-model="addForm.farm_province"
-                              label="Province"
-                              required
-                              :rules="[v => !!v || 'Farm province is required']"
-                            ></v-text-field>
-                       </div>
-                         <div class="col-xs-12 col-sm-6 col-md-4">
-                            <v-text-field
-                              v-model="addForm.farm_zipcode"
-                              label="Zip Code"
-                              required
-                              :rules="[v => !!v || 'Farm zip code is required']"
-                            ></v-text-field>
-                        </div>
-                          <div class="col-xs-12 col-sm-6 col-md-4">
-                            <v-switch v-model="addForm.farm_active" class="mx-2" label="Is Active"></v-switch>
-                        </div>
+                              <v-text-field
+                                type="text"
+                                class="mt-m11"
+                                @input="onChange"
+                                v-model="search"
+                                label="Search Place"
+                                required
+                                :rules="[v => !!v || 'Place is required']"
+                              ></v-text-field>
+                              <ul v-show="isOpen" class="autocomplete-results">
+                                <li
+                                  v-for="(result, i) in items"
+                                  :key="i"
+                                  @click="setResult(result)"
+                                  class="autocomplete-result"
+                                >{{ result.place_name }}</li>
+                              </ul>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-md-4">
+                              <v-text-field
+                                v-model="addForm.farm_unit"
+                                label="Apt/Unit"
+                                required
+                                :rules="[v => !!v || 'Farm apt/unit is required']"
+                              ></v-text-field>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-md-4">
+                              <v-text-field
+                                v-model="addForm.farm_city"
+                                label="City"
+                                required
+                                :rules="[v => !!v || 'Farm city is required']"
+                              ></v-text-field>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-md-4">
+                                  <v-text-field
+                                    v-model="addForm.farm_province"
+                                    label="Province"
+                                    required
+                                    :rules="[v => !!v || 'Farm province is required']"
+                                  ></v-text-field>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-md-4">
+                              <v-text-field
+                                v-model="addForm.farm_zipcode"
+                                label="Zip Code"
+                                required
+                                :rules="[v => !!v || 'Farm zip code is required']"
+                              ></v-text-field>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-md-4">
+                              <v-switch v-model="addForm.farm_active" class="mx-2" label="Is Active"></v-switch>
+                            </div>
+                          </v-col>
                         </v-row>
                       </v-col>
   
@@ -121,7 +122,7 @@
                               v-on:processfile="handleProcessFile2"
                               v-on:processfilerevert="handleRemoveFile2"
                             />
-                           </div>
+                          </v-col>
                           <div class="col-xs-12 col-sm-6 col-md-4">
                             <v-select
                               v-model="input.manager_prefix"
@@ -129,16 +130,16 @@
                               label="Prefix"
                               :rules="[v => !!v || 'Prefix is required']"
                             ></v-select>
-                           </div>
-                          <v<div class="col-xs-12 col-sm-6 col-md-4">
+                          </div>
+                          <div class="col-xs-12 col-sm-6 col-md-4">
                             <v-text-field
                               v-model="input.manager_name"
                               label="Name"
                               required
                               :rules="[v => !!v || 'Manager name is required']"
                             ></v-text-field>
-                           </div>
-                         <div class="col-xs-12 col-sm-6 col-md-4">
+                          </div>
+                          <div class="col-xs-12 col-sm-6 col-md-4">
                             <v-text-field
                               v-model="input.email"
                               :rules="emailRules"
@@ -146,7 +147,7 @@
                               label="E-mail"
                               required
                             ></v-text-field>
-                           </div>
+                          </div>
                           <div class="col-xs-12 col-sm-6 col-md-4">
                             <v-text-field
                               v-model="input.manager_phone"
@@ -155,8 +156,8 @@
                               required
                               maxlength="10"
                             ></v-text-field>
-                           </div>
-                     <div class="col-xs-12 col-sm-6 col-md-4">
+                          </div>
+                          <div class="col-xs-12 col-sm-6 col-md-4">
                             <v-text-field
                               v-model="input.manager_address"
                               label="Address"
@@ -164,22 +165,22 @@
                               :rules="[v => !!v || 'address is required']"
                             ></v-text-field>
                           </div>
-                        <div class="col-xs-12 col-sm-6 col-md-4">
+                          <div class="col-xs-12 col-sm-6 col-md-4">
                             <v-text-field
                               v-model="input.manager_city"
                               label="City"
                               required
                               :rules="[v => !!v || 'City is required']"
                             ></v-text-field>
-                         </div>
-                         <div class="col-xs-12 col-sm-6 col-md-4">
+                          </div>
+                          <div class="col-xs-12 col-sm-6 col-md-4">
                             <v-text-field
                               v-model="input.manager_province"
                               label="State"
                               required
                               :rules="[v => !!v || 'Province is required']"
                             ></v-text-field>
-                        </div>
+                          </div>
                           <div class="col-xs-12 col-sm-6 col-md-4">
                             <v-text-field
                               v-model="input.manager_zipcode"
@@ -188,14 +189,14 @@
                               required
                             ></v-text-field>
                           </div>
-                         <div class="col-xs-12 col-sm-6 col-md-4">
+                          <div class="col-xs-12 col-sm-6 col-md-4">
                             <v-text-field
                               v-model="input.manager_id_card"
                               :rules="[v => !!v || 'Card Id number is required']"
                               label="Id CradNo"
                               required
                             ></v-text-field>
-                      </div>
+                          </div>
                           <div class="col-xs-12 col-sm-6 col-md-4">
                             <file-pond
                               name="uploadImage"
@@ -212,12 +213,12 @@
                               required
                               :rules="[v => !!v || 'Upload id card is required']"
                             />
-                         </div>
-                            <div class="v-messages theme--light error--text" role="alert" v-if="docError">
-                              <div class="v-messages__wrapper">
-                                <div class="v-messages__message">Id card image is required</div>
-                              </div>
+                          </div>
+                          <div class="v-messages theme--light error--text" role="alert" v-if="docError">
+                            <div class="v-messages__wrapper">
+                              <div class="v-messages__message">Id card image is required</div>
                             </div>
+                          </div>
                         </v-row>
                         </template>
                       </v-col>

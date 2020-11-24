@@ -106,4 +106,13 @@ class User extends Authenticatable
         return $this->hasMany('App\User', 'created_by');
     }
     
+    public function getManagerIdCardAttribute(){
+        $id = '';
+        if($this->managerDetails){
+            $id = $this->managerDetails->identification_number;
+        }
+        return $id;
+    }
+
+    protected $appends = ['manager_id_card'];
 }

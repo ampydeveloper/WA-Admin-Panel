@@ -325,6 +325,7 @@ export default {
         // only the end or destination will change
         var url = 'https://api.mapbox.com/directions/v5/mapbox/cycling/' + start[0] + ',' + start[1] + ';' + end[0] + ',' + end[1] + '?steps=true&geometries=geojson&access_token=pk.eyJ1IjoibG9jb25lIiwiYSI6ImNrYmZkMzNzbDB1ZzUyenM3empmbXE3ODQifQ.SiBnr9-6jpC1Wa8OTAmgVA';
 
+        console.log(url);
         // make an XHR request https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
         var req = new XMLHttpRequest();
         req.open('GET', url, true);
@@ -342,7 +343,7 @@ export default {
           };
           // if the route already exists on the map, reset it using setData
           if (map.getSource('route')) {
-            console.log(geojson);
+            console.log('un');
             map.getSource('route').setData(geojson);
           } else { // otherwise, make a new request
             map.addLayer({
@@ -355,7 +356,7 @@ export default {
                   properties: {},
                   geometry: {
                     type: 'LineString',
-                    coordinates: geojson
+                    coordinates: [geojson]
                   }
                 }
               },
@@ -364,9 +365,9 @@ export default {
                 'line-cap': 'round'
               },
               paint: {
-                'line-color': '#3887be',
-                'line-width': 5,
-                'line-opacity': 0.75
+                'line-color': '#f30',
+                'line-width': 50,
+                'line-opacity': 1
               }
             });
           }
@@ -379,7 +380,8 @@ export default {
       map.on('load', function() {
         // make an initial directions request that
         // starts and ends at the same location
-        getRoute(start, [-122.61365699963287, 45.51773726437733]);
+        console.log('here');
+        // getRoute(start, [-122.61365699963287, 45.51773726437733]);
 
         map.addSource('truck', {
             type: 'geojson',
@@ -424,7 +426,7 @@ export default {
             }
           },
           paint: {
-            'circle-radius': 10,
+            'circle-radius': 5,
             'circle-color': '#f30'
           }
         });
@@ -433,25 +435,25 @@ export default {
 
       });
       window.lo = 45.523751;
-      window.setInterval(function () {
-        lo = lo - .0001
-        start = [-122.662453, lo];
+      // window.setInterval(function () {
+      //   lo = lo - .0001
+      //   start = [-122.662453, lo];
 
-        map.getSource('truck').setData({
-              type: 'Feature',
-              properties: {},
-              geometry: {
-                type: 'Point',
-                coordinates: start
-              }
-          });
-        map.flyTo({
-          center: start,
-          speed: 0.5
-        });
-      getRoute(start, [-122.61365699963287, 45.51773726437733]);
+      //   map.getSource('truck').setData({
+      //         type: 'Feature',
+      //         properties: {},
+      //         geometry: {
+      //           type: 'Point',
+      //           coordinates: start
+      //         }
+      //     });
+      //   map.flyTo({
+      //     center: start,
+      //     speed: 0.5
+      //   });
+      // getRoute(start, [-122.61365699963287, 45.51773726437733]);
 
-      }, 2000);
+      // }, 2000);
   },
   methods: {
     getDriverWVehicles(){
@@ -498,7 +500,7 @@ export default {
       jobService.dispatchAllJoblist().then((response) => {
         //handle response
         if (response.status) {
-          console.log(response.data);
+          // console.log(response.data);
           this.alljobs = response.data;
           // [...response.data].forEach((job) => {
           //   let did = 0;
@@ -522,19 +524,19 @@ export default {
     },
     getDispatch() {
       // this.alljobs = [];
-      jobService.dispatchlist().then((response) => {
-        //handle response
-        if (response.status) {
-          this.alldispatch = response.data;
-          console.log(response.data);
-        } else {
-          this.$toast.open({
-            message: response.message,
-            type: "error",
-            position: "top-right",
-          });
-        }
-      });
+      // jobService.dispatchlist().then((response) => {
+      //   //handle response
+      //   if (response.status) {
+      //     this.alldispatch = response.data;
+      //     console.log(response.data);
+      //   } else {
+      //     this.$toast.open({
+      //       message: response.message,
+      //       type: "error",
+      //       position: "top-right",
+      //     });
+      //   }
+      // });
     },
     update(did, type, jid){
       jobService.update(type, did, jid).then((response) => {

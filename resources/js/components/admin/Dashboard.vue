@@ -416,6 +416,7 @@ export default {
       graphs: "",
       invoiceGraphs: "",
       weather: "",
+      gradient: null,
       planetChartData: planetChartData,
       pieChartData: pieChartData,
       servicesData: servicesData,
@@ -428,13 +429,12 @@ export default {
     this.dashboardData();
     // this.gradient = this.$refs.canvas.getContext('2d').createLinearGradient(0, 0, 0, 450);
     this.gradient = null;
-
     // this.gradient.addColorStop(0, 'rgba(255, 0,0, 0.5)')
     // this.gradient.addColorStop(0.5, 'rgba(255, 0, 0, 0.25)');
     // this.gradient.addColorStop(1, 'rgba(255, 0, 0, 0)');
     // setTimeout(function(){
-    this.createChart("planet-chart", this.planetChartData, this.gradient);
-    this.createChart("pie-chart", this.pieChartData, this.gradient);
+    // this.createChart("planet-chart", this.planetChartData, this.gradient);
+    // this.createChart("pie-chart", this.pieChartData, this.gradient);
     this.createChart("services-chart", this.servicesData, this.gradient);
     this.createChart("services-chart2", this.servicesData4, this.gradient);
     this.createChart("services-chart3", this.servicesData2, this.gradient);
@@ -463,9 +463,23 @@ export default {
           this.weather = response.data.weather;
           this.weather.main_temp = response.data.weather.the_temp.toFixed(2);
           this.weather.min_temp_val = response.data.weather.min_temp.toFixed(2);
-          this.weather.max_temp_val = response.data.weather.max_temp.toFixed(2);
+          this.weather.max_temp_val = parseFloat(response.data.weather.max_temp).toFixed(2);
 
-          //  this.pieChartData.data.datasets.data = this.invoiceGraphs;
+          // Customer Graph
+          let customerLabels = [];
+          let customerData = [];
+          [...response.data.graphs.newCustomerGraph].forEach((stat) => {
+            customerLabels.push(stat.date);
+            customerData.push(stat.no);
+          });
+          this.planetChartData.data.datasets[0].data = customerData;
+          this.planetChartData.data.labels = customerLabels;
+          this.createChart("planet-chart", this.planetChartData, this.gradient);
+
+          // Invoice Pie-Chart
+          const invoiceVals = response.data.invoiceGraphs;
+          this.pieChartData.data.datasets[0].data = [invoiceVals.customerInvoice, invoiceVals.haulerInvoice, invoiceVals.outstandingInvoices];
+          this.createChart("pie-chart", this.pieChartData, this.gradient);
           //  this.createChart("pie-chart", this.pieChartData, this.gradient);
         } else {
           this.$toast.open({

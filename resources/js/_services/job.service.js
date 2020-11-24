@@ -43,7 +43,7 @@ export const jobService = {
   currentUrl: '',
   currentUser: currentUserSubject.asObservable(),
   get currentUserValue() {
-    return currentUserSubject.value;
+    return currentUserSubject.value
   }
 };
 

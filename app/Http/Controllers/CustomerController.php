@@ -743,6 +743,121 @@ class CustomerController extends Controller {
         }
     }
 
+    public function updateFarmWManagers(Request $request){
+        $validator = Validator::make($request->all(), [
+            'farm.farm_id' => 'required',
+            'farm.farm_address' => 'required',
+            'farm.farm_city' => 'required',
+            'farm.farm_province' => 'required',
+            'farm.farm_zipcode' => 'required',
+            'farm.farm_active' => 'required',
+            'farm.latitude' => 'required',
+            'farm.longitude' => 'required',
+    
+            'managers.*.manager_name' => 'required',
+            'managers.*.manager_email' => 'required|email',
+            'managers.*.manager_phone' => 'required',
+            'managers.*.manager_address' => 'required',
+            'managers.*.manager_city' => 'required',
+            'managers.*.manager_province' => 'required',
+            'managers.*.manager_zipcode' => 'required',
+            'managers.*.manager_id_card' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                        'status' => false,
+                        'message' => 'The given data was invalid.',
+                        'data' => $validator->errors()
+                            ], 422);
+        }
+        try {
+            DB::beginTransaction();
+
+            // Update Farm
+            CustomerFarm::whereId($request->farm['farm_id'])->update([
+                'farm_address' => $request->farm['farm_address'],
+                'farm_unit' => (isset($request->farm['farm_unit']) && $request->farm['farm_unit'] != '' && $request->farm['farm_unit'] != null) ? ($request->farm['farm_unit']) : null,
+                'farm_city' => $request->farm['farm_city'],
+                'farm_province' => $request->farm['farm_province'],
+                'farm_zipcode' => $request->farm['farm_zipcode'],
+                'farm_image' => (isset($request->farm['farm_images']) && $request->farm['farm_images'] != '' && $request->farm['farm_images'] != null) ? json_encode($request->farm['farm_images']) : null,
+                'farm_active' => $request->farm['farm_active'],
+                'latitude' => $request->farm['latitude'],
+                'longitude' => $request->farm['longitude'],
+            ]);
+
+            $updatedManagerIds = [];
+            foreach ($request->managers as $manager) {
+                // Check Email
+                $existingObj = null;
+                if(array_key_exists('manager_id', $manager)){ $existingObj = User::whereId($manager['manager_id'])->first(); }
+                if ($manager['manager_email'] != '' && $manager['manager_email'] != null) {
+                    if ($existingObj->email !== $manager['manager_email'] || $existingObj == null) {
+                        $checkEmail = User::where('email', $manager['manager_email'])->first();
+                        if ($checkEmail !== null) {
+                            if ($checkEmail->id !== $manager['manager_id']) {
+                                return response()->json([
+                                            'status' => false,
+                                            'message' => 'Email '.$manager['manager_email'].' is already taken.',
+                                            'data' => []
+                                                ], 422);
+                            }
+                        }
+                    }
+                }
+                // Update Existing
+                if(isset($manager['manager_id'])){
+                    // array_push($updatedManagerIds, $manager['manager_id']);
+                    $managerObj = $existingObj;
+                    $managerDetailObj = ManagerDetail::where('user_id', $manager['manager_id'])->first();
+                    if($managerDetailObj == null){ $managerDetailObj = new ManagerDetail(); }
+                }else{
+                    $managerObj = new User();
+                    $managerDetailObj = new ManagerDetail();
+                }
+                
+                $managerObj->prefix = (isset($manager['manager_prefix']) && $manager['manager_prefix'] != '' && $manager['manager_prefix'] != null) ? $manager['manager_prefix'] : null;
+                $managerObj->first_name = $manager['manager_name'];
+                $managerObj->email = $manager['manager_email'];
+                $managerObj->phone = $manager['manager_phone'];
+                $managerObj->address = $manager['manager_address'];
+                $managerObj->city = $manager['manager_city'];
+                $managerObj->state = $manager['manager_province'];
+                $managerObj->zip_code = $manager['manager_zipcode'];
+                $managerObj->user_image = (isset($manager['manager_image']) && $manager['manager_image'] != '' && $manager['manager_image'] != null) ? $manager['manager_image'] : null;
+                $managerObj->farm_id = $request->farm['farm_id'];
+                
+                if ($managerObj->save()) {
+                    array_push($updatedManagerIds, $managerObj->id);
+                    $managerDetailObj->user_id = $managerObj->id;
+                    $managerDetailObj->identification_number = $manager['manager_id_card'];
+                    $managerDetailObj->document = $manager['manager_card_image'] ?? null;
+                    $managerDetailObj->save();
+                }
+            }
+            
+            // Deleted removed Managers
+            User::where('farm_id', $request->farm['farm_id'])->whereNotIn('id', $updatedManagerIds)->delete();
+
+            DB::commit();
+            return response()->json([
+                        'status' => true,
+                        'message' => 'Farm & Manager details saved successfully.',
+                        'data' => []
+                            ], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error($e);
+            // Log::error(json_encode($e->getMessage()));
+            return response()->json([
+                        'status' => false,
+                        'message' => $e->getMessage(),
+                        'data' => []
+                            ], 500);
+        }
+    }
+
     /**
      * email for new registration and password
      */
