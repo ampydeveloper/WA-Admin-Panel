@@ -62,7 +62,6 @@ class DriverController extends Controller {
                             ], 422);
         }
         
-        dd('here');
         $driver = $request->user();
         
         
@@ -249,7 +248,7 @@ class DriverController extends Controller {
         return response()->json([
                             'status' => true,
                             'message' => 'job details.',
-                            'data' => Job::whereId($request->job_id)->with("customer", "manager", "farm", "service")->first()
+                            'data' => Job::whereId($request->job_id)->with("customer", "manager", "farm", "service", 'truck', 'skidsteer', 'truck_driver', 'skidsteer_driver')->first()
                                 ], 200);
         
     }
