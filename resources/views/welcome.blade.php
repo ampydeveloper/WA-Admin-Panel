@@ -21,7 +21,8 @@
         </div>
         <div id="snackbar">
         </div>
-        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAQEbFYBxoq9qSepomK_1KEM7TxU3vSOyw&libraries=geometry,places"></script>
+        <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCymw6I3DWcllnp9aCBz3HYTWqtj916DFA&libraries=geometry,places"></script>
+       <!-- <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCymw6I3DWcllnp9aCBz3HYTWqtj916DFA&libraries=geometry,places"></script> <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAQEbFYBxoq9qSepomK_1KEM7TxU3vSOyw&libraries=geometry,places"></script> -->
         <script src="{{ mix('js/app.js') }}" type="text/javascript"></script>
         <script src="//code.jquery.com/jquery.js"></script>
         <script src="//cdn.datatables.net/1.10.7/js/jquery.dataTables.min.js"></script> 
