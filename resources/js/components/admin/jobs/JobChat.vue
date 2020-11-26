@@ -5,8 +5,8 @@
         <v-col cols="4" md="4" class="job_info main_box">
           <div class="mb-5">
             <div class="clearfix">
-              <span class="basic-grey-label-half">Job ID</span>
-              <span class="det-half">#JOB100{{ job.id }}</span>
+              <span class="basic-grey-label-half">Pickup ID</span>
+              <span class="det-half">#PICKUP100{{ job.id }}</span>
             </div>
             <div class="clearfix">
               <span class="basic-grey-label-half">Service</span>
@@ -80,6 +80,8 @@
                   :value="userdata.id"
                 />
                 <input type="hidden" id="job-id" :value="job.id" />
+                <input type="hidden" id="job-lat" :value="farm.latitude" />
+                <input type="hidden" id="job-long" :value="farm.longitude" />
                 <input
                   type="hidden"
                   id="current-user-image"
@@ -168,7 +170,7 @@ export default {
 var wellOffice = "26.695145,-80.244859";
     var icons = {
       start: new google.maps.MarkerImage(
-        "http://wa.customer.leagueofclicks.com/img/map-icon2.png",
+        "http://wa.customer.leagueofclicks.com/img/car-marker2.png",
         new google.maps.Size(72, 100),
         // The origin point (x,y)
         new google.maps.Point(0, 0),
@@ -176,7 +178,7 @@ var wellOffice = "26.695145,-80.244859";
         new google.maps.Point(22, 32)
       ),
       end: new google.maps.MarkerImage(
-        "http://wa.customer.leagueofclicks.com/img/car-marker2.png",
+        "http://wa.customer.leagueofclicks.com/img/map-icon2.png",
         new google.maps.Size(55, 55),
         // The origin point (x,y)
         new google.maps.Point(0, 0),
@@ -192,7 +194,7 @@ var wellOffice = "26.695145,-80.244859";
         zoom: 7,
         center: { lat: 41.85, lng: -87.65 },
         mapTypeControl: false,
-        draggable: false,
+        // draggable: false,
         scaleControl: false,
         scrollwheel: false,
         navigationControl: false,
@@ -377,13 +379,15 @@ var wellOffice = "26.695145,-80.244859";
     }
 
     function calculateAndDisplayRoute(directionsService, directionsRenderer) {
+      const jobLat = document.getElementById("job-lat")._value;
+        const joblong = document.getElementById("job-long")._value;
       directionsService.route(
         {
           origin: {
-            query: wellOffice, //"st louis, mo"
+            query: wellOffice,
           },
           destination: {
-            query: "st louis, mo",
+            query: jobLat+','+joblong, // //"st louis, mo"
           },
           travelMode: google.maps.TravelMode.DRIVING,
         },
@@ -391,8 +395,8 @@ var wellOffice = "26.695145,-80.244859";
           if (status === "OK") {
             directionsRenderer.setDirections(response);
             var leg = response.routes[0].legs[0];
-            makeMarker(leg.start_location, icons.start, "title");
-            makeMarker(leg.end_location, icons.end, "title");
+            makeMarker(leg.start_location, icons.start, "Wellington Office");
+            makeMarker(leg.end_location, icons.end, "Farm");
           } else {
             window.alert("Directions request failed due to " + status);
           }
@@ -407,166 +411,10 @@ var wellOffice = "26.695145,-80.244859";
         title: title,
       });
     }
+setTimeout(function(){
+ initMap();
+},6000);   
 
-    initMap();
-
-// let scrollScript3 = document.createElement("script");
-//     scrollScript3.setAttribute(
-//       "src",
-//       "https://api.tiles.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"
-//     );
-//     document.head.appendChild(scrollScript3);
-//     let scrollScript4 = document.createElement("link");
-//     scrollScript4.setAttribute(
-//       "href",
-//       "https://api.tiles.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css"
-//     );
-//     scrollScript4.setAttribute("rel", "stylesheet");
-//     document.head.appendChild(scrollScript4);
-
-    // mapboxgl.accessToken =
-    //   "pk.eyJ1IjoibG9jb25lIiwiYSI6ImNrYmZkMzNzbDB1ZzUyenM3empmbXE3ODQifQ.SiBnr9-6jpC1Wa8OTAmgVA";
-    // var map = new mapboxgl.Map({
-    //   container: "map",
-    //   style: "mapbox://styles/mapbox/dark-v9",
-    //   center: [-122.662323, 45.523751], // starting position
-    //   zoom: 12,
-    // });
-
-    // var canvas = map.getCanvasContainer();
-    // var start = [-122.662323, 45.523751];
-
-    // function getRoute(start, end) {
-    //   var url =
-    //     "https://api.mapbox.com/directions/v5/mapbox/cycling/" +
-    //     start[0] +
-    //     "," +
-    //     start[1] +
-    //     ";" +
-    //     end[0] +
-    //     "," +
-    //     end[1] +
-    //     "?steps=true&geometries=geojson&access_token=pk.eyJ1IjoibG9jb25lIiwiYSI6ImNrYmZkMzNzbDB1ZzUyenM3empmbXE3ODQifQ.SiBnr9-6jpC1Wa8OTAmgVA";
-        
-    //   var req = new XMLHttpRequest();
-    //   req.open("GET", url, true);
-    //   req.onload = function () {
-    //     var json = JSON.parse(req.response);
-    //     var data = json.routes[0];
-    //     var route = data.geometry.coordinates;
-    //     var geojson = {
-    //       type: "Feature",
-    //       properties: {},
-    //       geometry: {
-    //         type: "LineString",
-    //         coordinates: route,
-    //       },
-    //     };
-    //     // if the route already exists on the map, reset it using setData
-    //     if (map.getSource("route")) {
-    //       console.log(geojson);
-    //       map.getSource("route").setData(geojson);
-    //     } else {
-    //       // otherwise, make a new request
-    //       map.addLayer({
-    //         id: "route",
-    //         type: "line",
-    //         source: {
-    //           type: "geojson",
-    //           data: {
-    //             type: "Feature",
-    //             properties: {},
-    //             geometry: {
-    //               type: "LineString",
-    //               coordinates: geojson,
-    //             },
-    //           },
-    //         },
-    //         layout: {
-    //           "line-join": "round",
-    //           "line-cap": "round",
-    //         },
-    //         paint: {
-    //              "line-color": "#3c3b3b",
-    //           "line-width": 4,
-    //           "line-opacity": 0.75,
-    //         },
-    //       });
-    //     }
-    //     // add turn instructions here at the end
-    //   };
-    //   req.send();
-    // }
-
-    // // this is where the code for the next step will go
-    // map.on("load", function () {
-    //   // make an initial directions request that
-    //   // starts and ends at the same location
-    //   getRoute(start, [-122.61365699963287, 45.51773726437733]);
-
-    //   map.addSource("truck", {
-    //     type: "geojson",
-    //     data: {
-    //       type: "FeatureCollection",
-    //       features: [
-    //         {
-    //           type: "Feature",
-    //           properties: {},
-    //           geometry: {
-    //             type: "Point",
-    //             coordinates: start,
-    //           },
-    //         },
-    //       ],
-    //     },
-    //   });
-
-    //   map.loadImage(
-    //     `http://wa.customer.leagueofclicks.com/img/car-marker2.png`,
-    //     function (error, image) {
-    //       if (error) throw error;
-    //       map.addImage("car-marker", image);
-    //     }
-    //   );
-
-    //   // Add starting point to the map
-    //   map.addLayer({
-    //     id: "truck",
-    //     type: "symbol",
-    //     source: "truck",
-    //     layout: {
-    //       "icon-image": "car-marker",
-    //     },
-    //   });
-
-    //   var el = document.createElement("div");
-    //   el.className = "map-marker";
-    //   new mapboxgl.Marker(el)
-    //     .setLngLat([-122.61365699963287, 45.51773726437733])
-    //     .addTo(map);
-
-    //   getRoute(start, [-122.61365699963287, 45.51773726437733]);
-    // });
-
-    // window.lo = 45.523751;
-    // window.setInterval(function () {
-    //   lo = lo - 0.0001;
-    //   start = [-122.662453, lo];
-
-    //   map.getSource("truck").setData({
-    //     type: "Feature",
-    //     properties: {},
-    //     geometry: {
-    //       type: "Point",
-    //       coordinates: start,
-    //     },
-    //   });
-    //   map.flyTo({
-    //     center: start,
-    //     speed: 0.5,
-    //   });
-    //   getRoute(start, [-122.61365699963287, 45.51773726437733]);
-    // }, 2000);
   },
   methods: {
     getResults() {
@@ -646,6 +494,7 @@ var wellOffice = "26.695145,-80.244859";
 
       socket.on("chat-message", (data) => {
         const userImage = $("#current-user-image").val();
+         if (data.job_id == jobId._value) {
         if (data.name == name._value) {
           appendMessage(
             '<div class="chat-msg">' +
@@ -664,6 +513,7 @@ var wellOffice = "26.695145,-80.244859";
           );
         }
         messageContainerScroll.scroll([0, "100%"], 50, { x: "", y: "linear" });
+        }
       });
       $(document).on("submit", "#send-container", function (e) {
         const message = messageInput.value;

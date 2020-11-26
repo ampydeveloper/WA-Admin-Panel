@@ -14,7 +14,9 @@ class ChatController extends Controller {
         
     }
 
-    public function jobChat() {
+    public function jobChat(Request $request) {
+//        echo $request->jobId;
+        die('red');
 //        if (Auth::check()) {
 //            $ch = curl_init();
 //            curl_setopt($ch, CURLOPT_URL, "http://" . env('SOCKET_SERVER_IP') . ":" . env('SOCKET_SERVER_PORT'));
@@ -35,7 +37,7 @@ class ChatController extends Controller {
 //        session()->flush();
 //        return redirect(route('frontend.enterLiveStreaming'));
         $data = array(
-            'jobId' => 46,
+            'jobId' => $request->jobId,
         );
         $postData = json_encode($data);
 

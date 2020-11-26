@@ -149,26 +149,7 @@
         <div class="grap" style="height: 594px">
           <div class="customer-graph-headings">
             <h4 class="active">Dispatched Fleet</h4>
-            <mapbox
-              access-token="pk.eyJ1IjoibG9jb25lIiwiYSI6ImNrYmZkMzNzbDB1ZzUyenM3empmbXE3ODQifQ.SiBnr9-6jpC1Wa8OTAmgVA"
-              :map-options="{
-                style: 'mapbox://styles/mapbox/dark-v9',
-                center: [-80.2853179, 26.6094155],
-                zoom: 7,
-              }"
-              :geolocate-control="{
-                show: true,
-                position: 'top-left',
-              }"
-              :scale-control="{
-                show: true,
-                position: 'top-left',
-              }"
-              :fullscreen-control="{
-                show: true,
-                position: 'top-left',
-              }"
-            />
+            <div id="map" class="contain"></div>
           </div>
         </div>
       </v-col>
@@ -370,7 +351,7 @@
 
 <script>
 import Chart from "chart.js";
-import Mapbox from "mapbox-gl-vue";
+// import Mapbox from "mapbox-gl-vue";
 import planetChartData from "./chart/chart-data.js";
 import pieChartData from "./chart/pie-chart-data.js";
 import servicesData from "./chart/services-data.js";
@@ -394,7 +375,7 @@ export default {
   components: {
     UserIcon,
     LockIcon,
-    Mapbox,
+    // Mapbox,
     GridIcon,
     UserCheckIcon,
     TruckIcon,
@@ -440,6 +421,253 @@ export default {
     this.createChart("services-chart3", this.servicesData2, this.gradient);
     this.createChart("services-chart4", this.servicesData3, this.gradient);
     // }, 2000);
+
+    var wellOffice = "26.695145,-80.244859";
+    var icons = {
+      start: new google.maps.MarkerImage(
+        "http://wa.customer.leagueofclicks.com/img/car-marker2.png",
+        new google.maps.Size(72, 100),
+        // The origin point (x,y)
+        new google.maps.Point(0, 0),
+        // The anchor point (x,y)
+        new google.maps.Point(22, 32)
+      ),
+      end: new google.maps.MarkerImage(
+        "http://wa.customer.leagueofclicks.com/img/map-icon2.png",
+        new google.maps.Size(55, 55),
+        // The origin point (x,y)
+        new google.maps.Point(0, 0),
+        // The anchor point (x,y)
+        new google.maps.Point(22, 32)
+      ),
+    };
+    var map;
+    function initMap() {
+      const directionsService = new google.maps.DirectionsService();
+      const directionsRenderer = new google.maps.DirectionsRenderer({suppressMarkers: true});
+      map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 7,
+        center: { lat: 41.85, lng: -87.65 },
+        mapTypeControl: false,
+        // draggable: false,
+        scaleControl: false,
+        scrollwheel: false,
+        navigationControl: false,
+        streetViewControl: false,
+        styles: [
+          {
+            featureType: "landscape.natural",
+            elementType: "all",
+            stylers: [
+              {
+                visibility: "on",
+              },
+            ],
+          },
+          {
+            featureType: "landscape.natural",
+            elementType: "labels",
+            stylers: [
+              {
+                visibility: "off",
+              },
+            ],
+          },
+          {
+            featureType: "poi",
+            elementType: "labels",
+            stylers: [
+              {
+                visibility: "simplified",
+              },
+            ],
+          },
+          {
+            featureType: "poi",
+            elementType: "labels.text",
+            stylers: [
+              {
+                visibility: "simplified",
+              },
+            ],
+          },
+          {
+            featureType: "poi",
+            elementType: "labels.icon",
+            stylers: [
+              {
+                visibility: "off",
+              },
+            ],
+          },
+          {
+            featureType: "poi.park",
+            elementType: "all",
+            stylers: [
+              {
+                visibility: "on",
+              },
+            ],
+          },
+          {
+            featureType: "poi.park",
+            elementType: "labels",
+            stylers: [
+              {
+                visibility: "off",
+              },
+            ],
+          },
+          {
+            featureType: "road",
+            elementType: "all",
+            stylers: [
+              {
+                visibility: "simplified",
+              },
+            ],
+          },
+          {
+            featureType: "road",
+            elementType: "labels",
+            stylers: [
+              {
+                visibility: "on",
+              },
+            ],
+          },
+          {
+            featureType: "road",
+            elementType: "labels.text.fill",
+            stylers: [
+              {
+                visibility: "on",
+              },
+            ],
+          },
+          {
+            featureType: "road",
+            elementType: "labels.text.stroke",
+            stylers: [
+              {
+                visibility: "on",
+              },
+            ],
+          },
+          {
+            featureType: "road",
+            elementType: "labels.icon",
+            stylers: [
+              {
+                visibility: "off",
+              },
+            ],
+          },
+          {
+            featureType: "transit",
+            elementType: "all",
+            stylers: [
+              {
+                visibility: "simplified",
+              },
+            ],
+          },
+          {
+            featureType: "transit.station.airport",
+            elementType: "all",
+            stylers: [
+              {
+                visibility: "off",
+              },
+            ],
+          },
+          {
+            featureType: "transit.station.airport",
+            elementType: "geometry.fill",
+            stylers: [
+              {
+                visibility: "off",
+              },
+            ],
+          },
+          {
+            featureType: "transit.station.airport",
+            elementType: "labels.text.fill",
+            stylers: [
+              {
+                visibility: "off",
+              },
+            ],
+          },
+          {
+            featureType: "transit.station.bus",
+            elementType: "all",
+            stylers: [
+              {
+                visibility: "off",
+              },
+            ],
+          },
+          {
+            featureType: "transit.station.rail",
+            elementType: "all",
+            stylers: [
+              {
+                visibility: "off",
+              },
+            ],
+          },
+          {
+            featureType: "water",
+            elementType: "geometry.fill",
+            stylers: [
+              {
+                color: "#e2f6fe",
+              },
+            ],
+          },
+        ],
+      });
+      directionsRenderer.setMap(map);
+
+      calculateAndDisplayRoute(directionsService, directionsRenderer);
+    }
+
+    function calculateAndDisplayRoute(directionsService, directionsRenderer) {
+      directionsService.route(
+        {
+          origin: {
+            query: wellOffice,
+          },
+          destination: {
+            query: '26.654155,-80.248645', 
+          },
+          travelMode: google.maps.TravelMode.DRIVING,
+        },
+        (response, status) => {
+          if (status === "OK") {
+            directionsRenderer.setDirections(response);
+            var leg = response.routes[0].legs[0];
+            makeMarker(leg.start_location, icons.start, "Wellington Office");
+            makeMarker(leg.end_location, icons.end, "Farm");
+          } else {
+            window.alert("Directions request failed due to " + status);
+          }
+        }
+      );
+    }
+    function makeMarker(position, icon, title) {
+      new google.maps.Marker({
+        position: position,
+        map: map,
+        icon: icon,
+        title: title,
+      });
+    }
+setTimeout(function(){
+ initMap();
+},6000); 
+
   },
   methods: {
     createChart(chartId, chartData, gradient) {
