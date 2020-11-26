@@ -75,6 +75,9 @@ class CreateJobsTable extends Migration
             $table->time('start_time')->nullable();
 
             $table->time('end_time')->nullable();
+            
+            $table->integer('starting_miles')->nullable();
+            $table->integer('ending_miles')->nullable();
 
             $table->timestamps();
             $table->softDeletes('deleted_at', 0);

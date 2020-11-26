@@ -215,14 +215,14 @@ Route::group(['prefix' => 'auth'], function () {
             Route::get('delivered-jobs', 'Driver\DriverController@deliveredJobs');
             Route::get('ongoing-jobs', 'Driver\DriverController@ongoingJobs');
             Route::get('job-detail/{job_id}', 'Driver\DriverController@jobDetail');
+            Route::post('start-job', 'Driver\DriverController@startJob');
+            Route::post('end-job', 'Driver\DriverController@endJob');
             Route::get('earnings', 'Driver\DriverController@earnings');
             
             Route::get('dashboard', 'Driver\DriverController@dashboard');
             Route::get('routes', 'Driver\DriverController@routes');
             Route::get('start-route', 'Driver\DriverController@startRoute');
-            Route::get('start-job', 'Driver\DriverController@startJob');
             Route::get('end-route', 'Driver\DriverController@endRoute');
-            Route::get('end-job', 'Driver\DriverController@endJob');
             Route::post('job-filter', 'Driver\DriverController@jobFilter');
         });
     });
