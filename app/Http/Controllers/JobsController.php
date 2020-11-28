@@ -8,6 +8,7 @@ use App\User;
 use Validator;
 use App\Service;
 use App\CustomerFarm;
+use App\Vehicle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 //use Illuminate\Support\Str;
@@ -137,6 +138,18 @@ class JobsController extends Controller {
                                 'message' => 'The given data was invalid.',
                                 'data' => []
                                     ], 422);
+                }
+            }
+            
+            if(User::wherId($request->customer_id)->first('role_id')['role_id'] == config('constant.roles.Customer')){
+                $timeSlot = null;
+                if($request->has('time_slots_id')){ $timeSlot = $request->time_slots_id; }
+                if(!$this->__checkAvailability($request->service_id, $request->job_providing_date, $timeSlot)){
+                    return response()->json([
+                            'status' => false,
+                            'message' => 'No slots left for selected service in selected date and service time, please try selecting different options',
+                            'data' => []
+                                ], 422);
                 }
             }
             if ($checkService->service_type == config('constant.service_type.by_weight')) {
@@ -480,6 +493,40 @@ class JobsController extends Controller {
                         'data' => []
                             ], 500);
         }
+    }
+
+    private function __checkAvailability($service=null, $date=null, $timeSlot=null, $weight=false){
+        // Assume Available Minutes per slot 180
+        // $service = 20; //test
+        // $date = '2020-11-25'; //test
+        // $timeSlot = 3; //test
+
+        // // Job by weight //Discussion Pending
+        // // Get weight from job
+        
+        // Available Trucks & Drivers
+        $drivers = User::join('drivers', 'drivers.user_id', '=', 'users.id')->where(['users.role_id' => config('constant.roles.Driver'), 'users.is_active' => 1, 'drivers.driver_type' => config('constant.driver_type.truck_driver'), 'drivers.status' => config('constant.driver_status.available')])->count();
+        $vehicles = Vehicle::where(['vehicle_type' => config('constant.vehicle_type.truck'), 'status' => config('constant.vehicle_status.available')])->count();
+        
+        $totalMinutes = ($drivers < $vehicles ? $drivers : $vehicles) * 180;
+        
+        $ttc_mapping = config('constant.time_taken_to_complete_service_reverse');
+        $service_ttc = (int) $ttc_mapping[Service::whereId($service)->first('time_taken_to_complete_service')['time_taken_to_complete_service']];
+        
+        $bookedJobs = Job::where(['job_providing_date' => $date, 'service_id' => $service]);
+
+        // if($timeSlot != null){ $bookedJobs->where('time_slots_id', $timeSlot); $totalMinutes *= 3; } 
+        
+        $bookedJobs = $bookedJobs->with('service')->get();
+        
+        $bookedMinutes = 0;
+        foreach($bookedJobs as $job){
+            // add distance from warehouse and dumoign area in total, get from farm associated with job, to-do, community
+            $bookedMinutes += (int) $ttc_mapping[$job->service->time_taken_to_complete_service] + $job->farm->distance_warehouse + $job->farm->distance_dumping_area; //ttc + commute distance from warehouse and dumping_area
+        }
+        $availableMinutes = $totalMinutes - $bookedMinutes;
+
+        return $service_ttc <= $availableMinutes ? True : False;
     }
 
 }
