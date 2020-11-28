@@ -21,7 +21,7 @@ return [
     ],
     'driver_status' => [
         'available' => 1,
-        'unavailable' => 2
+        'unavailable' => 0
     ],
     'payment_methods' => [
         'stripe' => 1,
@@ -135,6 +135,10 @@ return [
     'warehouse' => [
         'lat' => '31.23',
         'lon' => '34.34'
+    ],
+    'dumping_area' => [
+        'lat' => '31.30',
+        'lon' => '34.36'
     ],
     'repeating_days' => ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'],
 ];

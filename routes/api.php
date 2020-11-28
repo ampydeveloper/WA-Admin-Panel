@@ -219,6 +219,8 @@ Route::group(['prefix' => 'auth'], function () {
             Route::post('start-job', 'Driver\DriverController@startJob');
             Route::post('end-job', 'Driver\DriverController@endJob');
             Route::get('earnings', 'Driver\DriverController@earnings');
+            Route::post('earnings-filter', 'Driver\DriverController@earningsFilter');
+            Route::post('status', 'Driver\DriverController@driverStatus');
             
             Route::get('dashboard', 'Driver\DriverController@dashboard');
             Route::get('routes', 'Driver\DriverController@routes');

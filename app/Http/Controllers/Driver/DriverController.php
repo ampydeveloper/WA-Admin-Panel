@@ -25,6 +25,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 
+use DateTime;
+
 class DriverController extends Controller {
     
     public function getDriver(Request $request) {
@@ -263,7 +265,7 @@ class DriverController extends Controller {
         $jobDetails['end_time'] = $data->end_time;
         $jobDetails['truck_no'] = $data->truck->truck_number;
         $jobDetails['skidsteer_no'] = $data->skidsteer->truck_number;
-                
+        $jobDetails['job_status'] = $data->job_status;        
         if($driver->id == $data->truck_driver->id) {
             $jobDetails['skidsteer_driver_name'] = $data->skidsteer_driver->first_name;
         } else {
@@ -300,8 +302,15 @@ class DriverController extends Controller {
         }
         
         try {
+            if(Job::where('job_status', config('constant.job_status.assigned'))->where('start_time', '!=', null)->where('end_time', null)->exists()) {
+                return response()->json([
+                        'status' => false,
+                        'message' => 'Please end the current job first',
+                        'data' => []
+                            ], 422);
+            }
             $data = Job::where('id', $request->job_id)->where('job_status', config('constant.job_status.assigned'))->first();
-            $data->update(['start_time' => date("h:i:s A", time()),'starting_miles' => $request->starting_miles]);
+            $data->update(['start_time' => date("G:i", time()),'starting_miles' => $request->starting_miles]);
             return response()->json([
                             'status' => true,
                             'message' => 'job started sucessfully.',
@@ -343,7 +352,7 @@ class DriverController extends Controller {
             
             $data = Job::where('id', $request->job_id)->where('job_status', config('constant.job_status.assigned'))->first();
             if($request->ending_miles > $data->starting_miles) {
-                $data->update(['end_time' => date("h:i:s A", time()), 'ending_miles' => $request->ending_miles, 'job_status' => config('constant.job_status.completed')]);
+                $data->update(['end_time' => date("G:i", time()), 'ending_miles' => $request->ending_miles, 'job_status' => config('constant.job_status.completed')]);
                 return response()->json([
                             'status' => true,
                             'message' => 'job ended sucessfully.',
@@ -374,37 +383,163 @@ class DriverController extends Controller {
                         'data' => []
                             ], 421);
         }
-        $driverDetails = $driver->driver;
-//        dd($driverDetails->toArray());
-        $first_day_this_month = date('Y-m-01'); 
-        $last_day_this_month  = date('Y-m-t');
-        dump($first_day_this_month);
-        dump($last_day_this_month);
+        $month = date('m');
+        $year = date('Y');
+        $first_day_this_month = $year.'-'.$month.'-01';
+        if($month == 2 || $month == 4 || $month == 6 || $month == 9 || $month == 11 ) {
+            $last_day_this_month = $year.'-'.$month.'-30';
+        } else {
+            $last_day_this_month = $year.'-'.$month.'-31';
+        }
         $jobs = Job::where('truck_driver_id', $driver->id)->where(function($q) {
                 $q->where('job_status', config('constant.job_status.completed'))->orWhere('job_status', config('constant.job_status.close'));
-            })->get();
-            
+            })->whereBetween('job_providing_date', [$first_day_this_month, $last_day_this_month])->get();
+        $driverDetails = $driver->driver;
         if($driverDetails->salary_type == config('constant.salary_type.per_month')) {
             $data['total_amount'] = $driverDetails->driver_salary;
-            
-            dump($jobs->toArray());
+            $data['salary_type'] = 'monthly';
             if($jobs->count()) {
                 foreach($jobs as $key=>$job) {
-                $data[$key]['date'] = $job->job_providing_date;
-                $data[$key]['total_mile'] = $job->ending_miles - $job->starting_miles;
-                $data[$key]['total_time'] = $job->ending_miles - $job->starting_miles;
-                $data[$key]['shift_time'] = $job->ending_miles - $job->starting_miles;
+                    $data[$key]['date'] = $job->job_providing_date;
+                    $data[$key]['total_mile'] = $job->ending_miles - $job->starting_miles;
+                    $data[$key]['salary'] = $driverDetails->driver_salary;
+                    $data[$key]['total_time'] = round(abs(strtotime($job->end_time) - strtotime($job->start_time)) / 3600, 2);
+                    $data[$key]['shift_time'] = $job->time_slots_id;
                     
                 }
             }
-            return response()->json([
+        } else {
+            $data['salary_type'] = 'hourly';
+            $data['total_amount'] = 0;
+            if($jobs->count()) {
+                foreach($jobs as $key=>$job) {
+                    $data[$key]['date'] = $job->job_providing_date;
+                    $data[$key]['total_mile'] = $job->ending_miles - $job->starting_miles;
+                    $data[$key]['salary'] = $driverDetails->driver_salary;
+                    $data[$key]['total_time'] = round(abs(strtotime($job->end_time) - strtotime($job->start_time)) / 3600, 2);
+                    $data[$key]['shift_time'] = $job->time_slots_id;
+                    $data[$key]['amount'] = $data[$key]['total_time'] * $data[$key]['salary'];
+                    $data['total_amount'] += $data[$key]['amount'];
+                }
+            }
+        }
+        return response()->json([
                             'status' => true,
-                            'message' => 'job ended sucessfully.',
+                            'message' => 'Driver earnings.',
                             'data' => $data
                                 ], 200);
-            
+    }
+    
+    public function earningsFilter(Request $request) {
+        $driver = $request->user();
+        if ($driver->role_id != config('constant.roles.Driver')) {
+            return response()->json([
+                        'status' => false,
+                        'message' => 'Unauthorized access.',
+                        'data' => []
+                            ], 421);
+        }
+        
+        $validator = Validator::make($request->all(), [
+                    'month' => 'required',
+                    'year' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                        'status' => false,
+                        'message' => $validator->errors(),
+                        'data' => []
+                            ], 422);
+        }
+        
+        $month = $request->month;
+        $year = $request->year;
+        $first_day_this_month = $year.'-'.$month.'-01';
+        if($month == 2 || $month == 4 || $month == 6 || $month == 9 || $month == 11 ) {
+            $last_day_this_month = $year.'-'.$month.'-30';
         } else {
-            
+            $last_day_this_month = $year.'-'.$month.'-31';
+        }
+        $jobs = Job::where('truck_driver_id', $driver->id)->where(function($q) {
+                $q->where('job_status', config('constant.job_status.completed'))->orWhere('job_status', config('constant.job_status.close'));
+            })->whereBetween('job_providing_date', [$first_day_this_month, $last_day_this_month])->get();
+        $driverDetails = $driver->driver;
+        if($driverDetails->salary_type == config('constant.salary_type.per_month')) {
+            $data['total_amount'] = $driverDetails->driver_salary;
+            $data['salary_type'] = 'monthly';
+            if($jobs->count()) {
+                foreach($jobs as $key=>$job) {
+                    $data[$key]['date'] = $job->job_providing_date;
+                    $data[$key]['total_mile'] = $job->ending_miles - $job->starting_miles;
+                    $data[$key]['salary'] = $driverDetails->driver_salary;
+                    $data[$key]['total_time'] = round(abs(strtotime($job->end_time) - strtotime($job->start_time)) / 3600, 2);
+                    $data[$key]['shift_time'] = $job->time_slots_id;
+                    
+                }
+            }
+        } else {
+            $data['salary_type'] = 'hourly';
+            $data['total_amount'] = 0;
+            if($jobs->count()) {
+                foreach($jobs as $key=>$job) {
+                    $data[$key]['date'] = $job->job_providing_date;
+                    $data[$key]['total_mile'] = $job->ending_miles - $job->starting_miles;
+                    $data[$key]['salary'] = $driverDetails->driver_salary;
+                    $data[$key]['total_time'] = round(abs(strtotime($job->end_time) - strtotime($job->start_time)) / 3600, 2);
+                    $data[$key]['shift_time'] = $job->time_slots_id;
+                    $data[$key]['amount'] = $data[$key]['total_time'] * $data[$key]['salary'];
+                    $data['total_amount'] += $data[$key]['amount'];
+                }
+            }
+        }
+        return response()->json([
+                            'status' => true,
+                            'message' => 'Driver earnings.',
+                            'data' => $data
+                                ], 200);
+    }
+    
+    public function driverStatus(Request $request) {
+        $driver = $request->user();
+        if ($driver->role_id != config('constant.roles.Driver')) {
+            return response()->json([
+                        'status' => false,
+                        'message' => 'Unauthorized access.',
+                        'data' => []
+                            ], 421);
+        }
+        
+        $validator = Validator::make($request->all(), [
+                    'status' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                        'status' => false,
+                        'message' => $validator->errors(),
+                        'data' => []
+                            ], 422);
+        }
+        $driverDetails = $driver->driver;
+        if (($request->status == config('constant.driver_status.available') && $driver->is_active == config('constant.driver_status.unavailable') && $driverDetails->status == config('constant.driver_status.unavailable')) || ($request->status == config('constant.driver_status.unavailable') && $driver->is_active == config('constant.driver_status.available') && $driverDetails->status == config('constant.driver_status.available'))) {
+            if ($driver->update(['is_active' => $request->status]) && $driverDetails->update(['status' => $request->status])) {
+                return response()->json([
+                            'status' => true,
+                            'message' => 'Driver status updated sucessfully.',
+                            'data' => $driver
+                                ], 200);
+            } else {
+                return response()->json([
+                            'status' => false,
+                            'message' => 'Please try again.',
+                            'data' => []
+                                ], 500);
+            }
+        } else {
+            return response()->json([
+                        'status' => false,
+                        'message' => 'Inappropraite status',
+                        'data' => []
+                            ], 422);
         }
     }
     

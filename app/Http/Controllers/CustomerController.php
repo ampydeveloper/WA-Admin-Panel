@@ -146,6 +146,8 @@ class CustomerController extends Controller {
                         'farm_active' => $request->farm_active,
                         'latitude' => $request->latitude,
                         'longitude' => $request->longitude,
+                        'distance_warehouse' => $this->getDistance($request->latitude, $request->longitude, null, null, 'M', 'warehouse'),
+                        'distance_dumping_area' => $this->getDistance($request->latitude, $request->longitude, null, null, 'M', 'dumping'),
                         'created_by' => $request->user()->id,
                     ]);
                     if ($farmDetails->save()) {
@@ -208,6 +210,42 @@ class CustomerController extends Controller {
                             ], 421);
         }
     }
+    
+    public function getDistance($lat1, $lon1, $lat2, $lon2, $unit, $flag)
+    {
+        if($flag == 'warehouse') {
+            $lat2 = ($lat2 == null) ? config('constant.warehouse.lat') : $lat2;
+            $lon2 = ($lon2 == null) ? config('constant.warehouse.lon') : $lon2;
+        } else {
+            $lat2 = ($lat2 == null) ? config('constant.dumping_area.lat') : $lat2;
+            $lon2 = ($lon2 == null) ? config('constant.dumping_area.lon') : $lon2;
+        }
+        
+        $lat1 = (float)$lat1;
+        $lat2 = (float)$lat2;
+        $lon1 = (float)$lon1;
+        $lon2 = (float)$lon2;
+
+        if (($lat1 == $lat2) && ($lon1 == $lon2)) {
+            return 0;
+          }
+          else {
+            $theta = $lon1 - $lon2;
+            $dist = sin(deg2rad($lat1)) * sin(deg2rad($lat2)) +  cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta));
+            $dist = acos($dist);
+            $dist = rad2deg($dist);
+            $miles = $dist * 60 * 1.1515;
+            $unit = strtoupper($unit);
+        
+            if ($unit == "K") {
+              return (int) ($miles * 1.609344);
+            } else if ($unit == "N") {
+              return (int) ($miles * 0.8684);
+            } else {
+              return (int) $miles;
+            }
+          }
+    }
 
     public function createFarm(Request $request) {
         $validator = Validator::make($request->all(), [
@@ -255,6 +293,8 @@ class CustomerController extends Controller {
                     'latitude' => $request->latitude,
                     'longitude' => $request->longitude,
                     'created_by' => $request->user()->id,
+                    'distance_warehouse' => $this->getDistance($request->latitude, $request->longitude, null, null, 'M', 'warehouse'),
+                    'distance_dumping_area' => $this->getDistance($request->latitude, $request->longitude, null, null, 'M', 'dumping')
                 ]);
                 if ($farmDetails->save()) {
                     foreach ($request->manager_details as $manager) {
@@ -623,6 +663,8 @@ class CustomerController extends Controller {
                     'farm_active' => $request->farm_active,
                     'latitude' => $request->latitude,
                     'longitude' => $request->longitude,
+                    'distance_warehouse' => $this->getDistance($request->latitude, $request->longitude, null, null, 'M', 'warehouse'),
+                    'distance_dumping_area' => $this->getDistance($request->latitude, $request->longitude, null, null, 'M', 'dumping')
                 ]);
                 return response()->json([
                             'status' => true,
@@ -785,6 +827,8 @@ class CustomerController extends Controller {
                 'farm_active' => $request->farm['farm_active'],
                 'latitude' => $request->farm['latitude'],
                 'longitude' => $request->farm['longitude'],
+                'distance_warehouse' => $this->getDistance($request->farm['latitude'], $request->farm['longitude'], null, null, 'M', 'warehouse'),
+                'distance_dumping_area' => $this->getDistance($request->farm['latitude'], $request->farm['longitude'], null, null, 'M', 'dumping')
             ]);
 
             $updatedManagerIds = [];
