@@ -28,6 +28,15 @@ use Illuminate\Support\Facades\Validator;
 class DriverController extends Controller {
     
     public function getDriver(Request $request) {
+        
+        $driver = $request->user();
+        if($driver->role_id != config('constant.roles.Driver')) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Unauthorized access.',
+                'data' => []
+            ], 421);
+        }
         return response()->json([
                             'status' => true,
                             'message' => 'Driver details.',
@@ -37,6 +46,15 @@ class DriverController extends Controller {
     
     
     public function editProfile(Request $request) {
+        
+        $driver = $request->user();
+        if($driver->role_id != config('constant.roles.Driver')) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Unauthorized access.',
+                'data' => []
+            ], 421);
+        }
         
         $validator = Validator::make($request->all(), [
                     'first_name' => 'required|string',
@@ -54,7 +72,6 @@ class DriverController extends Controller {
                     'licence_image' => 'sometimes|required',
         ]);
         if ($validator->fails()) {
-            
             return response()->json([
                         'status' => false,
                         'message' => $validator->errors(),
@@ -62,19 +79,8 @@ class DriverController extends Controller {
                             ], 422);
         }
         
-        $driver = $request->user();
-        
-        
-        if($driver->role_id != config('constant.roles.Driver')) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Unauthorized access.',
-                'data' => []
-            ], 421);
-        }
-        
             if ($request->email != '' && $request->email != null) {
-                if ($driver->email !== $request->email) {
+                if ($driver->email != $request->email) {
                     $checkEmail = User::where('email', $request->email)->first();
                     if ($checkEmail !== null) {
                         if ($checkEmail->id !== $driver->id) {
@@ -245,16 +251,161 @@ class DriverController extends Controller {
             ], 421);
         }
         
+        $data = Job::whereId($request->job_id)->with("customer", "manager", "farm", "service", 'truck', 'skidsteer', 'truck_driver', 'skidsteer_driver')->first();
+        $jobDetails['id'] = $data->id;
+        $jobDetails['service_name'] = $data->service->service_name;
+        $jobDetails['customer_name'] = $data->customer->first_name." ". $data->customer->last_name;
+        $jobDetails['manager_name'] = $data->manager->first_name;
+        $jobDetails['manager_email'] = $data->manager->email;
+        $jobDetails['manager_phone_no'] = $data->manager->phone;
+        $jobDetails['farm_location'] = $data->farm->farm_unit." ".$data->farm->farm_address." ".$data->farm->farm_city." ".$data->farm->farm_province." ".$data->farm->farm_zipcode;
+        $jobDetails['start_time'] = $data->start_time;
+        $jobDetails['end_time'] = $data->end_time;
+        $jobDetails['truck_no'] = $data->truck->truck_number;
+        $jobDetails['skidsteer_no'] = $data->skidsteer->truck_number;
+                
+        if($driver->id == $data->truck_driver->id) {
+            $jobDetails['skidsteer_driver_name'] = $data->skidsteer_driver->first_name;
+        } else {
+            $jobDetails['truck_driver_name'] = $data->truck_driver->first_name;
+        }
         return response()->json([
                             'status' => true,
                             'message' => 'job details.',
-                            'data' => Job::whereId($request->job_id)->with("customer", "manager", "farm", "service", 'truck', 'skidsteer', 'truck_driver', 'skidsteer_driver')->first()
+                            'data' => $jobDetails
                                 ], 200);
         
     }
     
+    public function startJob(Request $request) {
+        $driver = $request->user();
+        if ($driver->role_id != config('constant.roles.Driver')) {
+            return response()->json([
+                        'status' => false,
+                        'message' => 'Unauthorized access.',
+                        'data' => []
+                            ], 421);
+        }
+        
+        $validator = Validator::make($request->all(), [
+                    'job_id' => 'required',
+                    'starting_miles' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                        'status' => false,
+                        'message' => $validator->errors(),
+                        'data' => []
+                            ], 422);
+        }
+        
+        try {
+            $data = Job::where('id', $request->job_id)->where('job_status', config('constant.job_status.assigned'))->first();
+            $data->update(['start_time' => date("h:i:s A", time()),'starting_miles' => $request->starting_miles]);
+            return response()->json([
+                            'status' => true,
+                            'message' => 'job started sucessfully.',
+                            'data' => $data
+                                ], 200);
+            
+        } catch (\Exception $e) {
+            return response()->json([
+                        'status' => false,
+                        'message' => $e->getMessage(),
+                        'data' => []
+                            ], 500);
+        }
+    }
+    
+    public function endJob(Request $request) {
+        $driver = $request->user();
+        if ($driver->role_id != config('constant.roles.Driver')) {
+            return response()->json([
+                        'status' => false,
+                        'message' => 'Unauthorized access.',
+                        'data' => []
+                            ], 421);
+        }
+        
+        $validator = Validator::make($request->all(), [
+                    'job_id' => 'required',
+                    'ending_miles' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                        'status' => false,
+                        'message' => $validator->errors(),
+                        'data' => []
+                            ], 422);
+        }
+        
+        try {
+            
+            $data = Job::where('id', $request->job_id)->where('job_status', config('constant.job_status.assigned'))->first();
+            if($request->ending_miles > $data->starting_miles) {
+                $data->update(['end_time' => date("h:i:s A", time()), 'ending_miles' => $request->ending_miles, 'job_status' => config('constant.job_status.completed')]);
+                return response()->json([
+                            'status' => true,
+                            'message' => 'job ended sucessfully.',
+                            'data' => $data
+                                ], 200);
+            } else {
+                return response()->json([
+                            'status' => false,
+                            'message' => 'You entered ending miles less then starting miles',
+                            'data' => []
+                                ], 422);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                        'status' => false,
+                        'message' => $e->getMessage(),
+                        'data' => []
+                            ], 500);
+        }
+    }
+    
     public function earnings(Request $request) {
-            dd('earnings');
+        $driver = $request->user();
+        if ($driver->role_id != config('constant.roles.Driver')) {
+            return response()->json([
+                        'status' => false,
+                        'message' => 'Unauthorized access.',
+                        'data' => []
+                            ], 421);
+        }
+        $driverDetails = $driver->driver;
+//        dd($driverDetails->toArray());
+        $first_day_this_month = date('Y-m-01'); 
+        $last_day_this_month  = date('Y-m-t');
+        dump($first_day_this_month);
+        dump($last_day_this_month);
+        $jobs = Job::where('truck_driver_id', $driver->id)->where(function($q) {
+                $q->where('job_status', config('constant.job_status.completed'))->orWhere('job_status', config('constant.job_status.close'));
+            })->get();
+            
+        if($driverDetails->salary_type == config('constant.salary_type.per_month')) {
+            $data['total_amount'] = $driverDetails->driver_salary;
+            
+            dump($jobs->toArray());
+            if($jobs->count()) {
+                foreach($jobs as $key=>$job) {
+                $data[$key]['date'] = $job->job_providing_date;
+                $data[$key]['total_mile'] = $job->ending_miles - $job->starting_miles;
+                $data[$key]['total_time'] = $job->ending_miles - $job->starting_miles;
+                $data[$key]['shift_time'] = $job->ending_miles - $job->starting_miles;
+                    
+                }
+            }
+            return response()->json([
+                            'status' => true,
+                            'message' => 'job ended sucessfully.',
+                            'data' => $data
+                                ], 200);
+            
+        } else {
+            
+        }
     }
     
     public function routes(Request $request) {
@@ -264,15 +415,11 @@ class DriverController extends Controller {
     public function startRoute(Request $request) {
         dd('routes');
     }
-    public function startJob(Request $request) {
-        dd('startJob');
-    }
+    
     public function endRoute(Request $request) {
         dd('endRoute');
     }
-    public function endJob(Request $request) {
-        dd('endJob');
-    }
+    
     public function jobFilter(Request $request) {
         dd('jobFilter');
     }
