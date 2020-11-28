@@ -265,7 +265,7 @@ class DriverController extends Controller {
         $jobDetails['end_time'] = $data->end_time;
         $jobDetails['truck_no'] = $data->truck->truck_number;
         $jobDetails['skidsteer_no'] = $data->skidsteer->truck_number;
-                
+        $jobDetails['job_status'] = $data->job_status;        
         if($driver->id == $data->truck_driver->id) {
             $jobDetails['skidsteer_driver_name'] = $data->skidsteer_driver->first_name;
         } else {
@@ -302,6 +302,13 @@ class DriverController extends Controller {
         }
         
         try {
+            if(Job::where('job_status', config('constant.job_status.assigned'))->where('start_time', '!=', null)->where('end_time', null)->exists()) {
+                return response()->json([
+                        'status' => false,
+                        'message' => 'Please end the current job first',
+                        'data' => []
+                            ], 422);
+            }
             $data = Job::where('id', $request->job_id)->where('job_status', config('constant.job_status.assigned'))->first();
             $data->update(['start_time' => date("G:i", time()),'starting_miles' => $request->starting_miles]);
             return response()->json([
@@ -411,7 +418,8 @@ class DriverController extends Controller {
                     $data[$key]['salary'] = $driverDetails->driver_salary;
                     $data[$key]['total_time'] = round(abs(strtotime($job->end_time) - strtotime($job->start_time)) / 3600, 2);
                     $data[$key]['shift_time'] = $job->time_slots_id;
-                    $data['total_amount'] += $data[$key]['total_time'] * $data[$key]['salary'];
+                    $data[$key]['amount'] = $data[$key]['total_time'] * $data[$key]['salary'];
+                    $data['total_amount'] += $data[$key]['amount'];
                 }
             }
         }
@@ -479,7 +487,8 @@ class DriverController extends Controller {
                     $data[$key]['salary'] = $driverDetails->driver_salary;
                     $data[$key]['total_time'] = round(abs(strtotime($job->end_time) - strtotime($job->start_time)) / 3600, 2);
                     $data[$key]['shift_time'] = $job->time_slots_id;
-                    $data['total_amount'] += $data[$key]['total_time'] * $data[$key]['salary'];
+                    $data[$key]['amount'] = $data[$key]['total_time'] * $data[$key]['salary'];
+                    $data['total_amount'] += $data[$key]['amount'];
                 }
             }
         }
@@ -488,9 +497,50 @@ class DriverController extends Controller {
                             'message' => 'Driver earnings.',
                             'data' => $data
                                 ], 200);
+    }
+    
+    public function driverStatus(Request $request) {
+        $driver = $request->user();
+        if ($driver->role_id != config('constant.roles.Driver')) {
+            return response()->json([
+                        'status' => false,
+                        'message' => 'Unauthorized access.',
+                        'data' => []
+                            ], 421);
+        }
         
-        
-        
+        $validator = Validator::make($request->all(), [
+                    'status' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                        'status' => false,
+                        'message' => $validator->errors(),
+                        'data' => []
+                            ], 422);
+        }
+        $driverDetails = $driver->driver;
+        if (($request->status == config('constant.driver_status.available') && $driver->is_active == config('constant.driver_status.unavailable') && $driverDetails->status == config('constant.driver_status.unavailable')) || ($request->status == config('constant.driver_status.unavailable') && $driver->is_active == config('constant.driver_status.available') && $driverDetails->status == config('constant.driver_status.available'))) {
+            if ($driver->update(['is_active' => $request->status]) && $driverDetails->update(['status' => $request->status])) {
+                return response()->json([
+                            'status' => true,
+                            'message' => 'Driver status updated sucessfully.',
+                            'data' => $driver
+                                ], 200);
+            } else {
+                return response()->json([
+                            'status' => false,
+                            'message' => 'Please try again.',
+                            'data' => []
+                                ], 500);
+            }
+        } else {
+            return response()->json([
+                        'status' => false,
+                        'message' => 'Inappropraite status',
+                        'data' => []
+                            ], 422);
+        }
     }
     
     public function routes(Request $request) {
