@@ -132,7 +132,7 @@
                     <tr v-for="(job, index) in alljobs">
                       <td>
                         <span class="basic-info">{{
-                          job.start_date | formatDateLic
+                          job.job_providing_date | formatDateLic
                         }}</span>
                         <span class="basic-big">#PICKUP100{{ job.id }}</span>
                         <span class="basic-grey"

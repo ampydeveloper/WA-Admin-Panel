@@ -198,15 +198,15 @@
                                       required
                                       ></v-text-field>
                                   </div>
-                                  <div class="col-xs-12 col-sm-6 col-md-4 pt-0 pb-0">
+                                  <!-- <div class="col-xs-12 col-sm-6 col-md-4 pt-0 pb-0">
                                       <v-text-field
                                       label="Enter Card ID Number"
                                       v-model="manager.manager_id_card"
                                       :rules="[v => !!v || 'Card Id number is required.']"
                                       required
                                       ></v-text-field>
-                                  </div>
-                                  <div class="col-xs-12 col-sm-6 col-md-4 pt-0 pb-0">
+                                  </div> -->
+                                  <!-- <div class="col-xs-12 col-sm-6 col-md-4 pt-0 pb-0">
                                       <file-pond
                                       name="uploadImage"
                                       ref="pond"
@@ -220,10 +220,10 @@
                                       v-on:processfile="handleProcessFile3"
                                       v-on:processfilerevert="handleRemoveFile3(parentIndex, childIndex)"
                                       />
-                                      <!-- <div class="service-image-outer" v-if="manager.manager_image">
+                                      <div class="service-image-outer" v-if="manager.manager_image">
                                       <img :src="'../../../'+manager.manager_image" />
-                                      </div>-->
-                                  </div>
+                                      </div>
+                                  </div> -->
                               </v-row>
                           </v-col>
                       </div>
