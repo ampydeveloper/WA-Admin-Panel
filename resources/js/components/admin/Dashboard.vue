@@ -77,9 +77,10 @@
             <div class="graph-select">
               <v-select
                 :items="prefixs"
-                v-model="prefixSelected"
+                v-model="prefixSelectedCustomer"
                 class="graph-select-sl"
                 :menu-props="{ contentClass: 'graph-select-options' }"
+                @change='updateCustomerGraph'
               ></v-select>
             </div>
           </div>
@@ -114,9 +115,10 @@
             <div class="graph-select">
               <v-select
                 :items="prefixs"
-                v-model="prefixSelected"
+                v-model="prefixSelectedInvoice"
                 class="graph-select-sl"
                 :menu-props="{ contentClass: 'graph-select-options' }"
+                @change='updateInvoiceGraph'
               ></v-select>
             </div>
           </div>
@@ -351,6 +353,7 @@
 
 <script>
 import Chart from "chart.js";
+import moment from 'moment';
 // import Mapbox from "mapbox-gl-vue";
 import planetChartData from "./chart/chart-data.js";
 import pieChartData from "./chart/pie-chart-data.js";
@@ -385,7 +388,8 @@ export default {
   },
   data() {
     return {
-      prefixSelected: ["Last 7 Days"],
+      prefixSelectedCustomer: ["Last 7 Days"],
+      prefixSelectedInvoice: ["Last 7 Days"],
       prefixs: ["Last 7 Days", "Last Month", "Last Year"],
       count: {
         drivers: 0,
@@ -682,6 +686,32 @@ setTimeout(function(){
         options: chartData.options,
       });
     },
+    processCustomerGraphData(newCustomerGraph, newHaulerGraph){
+      let customerData = {}, haulerData = {}, planetChartLabels = [], planetChartCustomerVals = [], planetChartHaulerVals = [];
+        [...newCustomerGraph].forEach((stat) => {
+          customerData[stat.date] = stat.no;
+          planetChartLabels.push(stat.date);
+        });
+        [...newHaulerGraph].forEach((stat) => {
+          haulerData[stat.date] = stat.no;
+          planetChartLabels.push(stat.date);
+        });
+        planetChartLabels = [...new Set(planetChartLabels)];
+        planetChartLabels.sort((a,b)=>moment(a, 'DD-MMM-YY')-moment('DD-MMM-YY'));
+        [...planetChartLabels].forEach((dt) => {
+          let val = 0;
+          if(Object.keys(customerData).includes(dt)){
+            val = customerData[dt];
+          }
+          planetChartCustomerVals.push(val);
+          val = 0;
+          if(Object.keys(haulerData).includes(dt)){
+            val = haulerData[dt];
+          }
+          planetChartHaulerVals.push(val);
+        });
+      return [planetChartCustomerVals, planetChartHaulerVals, planetChartLabels];
+    },
     dashboardData() {
       adminService.dashboardData().then((response) => {
         if (response.status) {
@@ -694,14 +724,15 @@ setTimeout(function(){
           this.weather.max_temp_val = parseFloat(response.data.weather.max_temp).toFixed(2);
 
           // Customer Graph
-          let customerLabels = [];
-          let customerData = [];
-          [...response.data.graphs.newCustomerGraph].forEach((stat) => {
-            customerLabels.push(stat.date);
-            customerData.push(stat.no);
-          });
-          this.planetChartData.data.datasets[0].data = customerData;
-          this.planetChartData.data.labels = customerLabels;
+          // let customerLabels = [];
+          let processed = this.processCustomerGraphData(response.data.graphs.newCustomerGraph, response.data.graphs.newHaulerGraph);
+          let planetChartCustomerVals = processed[0];
+          let planetChartHaulerVals = processed[1];
+          let planetChartLabels = processed[2];
+          
+          this.planetChartData.data.datasets[0].data = planetChartCustomerVals;
+          this.planetChartData.data.datasets[1].data = planetChartHaulerVals;
+          this.planetChartData.data.labels = planetChartLabels;
           this.createChart("planet-chart", this.planetChartData, this.gradient);
 
           // Invoice Pie-Chart
@@ -718,6 +749,34 @@ setTimeout(function(){
         }
       });
     },
+    updateCustomerGraph(){
+      adminService.dashboardDataFilters({'filter_for': 'graphs', 'filter_time': this.prefixSelectedCustomer}).then((response) => {
+        if (response.status) {
+          this.count.newCustomersCount = response.data.graphs.newCustomersCount;
+          this.count.newHaulersCount = response.data.graphs.newHaulersCount;
+          this.graphs.revenueGeneratedByNewCustomers = response.data.graphs.revenueGeneratedByNewCustomers;
+          // planetChartCustomerVals, planetChartHaulerVals, planetChartLabels = this.processCustomerGraphData(response.data.graphs.newCustomerGraph, response.data.graphs.newHaulerGraph);
+          let processed = this.processCustomerGraphData(response.data.graphs.newCustomerGraph, response.data.graphs.newHaulerGraph);
+          let planetChartCustomerVals = processed[0];
+          let planetChartHaulerVals = processed[1];
+          let planetChartLabels = processed[2];
+          this.planetChartData.data.datasets[0].data = planetChartCustomerVals;
+          this.planetChartData.data.datasets[1].data = planetChartHaulerVals;
+          this.planetChartData.data.labels = planetChartLabels;
+          this.createChart("planet-chart", this.planetChartData, this.gradient);
+        }
+      });
+    },
+    updateInvoiceGraph(){
+      adminService.dashboardDataFilters({'filter_for': 'invoices', 'filter_time': this.prefixSelectedInvoice}).then((response) => {
+        if (response.status) {
+          const invoiceVals = response.data.invoiceGraphs;
+          this.invoiceGraphs = response.data.invoiceGraphs;
+          this.pieChartData.data.datasets[0].data = [invoiceVals.customerInvoices, invoiceVals.haulerInvoices, invoiceVals.outstandingInvoices];
+          this.createChart("pie-chart", this.pieChartData, this.gradient);
+        }
+      });
+    }
   },
 
   created() {},

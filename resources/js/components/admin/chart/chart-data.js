@@ -4,7 +4,7 @@ export const planetChartData = {
         labels: [],
         datasets: [
             { 
-                label: '',
+                label: 'Customers',
                 data: [],
                 fill: false,
                 backgroundColor: [
@@ -15,18 +15,18 @@ export const planetChartData = {
                 ],
                 borderWidth: 3
             },
-            // { 
-            //     label: '',
-            //     data: [21, 40, 60, 25, 85, 45, 130, 25],
-            //     fill: false,
-            //     backgroundColor: [
-            //         '#11b276', // Green
-            //     ],
-            //     borderColor: [
-            //         '#11b276',
-            //     ],
-            //     borderWidth: 3
-            // }
+            { 
+                label: 'Haulers',
+                data: [],
+                fill: false,
+                backgroundColor: [
+                    '#11b276', // Green
+                ],
+                borderColor: [
+                    '#11b276',
+                ],
+                borderWidth: 3
+            }
         ]
     },
     options: {

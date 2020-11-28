@@ -131,6 +131,22 @@
               </v-col>
             </v-col>
 
+            <v-col class="pt-0 pb-0" cols="12" v-if="customerNotHauler">
+              <v-col sm="2" class="label-align pt-0">
+                <label>Driver</label>
+              </v-col>
+              <v-col sm="4" class="pt-0 pb-0 farm-conatiner">
+                <v-select
+                  v-model="addForm.manager_id"
+                  :items="driversList"
+                  label="Select Driver"
+                  item-text="first_name"
+                  item-value="id"
+                  :rules="[(v) => !!v || 'Driver is required.']"
+                ></v-select>
+              </v-col>
+            </v-col>
+
             <v-col class="pt-0 pb-0" cols="12">
               <v-col sm="2" class="label-align pt-0">
                 <label>Service</label>
@@ -145,6 +161,46 @@
                   item-value="id"
                   @change="serviceSelection"
                 ></v-select>
+              </v-col>
+            </v-col>
+            <v-col cols="12" class="pt-0 pb-0 service-time-timing-outer" v-if='slot_select'>
+              <v-col sm="2" class="label-align pt-0">
+                <label>Service Time</label>
+              </v-col>
+              <v-col sm="8" class="pt-0 pb-0 service-time-timing-out">
+                <div class="pretty p-default p-round px-2" v-if='available_slots.includes(1) || available_slots.includes("1")'>
+                  <input
+                    type="radio"
+                    name="slot_type"
+                    v-model="addForm.time_slots_id"
+                    value="1"
+                  />
+                  <div class="state">
+                    <label>Morning</label>
+                  </div>
+                </div>
+                <div class="pretty p-default p-round px-2" v-if='available_slots.includes(2) || available_slots.includes("2")'>
+                  <input
+                    type="radio"
+                    name="slot_type"
+                    v-model="addForm.time_slots_id"
+                    value="2"
+                  />
+                  <div class="state">
+                    <label>Afternoon</label>
+                  </div>
+                </div>
+                <div class="pretty p-default p-round px-2" v-if='available_slots.includes(3) || available_slots.includes("3")'>
+                  <input
+                    type="radio"
+                    name="slot_type"
+                    v-model="addForm.time_slots_id"
+                    value="3"
+                  />
+                  <div class="state">
+                    <label>Evening</label>
+                  </div>
+                </div>
               </v-col>
             </v-col>
             <div id="showTimingSection" v-if="servicetime">
@@ -172,7 +228,43 @@
                         :rules="[v => !!v || 'Start date is required.']"
                       ></v-text-field>
                     </template>
-                    <v-date-picker v-model="date" @input="menu1 = false" :min="setDate"></v-date-picker>
+                    <v-date-picker v-model="date" @input="menu1 = false" :min="minDate"></v-date-picker>
+                  </v-menu>
+                </v-col>
+              </v-col>
+
+              <v-col cols="12" class="pt-0 pb-0" v-if='customerNotHauler'>
+                <v-col sm="2" class="label-align pt-0">
+                  <label>Time</label>
+                </v-col>
+                <v-col sm="4" class="pt-0 pb-0">
+                  <v-menu
+                    ref="time"
+                    v-model="timeMenu"
+                    :close-on-content-click="false"
+                    :nudge-right="40"
+                    :return-value.sync="addForm.job_providing_time"
+                    transition="scale-transition"
+                    offset-y
+                    max-width="290px"
+                    min-width="290px"
+                  >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-text-field
+                        v-model="addForm.job_providing_time"
+                        readonly
+                        v-bind="attrs"
+                        v-on="on"
+                        :rules="[(v) => !!v || 'Time is required.']"
+                      ></v-text-field>
+                    </template>
+                    <v-time-picker
+                      v-if="timeMenu"
+                      v-model="addForm.job_providing_time"
+                      full-width
+                      format="24hr"
+                      @click:minute="$refs.time.save(addForm.job_providing_time)"
+                    ></v-time-picker>
                   </v-menu>
                 </v-col>
               </v-col>
@@ -206,13 +298,14 @@
                   <label>Weight</label>
                 </v-col>
                 <v-col sm="4" class="pt-0">
-                  <v-text-field
-                    label="Enter Weight"
-                    v-model="addForm.weight"
+                  <v-select 
                     required
-                    type="number"
-                    :rules="killometerRules"
-                  ></v-text-field>
+                    v-model="addForm.weight" 
+                    :items=[5,10,15,20,25] 
+                    :rules="[(v) => !!v || 'Weight is required.']"
+                    hint="Tons"
+                    persistent-hint
+                  ></v-select>
                 </v-col>
               </v-col>
 
@@ -271,8 +364,31 @@
                 <v-col sm="2" class="label-align pt-0">
                   <label class="label_text label-check-half">Repeating</label>
                 </v-col>
-                <v-col sm="4" class="pt-0">
+                <v-col sm="8" class="pt-0">
                   <v-switch v-model="addForm.is_repeating_job"></v-switch>
+                  <v-row v-if="addForm.is_repeating_job" class="mb-3">
+                    <v-col cols="12" sm="4" md="4" class="pt-0 pb-0" style="height: 29px;">
+                      <v-checkbox color="success" v-model="addForm.repeating_days" label="Monday" value="monday"></v-checkbox>
+                    </v-col>
+                    <v-col cols="12" sm="4" md="4" class="pt-0 pb-0" style="height: 29px;">
+                      <v-checkbox color="success" v-model="addForm.repeating_days" label="Tuesday" value="tuesday" hide-details></v-checkbox>
+                    </v-col>
+                    <v-col cols="12" sm="4" md="4" class="pt-0 pb-0" style="height: 29px;">
+                      <v-checkbox color="success" v-model="addForm.repeating_days" label="Wednesday" value="wednesday" hide-details></v-checkbox>
+                    </v-col>
+                    <v-col cols="12" sm="4" md="4" class="pt-0 pb-0">
+                      <v-checkbox color="success" v-model="addForm.repeating_days" label="Thursday" value="thursday" hide-details></v-checkbox>
+                    </v-col>
+                    <v-col cols="12" sm="4" md="4" class="pt-0 pb-0">
+                      <v-checkbox color="success" v-model="addForm.repeating_days" label="Friday" value="friday" hide-details></v-checkbox>
+                    </v-col>
+                    <v-col cols="12" sm="4" md="4" class="pt-0 pb-0">
+                      <v-checkbox color="success" v-model="addForm.repeating_days" label="Saturday" value="saturday" hide-details></v-checkbox>
+                    </v-col>
+                    <v-col cols="12" sm="4" md="4" class="pt-0 pb-0">
+                      <v-checkbox color="success" v-model="addForm.repeating_days" label="Sunday" value="sunday" hide-details></v-checkbox>
+                    </v-col>
+                  </v-row>
                 </v-col>
               </v-col>
             </div>
@@ -304,23 +420,29 @@ import { router } from "../../../_helpers/router";
 import { jobService } from "../../../_services/job.service";
 import { environment } from "../../../config/test.env";
 import { authenticationService } from "../../../_services/authentication.service";
+import moment from 'moment';
 export default {
   components: {},
   data() {
     return {
+      minDate: moment().add(1, 'days').format("YYYY-MM-DD"),
       valid: true,
       setDate: new Date().toISOString().substr(0, 10),
       menu1: false,
+      timeMenu: false,
       loading: false,
       weightShow: false,
       customerNotHauler: true,
-      date: "",
+      date: moment().add(1, 'days').format("YYYY-MM-DD"),
       job_providing_date: "",
       apiUrl: environment.apiUrl,
       customerName: [],
       managerName: [],
       serviceName: [],
+      driversList: [],
       farmName: [],
+      slot_select: false,
+      available_slots: [],
       servicetime: "",
       customer_id: "",
       addForm: {
@@ -332,8 +454,10 @@ export default {
         farm_add: "",
         farm_id: "",
         images: [],
-        // time_slots_id: "",
+        repeating_days: [],
+        time_slots_id: "",
         job_providing_date: "",
+        job_providing_time: "",
         weight: "",
         amount: "",
         is_repeating_job: false,
@@ -413,7 +537,7 @@ export default {
           this.customerName[i].role_id == 6
         ) {
           this.customerNotHauler = true;
-         
+          this.getHaulerDrivers(this.customerName[i].id);
           return false;
          
         }else{
@@ -452,6 +576,20 @@ export default {
         }
       });
     },
+    getHaulerDrivers(hid){
+      jobService.getHaulerDrivers(hid).then((response) => {
+        //handle response
+        if (response.status) {
+          this.driversList = response.data;
+        } else {
+          this.$toast.open({
+            message: response.message,
+            type: "error",
+            position: "top-right",
+          });
+        }
+      });
+    },
     managerSelection(val) {
       this.addForm.manager_id = val;
     },
@@ -467,8 +605,16 @@ export default {
             this.addForm.weight = "";
             this.weightShow = false;
           }
+          this.available_slots = [];
+          
+          this.slot_select = false;
+          if(file.slot_type && file.slot_type.length > 0){
+            this.slot_select = true;
+            this.available_slots = file.slot_type;
+          }
         }
       });
+
 
       // jobService.servicesTimeSlots(val).then((response) => {
       //   //handle response
@@ -490,7 +636,7 @@ export default {
       this.addForm.job_providing_date = this.date;
       this.addForm.payment_mode = 0;
       // this.addForm.amount = 10;
-
+      console.log(this.addForm);
       if (this.$refs.form.validate()) {
         jobService.createJob(this.addForm).then((response) => {
           //stop loading

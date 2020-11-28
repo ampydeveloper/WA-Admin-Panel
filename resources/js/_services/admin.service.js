@@ -16,6 +16,7 @@ export const adminService = {
   getAdmin,
   listAdmin,
   dashboardData,
+  dashboardDataFilters,
   apiUrl: environment.apiUrl,
   currentUrl: '',
   currentUser: currentUserSubject.asObservable(),
@@ -79,6 +80,18 @@ function dashboardData() {
   return fetch(
     this.apiUrl + `admin/dashboard`,
     requestOptions.get()
+  )
+    .then(handleResponse)
+    .then(user => {
+      // store user details and passport token in local storage to keep user logged in between page refreshes
+
+      return user;
+    });
+}
+function dashboardDataFilters(data) {
+  return fetch(
+    this.apiUrl + `admin/dashboard-filters`,
+    requestOptions.post(data)
   )
     .then(handleResponse)
     .then(user => {

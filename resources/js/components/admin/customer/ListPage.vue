@@ -101,6 +101,7 @@
                         class="c-title-name"
                       >{{ customer.prefix }} {{ customer.first_name }} {{ customer.last_name }}</span>
                       <span class="c-title-edit">
+                        <button class="btn-outline-green-top btn-o-sm">Reset Password</button>
                         <router-link
                           v-if="isAdmin"
                           :to="'/admin/customer/details/' + customer.id"

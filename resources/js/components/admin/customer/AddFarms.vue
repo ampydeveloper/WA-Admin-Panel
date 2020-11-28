@@ -270,7 +270,7 @@
                         required
                       ></v-text-field>
                     </div>
-                    <div class="col-xs-12 col-sm-6 col-md-4">
+                    <!-- <div class="col-xs-12 col-sm-6 col-md-4">
                       <v-text-field
                         v-model="input.manager_id_card"
                         :rules="[(v) => !!v || 'Card ID number is required.']"
@@ -294,8 +294,8 @@
                         required
                         :rules="[(v) => !!v || 'ID card image is required.']"
                       />
-                    </div>
-                    <div
+                    </div> -->
+                    <!-- <div
                       class="v-messages theme--light error--text"
                       role="alert"
                       v-if="docError"
@@ -305,7 +305,7 @@
                           ID card image is required.
                         </div>
                       </div>
-                    </div>
+                    </div> -->
                   </v-row>
                 </template>
               </div>
@@ -547,10 +547,10 @@ export default {
         this.farmImgError = true;
         return false;
       }
-      if (this.addForm.manager_card_image) {
-        this.docError = true;
-        return false;
-      }
+      // if (this.addForm.manager_card_image) {
+        // this.docError = true;
+        // return false;
+      // }
       if (this.$refs.customerForm.validate()) {
         //check if customer details exist if not then direct save farm
         if (localStorage.getItem("customerDetails") == null) {

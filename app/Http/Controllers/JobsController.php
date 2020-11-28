@@ -141,7 +141,7 @@ class JobsController extends Controller {
                 }
             }
             
-            if(User::wherId($request->customer_id)->first('role_id')['role_id'] == config('constant.roles.Customer')){
+            if(User::whereId($request->customer_id)->first('role_id')['role_id'] == config('constant.roles.Customer')){
                 $timeSlot = null;
                 if($request->has('time_slots_id')){ $timeSlot = $request->time_slots_id; }
                 if(!$this->__checkAvailability($request->service_id, $request->job_providing_date, $timeSlot)){
@@ -271,6 +271,21 @@ class JobsController extends Controller {
                         'status' => true,
                         'message' => 'Farm details',
                         'data' => User::where('farm_id', $request->farm_id)->where('is_confirmed', '1')->get()
+                            ], 200);
+        } else {
+            return response()->json([
+                        'status' => false,
+                        'message' => 'Unauthorized access.',
+                            ], 421);
+        }
+    }
+
+    public function getHaulerDrivers(Request $request) {
+        if ($request->user()->role_id == config('constant.roles.Admin') || $request->user()->role_id == config('constant.roles.Admin_Manager')) {
+            return response()->json([
+                        'status' => true,
+                        'message' => 'Driver List',
+                        'data' => User::where('role_id', config('constant.roles.Hauler_driver'))->where('created_by', $request->hauler_id)->where('is_confirmed', '1')->get()
                             ], 200);
         } else {
             return response()->json([

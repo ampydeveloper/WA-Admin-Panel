@@ -133,6 +133,7 @@ Route::group(['prefix' => 'auth'], function () {
             Route::get('job-customer', 'JobsController@getCustomers');
             Route::get('job-farms/{customer_id}', 'JobsController@getJobFrams');
             Route::get('job-farms-manager/{farm_id}', 'JobsController@getJobFramManagers');
+            Route::get('job-hauler-drivers/{hauler_id}', 'JobsController@getHaulerDrivers');
             Route::get('service-list-customer/{customer_id}', 'JobsController@getServiceForCustomer');
             Route::get('single-job/{job_id}', 'JobsController@getSingleJob');
             Route::post('update-booked-job', 'JobsController@updateBookedJob');

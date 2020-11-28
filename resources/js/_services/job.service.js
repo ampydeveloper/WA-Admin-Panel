@@ -37,6 +37,7 @@ export const jobService = {
   listSkidsteers,
   update,
   deleteJob,
+  getHaulerDrivers,
   apiUrl: environment.apiUrl,
   // chatUrl: 'http://13.235.151.113:3100/',
   chatUrl: 'http://wa.customer.leagueofclicks.com/',
@@ -379,5 +380,18 @@ function update(type, id, jid) {
         .then(handleResponse)
         .then(status => {
             return status;
+        });
+}
+
+function getHaulerDrivers(data){
+    return fetch(
+            this.apiUrl + `admin/job-hauler-drivers/` + data,
+            requestOptions.get()
+        )
+        .then(handleResponse)
+        .then(user => {
+            // store user details and passport token in local storage to keep user logged in between page refreshes
+
+            return user;
         });
 }
