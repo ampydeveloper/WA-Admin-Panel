@@ -975,4 +975,26 @@ class CustomerController extends Controller {
         }
     }
 
+    public function resetCustomerPassword(User $cid){
+        try{
+            $newPassword = Str::random();
+            $cid->update(['password' => bcrypt($newPassword)]);
+            Mail::send('email_templates.reset_password', ['user' => $cid, 'password' => $newPassword], function ($message) use ($cid) {
+                $message->to($cid->email, $cid->first_name)->subject('New Password');
+                $message->from(env('MAIL_USERNAME'), env('MAIL_USERNAME'));
+            });
+            return response()->json([
+                'status' => true,
+                'message' => 'Password reset successfully.',
+                'data' => []
+            ], 200);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+                'data' => []
+            ], 500);
+        }
+    }
 }

@@ -632,12 +632,30 @@ export default {
     },
     submit() {
       //start loading
-      this.loading = true;
       this.addForm.job_providing_date = this.date;
       this.addForm.payment_mode = 0;
+      if(this.addForm.is_repeating_job && this.addForm.repeating_days.length == 0){
+        this.$toast.open({
+          message: 'Please select atleast 1 day for repeating this pickup',
+          type: "error",
+          position: "top-right",
+        });
+        return false;
+      }
+
+      if(this.available_slots.length > 0 && this.addForm.time_slots_id.length == 0){
+        this.$toast.open({
+          message: 'Service Time Required!',
+          type: "error",
+          position: "bottom-right",
+          dismissible: false,
+        });
+        return false;
+      }
+      
       // this.addForm.amount = 10;
-      console.log(this.addForm);
       if (this.$refs.form.validate()) {
+        this.loading = true;
         jobService.createJob(this.addForm).then((response) => {
           //stop loading
           this.loading = false;

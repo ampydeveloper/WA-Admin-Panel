@@ -20,6 +20,7 @@ export const customerService = {
   getCustomerRecord,
   updateFarmManager,
   updateFarmWManagers,
+  resetCustomerPassword,
   apiUrl: environment.apiUrl,
   currentUrl: '',
   currentUser: currentUserSubject.asObservable(),
@@ -154,6 +155,19 @@ function updateFarmWManagers(data) {
     .then(handleResponse)
     .then(user => {
       // store user details and passport token in local storage to keep user logged in between page refreshes
+      return user;
+    });
+}
+
+function resetCustomerPassword(cid){
+  return fetch(
+    this.apiUrl+`admin/resetCustomerPassword/${cid}`,
+    requestOptions.get()
+  )
+    .then(handleResponse)
+    .then(user => {
+      // store user details and passport token in local storage to keep user logged in between page refreshes
+
       return user;
     });
 }

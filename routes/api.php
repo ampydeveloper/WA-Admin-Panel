@@ -107,6 +107,7 @@ Route::group(['prefix' => 'auth'], function () {
             Route::post('update-manager', 'CustomerController@updateManager');
             Route::post('update-farm-and-managers', 'CustomerController@updateFarmWManagers');
             Route::post('update-customer-payment-mode', 'CustomerController@updateCustomerPaymentMode');
+            Route::get('resetCustomerPassword/{cid}', 'CustomerController@resetCustomerPassword');
 
             //CompanyController
             Route::get('list-hauler', 'CompanyController@listHauler');

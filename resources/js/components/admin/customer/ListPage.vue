@@ -101,7 +101,7 @@
                         class="c-title-name"
                       >{{ customer.prefix }} {{ customer.first_name }} {{ customer.last_name }}</span>
                       <span class="c-title-edit">
-                        <button class="btn-outline-green-top btn-o-sm">Reset Password</button>
+                        <v-btn small @click="resetCustomerPassword(customer.id)" :loading='loading && activeCid==customer.id' :key='"ResetPass"+customer.id' class="btn-outline-green-top btn-o-sm">Reset Password</v-btn>
                         <router-link
                           v-if="isAdmin"
                           :to="'/admin/customer/details/' + customer.id"
@@ -201,6 +201,8 @@ export default {
   },
   data() {
     return {
+      loading: false,
+      activeCid: 0,
       search: "",
       baseUrl: environment.baseUrl,
       headers: [
@@ -282,11 +284,32 @@ export default {
     Close() {
       this.dialog = false;
     },
+    resetCustomerPassword(cid){
+      this.loading = true;
+      this.activeCid = cid;
+      customerService.resetCustomerPassword(cid).then((response) => {
+        if (response.status) {
+          this.$toast.open({
+            message: response.message,
+            type: "success",
+            position: "top-right",
+          });
+        } else {
+          this.$toast.open({
+            message: response.message,
+            type: "error",
+            position: "top-right",
+          });
+        }
+        this.loading = false;
+      });
+    }
   },
   updated() {
     setTimeout(function () {
       $(document).ready(function () {
         $(".table-main").DataTable({
+          destroy: true,
           oLanguage: { sSearch: "", "sEmptyTable": "No customer till now.", "infoEmpty": "No customer found.", },
           drawCallback: function (settings) {
             $(".dataTables_paginate .paginate_button.previous").html(
