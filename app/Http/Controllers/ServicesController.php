@@ -125,10 +125,15 @@ class ServicesController extends Controller
 
     public function listServices(Request $request) {
         if ($request->user()->role_id == config('constant.roles.Admin') || $request->user()->role_id == config('constant.roles.Admin_Manager')) {
+            if(isset($request->role_id) && $request->role_id != 0){
+                $services = Service::where('service_for', $request->role_id)->get();
+            }else{
+                $services = Service::get();
+            }
             return response()->json([
                         'status' => true,
                         'message' => 'Service Listing.',
-                        'data' => Service::get()
+                        'data' => $services
                             ], 200);
         } else {
             return response()->json([

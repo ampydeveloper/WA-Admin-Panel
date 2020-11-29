@@ -432,7 +432,7 @@ export default {
       timeMenu: false,
       loading: false,
       weightShow: false,
-      customerNotHauler: true,
+      customerNotHauler: false,
       date: moment().add(1, 'days').format("YYYY-MM-DD"),
       job_providing_date: "",
       apiUrl: environment.apiUrl,
@@ -514,8 +514,9 @@ export default {
         }
       });
     },
-    getService() {
-      jobService.listService().then((response) => {
+    getService(val=0) {
+      this.serviceName = [];
+      jobService.listService(val).then((response) => {
         //handle response
         if (response.status) {
           this.serviceName = response.data;
@@ -538,14 +539,15 @@ export default {
         ) {
           this.customerNotHauler = true;
           this.getHaulerDrivers(this.customerName[i].id);
+          this.getService(6);
           return false;
          
         }else{
           this.customerNotHauler = false;
-          
         }
       }
 
+      this.getService(4);
       this.customer_id = val;
       jobService.getFarm(val).then((response) => {
         //handle response
@@ -560,6 +562,7 @@ export default {
           });
         }
       });
+      
     },
     getFarmManager(val) {
       this.addForm.farm_id = val;

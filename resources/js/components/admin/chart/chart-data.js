@@ -41,19 +41,27 @@ export const planetChartData = {
         },
         scales: {
             yAxes: [{
-                
                 ticks: {
                     beginAtZero: true,
                     padding: 25,
-                    display: false,
+                    // display: false,
                 },
-                // gridLines: {
-                //     display: false
-                // }
+                gridLines: {
+                    tickMarkLength: 1,
+                    color: '#19191a',
+                    zeroLineColor: '#19191a'
+                }
             }],
             xAxes: [{
-                gridLines: {
+                ticks: {
+                    labels: false,
+                    beginAtZero: true,
                     display: false
+                },
+                gridLines: {
+                    tickMarkLength: 1,
+                    color: '#19191a',
+                    zeroLineColor: '#19191a'
                 }
             }],
         }

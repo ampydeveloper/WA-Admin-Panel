@@ -74,9 +74,9 @@ function getJobChatMessages(data) {
         });
 }
 
-function listService() {
+function listService(rid) {
     return fetch(
-            this.apiUrl + `admin/list-services`,
+            this.apiUrl + `admin/list-services/${rid}`,
             requestOptions.get()
         )
         .then(handleResponse)
