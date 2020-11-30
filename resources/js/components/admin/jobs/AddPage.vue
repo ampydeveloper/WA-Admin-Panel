@@ -293,13 +293,14 @@
                 </div>
               </v-col> -->
 
-              <v-col class="pt-0 pb-0" cols="12" v-if="weightShow">
+              <v-col class="pt-0 pb-0" cols="12" v-if="weightShow || customerNotHauler">
                 <v-col sm="2" class="label-align pt-0">
                   <label>Weight</label>
                 </v-col>
                 <v-col sm="4" class="pt-0">
                   <v-select 
                     required
+                    dark
                     v-model="addForm.weight" 
                     :items=[5,10,15,20,25] 
                     :rules="[(v) => !!v || 'Weight is required.']"
@@ -309,7 +310,7 @@
                 </v-col>
               </v-col>
 
-              <v-col cols="12" class="textarea-parent pt-0 pb-0">
+              <v-col cols="12" class="textarea-parent pt-0 pb-0" v-if='!customerNotHauler'>
                 <v-col sm="2" class="label-align pt-0">
                   <label>Gate Number</label>
                 </v-col>
@@ -324,7 +325,7 @@
                 </v-col>
               </v-col>
 
-              <v-col cols="12" md="12" class="pt-0 pb-0">
+              <v-col cols="12" md="12" class="pt-0 pb-0" v-if='!customerNotHauler'>
                 <v-col sm="2" class="label-align pt-0 image-upload-label">
                   <label class="label_text">Photos</label>
                 </v-col>
