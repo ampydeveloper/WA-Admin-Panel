@@ -99,6 +99,11 @@ return [
         2 => 'afternoon',
         3 => 'evening',
     ],
+    'service_slot_type_timings' => [
+        '09-12' => 1, //Morning, 9AM-12PM
+        '12-15' => 2, //Afternoon, 12PM-3PM 
+        '15-18' => 3 //Evening, 3PM-6PM
+    ],
     'time_taken_to_complete_service' => [
         '15_mins' => 1,
         '30_mins' => 2,

@@ -9,11 +9,12 @@ use Validator;
 use App\Service;
 use App\CustomerFarm;
 use App\Vehicle;
+use App\JobAssignmentHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 //use Illuminate\Support\Str;
-//use Illuminate\Support\Facades\DB;
-//use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class JobsController extends Controller {
     
@@ -500,7 +501,6 @@ class JobsController extends Controller {
                     'data' => []
                         ], 500);
         }catch (\Exception $e) {
-            dd($e);
             Log::error(json_encode($e->getMessage()));
             return response()->json([
                         'status' => false,
@@ -528,11 +528,15 @@ class JobsController extends Controller {
         $ttc_mapping = config('constant.time_taken_to_complete_service_reverse');
         $service_ttc = (int) $ttc_mapping[Service::whereId($service)->first('time_taken_to_complete_service')['time_taken_to_complete_service']];
         
-        $bookedJobs = Job::where(['job_providing_date' => $date, 'service_id' => $service]);
+        // Get All booked jobs including repeating ones
+        $repeating_day = strtolower(Carbon::createFromFormat('Y-m-d', $date)->dayName);
+        $bookedJobs = Job::where(['job_status' => config('constant.job_status.open'), 'job_providing_date' => $date, 'service_id' => $service])->with('service')->get();
 
         // if($timeSlot != null){ $bookedJobs->where('time_slots_id', $timeSlot); $totalMinutes *= 3; } 
-        
-        $bookedJobs = $bookedJobs->with('service')->get();
+
+        // Repeating Jobs
+        $repeatingJobs = Job::where(['job_status' => config('constant.job_status.open'), 'service_id' => $service, 'is_repeating_job' => config('constant.repeating_job.yes')])->whereJsonContains('repeating_days', [$repeating_day])->with('service')->get();
+        $bookedJobs = $bookedJobs->merge($repeatingJobs);
         
         $bookedMinutes = 0;
         foreach($bookedJobs as $job){
@@ -542,6 +546,107 @@ class JobsController extends Controller {
         $availableMinutes = $totalMinutes - $bookedMinutes;
 
         return $service_ttc <= $availableMinutes ? True : False;
+    }
+
+    /**
+     * Function for assigning one-time and repeatitive jobs based on current date, time_slot and day(for repeatitive)
+     * if driver_id and truck_id is null, then will assign available to jobs to available drivers, first run of the day
+     */
+    public function assignJob($driver_id=null, $truck_id=null){
+        try{
+            $currentDate = Carbon::now()->format('Y-m-d');
+            $currentDay = strtolower(Carbon::now()->dayName);
+
+            // Get current timeslot id using hour from current time
+            $currentHour = (int) Carbon::now()->format('H');
+            $current_time_slot_id = 0;
+            $timeSlotTimings = config('constant.service_slot_type_timings');
+            foreach($timeSlotTimings as $time => $slot_id){
+                $time = explode('-', $time);
+                if((int) $time[0] <= $currentHour && $currentHour < (int) $time[1]){
+                    $current_time_slot_id = $slot_id;
+                    break;
+                }
+            }
+            // $current_time_slot_id=2; //test
+
+            // Get Job list, excluding Non-Repeating
+            $nrJobs = Job::where(['job_status' => config('constant.job_status.open'), 'job_providing_date' => $currentDate, 'time_slots_id' => $current_time_slot_id, 'is_repeating_job' => config('constant.repeating_job.no')])->get();
+            
+            // Get Repeating Jobs, to be performed on current Day
+            $rJobs = Job::where(['job_status' => config('constant.job_status.open'), 'time_slots_id' => $current_time_slot_id, 'is_repeating_job' => config('constant.repeating_job.yes')])->whereJsonContains('repeating_days', [$currentDay])->get();
+
+            // Get Available Truck and drivers
+            if($driver_id == null && $truck_id == null){
+                $drivers = User::join('drivers', 'drivers.user_id', '=', 'users.id')->where(['users.role_id' => config('constant.roles.Driver'), 'users.is_active' => 1, 'drivers.driver_type' => config('constant.driver_type.truck_driver'), 'drivers.status' => config('constant.driver_status.available')])->pluck('users.id')->toArray();
+                $vehicles = Vehicle::where(['vehicle_type' => config('constant.vehicle_type.truck'), 'status' => config('constant.vehicle_status.available')])->pluck('id')->toArray();
+            }else{
+                $drivers = [$driver_id]; $vehicles = [$truck_id];
+            }
+            // dd($nrJobs->count(), $rJobs, $drivers, $vehicles);
+
+            $availability = (count($drivers) < count($vehicles) ? count($drivers) : count($vehicles));
+
+            // Assign drivers and vehicles to Non-Repeating jobs
+            if($nrJobs->count() > 0 && $availability > 0){
+                for($i=0; $i < $availability; $i++){
+                    $nrJobs[$i]->update(['truck_id' => $vehicles[$i], 'truck_driver_id' => $drivers[$i]]);
+                    unset($vehicles[$i], $drivers[$i]);
+                    if(count($vehicles) == 0 || count($drivers) == 0){
+                        return response()->json([
+                            'status' => true,
+                            'message' => 'Job assigned successfully.',
+                            'data' => $nrJobs[$i]
+                        ], 200);
+                    }
+                    unset($nrJobs[$i]);
+                    if(count($nrJobs) == 0){ break; }
+                }
+            }
+
+            $availability = (count($drivers) < count($vehicles) ? count($drivers) : count($vehicles));
+            // Check remaining available drivers and vehicles
+            if($availability != 0){
+                $drivers = array_values($drivers); $vehicles = array_values($vehicles); //Normalize indexes
+                for ($i = 0; $i < $availability; $i++) {
+                    try{
+                        // Insert existing assignment info to history
+                        DB::beginTransaction();
+                        JobAssignmentHistory::updateOrCreate(
+                            ['job_id' => $rJobs[$i]->id, 'job_providing_date' => $rJobs[$i]->job_providing_date], 
+                            array_merge(['job_id' => $rJobs[$i]->id], $rJobs[$i]->only('job_providing_date', 'job_providing_time', 'job_status', 'truck_id', 'truck_driver_id', 'skidsteer_id', 'skidsteer_driver_id', 'start_time', 'end_time', 'starting_miles', 'end_miles'))
+                        );
+
+                        // Assign new info
+                        $rJobs[$i]->update(['truck_id' => $vehicles[$i], 'truck_driver_id' => $drivers[$i]]);
+                        DB::commit();
+                    }catch(\Exception $e){
+                        DB::rollback();
+                    }
+                    unset($vehicles[$i], $drivers[$i]);
+                    if (count($vehicles) == 0 || count($drivers) == 0) {
+                        return response()->json([
+                            'status' => true,
+                            'message' => 'Job assigned successfully.',
+                            'data' => $rJobs[$i]
+                        ], 200);
+                    }
+                    unset($rJobs[$i]);
+                    if(count($rJobs) == 0){ break; }
+                }
+            }
+            
+            // dump($nrJobs, $rJobs, $drivers, $vehicles);
+            return 'done';
+        }catch(\Exception $e){
+            Log::error(['type' => 'assignJob', 'error' => $e->getMessage()]);
+            return response()->json([
+                'status' => false,
+                'message' => 'Job cannot be assigned.',
+                'data' => []
+            ], 500);
+        }
+        
     }
 
 }
