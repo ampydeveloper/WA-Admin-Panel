@@ -14,11 +14,15 @@
             </div>
             <div class="clearfix">
               <span class="basic-grey-label-half">Price</span>
-              <span class="det-half"> ${{ (job.job_amount?job.job_amount:'0') }}</span>
+              <span class="det-half">
+                ${{ job.job_amount ? job.job_amount : "0" }}</span
+              >
             </div>
             <div class="clearfix">
               <span class="basic-grey-label-half">Service Date</span>
-              <span class="det-half">{{ job.start_date | formatDateLic}} </span>
+              <span class="det-half"
+                >{{ job.start_date | formatDateLic }}
+              </span>
             </div>
           </div>
 
@@ -89,6 +93,18 @@
                 />
 
                 <span class="upload-images-out">
+                  <!-- <input
+                  type="file"
+                  id="image-file"
+                  name="chat-image"
+                /> -->
+                  <v-file-input
+                    accept=".png,.jpg,.jpeg"
+                    id="image-file"
+                    v-model="chatUploadImage"
+                     @click="chatImageUpload"
+                  >
+                  </v-file-input>
                   <image-icon size="1.5x" class="custom-class"></image-icon>
                 </span>
                 <input
@@ -132,6 +148,7 @@ export default {
       farm: "",
       userdata: "",
       chatUsers: "",
+      chatUploadImage: "",
       baseUrl: environment.baseUrl,
     };
   },
@@ -142,11 +159,11 @@ export default {
   mounted() {
     this.getResults();
     this.getChatMembers();
-  
+
     setTimeout(() => {
-           this.getChatMessages();
-        }, 500);
-    
+      this.getChatMessages();
+    }, 500);
+
     let socketScript = document.createElement("script");
     socketScript.setAttribute(
       "src",
@@ -167,7 +184,7 @@ export default {
     scrollScript2.setAttribute("rel", "stylesheet");
     document.head.appendChild(scrollScript2);
 
-var wellOffice = "26.695145,-80.244859";
+    var wellOffice = "26.695145,-80.244859";
     var icons = {
       start: new google.maps.MarkerImage(
         "http://wa.customer.leagueofclicks.com/img/car-marker2.png",
@@ -189,7 +206,9 @@ var wellOffice = "26.695145,-80.244859";
     var map;
     function initMap() {
       const directionsService = new google.maps.DirectionsService();
-      const directionsRenderer = new google.maps.DirectionsRenderer({suppressMarkers: true});
+      const directionsRenderer = new google.maps.DirectionsRenderer({
+        suppressMarkers: true,
+      });
       map = new google.maps.Map(document.getElementById("map"), {
         zoom: 7,
         center: { lat: 41.85, lng: -87.65 },
@@ -380,14 +399,14 @@ var wellOffice = "26.695145,-80.244859";
 
     function calculateAndDisplayRoute(directionsService, directionsRenderer) {
       const jobLat = document.getElementById("job-lat")._value;
-        const joblong = document.getElementById("job-long")._value;
+      const joblong = document.getElementById("job-long")._value;
       directionsService.route(
         {
           origin: {
             query: wellOffice,
           },
           destination: {
-            query: jobLat+','+joblong, // //"st louis, mo"
+            query: jobLat + "," + joblong, // //"st louis, mo"
           },
           travelMode: google.maps.TravelMode.DRIVING,
         },
@@ -411,10 +430,9 @@ var wellOffice = "26.695145,-80.244859";
         title: title,
       });
     }
-setTimeout(function(){
- initMap();
-},6000);   
-
+    setTimeout(function () {
+      initMap();
+    }, 6000);
   },
   methods: {
     getResults() {
@@ -472,9 +490,27 @@ setTimeout(function(){
           }
         });
     },
+    chatImageUpload() {
+      jobService
+        .chatImageUpload({ uploadImage: this.chatUploadImage })
+        .then((response) => {
+          if (response.status) {
+            this.$toast.open({
+              message: response.message,
+              type: "success",
+              position: "top-right",
+            });
+          } else {
+            this.$toast.open({
+              message: response.message,
+              type: "error",
+              position: "top-right",
+            });
+          }
+        });
+    },
   },
   updated() {
-
     var messageContainerScroll;
     setTimeout(function () {
       messageContainerScroll = OverlayScrollbars(
@@ -494,25 +530,28 @@ setTimeout(function(){
 
       socket.on("chat-message", (data) => {
         const userImage = $("#current-user-image").val();
-         if (data.job_id == jobId._value) {
-        if (data.name == name._value) {
-          appendMessage(
-            '<div class="chat-msg">' +
-              `${data.message.message}` +
-              '</div><div class="chat-img"><img src="' +
-              `${userImage}` +
-              '"></div>'
-          );
-        } else {
-          appendMessage(
-            '<div class="chat-msg">' +
-              `${data.message.message}` +
-              '</div><div class="chat-img"><img src="' +
-              `${environment.baseUrl + "/images/avatar.png"}` +
-              '"></div>'
-          );
-        }
-        messageContainerScroll.scroll([0, "100%"], 50, { x: "", y: "linear" });
+        if (data.job_id == jobId._value) {
+          if (data.name == name._value) {
+            appendMessage(
+              '<div class="chat-msg">' +
+                `${data.message.message}` +
+                '</div><div class="chat-img"><img src="' +
+                `${userImage}` +
+                '"></div>'
+            );
+          } else {
+            appendMessage(
+              '<div class="chat-msg">' +
+                `${data.message.message}` +
+                '</div><div class="chat-img"><img src="' +
+                `${environment.baseUrl + "/images/avatar.png"}` +
+                '"></div>'
+            );
+          }
+          messageContainerScroll.scroll([0, "100%"], 50, {
+            x: "",
+            y: "linear",
+          });
         }
       });
       $(document).on("submit", "#send-container", function (e) {

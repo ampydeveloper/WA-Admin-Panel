@@ -38,6 +38,7 @@ export const jobService = {
   update,
   deleteJob,
   getHaulerDrivers,
+  chatImageUpload,
   apiUrl: environment.apiUrl,
   // chatUrl: 'http://13.235.151.113:3100/',
   chatUrl: 'http://wa.customer.leagueofclicks.com/',
@@ -395,3 +396,15 @@ function getHaulerDrivers(data){
             return user;
         });
 }
+
+function chatImageUpload(data) {
+    return fetch(
+      this.apiUrl+`auth/uploadImage`,
+      requestOptions.post(data)
+    )
+      .then(handleResponse)
+      .then(user => {
+        // store user details and passport token in local storage to keep user logged in between page refreshes
+          return user;
+      });
+  }
