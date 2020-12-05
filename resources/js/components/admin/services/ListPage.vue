@@ -96,6 +96,7 @@
                   <th class="text-left">Service Type</th>
                   <th class="text-left">Service For</th>
                   <th class="text-left">Price</th>
+                  <th class="text-left">Overhead Cost</th>
                   <th class="text-left">Day Time</th>
                   <th class="text-left">Complete Time</th>
                   <th class="text-left">Actions</th>
@@ -115,6 +116,7 @@
                   <td v-if="item.service_for == 4">Customer</td>
                   <td v-if="item.service_for == 6">Hauler</td>
                   <td>${{ item.price }}</td>
+                  <td>${{ item.overhead_cost }}</td>
                   <td>
                     <span v-for="(type, index) in item.slot_type">
                       <span class="badges-item" v-if="type == 1 || type == 2 || type == 3">

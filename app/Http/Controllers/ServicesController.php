@@ -18,6 +18,7 @@ class ServicesController extends Controller
         $validator = Validator::make($request->all(), [
                     'service_name' => 'required|string',
                     'price' => 'required|numeric',
+                    'overhead_cost' => 'required|numeric',
                     'description' => 'required|string',
                     'service_image' => 'required|string',
                     'service_for' => 'required|numeric',
@@ -37,6 +38,7 @@ class ServicesController extends Controller
                 $service = new Service([
                     'service_name' => $request->service_name,
                     'price' => $request->price,
+                    'overhead_cost' => $request->overhead_cost,
                     'description' => $request->description,
                     'service_type' => $request->service_type,
                     'service_image' => $request->service_image,
@@ -74,6 +76,7 @@ class ServicesController extends Controller
                     'service_id' => 'required',
                     'service_name' => 'required|string',
                     'price' => 'required|numeric',
+                    'overhead_cost' => 'required|numeric',
                     'description' => 'required|string',
                     'service_image' => 'required|string',
                     'service_for' => 'required|numeric',
@@ -95,6 +98,7 @@ class ServicesController extends Controller
                 Service::whereId($request->service_id)->update([
                     'service_name' => $request->service_name,
                     'price' => $request->price,
+                    'overhead_cost' => $request->overhead_cost,
                     'description' => $request->description,
                     'service_type' => $request->service_type,
                     'service_image' => $request->service_image,

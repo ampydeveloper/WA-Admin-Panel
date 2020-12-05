@@ -302,7 +302,7 @@ class DriverController extends Controller {
         }
         
         try {
-            if(Job::where('job_status', config('constant.job_status.assigned'))->where('start_time', '!=', null)->where('end_time', null)->exists()) {
+            if(Job::where('id', $request->job_id)->where('job_status', config('constant.job_status.assigned'))->where('start_time', '!=', null)->where('end_time', null)->exists()) {
                 return response()->json([
                         'status' => false,
                         'message' => 'Please end the current job first',
@@ -310,7 +310,23 @@ class DriverController extends Controller {
                             ], 422);
             }
             $data = Job::where('id', $request->job_id)->where('job_status', config('constant.job_status.assigned'))->first();
-            $data->update(['start_time' => date("G:i", time()),'starting_miles' => $request->starting_miles]);
+            
+            if (is_file($request->starting_job_image)) {
+                $file = "";
+                $path = public_path() . '/uploads';
+                if (!file_exists($path)) {
+                    mkdir($path, 0777, true);
+                }
+                $cover = $request->file('starting_job_image');
+                $extension = $cover->getClientOriginalExtension();
+                $file = $cover->getFilename() . '.' . $extension;
+                if (!Storage::disk('public')->put($cover->getFilename() . '.' . $extension, File::get($cover))) {
+                    $file = "";
+                } else {
+                    $file = 'uploads/' . $file;
+                }
+            }
+            $data->update(['start_time' => date("G:i", time()),'starting_miles' => $request->starting_miles,'starting_job_image'=> $file]);
             return response()->json([
                             'status' => true,
                             'message' => 'job started sucessfully.',
@@ -352,7 +368,23 @@ class DriverController extends Controller {
             
             $data = Job::where('id', $request->job_id)->where('job_status', config('constant.job_status.assigned'))->first();
             if($request->ending_miles > $data->starting_miles) {
-                $data->update(['end_time' => date("G:i", time()), 'ending_miles' => $request->ending_miles, 'job_status' => config('constant.job_status.completed')]);
+                if (is_file($request->ending_job_image)) {
+                    $file = "";
+                    $path = public_path() . '/uploads';
+                    if (!file_exists($path)) {
+                        mkdir($path, 0777, true);
+                    }
+                    $cover = $request->file('ending_job_image');
+                    $extension = $cover->getClientOriginalExtension();
+                    $file = $cover->getFilename() . '.' . $extension;
+                    if (!Storage::disk('public')->put($cover->getFilename() . '.' . $extension, File::get($cover))) {
+                        $file = "";
+                    } else {
+                        $file = 'uploads/' . $file;
+                    }
+                }
+                
+                $data->update(['end_time' => date("G:i", time()), 'ending_miles' => $request->ending_miles, 'job_status' => config('constant.job_status.completed'),'ending_job_image' => $file]);
                 return response()->json([
                             'status' => true,
                             'message' => 'job ended sucessfully.',

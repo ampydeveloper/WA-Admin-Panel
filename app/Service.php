@@ -14,7 +14,7 @@ class Service extends Model
      * @var array
      */
     protected $fillable = [
-        'service_name', 'price', 'description', 'service_type', 'service_image', 'slot_type', 'slot_time', 'service_for', 'service_created_by', 'time_taken_to_complete_service'
+        'service_name', 'price', 'description', 'service_type', 'service_image', 'slot_type', 'slot_time', 'service_for', 'service_created_by', 'time_taken_to_complete_service','overhead_cost'
     ];
     
     public function getSlotTypeAttribute($data) {

@@ -298,6 +298,23 @@
                 </v-col>
               </v-col>
 
+              <v-col cols="12" md="12" class="pt-0 pb-0">
+                <v-col sm="2" class="label-align pt-0">
+                  <label class="label_text">Overhead Cost</label>
+                </v-col>
+                <v-col sm="4" class="pt-0 pb-0">
+                  <v-text-field
+                    type="number"
+                    max="100"
+                    min="0"
+                    v-model="editForm.overhead_cost"
+                    :rules="overheadCostRules"
+                    label="Enter overhead cost"
+                    required
+                  ></v-text-field>
+                </v-col>
+              </v-col>
+
               <v-col cols="12" md="12" class="textarea-parent pt-0 pb-0">
                 <v-col sm="2" class="label-align pt-0">
                   <label class="label_text">Description</label>
@@ -458,6 +475,7 @@ export default {
         service_name: "",
         service_for: "",
         price: "",
+        overhead_cost: "",
         description: "",
         service_image: "",
         service_type: "",
@@ -471,6 +489,7 @@ export default {
       eveningSlots: [],
       nameRules: [(v) => !!v || "Service Name is required."],
       priceRules: [(v) => !!v || "Service Price is invalid/required."],
+      overheadCostRules: [(v) => !!v || "Overhead cost is invalid/required."],
       descRules: [(v) => !!v || "Service Description is required."],
       myFiles: [],
     };
@@ -511,6 +530,7 @@ export default {
         this.editForm.service_id = response.data.id;
         this.editForm.service_name = response.data.service_name;
         this.editForm.price = response.data.price;
+        this.editForm.overhead_cost = response.data.overhead_cost;
         this.editForm.description = response.data.description;
         this.editForm.service_image = response.data.service_image;
         this.editForm.time_taken_to_complete_service =

@@ -27,6 +27,7 @@ class CreateServicesTable extends Migration
             $table->tinyInteger('time_taken_to_complete_service')->nullable()->comment("1: 15_mins, 2: 30_mins, 3: 45_mins, 4: 60_mins, 5: 75_mins, 6: 90_mins,");
             $table->unsignedBigInteger('service_created_by');
             $table->foreign('service_created_by')->references('id')->on('users');
+            $table->desimal("overhead_cost", 8, 2)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
