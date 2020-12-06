@@ -82,8 +82,16 @@ class ManagerController extends Controller {
         
         $data['graphs']['allJobsCount'] = Job::get()->count();
         $data['graphs']['newJobsCount'] = Job::whereBetween('created_at', [$startDate,date('Y-m-d')])->get()->count();
+
+        //generating job graph
+        $counter = 0; $data['graphs']['newJobGraph'] = [];
+        foreach($newHaulers as $key => $value) {
+            $data['graphs']['newJobGraph'][$counter]['date'] = $key;
+            $data['graphs']['newJobGraph'][$counter]['no'] = count($value);
+            $counter++;
+        }
         $data['graphs']['revenueGeneratedByNewJobs'] = Job::whereBetween('created_at', [$startDate,date('Y-m-d')])->sum('amount');
-        
+
         //invoices
         $data['invoiceGraphs']['customerInvoices'] = Job::whereHas('customer', function($q) {
             $q->where('role_id', config('constant.roles.Customer'));
