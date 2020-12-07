@@ -522,9 +522,24 @@ class CustomerController extends Controller {
     public function getAllRecords(Request $request) {
         $customer = User::where('id', $request->customer_id)->first();
         $memberSince = $customer->created_at;
-        $farms = CustomerFarm::where('customer_id', $request->customer_id)->get();
+        $farms = CustomerFarm::where('customer_id', $customer->id)->get();
         $totalFarms = $farms->count();
-        $jobs = Job::where('customer_id', $request->customer_id)->with(['farm', 'truck_driver', 'skidsteer_driver', 'service'])->get();
+        $jobs = Job::where('customer_id', $customer->id)
+                ->select('id', 'service_id', 'farm_id', 'job_providing_date', 'time_slots_id', 'notes', 'amount', 'job_status', 'truck_driver_id', 'skidsteer_driver_id')
+                ->with(['farm' => function($q) {
+                    $q->select('id', 'farm_address', 'farm_city', 'farm_province', 'farm_unit', 'farm_zipcode');
+                }])
+                ->with(['truck_driver' => function($q) {
+                    $q->select('id', 'first_name');
+                }])
+                ->with(['skidsteer_driver' => function($q) {
+                    $q->select('id', 'first_name');
+                }])
+                ->with(['service' => function($q) {
+                    $q->select('id', 'service_name');
+                }])
+                ->get();
+        $invoices = "Will come from quickbooks";
         $totalJobs = $jobs->count();
         $lifetimeBilling = Payment::where('customer_id', $request->customer_id)->sum('amount');
         $last12MonthBilling = Payment::where('customer_id', $request->customer_id)->whereMonth(
