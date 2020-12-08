@@ -392,6 +392,23 @@
                   </v-row>
                 </v-col>
               </v-col>
+              <v-col class="pt-0 pb-0" cols="12">
+                <v-col sm="2" class="label-align pt-0">
+                  <label class="label_text label-check-half">Service Price</label>
+                </v-col>
+                <v-col cols="12" sm="4" md="4" class="pt-0 pb-0">
+                  <h4><span>$</span> {{ addForm.amount }}</h4>
+                </v-col>
+              </v-col>
+              <v-col class="pt-0 pb-0" cols="12">
+                <v-col sm="2" class="label-align pt-0">
+                  <label class="label_text label-check-half">Overhead Cost</label>
+                </v-col>
+                <v-col cols="12" sm="4" md="4" class="pt-0 pb-0">
+                  <h4><span>$</span> {{ addForm.overhead_cost }}</h4>
+                </v-col>
+                </v-col>
+              </v-col>
             </div>
 
             <v-col class="pt-0 pb-0" cols="12" md="12">
@@ -461,6 +478,7 @@ export default {
         job_providing_time: "",
         weight: "",
         amount: "",
+        overhead_cost: "",
         is_repeating_job: false,
       },
       killometerRules: [
@@ -602,6 +620,7 @@ export default {
       this.serviceName.find((file) => {
         if (file.id == val) {
           this.addForm.amount = file.price;
+          this.addForm.overhead_cost = file.overhead_cost;
           this.servicetime = true;
           if (file.service_type == 1) {
             this.weightShow = true;
