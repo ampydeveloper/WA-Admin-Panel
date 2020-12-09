@@ -62,6 +62,7 @@ Route::group(['prefix' => 'auth'], function () {
             
             //Dispatch
             Route::get('dispatches', 'JobsController@dispatches');
+            Route::post('job-by-map', 'JobsController@jobByMap');
             Route::patch('update-driver-vehicle/{job_id}/{type}/{id}', 'JobsController@updateDriverVehicle');
 
             //update admin profile
@@ -210,6 +211,10 @@ Route::group(['prefix' => 'auth'], function () {
 
             //stripe
             Route::post('stripe-charge', 'PaymentController@stripeCharge');
+            
+            //Report
+            Route::get('get-report', 'ReportController@getCustomerReport');
+
         });
         Route::group(['prefix' => 'driver'], function () {
             Route::get('', 'Driver\DriverController@getDriver');

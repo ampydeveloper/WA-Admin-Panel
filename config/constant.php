@@ -146,4 +146,11 @@ return [
         'lon' => '34.36'
     ],
     'repeating_days' => ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'],
+    'report_of' => [
+        "this_month"    => 'This Month',
+        "last_month"    => 'Last Month',
+        "this_year"     => 'This Year',
+        "last_year"     => 'Last Year',
+        "custom"        => 'Custom'
+    ],
 ];
