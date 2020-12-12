@@ -149,6 +149,10 @@ Route::group(['prefix' => 'auth'], function () {
             Route::get('get-driver/{driver_id}', 'DriverController@getDriver');
             Route::delete('delete-driver/{driver_id}', 'DriverController@deleteDriver');
 
+            Route::get('invoice', 'EmailTemplateController@invoice');
+            Route::get('get-emails', 'EmailTemplateController@getEmails');
+            Route::post('save-emails', 'EmailTemplateController@saveEmails');
+            
             //truck
             Route::get('list-vehicle', 'VehicleController@listVehicle');
             Route::post('list-vehicle-mobile', 'VehicleController@listVehicleMobile');
@@ -211,10 +215,12 @@ Route::group(['prefix' => 'auth'], function () {
 
             //stripe
             Route::post('stripe-charge', 'PaymentController@stripeCharge');
-            
+
             //Report
             Route::get('get-report', 'ReportController@getCustomerReport');
-
+            Route::get('sales-by-customer', 'ReportController@salesByCustomer');
+            Route::get('sales-by-service-tech', 'ReportController@salesByServiceTech');
+            Route::get('transactions-by-customer', 'ReportController@transactionsByCustomer');
         });
         Route::group(['prefix' => 'driver'], function () {
             Route::get('', 'Driver\DriverController@getDriver');

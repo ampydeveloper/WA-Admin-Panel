@@ -151,6 +151,8 @@ return [
         "last_month"    => 'Last Month',
         "this_year"     => 'This Year',
         "last_year"     => 'Last Year',
-        "custom"        => 'Custom'
+        "custom"        => 'Custom',
+        "this_week"     => 'This Week',
+        "last_twelve_month"     => 'Last Twelve Month'
     ],
 ];

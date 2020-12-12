@@ -45,6 +45,11 @@ class User extends Authenticatable
         return Carbon::parse($date)->format('d-M-y');
     }
 
+    public function payment()
+    {
+        return $this->hasOne('App\Payment', 'user_id');
+    }
+
     public function managerDetails()
     {
         return $this->hasOne('App\ManagerDetail');
