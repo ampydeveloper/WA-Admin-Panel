@@ -648,5 +648,32 @@ class JobsController extends Controller {
         }
         
     }
+    
+    public function jobByMap(Request $request) {
+        if ($request->range[0] == 'This week') {
+            $start_date = date("Y-m-d", strtotime('last sunday'));
+            $end_date = date("Y-m-d", strtotime('next saturday'));
+        }
+        if ($request->range == 'This month') {
+            $start_date = date("Y-m-d", strtotime('first day of this month'));
+            $end_date = date("Y-m-d", strtotime('last day of this month'));
+        }
+        if ($request->range == 'This year') {
+            $start_date = date("Y-m-d", strtotime('1 january'));
+            $end_date = date("Y-m-d", strtotime('last day of this year'));
+        }
+        if ($request->user()->role_id == config('constant.roles.Admin') || $request->user()->role_id == config('constant.roles.Admin_Manager')) {
+            return response()->json([
+                        'status' => true,
+                        'message' => 'Dispatches',
+                        'data' => Job::where('job_status', config('constant.job_status.assigned'))->where('job_providing_date', '>=', $start_date)->where('job_providing_date', '<=', $end_date)->with("customer", "manager", "farm", "service", "truck", "skidsteer", "truck_driver", "skidsteer_driver")->get()
+                            ], 200);
+        } else {
+            return response()->json([
+                        'status' => false,
+                        'message' => 'Unauthorized access.',
+                            ], 421);
+        }
+    }
 
 }

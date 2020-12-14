@@ -518,7 +518,7 @@ export default {
         {}
       );
 
-      const socket = io.connect("http://13.235.151.113:3100", { secure: true });
+      const socket = io.connect("https://wa.customer.leagueofclicks.com:3100", { secure: true });
       const messageContainer = document.getElementById("message-container");
       const messageForm = document.getElementById("send-container");
       const messageInput = document.getElementById("message-input");

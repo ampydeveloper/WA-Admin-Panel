@@ -38,7 +38,9 @@ export const jobService = {
   update,
   deleteJob,
   getHaulerDrivers,
+  getEmails,
   chatImageUpload,
+  updateEmail,
   apiUrl: environment.apiUrl,
   // chatUrl: 'http://13.235.151.113:3100/',
   chatUrl: 'http://wa.customer.leagueofclicks.com/',
@@ -408,3 +410,29 @@ function chatImageUpload(data) {
           return user;
       });
   }
+
+  function getEmails() {
+    return fetch(
+            this.apiUrl + `admin/get-emails`,
+            requestOptions.get()
+        )
+        .then(handleResponse)
+        .then(user => {
+            // store user details and passport token in local storage to keep user logged in between page refreshes
+
+            return user;
+        });
+}
+
+function updateEmail(data) {
+    return fetch(
+            this.apiUrl + `admin/save-emails`,
+            requestOptions.post(data)
+        )
+        .then(handleResponse)
+        .then(user => {
+            // store user details and passport token in local storage to keep user logged in between page refreshes
+
+            return user;
+        });
+}

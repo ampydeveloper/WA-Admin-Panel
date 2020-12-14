@@ -29,7 +29,7 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('check-otp', 'AuthController@checkOtp');
     Route::post('forget-password-mobile', 'AuthController@forgotPasswordMobile');
     Route::post('forgot-password', 'AuthController@forgotPassword');
-    
+
     Route::post('recover-password', 'AuthController@recoverPassword');
     Route::get('confirm-update-email/{email}/{id}', 'AuthController@confirmUpdateEmail');
 
@@ -40,7 +40,7 @@ Route::group(['prefix' => 'auth'], function () {
 
     Route::post('start-time', 'TrackDriverTimeController@startJobTimer');
     Route::post('stop-time', 'TrackDriverTimeController@stopJobTimer');
-    
+
     Route::post('job-chat', 'ChatController@jobChat');
     Route::get('chat-members/{job_id}', 'ChatController@chatMembers');
 
@@ -59,7 +59,7 @@ Route::group(['prefix' => 'auth'], function () {
             Route::get('dashboard', 'ManagerController@dashboard');
             Route::post('dashboard-filters', 'ManagerController@dashboardFilters');
             Route::post('edit-profile', 'ManagerController@editProfile');
-            
+
             //Dispatch
             Route::get('dispatches', 'JobsController@dispatches');
             Route::post('job-by-map', 'JobsController@jobByMap');
@@ -140,6 +140,7 @@ Route::group(['prefix' => 'auth'], function () {
             Route::get('single-job/{job_id}', 'JobsController@getSingleJob');
             Route::post('update-booked-job', 'JobsController@updateBookedJob');
             Route::post('cancel-booked-job', 'JobsController@cancelJob');
+            Route::post('job-by-map', 'JobsController@jobByMap');
 
             //driver
             Route::get('list-drivers', 'DriverController@listDrivers');
@@ -152,7 +153,11 @@ Route::group(['prefix' => 'auth'], function () {
             Route::get('invoice', 'EmailTemplateController@invoice');
             Route::get('get-emails', 'EmailTemplateController@getEmails');
             Route::post('save-emails', 'EmailTemplateController@saveEmails');
-            
+
+            Route::get('invoice', 'EmailTemplateController@invoice');
+            Route::get('get-emails', 'EmailTemplateController@getEmails');
+            Route::post('save-emails', 'EmailTemplateController@saveEmails');
+
             //truck
             Route::get('list-vehicle', 'VehicleController@listVehicle');
             Route::post('list-vehicle-mobile', 'VehicleController@listVehicleMobile');
@@ -195,14 +200,14 @@ Route::group(['prefix' => 'auth'], function () {
             Route::get('single-news/{news_id}', 'NewsController@singleNews');
             Route::post('update-news', 'NewsController@updateNews');
             Route::delete('delete-news/{news_id}', 'NewsController@deleteNews');
-            
+
             //faq
             Route::get('faq-list', 'NewsController@faqList');
             Route::post('create-faq', 'NewsController@createFaq');
             Route::get('single-faq/{faq_id}', 'NewsController@singleFaq');
             Route::post('update-faq', 'NewsController@updateFaq');
             Route::delete('delete-faq/{faq_id}', 'NewsController@deleteFaq');
-            
+
             //mechanic
             Route::get('mechanic-list', 'ManagerController@mechanicList');
             Route::post('create-mechanic', 'ManagerController@createMechanic');
@@ -233,7 +238,7 @@ Route::group(['prefix' => 'auth'], function () {
             Route::get('earnings', 'Driver\DriverController@earnings');
             Route::post('earnings-filter', 'Driver\DriverController@earningsFilter');
             Route::post('status', 'Driver\DriverController@driverStatus');
-            
+
             Route::get('dashboard', 'Driver\DriverController@dashboard');
             Route::get('routes', 'Driver\DriverController@routes');
             Route::get('start-route', 'Driver\DriverController@startRoute');

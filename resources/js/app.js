@@ -19,9 +19,10 @@ import * as VueGoogleMaps from "vue2-google-maps";
 import { router } from "./_helpers/router";
 import store from './store';
 import moment from 'moment';
-import VueMoment from 'vue-moment';
+// import VueMoment from 'vue-moment';
 import Vuebar from 'vuebar';
 import App from "./app/App";
+import CKEditor from 'ckeditor4-vue';
 
 // Import Vue FilePond
 import vueFilePond from 'vue-filepond';
@@ -88,6 +89,7 @@ Vue.use(Vuetify);
 Vue.use(VueToast);
 Vue.use(VueFeatherIcon);
 Vue.use(Vuebar);
+Vue.use( CKEditor );
 
 Vue.filter('formatDateLic', function(value) {
     if (value) {

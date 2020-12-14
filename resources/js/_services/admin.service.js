@@ -17,6 +17,7 @@ export const adminService = {
   listAdmin,
   dashboardData,
   dashboardDataFilters,
+  dashboardJobs,
   apiUrl: environment.apiUrl,
   currentUrl: '',
   currentUser: currentUserSubject.asObservable(),
@@ -97,6 +98,17 @@ function dashboardDataFilters(data) {
     .then(user => {
       // store user details and passport token in local storage to keep user logged in between page refreshes
 
+      return user;
+    });
+}
+function dashboardJobs(data) {
+  return fetch(
+    this.apiUrl + `admin/job-by-map`,
+    requestOptions.post(data)
+  )
+    .then(handleResponse)
+    .then(user => {
+      // store user details and passport token in local storage to keep user logged in between page refreshes
       return user;
     });
 }

@@ -242,7 +242,7 @@
             active: true,
             items: [
                { title: 'Accounting',url: '/admin/accounting', icon: "<img src='/images/book-open.svg' />" },
-              // { title: 'Reports', url: '/admin/reports', icon: "<img src='/images/file-text.svg' />" }
+              { title: 'Reports', url: '/admin/reports', icon: "<img src='/images/file-text.svg' />" }
             ]
           },
           {
@@ -252,6 +252,7 @@
             items: [
                { title: 'News',url: '/admin/news', icon: "<img src='/images/book-open.svg' />" },
                { title: 'FAQ',url: '/admin/faq', icon: "<img src='/images/book-open.svg' />" },
+               { title: 'Emails',url: '/admin/emails', icon: "<img src='/images/book-open.svg' />" },
             ]
           }
         ],

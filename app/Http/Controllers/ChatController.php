@@ -16,7 +16,7 @@ class ChatController extends Controller {
 
     public function jobChat(Request $request) {
 //        echo $request->jobId;
-        die('red');
+//        die('red');
 //        if (Auth::check()) {
 //            $ch = curl_init();
 //            curl_setopt($ch, CURLOPT_URL, "http://" . env('SOCKET_SERVER_IP') . ":" . env('SOCKET_SERVER_PORT'));
@@ -42,7 +42,7 @@ class ChatController extends Controller {
         $postData = json_encode($data);
 
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "http://" . env('SOCKET_SERVER_IP') . ":" . env('SOCKET_SERVER_PORT') . "/job-chat");
+        curl_setopt($ch, CURLOPT_URL, "https://wa.customer.leagueofclicks.com/:" . env('SOCKET_SERVER_PORT') . "/job-chat");
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
@@ -53,8 +53,11 @@ class ChatController extends Controller {
 //        print_r($output);
 //        die('re');
         $messages = json_decode($output);
+        if(!empty($messages)){
         $messages = array_reverse($messages);
-        
+        }else{
+            $messages = [];
+        }
             return response()->json([
                     'status' => true,
                     'message' => 'Chat messages',

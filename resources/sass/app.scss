@@ -667,14 +667,16 @@ h6,
                     margin-top: 23px;
                     left: 0 !important;
                 }
+
                 @media only screen and (max-width: 768px) {
                     padding-bottom: 5px;
+
                     label {
                         margin: 0;
                     }
                 }
             }
-            
+
             .custom-col {
                 padding-top: 4px;
                 padding-bottom: 4px;
@@ -1007,10 +1009,12 @@ h6,
                         padding: 0 7.5px;
                         width: 20%;
                         float: left;
+
                         @media only screen and (max-width: 992px) {
                             width: 33.33333333%;
                             margin-bottom: 15px;
                         }
+
                         @media only screen and (max-width: 768px) {
                             width: 100%;
                             margin-bottom: 15px;
@@ -1636,7 +1640,7 @@ h4.top_heading {
 
     .v-select__selection--comma {
         background: #19191a;
-        color: #c2c6dc;
+        color: #c2c6dc !important;
         padding: 7px 4px 7px 10px;
         margin: 0;
         border-top-left-radius: 5px;
@@ -2001,14 +2005,16 @@ h4.top_heading {
 
                 .main-title {
                     text-align: left;
+
                     .right-bor {
                         display: none;
                     }
                 }
             }
+
             li {
                 display: none;
-            }  
+            }
         }
     }
 }
@@ -2790,12 +2796,17 @@ div#example_info {
 
 .graph-select {
     float: right;
-    width: 105px;
+    width: 130px;
     margin-top: -3px;
     margin-right: -7px;
 
     .v-select__slot {
         background: #19191a;
+    }
+
+    .v-select__selection--comma {
+        color: #c2c6dc !important;
+        padding-left: 10px;
     }
 
     .v-text-field {
@@ -2824,6 +2835,10 @@ div#example_info {
             }
         }
     }
+}
+
+.customer-g-outer {
+    height: 100%;
 }
 
 .graph-select-options {
@@ -2922,6 +2937,8 @@ div#example_info {
     background-size: cover;
     background-position: center center;
     height: 100%;
+    max-height: 486px;
+    overflow-y: scroll;
 
     .overlay {
         position: absolute;
@@ -2985,6 +3002,8 @@ div#example_info {
 
 .timeline-grap {
     height: 100%;
+    max-height: 486px;
+    overflow-y: scroll;
 
     .vx-card__collapsible-content {
         position: relative;
@@ -3540,15 +3559,67 @@ div#example_info {
 }
 
 @media only screen and (max-width: 768px) {
-    #app-bar{
+    #app-bar {
         width: 100%;
     }
 }
-.small-img-outer{
-    .small-img{
+
+.small-img-outer {
+    .small-img {
         width: 100px;
     }
 }
-.service-time-timing-out .pretty{
+
+.service-time-timing-out .pretty {
     display: inline-flex;
+}
+
+.reports-list {
+    .reports-list-in {
+        background: #000;
+        border-radius: 7px;
+        padding: 20px 20px;
+        // margin-bottom: 20px;
+    }
+
+    .report-each {
+        margin-top: 20px;
+    }
+
+    ul {
+        padding: 0 !important;
+        margin: 0;
+
+        li {
+            display: inline-block;
+
+            a {
+                color: #c2c6dc !important;
+                font-size: 12px;
+                padding-left: 10px;
+                margin-left: 10px;
+                border-left: 1px solid #c2c6dc;
+
+                &:hover {
+                    color: #56bf7a;
+                }
+
+                &:first-child {
+                    padding: 0;
+                    margin: 0;
+                    border: 0;
+                }
+            }
+        }
+    }
+}
+
+.modal-outer {
+    .v-card {
+        background: #000 !important;
+    }
+
+    .v-card__title.headline {
+        color: #ebeefd;
+    }
 }
