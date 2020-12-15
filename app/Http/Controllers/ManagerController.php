@@ -53,7 +53,8 @@ class ManagerController extends Controller {
         $newCustomers = User::where('role_id', config('constant.roles.Customer'))->whereBetween('created_at',[$startDate,date('Y-m-d')])->get()->groupBy('created_at');
         $data['graphs']['newCustomersCount'] = $newCustomers->count();
         
-        $counter = 0; 
+        $counter = 0;
+        $data['graphs']['newCustomerGraph'] = [];
         foreach($newCustomers as $key => $value) {
             $data['graphs']['newCustomerGraph'][$counter]['date'] = $key;
             $data['graphs']['newCustomerGraph'][$counter]['no'] = count($value);
@@ -69,7 +70,8 @@ class ManagerController extends Controller {
         $newHaulers = User::where('role_id', config('constant.roles.Haulers'))->whereBetween('created_at',[$startDate,date('Y-m-d')])->get()->groupBy('created_at');
         $data['graphs']['newHaulersCount'] = $newHaulers->count();
         
-        $counter = 0; 
+        $counter = 0;
+        $data['graphs']['newHaulerGraph'] = [];
         foreach($newHaulers as $key => $value) {
             $data['graphs']['newHaulerGraph'][$counter]['date'] = $key;
             $data['graphs']['newHaulerGraph'][$counter]['no'] = count($value);
@@ -87,7 +89,8 @@ class ManagerController extends Controller {
         $data['graphs']['newJobsCount'] = $newJobs->count();
 
         //generating job graph
-        $counter = 0; 
+        $counter = 0;
+        $data['graphs']['newJobGraph'] = [];
         foreach($newJobs as $key => $value) {
             $data['graphs']['newJobGraph'][$counter]['date'] = $key;
             $data['graphs']['newJobGraph'][$counter]['no'] = count($value);
@@ -131,9 +134,9 @@ class ManagerController extends Controller {
                             ], 422);
         }
         
-        if ($request->filter_time == '7 days') {
+        if ($request->filter_time == '7 days' || $request->filter_time == 'last 7 days') {
             $startDate = date('Y-m-d', strtotime('-7 days'));
-        } elseif ($request->filter_time == '1 month') {
+        } elseif ($request->filter_time == '1 month' || $request->filter_time == 'last month') {
             $startDate = date('Y-m-d', strtotime('-1 month'));
         } else {
             $startDate = date('Y-m-d', strtotime('-1 year'));
@@ -144,7 +147,7 @@ class ManagerController extends Controller {
             if($request->filter_category == 'customers') {
                 $newCustomers = User::where('role_id', config('constant.roles.Customer'))->whereBetween('created_at', [$startDate, date('Y-m-d')])->get()->groupBy('created_at');
                 $data['graphs']['newCustomersCount'] = $newCustomers->count();
-                $counter = 0;
+                $counter = 0; $data['graphs']['newCustomerGraph'] = [];
                 foreach ($newCustomers as $key => $value) {
                     $data['graphs']['newCustomerGraph'][$counter]['date'] = $key;
                     $data['graphs']['newCustomerGraph'][$counter]['no'] = count($value);
@@ -156,7 +159,7 @@ class ManagerController extends Controller {
             } elseif ($request->filter_category == 'haulers') {
                 $newHaulers = User::where('role_id', config('constant.roles.Haulers'))->whereBetween('created_at', [$startDate, date('Y-m-d')])->get()->groupBy('created_at');
                 $data['graphs']['newHaulersCount'] = $newHaulers->count();
-                $counter = 0;
+                $counter = 0; $data['graphs']['newHaulerGraph'] = [];
                 foreach ($newHaulers as $key => $value) {
                     $data['graphs']['newHaulerGraph'][$counter]['date'] = $key;
                     $data['graphs']['newHaulerGraph'][$counter]['no'] = count($value);

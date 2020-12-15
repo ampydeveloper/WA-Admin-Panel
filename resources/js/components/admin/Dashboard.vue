@@ -77,10 +77,10 @@
             <div class="graph-select">
               <v-select
                 :items="prefixs"
-                v-model="prefixSelectedCustomer"
+                v-model="prefixSelectedCustomers"
                 class="graph-select-sl"
                 :menu-props="{ contentClass: 'graph-select-options' }"
-                @change="updateCustomerGraph"
+                @change="updateGraph('Customers')"
               ></v-select>
             </div>
           </div>
@@ -104,7 +104,7 @@
               </p>
             </div>
           </div>
-          <canvas id="planet-chart"></canvas>
+          <canvas id="Customers-chart"></canvas>
         </div>
       </v-col>
       <v-col cols="12" md="5">
@@ -155,34 +155,34 @@
             <div class="graph-select">
               <v-select
                 :items="prefixs"
-                v-model="prefixSelectedCustomer"
+                v-model="prefixSelectedHaulers"
                 class="graph-select-sl"
                 :menu-props="{ contentClass: 'graph-select-options' }"
-                @change="updateCustomerGraph"
+                @change="updateGraph('Haulers')"
               ></v-select>
             </div>
           </div>
           <div class="customer-graph-details-outer">
             <div class="customer-graph-details">
               <h5>New</h5>
-              <p class="green-text">{{ graphs.newCustomersCount }}</p>
+              <p class="green-text">{{ graphs.newHaulersCount }}</p>
             </div>
             <div class="customer-graph-details">
               <h5>All</h5>
-              <p>{{ graphs.allCustomersCount }}</p>
+              <p>{{ graphs.allHaulersCount }}</p>
             </div>
 
             <div class="customer-graph-para">
               <p>
                 Your have
-                <span>{{ graphs.newCustomersCount }}</span> new customers
+                <span>{{ graphs.newHaulersCount }}</span> new haulers
                 generating
-                <span>${{ graphs.revenueGeneratedByNewCustomers }}</span> this
+                <span>${{ graphs.revenueGeneratedByNewHaulers }}</span> this
                 week.
               </p>
             </div>
           </div>
-          <canvas id="planet-chart"></canvas>
+          <canvas id="Haulers-chart"></canvas>
         </div>
       </v-col>
 
@@ -249,34 +249,34 @@
             <div class="graph-select">
               <v-select
                 :items="prefixs"
-                v-model="prefixSelectedCustomer"
+                v-model="prefixSelectedJobs"
                 class="graph-select-sl"
                 :menu-props="{ contentClass: 'graph-select-options' }"
-                @change="updateCustomerGraph"
+                @change="updateGraph('Jobs')"
               ></v-select>
             </div>
           </div>
           <div class="customer-graph-details-outer">
             <div class="customer-graph-details">
               <h5>New</h5>
-              <p class="green-text">{{ graphs.newCustomersCount }}</p>
+              <p class="green-text">{{ graphs.newJobsCount }}</p>
             </div>
             <div class="customer-graph-details">
               <h5>All</h5>
-              <p>{{ graphs.allCustomersCount }}</p>
+              <p>{{ graphs.allJobsCount }}</p>
             </div>
 
             <div class="customer-graph-para">
               <p>
                 Your have
-                <span>{{ graphs.newCustomersCount }}</span> new customers
+                <span>{{ graphs.newJobsCount }}</span> new jobs
                 generating
-                <span>${{ graphs.revenueGeneratedByNewCustomers }}</span> this
+                <span>${{ graphs.revenueGeneratedByNewJobs }}</span> this
                 week.
               </p>
             </div>
           </div>
-          <canvas id="planet-chart"></canvas>
+          <canvas id="Jobs-chart"></canvas>
         </div>
       </v-col>
 
@@ -485,7 +485,10 @@ export default {
   },
   data() {
     return {
-      prefixSelectedCustomer: ["Last 7 Days"],
+      map: null,
+      prefixSelectedCustomers: ["Last 7 Days"],
+      prefixSelectedHaulers: ["Last 7 Days"],
+      prefixSelectedJobs: ["Last 7 Days"],
       prefixSelectedInvoice: ["Last 7 Days"],
       prefixs: ["Last 7 Days", "Last Month", "Last Year"],
       prefixSelectedMap: ["This week"],
@@ -501,7 +504,9 @@ export default {
       invoiceGraphs: "",
       weather: "",
       gradient: null,
-      planetChartData: planetChartData,
+      CustomersChartData: {...planetChartData},
+      HaulersChartData: {...planetChartData},
+      JobsChartData: {...planetChartData},
       pieChartData: pieChartData,
       servicesData: servicesData,
       servicesData2: servicesData2,
@@ -510,6 +515,7 @@ export default {
     };
   },
   mounted() {
+    const self = this;
     this.dashboardData();
     this.dashboardJobs();
 
@@ -538,13 +544,13 @@ export default {
         new google.maps.Point(22, 32)
       ),
     };
-    var map;
+    
     function initMap() {
-      const directionsService = new google.maps.DirectionsService();
-      const directionsRenderer = new google.maps.DirectionsRenderer({
-        suppressMarkers: true,
-      });
-      map = new google.maps.Map(document.getElementById("map"), {
+      // const directionsService = new google.maps.DirectionsService();
+      // const directionsRenderer = new google.maps.DirectionsRenderer({
+      //   suppressMarkers: true,
+      // });
+      self.map = new google.maps.Map(document.getElementById("map"), {
         zoom: 7,
         center: { lat: 41.85, lng: -87.65 },
         mapTypeControl: false,
@@ -727,54 +733,64 @@ export default {
           },
         ],
       });
-      directionsRenderer.setMap(map);
+      // directionsRenderer.setMap(map);
 
+      const myLatLng = { lat: -25.363, lng: 131.044 };
+      // const map = new google.maps.Map(document.getElementById("map"), {
+      //   zoom: 4,
+      //   center: myLatLng,
+      // });
+      new google.maps.Marker({
+        position: myLatLng,
+        map: self.map,
+        title: "Hello World!",
+      });
       // calculateAndDisplayRoute(directionsService, directionsRenderer);
     }
 
-    function calculateAndDisplayRoute(directionsService, directionsRenderer) {
-      directionsService.route(
-        {
-          origin: {
-            query: wellOffice,
-          },
-          destination: {
-            query: '26.654155,-80.248645',
-          },
-          travelMode: google.maps.TravelMode.DRIVING,
-        },
-        (response, status) => {
-          if (status === "OK") {
-            directionsRenderer.setDirections(response);
-            var leg = response.routes[0].legs[0];
-            console.log(leg);
-            makeMarker(leg.start_location, icons.start, "Wellington Office");
-            makeMarker(leg.end_location, icons.end, "Farm");
-          } else {
-            window.alert("Directions request failed due to " + status);
-          }
-        }
-      );
-    }
-    function makeMarker(position, title) {
-      new google.maps.Marker({
-        position: position,
-        map: map,
-        // icon: icon,
-        title: title,
-      });
-    }
+    // function calculateAndDisplayRoute(directionsService, directionsRenderer) {
+    //   directionsService.route(
+    //     {
+    //       origin: {
+    //         query: wellOffice,
+    //       },
+    //       destination: {
+    //         query: '26.654155,-80.248645',
+    //       },
+    //       travelMode: google.maps.TravelMode.DRIVING,
+    //     },
+    //     (response, status) => {
+    //       if (status === "OK") {
+    //         directionsRenderer.setDirections(response);
+    //         var leg = response.routes[0].legs[0];
+    //         console.log(leg);
+    //         makeMarker(leg.start_location, icons.start, "Wellington Office");
+    //         makeMarker(leg.end_location, icons.end, "Farm");
+    //       } else {
+    //         window.alert("Directions request failed due to " + status);
+    //       }
+    //     }
+    //   );
+    // }
+    // function makeMarker(position, title) {
+    //   new google.maps.Marker({
+    //     position: position,
+    //     map: map,
+    //     // icon: icon,
+    //     title: title,
+    //   });
+    // }
 
-     const myLatLng = { lat: -25.363, lng: 131.044 };
+    //  const myLatLng = { lat: 41.85, lng: -87.65 };
   // const map = new google.maps.Map(document.getElementById("map"), {
   //   zoom: 4,
   //   center: myLatLng,
   // });
-  new google.maps.Marker({
-    position: myLatLng,
-    map,
-    title: "Hello World!",
-  });
+      // new google.maps.Marker({
+      //   position: myLatLng,
+      //   map: map,
+      //   title: "Hello World!",
+      // });
 
 // makeMarker({ lat: 26.654155, lng: -80.248645 }, "Farm");
     // adminService
@@ -803,42 +819,6 @@ export default {
         options: chartData.options,
       });
     },
-    processCustomerGraphData(newCustomerGraph, newHaulerGraph) {
-      let customerData = {},
-        haulerData = {},
-        planetChartLabels = [],
-        planetChartCustomerVals = [],
-        planetChartHaulerVals = [];
-      [...newCustomerGraph].forEach((stat) => {
-        customerData[stat.date] = stat.no;
-        planetChartLabels.push(stat.date);
-      });
-      [...newHaulerGraph].forEach((stat) => {
-        haulerData[stat.date] = stat.no;
-        planetChartLabels.push(stat.date);
-      });
-      planetChartLabels = [...new Set(planetChartLabels)];
-      planetChartLabels.sort(
-        (a, b) => moment(a, "DD-MMM-YY") - moment("DD-MMM-YY")
-      );
-      [...planetChartLabels].forEach((dt) => {
-        let val = 0;
-        if (Object.keys(customerData).includes(dt)) {
-          val = customerData[dt];
-        }
-        planetChartCustomerVals.push(val);
-        val = 0;
-        if (Object.keys(haulerData).includes(dt)) {
-          val = haulerData[dt];
-        }
-        planetChartHaulerVals.push(val);
-      });
-      return [
-        planetChartCustomerVals,
-        planetChartHaulerVals,
-        planetChartLabels,
-      ];
-    },
     dashboardData() {
       adminService.dashboardData().then((response) => {
         if (response.status) {
@@ -853,20 +833,20 @@ export default {
           ).toFixed(2);
 
           // Customer Graph
-          // let customerLabels = [];
-          let processed = this.processCustomerGraphData(
-            response.data.graphs.newCustomerGraph,
-            response.data.graphs.newHaulerGraph
-          );
-          let planetChartCustomerVals = processed[0];
-          let planetChartHaulerVals = processed[1];
-          let planetChartLabels = processed[2];
+          this.CustomersChartData.data.labels = (response.data.graphs.newCustomerGraph).map(function (e){ return e.date });
+          this.CustomersChartData.data.datasets[0].data = (response.data.graphs.newCustomerGraph).map(function (e){ return e.no });
+          this.createChart("Customers-chart", this.CustomersChartData, this.gradient);
 
-          this.planetChartData.data.datasets[0].data = planetChartCustomerVals;
-          this.planetChartData.data.datasets[1].data = planetChartHaulerVals;
-          this.planetChartData.data.labels = planetChartLabels;
-          this.createChart("planet-chart", this.planetChartData, this.gradient);
+          // Hauler Graph
+          this.HaulersChartData.data.labels = (response.data.graphs.newHaulerGraph).map(function (e){ return e.date });
+          this.HaulersChartData.data.datasets[0].data = (response.data.graphs.newHaulerGraph).map(function (e){ return e.no });
+          this.createChart("Haulers-chart", this.HaulersChartData, this.gradient);
 
+          // Job Graph
+          this.JobsChartData.data.labels = (response.data.graphs.newJobGraph).map(function (e){ return e.date });
+          this.JobsChartData.data.datasets[0].data = (response.data.graphs.newJobGraph).map(function (e){ return e.no });
+          this.createChart("Jobs-chart", this.JobsChartData, this.gradient);
+          
           // Invoice Pie-Chart
           const invoiceVals = response.data.invoiceGraphs;
           this.pieChartData.data.datasets[0].data = [
@@ -885,35 +865,21 @@ export default {
         }
       });
     },
-    updateCustomerGraph() {
+    updateGraph(type) {
       adminService
         .dashboardDataFilters({
           filter_for: "graphs",
-          filter_time: this.prefixSelectedCustomer,
+          filter_time: this[`prefixSelected${type}`].toLowerCase(),
+          filter_category: type.toLowerCase()
         })
         .then((response) => {
           if (response.status) {
-            this.count.newCustomersCount =
-              response.data.graphs.newCustomersCount;
-            this.count.newHaulersCount = response.data.graphs.newHaulersCount;
-            this.graphs.revenueGeneratedByNewCustomers =
-              response.data.graphs.revenueGeneratedByNewCustomers;
-            // planetChartCustomerVals, planetChartHaulerVals, planetChartLabels = this.processCustomerGraphData(response.data.graphs.newCustomerGraph, response.data.graphs.newHaulerGraph);
-            let processed = this.processCustomerGraphData(
-              response.data.graphs.newCustomerGraph,
-              response.data.graphs.newHaulerGraph
-            );
-            let planetChartCustomerVals = processed[0];
-            let planetChartHaulerVals = processed[1];
-            let planetChartLabels = processed[2];
-            this.planetChartData.data.datasets[0].data = planetChartCustomerVals;
-            this.planetChartData.data.datasets[1].data = planetChartHaulerVals;
-            this.planetChartData.data.labels = planetChartLabels;
-            this.createChart(
-              "planet-chart",
-              this.planetChartData,
-              this.gradient
-            );
+            this.count[`new${type}Count`] = response.data.graphs[`new${type}Count`];            
+            this.graphs[`revenueGeneratedByNew${type}`] = response.data.graphs[`revenueGeneratedByNew${type}`];
+
+            this[`${type}ChartData`]['data']['labels'] = (response.data.graphs[`new${type.slice(0, -1)}Graph`]).map(function (e){ return e.date });
+            this[`${type}ChartData`]['data']['datasets'][0]['data'] = (response.data.graphs[`new${type.slice(0, -1)}Graph`]).map(function (e){ return e.no });
+            this.createChart(`${type}-chart`, this[`${type}ChartData`], this.gradient);
           }
         });
     },
@@ -937,15 +903,22 @@ export default {
         });
     },
     dashboardJobs() {
-      // adminService
-      //   .dashboardJobs({ range: this.prefixSelectedMap })
-      //   .then((response) => {
-      //     if (response.status) {
-      //       // this.invoiceGraphs = response.data;
-      //       makeMarker('26.654155,-80.248645', 'sds', "Farm");
-      //       directionsRenderer.setMap(map);
-      //     }
-      //   });
+      const self = this;
+      adminService
+        .dashboardJobs({ range: this.prefixSelectedMap })
+        .then((response) => {
+          if (response.status) {
+            [...response.data].forEach((job) => {
+              if(job.farm_id != null){
+                let marker = new google.maps.Marker({
+                    position: { lat: Number.parseFloat(job.farm.latitude), lng: Number.parseFloat(job.farm.longitude) },
+                    title: `${job.service.name} | ${job.customer.first_name} ${job.customer.last_name}`
+                });
+                marker.setMap(self.map);
+              }
+            });
+          }
+        });
     },
   },
 

@@ -15,18 +15,18 @@ export const planetChartData = {
                 ],
                 borderWidth: 3
             },
-            { 
-                label: 'Haulers',
-                data: [],
-                fill: false,
-                backgroundColor: [
-                    '#11b276', // Green
-                ],
-                borderColor: [
-                    '#11b276',
-                ],
-                borderWidth: 3
-            }
+            // { 
+            //     label: 'Haulers',
+            //     data: [],
+            //     fill: false,
+            //     backgroundColor: [
+            //         '#11b276', // Green
+            //     ],
+            //     borderColor: [
+            //         '#11b276',
+            //     ],
+            //     borderWidth: 3
+            // }
         ]
     },
     options: {
