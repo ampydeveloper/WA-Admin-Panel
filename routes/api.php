@@ -222,10 +222,15 @@ Route::group(['prefix' => 'auth'], function () {
             Route::post('stripe-charge', 'PaymentController@stripeCharge');
 
             //Report
+            Route::post('sales-by-customer', 'ReportController@salesByCustomer');
+            Route::post('sales-by-service-tech', 'ReportController@salesByServiceTech');
+            Route::post('transactions-by-customer', 'ReportController@transactionsByCustomer');
+            Route::post('transactions-by-job', 'ReportController@transactionsByJob');
+            Route::get('customer-list', 'ReportController@customerList');
+            Route::get('customer-farm-list', 'ReportController@customerFarmList');
+            
             Route::get('get-report', 'ReportController@getCustomerReport');
-            Route::get('sales-by-customer', 'ReportController@salesByCustomer');
-            Route::get('sales-by-service-tech', 'ReportController@salesByServiceTech');
-            Route::get('transactions-by-customer', 'ReportController@transactionsByCustomer');
+            Route::get('job-activity-report', 'ReportController@jobActivityReport');
         });
         Route::group(['prefix' => 'driver'], function () {
             Route::get('', 'Driver\DriverController@getDriver');

@@ -95,6 +95,15 @@ class User extends Authenticatable
     {
         return $this->hasOne('App\Job', 'skidsteer_driver_id');
     }
+    public function truckDriverJobs()
+    {
+        return $this->hasMany('App\Job', 'truck_driver_id');
+    }
+
+    public function skidsteerDriverJobs()
+    {
+        return $this->hasMany('App\Job', 'skidsteer_driver_id');
+    }
 
     public function employeeSalaries()
     {
@@ -105,6 +114,12 @@ class User extends Authenticatable
         
         return $this->hasMany('App\Job', 'customer_id');
     }
+    public function jobs_count() {
+        
+        return $this->hasMany('App\Job', 'customer_id');
+    }
+    
+    
 
     public function hauler_driver() {
         
