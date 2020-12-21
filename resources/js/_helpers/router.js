@@ -105,6 +105,7 @@ import DispatchesViewPage from "../components/admin/dispatches/View";
 
 //reports
 import ReportsViewPage from "../components/admin/reports/View";
+import ReportsDetailsPage from "../components/admin/reports/reportDetails";
 import EmailPage from "../components/admin/EmailTemplate";
 //AccountingViewPage
 import AccountingViewPage from "../components/admin/accounting/View";
@@ -224,6 +225,7 @@ export const router = new Router({
         { path: 'accounting/details/:id', component: AccountingViewPage, name: 'Accounting', meta: { requiresAuth: [Role.Admin] } },
         { path: 'accounting', component: AccountingDetails, name: 'AccountingDetails', meta: { requiresAuth: [Role.Admin] } },
         { path: 'reports', component: ReportsViewPage, name: 'Reports', meta: { requiresAuth: [Role.Admin] } },
+        { path: 'report-details', component: ReportsDetailsPage, name: 'ReportsDetails', meta: { requiresAuth: [Role.Admin] } },
         { path: 'emails', component: EmailPage, name: 'Emails', meta: { requiresAuth: [Role.Admin] } },
       ]
     },

@@ -7,6 +7,7 @@ use App\Job;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\User;
 
 class ChatController extends Controller {
 
@@ -15,55 +16,41 @@ class ChatController extends Controller {
     }
 
     public function jobChat(Request $request) {
-//        echo $request->jobId;
-//        die('red');
-//        if (Auth::check()) {
-//            $ch = curl_init();
-//            curl_setopt($ch, CURLOPT_URL, "http://" . env('SOCKET_SERVER_IP') . ":" . env('SOCKET_SERVER_PORT'));
-//            // SSL important
-//            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-//            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-//            // curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-//
-//            $output = curl_exec($ch);
-//            curl_close($ch);
-//
-//            // dd($output);
-//            $messages = json_decode($output);
-//            $messages = array_reverse($messages);
-//            return view('chat.public', ['messages' => $messages]);
-//        }
-//
-//        session()->flush();
-//        return redirect(route('frontend.enterLiveStreaming'));
+//        print_r($request->jobId);
         $data = array(
             'jobId' => $request->jobId,
+//            'jobId' => 100,
         );
         $postData = json_encode($data);
-
+//die('re');
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "https://wa.customer.leagueofclicks.com/:" . env('SOCKET_SERVER_PORT') . "/job-chat");
+//        curl_setopt($ch, CURLOPT_URL, "https://wa.customer.leagueofclicks.com/:" . env('SOCKET_SERVER_PORT') . "/job-chat");
+        curl_setopt($ch, CURLOPT_URL, "https://wa.customer.leagueofclicks.com:3100/job-chat");
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
         $output = curl_exec($ch);
+
+//        if ($errno = curl_errno($ch)) {
+//            $error_message = curl_strerror($errno);
+//            echo "cURL error ({$errno}):\n {$error_message}";
+//        }
         curl_close($ch);
 //        print_r($output);
 //        die('re');
         $messages = json_decode($output);
-        if(!empty($messages)){
-        $messages = array_reverse($messages);
-        }else{
+        if (!empty($messages)) {
+            $messages = array_reverse($messages);
+        } else {
             $messages = [];
         }
-            return response()->json([
+        return response()->json([
                     'status' => true,
                     'message' => 'Chat messages',
                     'data' => $messages
                         ], 200);
-            
     }
 
     public function privateChat() {
@@ -130,24 +117,38 @@ class ChatController extends Controller {
         else
             return $b . "-" . $a;
     }
-    
+
     public function chatMembers(Request $request) {
         $chatMembers = Job::whereId($request->job_id)->select('id', 'customer_id', 'manager_id', 'truck_driver_id', 'skidsteer_driver_id')->with(['customer' => function($q) {
-            $q->select('id', 'first_name', 'user_image');
-        }]) ->with(['manager' => function($q) {
-        
-            $q->select('id', 'first_name', 'user_image');
-        }])->with(['truck_driver' => function($q) {
-        
-            $q->select('id', 'first_name', 'user_image');
-        }])->with(['skidsteer_driver' => function($q) {
-        
-            $q->select('id', 'first_name', 'user_image');
-        }])->first();
+                        $q->select('id', 'first_name', 'user_image');
+                    }])->with(['manager' => function($q) {
+
+                        $q->select('id', 'first_name', 'user_image');
+                    }])->with(['truck_driver' => function($q) {
+
+                        $q->select('id', 'first_name', 'user_image');
+                    }])->with(['skidsteer_driver' => function($q) {
+
+                        $q->select('id', 'first_name', 'user_image');
+                    }])->first();
+
+        $chatMembers->customer->user_image = env('CUSTOMER_URL') . '/storage/user_images/' . $chatMembers->customer->id . '/' . $chatMembers->customer->user_image;
+        $chatMembers->manager->user_image = env('CUSTOMER_URL') . '/storage/user_images/' . $chatMembers->manager->id . '/' . $chatMembers->manager->user_image;
+        $chatMembers->skidsteer_driver->user_image = env('APP_URL') . '/' . $chatMembers->skidsteer_driver->user_image;
+        $chatMembers->truck_driver->user_image = env('APP_URL') . '/' . $chatMembers->truck_driver->user_image;
+
+        $all_admin = User::where('role_id', config('constant.roles.Admin'))->select('id', 'first_name', 'user_image')->get();
+        foreach ($all_admin as $key => $admin) {
+            $all_admin[$key]->user_image = env('APP_URL') . '/' . $admin->user_image;
+        }
+        $chatMembers2 = collect($chatMembers);
+        $all_admin2 = collect(array('admin' => $all_admin));
+        $allChatMembers = $chatMembers2->merge($all_admin2);
+
         return response()->json([
                     'status' => true,
                     'message' => 'Chat members',
-                    'data' => $chatMembers
+                    'data' => $allChatMembers
                         ], 200);
     }
 

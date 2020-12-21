@@ -78,11 +78,11 @@
           <div class="report-each">
             <h5>Sales by Customer</h5>
             <ul class="list-unstyled">
-              <li><a href="">Last 12 Months</a></li>
-              <li><a href="">This Year</a></li>
-              <li><a href="">Last Months</a></li>
-              <li><a href="">This Months</a></li>
-              <li><a href="">This Week</a></li>
+              <li><a href="/admin/report-details?type=sales-by-customer&number=5">Last 12 Months</a></li>
+              <li><a href="" @click.prevent="generateReport(3)">This Year</a></li>
+              <li><a href="" @click.prevent="generateReport(2)">Last Month</a></li>
+              <li><a href="" @click.prevent="generateReport(1)">This Month</a></li>
+              <li><a href="" @click.prevent="generateReport(0)">This Week</a></li>
               <li><a href="" @click.prevent="dialog = true">Custom</a></li>
             </ul>
           </div>
@@ -90,11 +90,11 @@
           <div class="report-each">
             <h5>Sales by Service Tech</h5>
             <ul class="list-unstyled">
-              <li><a href="">Last 12 Months</a></li>
-              <li><a href="">This Year</a></li>
-              <li><a href="">Last Months</a></li>
-              <li><a href="">This Months</a></li>
-              <li><a href="">This Week</a></li>
+              <li><a href="" @click.prevent="generateReport()">Last 12 Months</a></li>
+              <li><a href="" @click.prevent="generateReport()">This Year</a></li>
+              <li><a href="" @click.prevent="generateReport()">Last Months</a></li>
+              <li><a href="" @click.prevent="generateReport()">This Months</a></li>
+              <li><a href="" @click.prevent="generateReport()">This Week</a></li>
               <li><a href="" @click.prevent="dialog = true">Custom</a></li>
             </ul>
           </div>
@@ -107,9 +107,9 @@
           <div class="report-each">
             <h5>Hours worked by Driver</h5>
             <ul class="list-unstyled">
-              <li><a href="">Last Two Weeks</a></li>
-              <li><a href="">Last Week</a></li>
-              <li><a href="">This Week</a></li>
+              <li><a href="" @click.prevent="generateReport()">Last Two Weeks</a></li>
+              <li><a href="" @click.prevent="generateReport()">Last Week</a></li>
+              <li><a href="" @click.prevent="generateReport()">This Week</a></li>
               <li><a href="" @click.prevent="dialog = true">Custom</a></li>
             </ul>
           </div>
@@ -117,26 +117,9 @@
           <div class="report-each">
             <h5>Job Driver & Labor Times</h5>
             <ul class="list-unstyled">
-              <li><a href="">Last Two Weeks</a></li>
-              <li><a href="">Last Week</a></li>
-              <li><a href="">This Week</a></li>
-              <li><a href="" @click.prevent="dialog = true">Custom</a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-sm-6 reports-list">
-        <div class="reports-list-in">
-          <h4>Sales Revenue</h4>
-          <div class="report-each">
-            <h5>Sales by Customer</h5>
-            <ul class="list-unstyled">
-              <li><a href="">Last 12 Months</a></li>
-              <li><a href="">This Year</a></li>
-              <li><a href="">Last Months</a></li>
-              <li><a href="">This Month</a></li>
-              <li><a href="">This Week</a></li>
+              <li><a href="" @click.prevent="generateReport()">Last Two Weeks</a></li>
+              <li><a href="" @click.prevent="generateReport()">Last Week</a></li>
+              <li><a href="" @click.prevent="generateReport()">This Week</a></li>
               <li><a href="" @click.prevent="dialog = true">Custom</a></li>
             </ul>
           </div>
@@ -149,9 +132,9 @@
           <div class="report-each">
             <h5>Expenses by Mechanic</h5>
             <ul class="list-unstyled">
-              <li><a href="">Last Two Weeks</a></li>
-              <li><a href="">Last Week</a></li>
-              <li><a href="">This Week</a></li>
+              <li><a href="" @click.prevent="generateReport()">Last Two Weeks</a></li>
+              <li><a href="" @click.prevent="generateReport()">Last Week</a></li>
+              <li><a href="" @click.prevent="generateReport()">This Week</a></li>
               <li><a href="" @click.prevent="dialog = true">Custom</a></li>
             </ul>
           </div>
@@ -164,10 +147,10 @@
           <div class="report-each">
             <h5>Sales Tax Report</h5>
             <ul class="list-unstyled">
-              <li><a href="">Last Quarter</a></li>
-              <li><a href="">Last Month</a></li>
-              <li><a href="">This Month</a></li>
-              <li><a href="">This Week</a></li>
+              <li><a href="" @click.prevent="generateReport()">Last Quarter</a></li>
+              <li><a href="" @click.prevent="generateReport()">Last Month</a></li>
+              <li><a href="" @click.prevent="generateReport()">This Month</a></li>
+              <li><a href="" @click.prevent="generateReport()">This Week</a></li>
               <li><a href="" @click.prevent="dialog = true">Custom</a></li>
             </ul>
           </div>
@@ -180,10 +163,10 @@
           <div class="report-each">
             <h5>Job Activity Report</h5>
             <ul class="list-unstyled">
-              <li><a href="">Last Month</a></li>
-              <li><a href="">Last Week</a></li>
-              <li><a href="">This Month</a></li>
-              <li><a href="">This Week</a></li>
+              <li><a href="" @click.prevent="generateReport()">Last Month</a></li>
+              <li><a href="" @click.prevent="generateReport()">Last Week</a></li>
+              <li><a href="" @click.prevent="generateReport()">This Month</a></li>
+              <li><a href="" @click.prevent="generateReport()">This Week</a></li>
               <li><a href="" @click.prevent="dialog = true">Custom</a></li>
             </ul>
           </div>
@@ -356,6 +339,11 @@
 </template>
 
 <script>
+import { router } from "../../../_helpers/router";
+import { jobService } from "../../../_services/job.service";
+import { environment } from "../../../config/test.env";
+// import { SendIcon, ImageIcon, LoaderIcon } from "vue-feather-icons";
+import { authenticationService } from "../../../_services/authentication.service";
 export default {
   data() {
     return {
@@ -373,5 +361,21 @@ export default {
     };
   },
   created() {},
+  methods: {
+    generateReport(reportId) {
+      jobService.getReport({ report_of: reportId }).then((response) => {
+        //handle response
+        if (response.status) {
+          // this.job = response.data;
+        } else {
+          this.$toast.open({
+            message: response.message,
+            type: "error",
+            position: "top-right",
+          });
+        }
+      });
+    },
+  }
 };
 </script>

@@ -41,6 +41,7 @@ export const jobService = {
   getEmails,
   chatImageUpload,
   updateEmail,
+  getReport,
   apiUrl: environment.apiUrl,
   // chatUrl: 'http://13.235.151.113:3100/',
   chatUrl: 'http://wa.customer.leagueofclicks.com/',
@@ -321,7 +322,8 @@ function chatList() {
 }
 
 function chatUsers(data) {
-  return fetch(
+    console.log(this.apiUrl + `chat-members/`+data);
+  return fetch( 
     this.apiUrl + `chat-members/`+data,
     requestOptions.get()
   )
@@ -427,6 +429,19 @@ function chatImageUpload(data) {
 function updateEmail(data) {
     return fetch(
             this.apiUrl + `admin/save-emails`,
+            requestOptions.post(data)
+        )
+        .then(handleResponse)
+        .then(user => {
+            // store user details and passport token in local storage to keep user logged in between page refreshes
+
+            return user;
+        });
+}
+
+function getReport(data) {
+    return fetch(
+            this.apiUrl + `admin/`+data.type,
             requestOptions.post(data)
         )
         .then(handleResponse)

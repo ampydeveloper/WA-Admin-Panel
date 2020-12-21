@@ -76,7 +76,7 @@
 
         <v-col cols="12" md="12" class="main_box chat-form-outer">
           <div class="type_msg">
-            <form id="send-container" autocomplete="off">
+            
               <div class="input_msg_write">
                 <input
                   type="hidden"
@@ -91,22 +91,23 @@
                   id="current-user-image"
                   :value="baseUrl + userdata.user_image"
                 />
+<input type="hidden" id="all-user-data" :value="JSON.stringify(chatUsers)" />
 
+<form id="upload-images-form" enctype="multipart/form-data">
                 <span class="upload-images-out">
-                  <!-- <input
-                  type="file"
-                  id="image-file"
-                  name="chat-image"
-                /> -->
-                  <v-file-input
+                  <input type="file" id="image-file" name="chat-image" />
+                  <!-- <v-file-input
                     accept=".png,.jpg,.jpeg"
                     id="image-file"
                     v-model="chatUploadImage"
-                     @click="chatImageUpload"
+                    @click.stop="chatImageUpload"
                   >
-                  </v-file-input>
+                  </v-file-input> -->
                   <image-icon size="1.5x" class="custom-class"></image-icon>
                 </span>
+                </form>
+
+<form id="send-container" autocomplete="off">
                 <input
                   type="text"
                   class="write_msg"
@@ -116,8 +117,9 @@
                 <button class="msg_send_btn" id="send-button" type="submit">
                   <send-icon size="1.5x" class="custom-class"></send-icon>
                 </button>
+</form>
               </div>
-            </form>
+            
           </div>
         </v-col>
       </v-row>
@@ -130,6 +132,7 @@ import { router } from "../../../_helpers/router";
 import { jobService } from "../../../_services/job.service";
 import { environment } from "../../../config/test.env";
 import { SendIcon, ImageIcon, LoaderIcon } from "vue-feather-icons";
+import { authenticationService } from "../../../_services/authentication.service";
 // import Mapbox from "mapbox-gl-vue";
 // import mapboxgl from "mapbox-gl";
 
@@ -158,11 +161,13 @@ export default {
   },
   mounted() {
     this.getResults();
-    this.getChatMembers();
 
     setTimeout(() => {
       this.getChatMessages();
-    }, 500);
+    }, 6000);
+    setTimeout(() => {
+      this.getChatMembers();
+    }, 1000);
 
     let socketScript = document.createElement("script");
     socketScript.setAttribute(
@@ -457,40 +462,67 @@ export default {
         //handle response
         if (response.status) {
           // this.job = response.data;
-          console.log(response.data);
+          // console.log(response.data);
           var users = [];
           users[response.data.customer_id] = response.data.customer;
           users[response.data.manager_id] = response.data.manager;
           users[response.data.skidsteer_driver_id] =
             response.data.skidsteer_driver;
           users[response.data.truck_driver_id] = response.data.truck_driver;
+          // console.log(users);
+
+          response.data.admin.forEach(function (val, index) {
+            users[val.id] = val;
+          });
 
           this.chatUsers = users;
+
         }
       });
     },
     getChatMessages() {
-      //${this.chatUsers[val.username].user_image}
+      // console.log(this.chatUsers);
+      const chatUsersList = this.chatUsers;
+      const currentUserDetails = this.userdata;
+      //  console.log(chatUsersList);
       jobService
         .getJobChatMessages({ jobId: this.$route.params.id })
         .then((response) => {
           if (response) {
             response.data.forEach(function (val, index) {
-              const messageElement = document.createElement("div");
-              messageElement.className = "chat-receiver";
-              messageElement.innerHTML =
-                '<div class="chat-msg">' +
-                `${val.message}` +
-                '</div><div class="chat-img"><img src="' +
-                `${environment.baseUrl + "/images/avatar.png"}` +
-                '"></div>';
-              $(document).find("#message-container").prepend(messageElement);
-              $("#message-container .empty-message").remove();
+              if (typeof val.username != "undefined") {
+                // console.log(val.username);
+                // console.log(chatUsersList[val.username]);
+                if (typeof chatUsersList[val.username] != "undefined") {
+                  var userImageLink = chatUsersList[val.username].user_image;
+                } else {
+                  var userImageLink =
+                    environment.baseUrl + "/images/avatar.png";
+                }
+                // console.log(userImageLink);
+                const messageElement = document.createElement("div");
+                if (currentUserDetails.id == val.username) {
+                  messageElement.className = "chat-receiver";
+                } else {
+                  messageElement.className = "chat-sender";
+                }
+                messageElement.innerHTML =
+                  '<div class="chat-msg">' +
+                  `${val.message}` +
+                  '</div><div class="chat-img"><img src="' +
+                  `${userImageLink}` +
+                  '"></div>';
+                $(document)
+                  .find("#message-container")
+                  .find(".os-content")
+                  .prepend(messageElement);
+                $("#message-container .empty-message").remove();
+              }
             });
           }
         });
     },
-    chatImageUpload() {
+    chatImageUpload(e) {
       jobService
         .chatImageUpload({ uploadImage: this.chatUploadImage })
         .then((response) => {
@@ -508,6 +540,7 @@ export default {
             });
           }
         });
+      // e.stopPropagation();
     },
   },
   updated() {
@@ -518,17 +551,22 @@ export default {
         {}
       );
 
-      const socket = io.connect("https://wa.customer.leagueofclicks.com:3100", { secure: true });
+      const socket = io.connect("https://wa.customer.leagueofclicks.com:3100", {
+        secure: true,
+      });
       const messageContainer = document.getElementById("message-container");
       const messageForm = document.getElementById("send-container");
       const messageInput = document.getElementById("message-input");
       const name = document.getElementById("user-details-id");
       const jobId = document.getElementById("job-id");
-
+      const allUserData = document.getElementById("all-user-data");
+      
       socket.emit("new-user", name._value);
       messageContainerScroll.scroll([0, "100%"], 50, { x: "", y: "linear" });
 
-      socket.on("chat-message", (data) => {
+      const chatUsersList = JSON.parse(allUserData.value);
+      const emitChannel = "chat-message"; //"chatmessage"+jobId
+      socket.on(emitChannel, (data) => {
         const userImage = $("#current-user-image").val();
         if (data.job_id == jobId._value) {
           if (data.name == name._value) {
@@ -537,15 +575,23 @@ export default {
                 `${data.message.message}` +
                 '</div><div class="chat-img"><img src="' +
                 `${userImage}` +
-                '"></div>'
+                '"></div>',
+              "chat-receiver"
             );
           } else {
+            if (typeof chatUsersList[data.name] != "undefined") {
+                  var userImageLink = chatUsersList[data.name].user_image;
+                } else {
+                  var userImageLink =
+                    environment.baseUrl + "/images/avatar.png";
+                }
             appendMessage(
               '<div class="chat-msg">' +
                 `${data.message.message}` +
                 '</div><div class="chat-img"><img src="' +
-                `${environment.baseUrl + "/images/avatar.png"}` +
-                '"></div>'
+                `${userImageLink}` +
+                '"></div>',
+              "chat-sender"
             );
           }
           messageContainerScroll.scroll([0, "100%"], 50, {
@@ -563,7 +609,8 @@ export default {
               `${message}` +
               '</div><div class="chat-img"><img src="' +
               `${userImage}` +
-              '"></div>'
+              '"></div>',
+            "chat-receiver"
           );
           socket.emit("send-chat-message", {
             message: message,
@@ -578,9 +625,9 @@ export default {
         }
         e.preventDefault();
       });
-      function appendMessage(message) {
+      function appendMessage(message, className) {
         const messageElement = document.createElement("div");
-        messageElement.className = "chat-receiver";
+        messageElement.className = className; //"chat-receiver"
         messageElement.innerHTML = message;
         $(document)
           .find("#message-container")
@@ -588,6 +635,44 @@ export default {
           .prepend(messageElement);
         $("#message-container .empty-message").remove();
       }
+
+      $(document).on("click", ".upload-images-out", function () {
+        $("#image-file").click();
+      });
+      $("#image-file").on("click", function (e) {
+        e.stopPropagation();
+      });
+      $("#image-file").on("change", function (e) {
+        var $this = $(this);
+        if ($this.val() != "") {
+          const currentUser = authenticationService.currentUserValue || {};
+
+var form = $("#upload-images-form")[0];
+          var imageData = new FormData(form);
+          imageData.append("uploadImage", $("#image-file").prop("files")[0]);
+          imageData.append("sds", 'dsds');
+
+          $.ajax({
+            url: environment.apiUrl + `uploadImage-file`,
+            headers: {
+              Authorization: "Bearer " + currentUser.data.access_token,
+              "Content-Type": "multipart/form-data",
+              "X-Requested-With": "XMLHttpRequest",
+              "X-CSRF-TOKEN": Laravel.csrfToken,
+            },
+            data: imageData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            dataType: "json",
+            type: "post",
+            success: function (result) {
+              console.log(result);
+            },
+          });
+        }
+        e.stopPropagation();
+      });
     }, 1000);
   },
 };

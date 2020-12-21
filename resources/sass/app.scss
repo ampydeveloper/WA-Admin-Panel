@@ -1201,9 +1201,6 @@ h6,
 
         .chat-msg {
             width: 60%;
-            margin-left: 60px;
-            background-color: #ebebeb;
-            padding: 10px 30px 10px 30px;
             position: relative;
             font-size: 14px;
 
@@ -1226,7 +1223,6 @@ h6,
 
             .chat-msg {
                 margin-left: 0;
-                margin-right: 20px;
                 display: inline-block;
                 text-align: left;
 
@@ -3418,6 +3414,8 @@ div#example_info {
     border-radius: 6px;
     background-color: #11b276;
     color: #fff;
+    display: inline-block;
+    margin-left: 15px;
 }
 
 #app .chat-area .chat-sender .chat-msg:before {
@@ -3436,6 +3434,11 @@ div#example_info {
 
 #app .chat-area .chat-receiver .chat-msg:before {
     border-left: 10px solid #000;
+}
+#app .chat-area .chat-sender{
+    float: left;
+    width: 100%;
+    margin-bottom: 15px;
 }
 
 #app .chat-area .chat-img img {
@@ -3524,9 +3527,12 @@ div#example_info {
     padding: 11.5px 10px 11.5px 10px;
     border: 1px solid #181819;
     background: #000;
-    margin-right: 10px;
-
+    margin-right: 8px;
     cursor: pointer;
+    display: inline-block;
+}
+#image-file{
+    display: none;
 }
 
 .dispatch-top {
