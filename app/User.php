@@ -119,13 +119,15 @@ class User extends Authenticatable
         return $this->hasMany('App\Job', 'customer_id');
     }
     
-    
-
     public function hauler_driver() {
         
         return $this->hasMany('App\User', 'created_by');
     }
     
+    public function DailyRouteDetails() {
+        
+        return $this->hasMany('App\DailyRouteDetail', 'driver_id');
+    }
     public function getManagerIdCardAttribute(){
         $id = '';
         if($this->managerDetails){
@@ -133,6 +135,6 @@ class User extends Authenticatable
         }
         return $id;
     }
-
+    
     protected $appends = ['manager_id_card'];
 }

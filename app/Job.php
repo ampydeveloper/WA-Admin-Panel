@@ -86,9 +86,21 @@ class Job extends Model
     {
         return $this->hasOne('App\EmployeeSalaries', 'user_id');
     }
+    
+    public function cardDetail()
+    {
+        return $this->belongsTo('App\CustomerCardDetail','card_id','id');
+    }
+    
+    public function jobAssignmentHistories()
+    {
+        return $this->hasMany('App\JobAssignmentHistory','job_id','id');
+    }
+    
     public function getJobStatusNameAttribute()
     {
         $jobStatus = array_flip(config('constant.job_status'));
         return $jobStatus[$this->job_status];
     }
+    
 }

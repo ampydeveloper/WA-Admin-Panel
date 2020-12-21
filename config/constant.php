@@ -155,6 +155,7 @@ return [
         "last_twelve_month" => 5,
         "custom"        => 6,
         "last_week"        => 7,
+        "last_two_week"        => 8,
     ],
     'inverse_report_of' => [
         0 =>"this_week",
@@ -165,5 +166,6 @@ return [
         5 =>"last_twelve_month",
         6 =>"custom",
         7 =>"last_week",
+        8 =>"last_two_week",
     ],
 ];
