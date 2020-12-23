@@ -75,7 +75,7 @@ class ReportController extends Controller
 
         return response()->json([
             'status' => true,
-            'saleCustomers' => $saleCustomers
+            'data' => $saleCustomers
         ], 200);
     }
     
@@ -161,7 +161,7 @@ class ReportController extends Controller
         
         return response()->json([
             'status' => true,
-            'saleJobs' => $saleJobs
+            'data' => $saleJobs
         ], 200);
        
     }
@@ -258,7 +258,7 @@ class ReportController extends Controller
         
         return response()->json([
             'status' => true,
-            'customerTransactions' => $customerTransactions
+            'data' => $customerTransactions
         ], 200);
     }
     
@@ -342,7 +342,7 @@ class ReportController extends Controller
 
         return response()->json([
             'status' => true,
-            'jobTransactions' => $jobTransactions
+            'data' => $jobTransactions
         ], 200);
     }
     
@@ -511,7 +511,7 @@ class ReportController extends Controller
 
         return response()->json([
             'status' => true,
-            'jobTransactions' => $jobTransactions
+            'data' => $jobTransactions
         ], 200);
     }
     
@@ -691,7 +691,7 @@ class ReportController extends Controller
         
         return response()->json([
             'status' => true,
-            'jobTransactions' => $jobTransactions
+            'data' => $jobTransactions
         ], 200);
     }
     
@@ -811,7 +811,7 @@ class ReportController extends Controller
 
         return response()->json([
             'status' => true,
-            'driveAndLabourTimes' => $driveAndLabourTimes
+            'data' => $driveAndLabourTimes
         ], 200);
     }
     

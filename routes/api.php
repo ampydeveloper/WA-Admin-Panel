@@ -226,11 +226,11 @@ Route::group(['prefix' => 'auth'], function () {
             Route::post('sales-by-service-tech', 'ReportController@salesByServiceTech');
             Route::post('transactions-by-customer', 'ReportController@transactionsByCustomer');
             Route::post('transactions-by-job', 'ReportController@transactionsByJob');
-            Route::get('customer-list', 'ReportController@customerList');
-            Route::get('customer-farm-list', 'ReportController@customerFarmList');
+            Route::post('customer-list', 'ReportController@customerList');
+            Route::post('customer-farm-list', 'ReportController@customerFarmList');
             
-            Route::get('get-report', 'ReportController@getCustomerReport');
-            Route::get('job-activity-report', 'ReportController@jobActivityReport');
+            Route::post('get-report', 'ReportController@getCustomerReport');
+            Route::post('job-activity-report', 'ReportController@jobActivityReport');
         });
         Route::group(['prefix' => 'driver'], function () {
             Route::get('', 'Driver\DriverController@getDriver');

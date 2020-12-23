@@ -23,27 +23,45 @@
                   <th class="text-left">Customer</th>
                   <th class="text-left">Activity</th>
                   <th class="text-left">Time of Activity</th>
-                  <th class="text-left">User</th>
                   <th class="text-left">Techs</th>
                 </tr>
               </thead>
               <tbody>
-                <template v-for="(reportData, index) in report">
-                  <tr>
-                    <!-- <tr v-for="(report.jobs, index2) in job"> -->
-                    <!-- <td>{{ job.id }} <br />{{ job.job_providing_date }}</td>
-                    <td></td>
-                    <td>InProgress <br />$0.00</td>
-                    <td>${{ job.amount }}</td>
-                    <td>{{ job.service.service_name }}</td> -->
-                    <td>
-                      {{ report.first_name + " " + report.last_name }} #{{
-                        report.id
-                      }}
-                    </td>
-                    <td></td>
-                  </tr>
-                </template>
+                <tr v-for="(report, index) in reportData">
+                  <td>#JOB100{{ report.id }}</td>
+                  <td>
+                    {{ report.job_providing_date | formatDateLic }}
+                  </td>
+                  <td>
+                    {{
+                      report.customer.first_name +
+                      " " +
+                      report.customer.last_name
+                    }}
+                  </td>
+                  <td>Job Created</td>
+                  <td>09/08/2020 09:56 am</td>
+                  <td>
+                    {{
+                      report.truck_driver ? report.truck_driver.first_name : ""
+                    }}
+                    {{
+                      report.truck_driver
+                        ? report.truck_driver.last_name + ", "
+                        : ""
+                    }}
+                    {{
+                      report.skidsteer_driver
+                        ? report.skidsteer_driver.first_name
+                        : ""
+                    }}
+                    {{
+                      report.skidsteer_driver
+                        ? report.skidsteer_driver.last_name
+                        : ""
+                    }}
+                  </td>
+                </tr>
               </tbody>
             </table>
           </v-col>
@@ -56,6 +74,11 @@
     <span id="table-chevron-right" class="d-none">
       <chevron-right-icon size="1.5x" class="custom-class"></chevron-right-icon>
     </span>
+    <span id="search-input-icon" class="d-none">
+      <span class="search-input-outer">
+        <search-icon size="1.5x" class="custom-class"></search-icon>
+      </span>
+    </span>
   </v-app>
 </template>
 
@@ -64,13 +87,18 @@
 import { jobService } from "../../../_services/job.service";
 import { authenticationService } from "../../../_services/authentication.service";
 import { environment } from "../../../config/test.env";
-import { ChevronLeftIcon, ChevronRightIcon } from "vue-feather-icons";
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  SearchIcon,
+} from "vue-feather-icons";
 import { router } from "../../../_helpers/router";
 
 export default {
   components: {
     ChevronLeftIcon,
     ChevronRightIcon,
+    SearchIcon,
   },
   data() {
     return {
@@ -99,7 +127,7 @@ export default {
         .then((response) => {
           //handle response
           if (response.status) {
-            this.reportData = response.saleCustomers;
+            this.reportData = response.data;
           } else {
             this.$toast.open({
               message: response.message,
@@ -135,11 +163,8 @@ export default {
               );
             },
           });
-          //   $(".dataTables_filter").append($("#search-input-icon").html());
-          //   $(".dataTables_filter input").attr(
-          //     "placeholder",
-          //     "Search News by Heading / Description"
-          //   );
+          $(".dataTables_filter").append($("#search-input-icon").html());
+          $(".dataTables_filter input").attr("placeholder", "Search Activity");
           $(".dataTables_paginate .paginate_button.previous").html(
             $("#table-chevron-left").html()
           );

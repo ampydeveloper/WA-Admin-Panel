@@ -70,7 +70,7 @@
 
     <v-row class="dashboard-graps">
       <v-col cols="12" md="7">
-        <div class="grap customer-g-outer">
+        <div class="grap customer-g-outer customer-x1-out">
           <div class="customer-graph-headings">
             <h4 class="active">Customer</h4>
 
@@ -148,7 +148,7 @@
 
     <v-row class="dashboard-graps">
       <v-col cols="12" md="7">
-        <div class="grap customer-g-outer">
+        <div class="grap customer-g-outer customer-x2-out">
           <div class="customer-graph-headings">
             <h4 class="active">Hauler</h4>
 
@@ -175,8 +175,7 @@
             <div class="customer-graph-para">
               <p>
                 Your have
-                <span>{{ graphs.newHaulersCount }}</span> new haulers
-                generating
+                <span>{{ graphs.newHaulersCount }}</span> new haulers generating
                 <span>${{ graphs.revenueGeneratedByNewHaulers }}</span> this
                 week.
               </p>
@@ -242,7 +241,7 @@
 
     <v-row class="dashboard-graps">
       <v-col cols="12" md="7">
-        <div class="grap customer-g-outer">
+        <div class="grap customer-g-outer customer-x3-out">
           <div class="customer-graph-headings">
             <h4 class="active">Jobs</h4>
 
@@ -269,10 +268,8 @@
             <div class="customer-graph-para">
               <p>
                 Your have
-                <span>{{ graphs.newJobsCount }}</span> new jobs
-                generating
-                <span>${{ graphs.revenueGeneratedByNewJobs }}</span> this
-                week.
+                <span>{{ graphs.newJobsCount }}</span> new jobs generating
+                <span>${{ graphs.revenueGeneratedByNewJobs }}</span> this week.
               </p>
             </div>
           </div>
@@ -504,9 +501,9 @@ export default {
       invoiceGraphs: "",
       weather: "",
       gradient: null,
-      CustomersChartData: {...planetChartData},
-      HaulersChartData: {...planetChartData},
-      JobsChartData: {...planetChartData},
+      CustomersChartData: { ...planetChartData },
+      HaulersChartData: { ...planetChartData },
+      JobsChartData: { ...planetChartData },
       pieChartData: pieChartData,
       servicesData: servicesData,
       servicesData2: servicesData2,
@@ -524,7 +521,7 @@ export default {
     this.createChart("services-chart2", this.servicesData4, this.gradient);
     this.createChart("services-chart3", this.servicesData2, this.gradient);
     this.createChart("services-chart4", this.servicesData3, this.gradient);
-    
+
     var wellOffice = "26.695145,-80.244859";
     var icons = {
       start: new google.maps.MarkerImage(
@@ -544,7 +541,7 @@ export default {
         new google.maps.Point(22, 32)
       ),
     };
-    
+
     function initMap() {
       // const directionsService = new google.maps.DirectionsService();
       // const directionsRenderer = new google.maps.DirectionsRenderer({
@@ -782,17 +779,17 @@ export default {
     // }
 
     //  const myLatLng = { lat: 41.85, lng: -87.65 };
-  // const map = new google.maps.Map(document.getElementById("map"), {
-  //   zoom: 4,
-  //   center: myLatLng,
-  // });
-      // new google.maps.Marker({
-      //   position: myLatLng,
-      //   map: map,
-      //   title: "Hello World!",
-      // });
+    // const map = new google.maps.Map(document.getElementById("map"), {
+    //   zoom: 4,
+    //   center: myLatLng,
+    // });
+    // new google.maps.Marker({
+    //   position: myLatLng,
+    //   map: map,
+    //   title: "Hello World!",
+    // });
 
-// makeMarker({ lat: 26.654155, lng: -80.248645 }, "Farm");
+    // makeMarker({ lat: 26.654155, lng: -80.248645 }, "Farm");
     // adminService
     //     .dashboardJobs({ range:'This year' })
     //     .then((response) => {
@@ -833,20 +830,52 @@ export default {
           ).toFixed(2);
 
           // Customer Graph
-          this.CustomersChartData.data.labels = (response.data.graphs.newCustomerGraph).map(function (e){ return e.date });
-          this.CustomersChartData.data.datasets[0].data = (response.data.graphs.newCustomerGraph).map(function (e){ return e.no });
-          this.createChart("Customers-chart", this.CustomersChartData, this.gradient);
+          this.CustomersChartData.data.labels = response.data.graphs.newCustomerGraph.map(
+            function (e) {
+              return e.date;
+            }
+          );
+          this.CustomersChartData.data.datasets[0].data = response.data.graphs.newCustomerGraph.map(
+            function (e) {
+              return e.no;
+            }
+          );
+          this.createChart(
+            "Customers-chart",
+            this.CustomersChartData,
+            this.gradient
+          );
 
           // Hauler Graph
-          this.HaulersChartData.data.labels = (response.data.graphs.newHaulerGraph).map(function (e){ return e.date });
-          this.HaulersChartData.data.datasets[0].data = (response.data.graphs.newHaulerGraph).map(function (e){ return e.no });
-          this.createChart("Haulers-chart", this.HaulersChartData, this.gradient);
+          this.HaulersChartData.data.labels = response.data.graphs.newHaulerGraph.map(
+            function (e) {
+              return e.date;
+            }
+          );
+          this.HaulersChartData.data.datasets[0].data = response.data.graphs.newHaulerGraph.map(
+            function (e) {
+              return e.no;
+            }
+          );
+          this.createChart(
+            "Haulers-chart",
+            this.HaulersChartData,
+            this.gradient
+          );
 
           // Job Graph
-          this.JobsChartData.data.labels = (response.data.graphs.newJobGraph).map(function (e){ return e.date });
-          this.JobsChartData.data.datasets[0].data = (response.data.graphs.newJobGraph).map(function (e){ return e.no });
+          this.JobsChartData.data.labels = response.data.graphs.newJobGraph.map(
+            function (e) {
+              return e.date;
+            }
+          );
+          this.JobsChartData.data.datasets[0].data = response.data.graphs.newJobGraph.map(
+            function (e) {
+              return e.no;
+            }
+          );
           this.createChart("Jobs-chart", this.JobsChartData, this.gradient);
-          
+
           // Invoice Pie-Chart
           const invoiceVals = response.data.invoiceGraphs;
           this.pieChartData.data.datasets[0].data = [
@@ -870,16 +899,32 @@ export default {
         .dashboardDataFilters({
           filter_for: "graphs",
           filter_time: this[`prefixSelected${type}`].toLowerCase(),
-          filter_category: type.toLowerCase()
+          filter_category: type.toLowerCase(),
         })
         .then((response) => {
           if (response.status) {
-            this.count[`new${type}Count`] = response.data.graphs[`new${type}Count`];            
-            this.graphs[`revenueGeneratedByNew${type}`] = response.data.graphs[`revenueGeneratedByNew${type}`];
+            this.count[`new${type}Count`] =
+              response.data.graphs[`new${type}Count`];
+            this.graphs[`revenueGeneratedByNew${type}`] =
+              response.data.graphs[`revenueGeneratedByNew${type}`];
 
-            this[`${type}ChartData`]['data']['labels'] = (response.data.graphs[`new${type.slice(0, -1)}Graph`]).map(function (e){ return e.date });
-            this[`${type}ChartData`]['data']['datasets'][0]['data'] = (response.data.graphs[`new${type.slice(0, -1)}Graph`]).map(function (e){ return e.no });
-            this.createChart(`${type}-chart`, this[`${type}ChartData`], this.gradient);
+            this[`${type}ChartData`]["data"]["labels"] = response.data.graphs[
+              `new${type.slice(0, -1)}Graph`
+            ].map(function (e) {
+              return e.date;
+            });
+            this[`${type}ChartData`]["data"]["datasets"][0][
+              "data"
+            ] = response.data.graphs[`new${type.slice(0, -1)}Graph`].map(
+              function (e) {
+                return e.no;
+              }
+            );
+            this.createChart(
+              `${type}-chart`,
+              this[`${type}ChartData`],
+              this.gradient
+            );
           }
         });
     },
@@ -909,10 +954,13 @@ export default {
         .then((response) => {
           if (response.status) {
             [...response.data].forEach((job) => {
-              if(job.farm_id != null){
+              if (job.farm_id != null) {
                 let marker = new google.maps.Marker({
-                    position: { lat: Number.parseFloat(job.farm.latitude), lng: Number.parseFloat(job.farm.longitude) },
-                    title: `${job.service.name} | ${job.customer.first_name} ${job.customer.last_name}`
+                  position: {
+                    lat: Number.parseFloat(job.farm.latitude),
+                    lng: Number.parseFloat(job.farm.longitude),
+                  },
+                  title: `${job.service.name} | ${job.customer.first_name} ${job.customer.last_name}`,
                 });
                 marker.setMap(self.map);
               }
@@ -923,5 +971,19 @@ export default {
   },
 
   created() {},
+  updated() {
+    setTimeout(function () {
+    $(document).ready(function () {
+      var customerX1 = $(".customer-x1-out").height();
+      $(".invoice-outer").height(customerX1);
+
+      var customerX2 = $(".customer-x2-out").height();
+      $(".temp-grap").height(customerX2);
+
+      var customerX3 = $(".customer-x3-out").height();
+      $(".timeline-grap").height(customerX3);
+    });
+    }, 4000);
+  },
 };
 </script>
