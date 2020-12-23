@@ -403,7 +403,7 @@ function getHaulerDrivers(data){
 
 function chatImageUpload(data) {
     return fetch(
-      this.apiUrl+`auth/uploadImage`,
+      this.apiUrl+`uploadImage`,
       requestOptions.post(data)
     )
       .then(handleResponse)

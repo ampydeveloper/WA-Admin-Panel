@@ -102,5 +102,8 @@ class Job extends Model
         $jobStatus = array_flip(config('constant.job_status'));
         return $jobStatus[$this->job_status];
     }
-    
+ 
+    public function getJobInvoiceAttribute(){
+        return sprintf('%sinvoice/%s/invoiceDownload', env('CUSTOMER_URL'), $this->id);
+    }
 }

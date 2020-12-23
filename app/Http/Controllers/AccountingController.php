@@ -28,7 +28,7 @@ class AccountingController extends Controller
                             $q->select('id', 'first_name', 'last_name', 'email');
                         }])->with(['service' => function($q) {
                             $q->select('id', 'service_name');
-                        }])->orderBy('created_at', 'DESC')->get()
+                        }])->orderBy('created_at', 'DESC')->get()->append('job_invoice')
                         ], 200);
     }
 

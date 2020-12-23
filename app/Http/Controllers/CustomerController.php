@@ -539,7 +539,11 @@ class CustomerController extends Controller {
                     $q->select('id', 'service_name');
                 }])
                 ->get();
-        $invoices = "Will come from quickbooks";
+        $invoices = Job::where('payment_status', config('constant.payment_status.paid'))->select('id', 'customer_id', 'service_id', 'amount', 'payment_mode','job_status','payment_status','quick_book', 'created_at')->with(['customer' => function($q) {
+                            $q->select('id', 'first_name', 'last_name', 'email');
+                        }])->with(['service' => function($q) {
+                            $q->select('id', 'service_name');
+                        }])->orderBy('created_at', 'DESC')->get()->append('job_invoice');
         $totalJobs = $jobs->count();
         $lifetimeBilling = Payment::where('customer_id', $request->customer_id)->sum('amount');
         $last12MonthBilling = Payment::where('customer_id', $request->customer_id)->whereMonth(
@@ -554,7 +558,8 @@ class CustomerController extends Controller {
                         'totalFarms' => $totalFarms,
                         'totalJobs' => $totalJobs,
                         'memberSince' => $memberSince,
-                        'jobDetails' => $jobs
+                        'jobDetails' => $jobs,
+                        'invoices' => $invoices
                     ]
                         ], 200);
     }

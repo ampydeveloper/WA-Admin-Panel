@@ -11,19 +11,20 @@ class ImageController extends Controller
 {
     public function uploadImage(Request $request)
     {
-        echo 'red';
+        // echo 'red';
 //die('redd');
         //set path blank initially
         $file = "";
-        print_r($request->all());
-//        if ($request->uploadImage != null && $request->uploadImage != '') {
-echo 'red1';
+        // print_r($request->all());
+        // exit();
+       if ($request->uploadImage != null && $request->uploadImage != '') {
+// echo 'red1';
             //check if directory exist if not create one
             $path = public_path() . '/uploads';
             if (!file_exists($path)) {
                 mkdir($path, 0777, true);
             }
-echo 'red1';
+// echo 'red1';
             $cover = $request->file('uploadImage');
             $extension = $cover->getClientOriginalExtension();
             $file = $cover->getFilename() . '.' . $extension;
@@ -33,7 +34,7 @@ echo 'red1';
             } else {
                 $file = 'uploads/' . $file;
             }
-//        }
+       }
         return $file;
     }
     

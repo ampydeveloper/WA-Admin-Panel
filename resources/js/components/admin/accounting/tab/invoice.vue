@@ -50,15 +50,15 @@
           </td>
           <td>${{invoice.amount}}</td>
           <td>
-            <template v-if="!invoice.quick_book">
+            <!-- <template v-if="!invoice.quick_book">
               <span class="badges-item">Not Sync</span>
-            </template>
+            </template> -->
             <template v-if="invoice.quick_book">
               <span class="badges-item">Sync</span>
             </template>
           </td>
           <td>{{invoice.customer.email}}</td>
-          <td><a href="#" class="btn-outline-green-top">Download</a></td>
+          <td><a :href="invoice.job_invoice" class="btn-outline-green-top">Download</a></td>
         </tr>
       </tbody>
     </table>

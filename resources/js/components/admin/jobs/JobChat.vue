@@ -91,23 +91,22 @@
                   id="current-user-image"
                   :value="baseUrl + userdata.user_image"
                 />
-<input type="hidden" id="all-user-data" :value="JSON.stringify(chatUsers)" />
+                <input type="hidden" id="all-user-data" :value="JSON.stringify(chatUsers)" />
 
-<form id="upload-images-form" enctype="multipart/form-data">
+              <form id="upload-images-form" enctype="multipart/form-data">
+                <input type="file" id="image-file" name="chat-image" />
                 <span class="upload-images-out">
-                  <input type="file" id="image-file" name="chat-image" />
                   <!-- <v-file-input
-                    accept=".png,.jpg,.jpeg"
-                    id="image-file"
+                    accept="image/png,image/jpg,image/jpeg"
                     v-model="chatUploadImage"
                     @click.stop="chatImageUpload"
                   >
                   </v-file-input> -->
                   <image-icon size="1.5x" class="custom-class"></image-icon>
                 </span>
-                </form>
+              </form>
 
-<form id="send-container" autocomplete="off">
+              <form id="send-container" autocomplete="off">
                 <input
                   type="text"
                   class="write_msg"
@@ -637,7 +636,7 @@ export default {
       }
 
       $(document).on("click", ".upload-images-out", function () {
-        $("#image-file").click();
+          $("#image-file").trigger('click');
       });
       $("#image-file").on("click", function (e) {
         e.stopPropagation();
@@ -647,26 +646,26 @@ export default {
         if ($this.val() != "") {
           const currentUser = authenticationService.currentUserValue || {};
 
-var form = $("#upload-images-form")[0];
-          var imageData = new FormData(form);
+        var form = $("#upload-images-form")[0];
+          var imageData = new FormData();
           imageData.append("uploadImage", $("#image-file").prop("files")[0]);
-          imageData.append("sds", 'dsds');
 
           $.ajax({
-            url: environment.apiUrl + `uploadImage-file`,
+            url: environment.apiUrl + `uploadImage`,
             headers: {
               Authorization: "Bearer " + currentUser.data.access_token,
-              "Content-Type": "multipart/form-data",
-              "X-Requested-With": "XMLHttpRequest",
-              "X-CSRF-TOKEN": Laravel.csrfToken,
+              // "Content-Type": "multipart/form-data",
+              // "X-Requested-With": "XMLHttpRequest",
+              // "X-CSRF-TOKEN": Laravel.csrfToken,
             },
             data: imageData,
             cache: false,
             contentType: false,
             processData: false,
-            dataType: "json",
+            dataType: "multipart/form-data",
             type: "post",
             success: function (result) {
+              clicked = false;
               console.log(result);
             },
           });
