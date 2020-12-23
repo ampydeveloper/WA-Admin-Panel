@@ -3,9 +3,7 @@
     <div class="bread_crum">
       <ul>
         <li>
-          <h4 class="main-title text-left top_heading">
-           Customer List
-          </h4>
+          <h4 class="main-title text-left top_heading">Customer List</h4>
         </li>
       </ul>
     </div>
@@ -20,27 +18,30 @@
             >
               <thead>
                 <tr>
-                  <th class="text-left">
-                    Customer 
-                  </th>
+                  <th class="text-left">Customer</th>
                   <th class="text-left">Farms Location</th>
-                  <th class="text-left">
-                    Primary Manager
-                  </th>
+                  <th class="text-left">Primary Manager</th>
                   <th class="text-left">Est. Jobs</th>
                   <th class="text-left">Last Serviced</th>
                 </tr>
               </thead>
               <tbody>
-                <template v-for="(reportData, index) in report">
-                    <tr>
-                  <!-- <tr v-for="(report.jobs, index2) in job"> -->
-                    <!-- <td>{{ job.id }} <br />{{ job.job_providing_date }} name emails phone</td>
+                <template v-for="(report, index) in reportData">
+                  <tr v-for="(job, index2) in report.jobs">
+                    <td>{{ job.id }} <br />{{ job.job_providing_date }}</td>
                     <td></td>
                     <td>InProgress <br />$0.00</td>
                     <td>${{ job.amount }}</td>
-                    <td>{{ job.service.service_name }}</td> -->
-                    <td>{{ report.first_name +' '+ report.last_name }} #{{ report.id }}</td>
+                    <td>
+                      {{
+                        job.service.service_name ? job.service.service_name : 0
+                      }}
+                    </td>
+                    <td>
+                      {{ report.first_name + " " + report.last_name }} #{{
+                        report.id
+                      }}
+                    </td>
                     <td></td>
                   </tr>
                 </template>
@@ -56,6 +57,11 @@
     <span id="table-chevron-right" class="d-none">
       <chevron-right-icon size="1.5x" class="custom-class"></chevron-right-icon>
     </span>
+    <span id="search-input-icon" class="d-none">
+      <span class="search-input-outer">
+        <search-icon size="1.5x" class="custom-class"></search-icon>
+      </span>
+    </span>
   </v-app>
 </template>
 
@@ -64,13 +70,18 @@
 import { jobService } from "../../../_services/job.service";
 import { authenticationService } from "../../../_services/authentication.service";
 import { environment } from "../../../config/test.env";
-import { ChevronLeftIcon, ChevronRightIcon } from "vue-feather-icons";
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  SearchIcon,
+} from "vue-feather-icons";
 import { router } from "../../../_helpers/router";
 
 export default {
   components: {
     ChevronLeftIcon,
     ChevronRightIcon,
+    SearchIcon,
   },
   data() {
     return {
@@ -135,11 +146,8 @@ export default {
               );
             },
           });
-        //   $(".dataTables_filter").append($("#search-input-icon").html());
-        //   $(".dataTables_filter input").attr(
-        //     "placeholder",
-        //     "Search News by Heading / Description"
-        //   );
+          $(".dataTables_filter").append($("#search-input-icon").html());
+          $(".dataTables_filter input").attr("placeholder", "Search Customers");
           $(".dataTables_paginate .paginate_button.previous").html(
             $("#table-chevron-left").html()
           );

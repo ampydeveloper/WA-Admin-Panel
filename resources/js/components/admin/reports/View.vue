@@ -78,24 +78,94 @@
           <div class="report-each">
             <h5>Sales by Customer</h5>
             <ul class="list-unstyled">
-              <li><a href="/admin/report-details?type=sales-by-customer&number=5">Last 12 Months</a></li>
-              <li><a href="" @click.prevent="generateReport(3)">This Year</a></li>
-              <li><a href="" @click.prevent="generateReport(2)">Last Month</a></li>
-              <li><a href="" @click.prevent="generateReport(1)">This Month</a></li>
-              <li><a href="" @click.prevent="generateReport(0)">This Week</a></li>
-              <li><a href="" @click.prevent="dialog = true">Custom</a></li>
+              <li>
+                <router-link
+                  :to="'/admin/report-sales-revenue?type=sales-by-customer&number=5'" target="_blank"
+                  >Last 12 Months</router-link
+                >
+              </li>
+              <li>
+                <router-link
+                  :to="'/admin/report-sales-revenue?type=sales-by-customer&number=3'" target="_blank"
+                  >This Year</router-link
+                >
+              </li>
+              <li>
+                <router-link
+                  :to="'/admin/report-sales-revenue?type=sales-by-customer&number=2'" target="_blank"
+                  >Last Month</router-link
+                >
+              </li>
+              <li>
+                <router-link
+                  :to="'/admin/report-sales-revenue?type=sales-by-customer&number=1'" target="_blank"
+                  >This Month</router-link
+                >
+              </li>
+              <li>
+                <router-link
+                  :to="'/admin/report-sales-revenue?type=sales-by-customer&number=0'" target="_blank"
+                  >This Week</router-link
+                >
+              </li>
+              <li>
+                <a
+                  href=""
+                  @click.prevent="
+                    (dialog = true),
+                      (reportcType = 'sales-by-customer'),
+                      (reportcLink = 'report-sales-revenue')
+                  "
+                  >Custom</a
+                >
+              </li>
             </ul>
           </div>
 
           <div class="report-each">
             <h5>Sales by Service Tech</h5>
             <ul class="list-unstyled">
-              <li><a href="" @click.prevent="generateReport()">Last 12 Months</a></li>
-              <li><a href="" @click.prevent="generateReport()">This Year</a></li>
-              <li><a href="" @click.prevent="generateReport()">Last Months</a></li>
-              <li><a href="" @click.prevent="generateReport()">This Months</a></li>
-              <li><a href="" @click.prevent="generateReport()">This Week</a></li>
-              <li><a href="" @click.prevent="dialog = true">Custom</a></li>
+              <li>
+                <router-link
+                  :to="'/admin/report-sales-revenue?type=sales-by-service-tech&number=5'" target="_blank"
+                  >Last 12 Months</router-link
+                >
+              </li>
+              <li>
+                <router-link
+                  :to="'/admin/report-sales-revenue?type=sales-by-service-tech&number=3'" target="_blank"
+                  >This Year</router-link
+                >
+              </li>
+              <li>
+                <router-link
+                  :to="'/admin/report-sales-revenue?type=sales-by-service-tech&number=2'" target="_blank"
+                  >Last Month</router-link
+                >
+              </li>
+              <li>
+                <router-link
+                  :to="'/admin/report-sales-revenue?type=sales-by-service-tech&number=1'" target="_blank"
+                  >This Month</router-link
+                >
+              </li>
+              <li>
+                <router-link
+                  :to="'/admin/report-sales-revenue?type=sales-by-service-tech&number=0'" target="_blank"
+                  >This Week</router-link
+                >
+              </li>
+              <li>
+                <a
+                  href=""
+                  @click.prevent="
+                    (dialog = true),
+                      (reportcType = 'sales-by-service-tech'),
+                      (reportcLink = 'report-sales-revenue')
+                  "
+                  >Custom</a
+                >
+              </li>
             </ul>
           </div>
         </div>
@@ -107,20 +177,40 @@
           <div class="report-each">
             <h5>Hours worked by Driver</h5>
             <ul class="list-unstyled">
-              <li><a href="" @click.prevent="generateReport()">Last Two Weeks</a></li>
-              <li><a href="" @click.prevent="generateReport()">Last Week</a></li>
-              <li><a href="" @click.prevent="generateReport()">This Week</a></li>
-              <li><a href="" @click.prevent="dialog = true">Custom</a></li>
+              <li><router-link :to="''">Last Two Weeks</router-link></li>
+              <li><router-link :to="''">Last Week</router-link></li>
+              <li><router-link :to="''">This Week</router-link></li>
+              <li>
+                <a
+                  href=""
+                  @click.prevent="
+                    (dialog = true),
+                      (reportcType = 'sales-by-service-tech'),
+                      (reportcLink = 'report-sales-revenue')
+                  "
+                  >Custom</a
+                >
+              </li>
             </ul>
           </div>
 
           <div class="report-each">
             <h5>Job Driver & Labor Times</h5>
             <ul class="list-unstyled">
-              <li><a href="" @click.prevent="generateReport()">Last Two Weeks</a></li>
-              <li><a href="" @click.prevent="generateReport()">Last Week</a></li>
-              <li><a href="" @click.prevent="generateReport()">This Week</a></li>
-              <li><a href="" @click.prevent="dialog = true">Custom</a></li>
+              <li><router-link :to="''">Last Two Weeks</router-link></li>
+              <li><router-link :to="''">Last Week</router-link></li>
+              <li><router-link :to="''">This Week</router-link></li>
+              <li>
+                <a
+                  href=""
+                  @click.prevent="
+                    (dialog = true),
+                      (reportcType = 'sales-by-service-tech'),
+                      (reportcLink = 'report-sales-revenue')
+                  "
+                  >Custom</a
+                >
+              </li>
             </ul>
           </div>
         </div>
@@ -132,10 +222,20 @@
           <div class="report-each">
             <h5>Expenses by Mechanic</h5>
             <ul class="list-unstyled">
-              <li><a href="" @click.prevent="generateReport()">Last Two Weeks</a></li>
-              <li><a href="" @click.prevent="generateReport()">Last Week</a></li>
-              <li><a href="" @click.prevent="generateReport()">This Week</a></li>
-              <li><a href="" @click.prevent="dialog = true">Custom</a></li>
+              <li><router-link :to="''">Last Two Weeks</router-link></li>
+              <li><router-link :to="''">Last Week</router-link></li>
+              <li><router-link :to="''">This Week</router-link></li>
+              <li>
+                <a
+                  href=""
+                  @click.prevent="
+                    (dialog = true),
+                      (reportcType = 'sales-by-service-tech'),
+                      (reportcLink = 'report-sales-revenue')
+                  "
+                  >Custom</a
+                >
+              </li>
             </ul>
           </div>
         </div>
@@ -147,11 +247,21 @@
           <div class="report-each">
             <h5>Sales Tax Report</h5>
             <ul class="list-unstyled">
-              <li><a href="" @click.prevent="generateReport()">Last Quarter</a></li>
-              <li><a href="" @click.prevent="generateReport()">Last Month</a></li>
-              <li><a href="" @click.prevent="generateReport()">This Month</a></li>
-              <li><a href="" @click.prevent="generateReport()">This Week</a></li>
-              <li><a href="" @click.prevent="dialog = true">Custom</a></li>
+              <li><router-link :to="''">Last Quarter</router-link></li>
+              <li><router-link :to="''">Last Month</router-link></li>
+              <li><router-link :to="''">This Month</router-link></li>
+              <li><router-link :to="''">This Week</router-link></li>
+              <li>
+                <a
+                  href=""
+                  @click.prevent="
+                    (dialog = true),
+                      (reportcType = 'sales-by-service-tech'),
+                      (reportcLink = 'report-sales-revenue')
+                  "
+                  >Custom</a
+                >
+              </li>
             </ul>
           </div>
         </div>
@@ -163,11 +273,41 @@
           <div class="report-each">
             <h5>Job Activity Report</h5>
             <ul class="list-unstyled">
-              <li><a href="" @click.prevent="generateReport()">Last Month</a></li>
-              <li><a href="" @click.prevent="generateReport()">Last Week</a></li>
-              <li><a href="" @click.prevent="generateReport()">This Month</a></li>
-              <li><a href="" @click.prevent="generateReport()">This Week</a></li>
-              <li><a href="" @click.prevent="dialog = true">Custom</a></li>
+              <li>
+                <router-link
+                  :to="'/admin/report-activity?type=job-activity-report&number=2'" target="_blank"
+                  >Last Month</router-link
+                >
+              </li>
+              <li>
+                <router-link
+                  :to="'/admin/report-activity?type=job-activity-report&number=7'" target="_blank"
+                  >Last Week</router-link
+                >
+              </li>
+              <li>
+                <router-link
+                  :to="'/admin/report-activity?type=job-activity-report&number=1'" target="_blank"
+                  >This Month</router-link
+                >
+              </li>
+              <li>
+                <router-link
+                  :to="'/admin/report-activity?type=job-activity-report&number=0'" target="_blank"
+                  >This Week</router-link
+                >
+              </li>
+              <li>
+               <a
+                  href=""
+                  @click.prevent="
+                    (dialog = true),
+                      (reportcType = 'job-activity-report'),
+                      (reportcLink = 'report-activity')
+                  "
+                  >Custom</a
+                >
+              </li>
             </ul>
           </div>
         </div>
@@ -179,24 +319,94 @@
           <div class="report-each">
             <h5>Transactions by Customer</h5>
             <ul class="list-unstyled">
-              <li><a href="">Last 12 Months</a></li>
-              <li><a href="">Last Year</a></li>
-              <li><a href="">Last Month</a></li>
-              <li><a href="">This Month</a></li>
-              <li><a href="">This Week</a></li>
-              <li><a href="" @click.prevent="dialog = true">Custom</a></li>
+              <li>
+                <router-link
+                  :to="'/admin/report-payment-refund?type=transactions-by-customer&number=5'" target="_blank"
+                  >Last 12 Months</router-link
+                >
+              </li>
+              <li>
+                <router-link
+                  :to="'/admin/report-payment-refund?type=transactions-by-customer&number=3'" target="_blank"
+                  >Last Year</router-link
+                >
+              </li>
+              <li>
+                <router-link
+                  :to="'/admin/report-payment-refund?type=transactions-by-customer&number=2'" target="_blank"
+                  >Last Month</router-link
+                >
+              </li>
+              <li>
+                <router-link
+                  :to="'/admin/report-payment-refund?type=transactions-by-customer&number=1'" target="_blank"
+                  >This Month</router-link
+                >
+              </li>
+              <li>
+                <router-link
+                  :to="'/admin/report-payment-refund?type=transactions-by-customer&number=0'" target="_blank"
+                  >This Week</router-link
+                >
+              </li>
+              <li>
+                <a
+                  href=""
+                  @click.prevent="
+                    (dialog = true),
+                      (reportcType = 'transactions-by-customer'),
+                      (reportcLink = 'report-payment-refund')
+                  "
+                  >Custom</a
+                >
+              </li>
             </ul>
           </div>
 
           <div class="report-each">
             <h5>Transactions by Job</h5>
             <ul class="list-unstyled">
-              <li><a href="">Last 12 Months</a></li>
-              <li><a href="">Last Year</a></li>
-              <li><a href="">Last Month</a></li>
-              <li><a href="">This Month</a></li>
-              <li><a href="">This Week</a></li>
-              <li><a href="" @click.prevent="dialog = true">Custom</a></li>
+              <li>
+                <router-link
+                  :to="'/admin/report-payment-refund?type=transactions-by-job&number=5'" target="_blank"
+                  >Last 12 Months</router-link
+                >
+              </li>
+              <li>
+                <router-link
+                  :to="'/admin/report-payment-refund?type=transactions-by-job&number=3'" target="_blank"
+                  >Last Year</router-link
+                >
+              </li>
+              <li>
+                <router-link
+                  :to="'/admin/report-payment-refund?type=transactions-by-job&number=2'" target="_blank"
+                  >Last Month</router-link
+                >
+              </li>
+              <li>
+                <router-link
+                  :to="'/admin/report-payment-refund?type=transactions-by-job&number=1'" target="_blank"
+                  >This Month</router-link
+                >
+              </li>
+              <li>
+                <router-link
+                  :to="'/admin/report-payment-refund?type=transactions-by-job&number=0'" target="_blank"
+                  >This Week</router-link
+                >
+              </li>
+              <li>
+                <a
+                  href=""
+                  @click.prevent="
+                    (dialog = true),
+                      (reportcType = 'transactions-by-job'),
+                      (reportcLink = 'report-payment-refund')
+                  "
+                  >Custom</a
+                >
+              </li>
             </ul>
           </div>
         </div>
@@ -208,14 +418,34 @@
           <div class="report-each">
             <h5>Customer List</h5>
             <ul class="list-unstyled">
-              <li><a href="" @click.prevent="dialog = true">Custom</a></li>
+              <li>
+                <a
+                  href=""
+                  @click.prevent="
+                    (dialog = true),
+                      (reportcType = 'sales-by-service-tech'),
+                      (reportcLink = 'report-sales-revenue')
+                  "
+                  >Custom</a
+                >
+              </li>
             </ul>
           </div>
 
           <div class="report-each">
             <h5>Customer Farms</h5>
             <ul class="list-unstyled">
-              <li><a href="" @click.prevent="dialog = true">Custom</a></li>
+              <li>
+                <a
+                  href=""
+                  @click.prevent="
+                    (dialog = true),
+                      (reportcType = 'sales-by-service-tech'),
+                      (reportcLink = 'report-sales-revenue')
+                  "
+                  >Custom</a
+                >
+              </li>
             </ul>
           </div>
         </div>
@@ -227,20 +457,40 @@
           <div class="report-each">
             <h5>Day Sheet by Driver</h5>
             <ul class="list-unstyled">
-              <li><a href="">Today</a></li>
-              <li><a href="">Tomorrow</a></li>
-              <li><a href="">Next Two Weeks</a></li>
-              <li><a href="#" @click.prevent="dialog = true">Custom</a></li>
+              <li><router-link :to="''">Today</router-link></li>
+              <li><router-link :to="''">Tomorrow</router-link></li>
+              <li><router-link :to="''">Next Two Weeks</router-link></li>
+              <li>
+                <a
+                  href=""
+                  @click.prevent="
+                    (dialog = true),
+                      (reportcType = 'sales-by-service-tech'),
+                      (reportcLink = 'report-sales-revenue')
+                  "
+                  >Custom</a
+                >
+              </li>
             </ul>
           </div>
 
           <div class="report-each">
             <h5>Expanded Day Sheet by Driver</h5>
             <ul class="list-unstyled">
-              <li><a href="">Today</a></li>
-              <li><a href="">Tomorrow</a></li>
-              <li><a href="">Next Two Weeks</a></li>
-              <li><a href="#" @click.prevent="dialog = true">Custom</a></li>
+              <li><router-link :to="''">Today</router-link></li>
+              <li><router-link :to="''">Tomorrow</router-link></li>
+              <li><router-link :to="''">Next Two Weeks</router-link></li>
+              <li>
+                <a
+                  href=""
+                  @click.prevent="
+                    (dialog = true),
+                      (reportcType = 'sales-by-service-tech'),
+                      (reportcLink = 'report-sales-revenue')
+                  "
+                  >Custom</a
+                >
+              </li>
             </ul>
           </div>
         </div>
@@ -260,10 +510,23 @@
               class="custom_form_field row"
               id="form_field"
             >
+              <input
+                type="hidden"
+                id="reportcType-input"
+                name="reportcType"
+                :value="reportcType"
+              />
+              <input
+                type="hidden"
+                id="reportcLink-input"
+                name="reportcLink"
+                :value="reportcLink"
+              />
+
               <h6 class="col-sm-2" style="margin-top: 12px; padding-right: 0">
                 Date Range
               </h6>
-              <v-col cols="5" sm="5" class="pt-0 pb-0">
+              <v-col cols="5" sm="5" class="pt-0 pb-0 cr-start-date">
                 <v-menu
                   v-model="menu1"
                   :close-on-content-click="false"
@@ -292,7 +555,7 @@
                 </v-menu>
               </v-col>
 
-              <v-col cols="5" sm="5" class="pt-0 pb-0">
+              <v-col cols="5" sm="5" class="pt-0 pb-0 cr-end-date">
                 <v-menu
                   v-model="menu2"
                   :close-on-content-click="false"
@@ -325,7 +588,7 @@
                 <v-btn
                   type="submit"
                   color="success"
-                  class="custom-save-btn mt-4"
+                  class="custom-save-btn mt-4 customReportLink"
                   id="submit_btn"
                   >Generate Report</v-btn
                 >
@@ -351,6 +614,8 @@ export default {
       valid: true,
       menu2: false,
       menu1: false,
+      reportcType: false,
+      reportcLink: false,
       date: "",
       date1: "",
       setDate: new Date().toISOString().substr(0, 10),
@@ -376,6 +641,30 @@ export default {
         }
       });
     },
-  }
+  },
+  updated() {
+    $(document).ready(function () {
+      $("#form_field").on("submit", function (e) {
+        // $('#reportcType-input').val();
+
+        var rName = $("#reportcType-input").val(),
+          rLink = $("#reportcLink-input").val(),
+          startdate = $("#form_field .cr-end-date input").val(),
+          enddate = $("#form_field .cr-start-date input").val();
+        var createLink =
+          environment.baseUrl +
+          "admin/" +
+          rLink +
+          "?type=" +
+          rName +
+          "&start=" +
+          startdate +
+          "&end=" +
+          enddate+"&number=null";
+        location.href = createLink;
+        e.preventDefault();
+      });
+    });
+  },
 };
 </script>

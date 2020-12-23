@@ -3,8 +3,11 @@
     <div class="bread_crum">
       <ul>
         <li>
-          <h4 class="main-title text-left top_heading">
-            General Sales Revenue Report
+          <h4 class="main-title text-left top_heading" v-if="reportType == 1">
+            Sales Revenue By Customer
+          </h4>
+          <h4 class="main-title text-left top_heading" v-if="reportType == 2">
+            Sales Revenue By Tech
           </h4>
         </li>
       </ul>
@@ -31,20 +34,50 @@
                   </th>
                   <th class="text-left">Total</th>
                   <th class="text-left">Service</th>
-                  <th class="text-left">Customer</th>
+                  <th class="text-left" v-if="reportType == 2">Tech(s)</th>
+                  <th class="text-left" v-if="reportType == 1">Customer</th>
                   <th class="text-left">Job Details</th>
                 </tr>
               </thead>
               <tbody>
-                <template v-for="(reportData, index) in report">
-                    <tr>
-                  <!-- <tr v-for="(report.jobs, index2) in job"> -->
-                    <!-- <td>{{ job.id }} <br />{{ job.job_providing_date }}</td>
+                <template v-for="(report, index) in reportData">
+                  <!-- <tr>
+                    <td colspan="7" class="report-customer">
+                      {{ report.first_name + " " + report.last_name }}
+                    </td>
+                  </tr> -->
+
+                  <tr v-for="(job, index2) in report.jobs">
+                    <td>
+                      #JOB100{{ job.id }} <br />{{
+                        job.job_providing_date | formatDateLic
+                      }}
+                    </td>
                     <td></td>
                     <td>InProgress <br />$0.00</td>
                     <td>${{ job.amount }}</td>
-                    <td>{{ job.service.service_name }}</td> -->
-                    <td>{{ report.first_name +' '+ report.last_name }} #{{ report.id }}</td>
+                    <td>{{ job.service ? job.service.service_name : "" }}</td>
+                    <td v-if="reportType == 2">
+                      {{ job.truck_driver ? job.truck_driver.first_name : "" }}
+                      {{
+                        job.truck_driver
+                          ? job.truck_driver.last_name + ", "
+                          : ""
+                      }}
+                      {{
+                        job.skidsteer_driver
+                          ? job.skidsteer_driver.first_name
+                          : ""
+                      }}
+                      {{
+                        job.skidsteer_driver
+                          ? job.skidsteer_driver.last_name
+                          : ""
+                      }}
+                    </td>
+                    <td v-if="reportType == 1">
+                      {{ report.first_name + " " + report.last_name }}
+                    </td>
                     <td></td>
                   </tr>
                 </template>
@@ -60,30 +93,47 @@
     <span id="table-chevron-right" class="d-none">
       <chevron-right-icon size="1.5x" class="custom-class"></chevron-right-icon>
     </span>
+    <span id="search-input-icon" class="d-none">
+      <span class="search-input-outer">
+        <search-icon size="1.5x" class="custom-class"></search-icon>
+      </span>
+    </span>
   </v-app>
 </template>
-
+<style lang="scss">
+// #app-bar.custom-toolbar, #app .sidebar-nav{
+//   display: none;
+// }
+// #app main.v-content {
+//     padding: 0 !important;
+// }
+</style>
 <script>
 // import { required } from "vuelidate/lib/validators";/
 import { jobService } from "../../../_services/job.service";
 import { authenticationService } from "../../../_services/authentication.service";
 import { environment } from "../../../config/test.env";
-import { ChevronLeftIcon, ChevronRightIcon } from "vue-feather-icons";
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  SearchIcon,
+} from "vue-feather-icons";
 import { router } from "../../../_helpers/router";
 
 export default {
   components: {
     ChevronLeftIcon,
     ChevronRightIcon,
+    SearchIcon,
   },
   data() {
     return {
       reportData: [],
       isAdmin: true,
+      reportType: false,
       imgUrl: environment.imgUrl,
     };
   },
-  getList() {},
   mounted() {
     const currentUser = authenticationService.currentUserValue;
     if (currentUser.data.user.role_id == 1) {
@@ -91,6 +141,12 @@ export default {
     } else {
       this.isAdmin = false;
     }
+    if (this.$route.query.type == "sales-by-customer") {
+      this.reportType = 1;
+    } else {
+      this.reportType = 2;
+    }
+
     this.getResults();
   },
   methods: {
@@ -99,11 +155,13 @@ export default {
         .getReport({
           type: this.$route.query.type,
           report_of: this.$route.query.number,
+          start_date: this.$route.query.start,
+          end_date: this.$route.query.end,
         })
         .then((response) => {
           //handle response
           if (response.status) {
-            this.reportData = response.saleCustomers;
+            this.reportData = response.data;
           } else {
             this.$toast.open({
               message: response.message,
@@ -139,11 +197,8 @@ export default {
               );
             },
           });
-        //   $(".dataTables_filter").append($("#search-input-icon").html());
-        //   $(".dataTables_filter input").attr(
-        //     "placeholder",
-        //     "Search News by Heading / Description"
-        //   );
+          $(".dataTables_filter").append($("#search-input-icon").html());
+          $(".dataTables_filter input").attr("placeholder", "Search Customers");
           $(".dataTables_paginate .paginate_button.previous").html(
             $("#table-chevron-left").html()
           );

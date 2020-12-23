@@ -105,7 +105,15 @@ import DispatchesViewPage from "../components/admin/dispatches/View";
 
 //reports
 import ReportsViewPage from "../components/admin/reports/View";
-import ReportsDetailsPage from "../components/admin/reports/reportDetails";
+import ReportsListPage from "../components/admin/reports/reportList";
+import ReportsActivityPage from "../components/admin/reports/reportActivity";
+import ReportsDaySheetPage from "../components/admin/reports/reportDaySheet";
+import ReportsMechanicReportPage from "../components/admin/reports/reportMechanicReport";
+import ReportsPaymentRefundPage from "../components/admin/reports/reportPaymentRefund";
+import ReportsPayrollPage from "../components/admin/reports/reportPayroll";
+import ReportsSalesRevenuePage from "../components/admin/reports/reportSalesRevenue";
+import ReportsTaxPage from "../components/admin/reports/reportTax";
+
 import EmailPage from "../components/admin/EmailTemplate";
 //AccountingViewPage
 import AccountingViewPage from "../components/admin/accounting/View";
@@ -225,7 +233,14 @@ export const router = new Router({
         { path: 'accounting/details/:id', component: AccountingViewPage, name: 'Accounting', meta: { requiresAuth: [Role.Admin] } },
         { path: 'accounting', component: AccountingDetails, name: 'AccountingDetails', meta: { requiresAuth: [Role.Admin] } },
         { path: 'reports', component: ReportsViewPage, name: 'Reports', meta: { requiresAuth: [Role.Admin] } },
-        { path: 'report-details', component: ReportsDetailsPage, name: 'ReportsDetails', meta: { requiresAuth: [Role.Admin] } },
+        { path: 'report-list', component: ReportsListPage, name: 'ReportsList', meta: { requiresAuth: [Role.Admin] } },
+        { path: 'report-activity', component: ReportsActivityPage, name: 'ReportsActivity', meta: { requiresAuth: [Role.Admin] } },
+        { path: 'report-day-sheet', component: ReportsDaySheetPage, name: 'ReportsDaySheet', meta: { requiresAuth: [Role.Admin] } },
+        { path: 'report-mechanic-report', component: ReportsMechanicReportPage, name: 'ReportsMechanicReport', meta: { requiresAuth: [Role.Admin] } },
+        { path: 'report-payment-refund', component: ReportsPaymentRefundPage, name: 'ReportsPaymentRefund', meta: { requiresAuth: [Role.Admin] } },
+        { path: 'report-payroll', component: ReportsPayrollPage, name: 'ReportsPayroll', meta: { requiresAuth: [Role.Admin] } },
+        { path: 'report-sales-revenue', component: ReportsSalesRevenuePage, name: 'ReportsSalesRevenue', meta: { requiresAuth: [Role.Admin] } },
+        { path: 'report-tax', component: ReportsTaxPage, name: 'ReportsTax', meta: { requiresAuth: [Role.Admin] } },
         { path: 'emails', component: EmailPage, name: 'Emails', meta: { requiresAuth: [Role.Admin] } },
       ]
     },

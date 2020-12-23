@@ -3,8 +3,11 @@
     <div class="bread_crum">
       <ul>
         <li>
-          <h4 class="main-title text-left top_heading">
+          <h4 class="main-title text-left top_heading" v-if="reportType == 1">
             Transactions By Customer
+          </h4>
+          <h4 class="main-title text-left top_heading" v-if="reportType == 2">
+            Transactions By Job
           </h4>
         </li>
       </ul>
@@ -24,25 +27,54 @@
                   <th class="text-left">Job#</th>
                   <th class="text-left">Customer</th>
                   <th class="text-left">Transaction Type</th>
-                  <th class="text-left">Method <br />Total</th>
+                  <th class="text-left">Card <br />Total</th>
                 </tr>
               </thead>
               <tbody>
-                <template v-for="(reportData, index) in report">
-                  <tr>
-                    <!-- <tr v-for="(report.jobs, index2) in job"> -->
-                    <!-- <td>{{ job.id }} <br />{{ job.job_providing_date }}</td>
-                    <td></td>
-                    <td>InProgress <br />$0.00</td>
-                    <td>${{ job.amount }}</td>
-                    <td>{{ job.service.service_name }}</td> -->
-                    <td>
-                      {{ report.first_name + " " + report.last_name }} #{{
-                        report.id
-                      }}
+                <template v-if="reportType == 1">
+                  <template v-for="(report, index) in reportData">
+                    <!-- <tr>
+                    <td colspan="7" class="report-customer">
+                      {{ report.first_name + " " + report.last_name }}
                     </td>
-                    <td></td>
-                  </tr>
+                  </tr> -->
+
+                    <tr v-for="(job, index2) in report.jobs">
+                      <td>
+                        {{ job.job_providing_date | formatDateLic }}
+                      </td>
+                      <td>#JOB100{{ job.id }}</td>
+                      <td>{{ report.first_name + " " + report.last_name }}</td>
+                      <td>ONLINE</td>
+                      <td>${{ job.amount }}</td>
+                    </tr>
+                  </template>
+                </template>
+
+                <template v-if="reportType == 2">
+                  <template v-for="(report, index) in reportData">
+                    <!-- <tr>
+                    <td colspan="7" class="report-customer">
+                      {{ report.first_name + " " + report.last_name }}
+                    </td>
+                  </tr> -->
+
+                    <tr>
+                      <td>
+                        {{ report.job_providing_date | formatDateLic }}
+                      </td>
+                      <td>#JOB100{{ report.id }}</td>
+                      <td>
+                        {{
+                          report.customer.first_name +
+                          " " +
+                          report.customer.last_name
+                        }}
+                      </td>
+                      <td>ONLINE</td>
+                      <td>${{ report.amount }}</td>
+                    </tr>
+                  </template>
                 </template>
               </tbody>
             </table>
@@ -56,6 +88,11 @@
     <span id="table-chevron-right" class="d-none">
       <chevron-right-icon size="1.5x" class="custom-class"></chevron-right-icon>
     </span>
+    <span id="search-input-icon" class="d-none">
+      <span class="search-input-outer">
+        <search-icon size="1.5x" class="custom-class"></search-icon>
+      </span>
+    </span>
   </v-app>
 </template>
 
@@ -64,18 +101,24 @@
 import { jobService } from "../../../_services/job.service";
 import { authenticationService } from "../../../_services/authentication.service";
 import { environment } from "../../../config/test.env";
-import { ChevronLeftIcon, ChevronRightIcon } from "vue-feather-icons";
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  SearchIcon,
+} from "vue-feather-icons";
 import { router } from "../../../_helpers/router";
 
 export default {
   components: {
     ChevronLeftIcon,
     ChevronRightIcon,
+    SearchIcon,
   },
   data() {
     return {
       reportData: [],
       isAdmin: true,
+      reportType: false,
       imgUrl: environment.imgUrl,
     };
   },
@@ -87,6 +130,12 @@ export default {
     } else {
       this.isAdmin = false;
     }
+    if (this.$route.query.type == "transactions-by-customer") {
+      this.reportType = 1;
+    } else {
+      this.reportType = 2;
+    }
+
     this.getResults();
   },
   methods: {
@@ -99,7 +148,7 @@ export default {
         .then((response) => {
           //handle response
           if (response.status) {
-            this.reportData = response.saleCustomers;
+            this.reportData = response.data;
           } else {
             this.$toast.open({
               message: response.message,
@@ -135,11 +184,11 @@ export default {
               );
             },
           });
-          //   $(".dataTables_filter").append($("#search-input-icon").html());
-          //   $(".dataTables_filter input").attr(
-          //     "placeholder",
-          //     "Search News by Heading / Description"
-          //   );
+          $(".dataTables_filter").append($("#search-input-icon").html());
+          $(".dataTables_filter input").attr(
+            "placeholder",
+            "Search Transaction"
+          );
           $(".dataTables_paginate .paginate_button.previous").html(
             $("#table-chevron-left").html()
           );
