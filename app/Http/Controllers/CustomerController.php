@@ -11,6 +11,7 @@ use App\Payment;
 use Carbon\Carbon;
 use App\CustomerFarm;
 use App\ManagerDetail;
+use App\CustomerActivity;
 //use App\ServicesTimeSlot;
 use App\CustomerCardDetail;
 use Illuminate\Support\Str;
@@ -135,63 +136,74 @@ class CustomerController extends Controller {
                 ]);
                 if ($user->save()) {
                     $this->_confirmPassword($user, $newPassword);
-                    $farmDetails = new CustomerFarm([
+                    $customerActivity = new CustomerActivity([
                         'customer_id' => $user->id,
-                        'farm_address' => $request->farm_address,
-                        'farm_unit' => (isset($request->farm_unit) && $request->farm_unit != '' && $request->farm_unit != null) ? ($request->farm_unit) : null,
-                        'farm_city' => $request->farm_city,
-                        'farm_province' => $request->farm_province,
-                        'farm_zipcode' => $request->farm_zipcode,
-                        'farm_image' => (isset($request->farm_images) && $request->farm_images != '' && $request->farm_images != null) ? json_encode($request->farm_images) : null,
-                        'farm_active' => $request->farm_active,
-                        'latitude' => $request->latitude,
-                        'longitude' => $request->longitude,
-                        'distance_warehouse' => $this->getDistance($request->latitude, $request->longitude, null, null, 'M', 'warehouse'),
-                        'distance_dumping_area' => $this->getDistance($request->latitude, $request->longitude, null, null, 'M', 'dumping'),
                         'created_by' => $request->user()->id,
+                        'activities' => 'Customer is created from wellington office by ' . $request->user()->first_name,
                     ]);
-                    if ($farmDetails->save()) {
-                        foreach ($request->manager_details as $manager) {
-                            $newPassword = Str::random();
-                            $saveManger = new User([
-                                'prefix' => (isset($manager['manager_prefix']) && $manager['manager_prefix'] != '' && $manager['manager_prefix'] != null) ? $manager['manager_prefix'] : null,
-                                'first_name' => $manager['manager_first_name'],
-                                'last_name' => $manager['manager_last_name'],
-                                'email' => $manager['email'],
-                                'phone' => $manager['manager_phone'],
-                                'address' => $manager['manager_address'],
-                                'city' => $manager['manager_city'],
-                                'state' => $manager['manager_province'],
-                                'zip_code' => $manager['manager_zipcode'],
-                                'user_image' => (isset($manager['manager_image']) && $manager['manager_image'] != '' && $manager['manager_image'] != null) ? $manager['manager_image'] : null,
-                                'role_id' => config('constant.roles.Customer_Manager'),
-                                'created_from_id' => $request->user()->id,
-                                'is_confirmed' => 1,
-                                'is_active' => 1,
-                                'created_by' => $user->id,
-                                'farm_id' => $farmDetails->id,
-                                'password' => bcrypt($newPassword)
+                    if ($customerActivity->save()) {
+                        $farmDetails = new CustomerFarm([
+                            'customer_id' => $user->id,
+                            'farm_address' => $request->farm_address,
+                            'farm_unit' => (isset($request->farm_unit) && $request->farm_unit != '' && $request->farm_unit != null) ? ($request->farm_unit) : null,
+                            'farm_city' => $request->farm_city,
+                            'farm_province' => $request->farm_province,
+                            'farm_zipcode' => $request->farm_zipcode,
+                            'farm_image' => (isset($request->farm_images) && $request->farm_images != '' && $request->farm_images != null) ? json_encode($request->farm_images) : null,
+                            'farm_active' => $request->farm_active,
+                            'latitude' => $request->latitude,
+                            'longitude' => $request->longitude,
+                            'distance_warehouse' => $this->getDistance($request->latitude, $request->longitude, null, null, 'M', 'warehouse'),
+                            'distance_dumping_area' => $this->getDistance($request->latitude, $request->longitude, null, null, 'M', 'dumping'),
+                            'created_by' => $request->user()->id,
+                        ]);
+                        if ($farmDetails->save()) {
+                            $customerActivity = new CustomerActivity([
+                                'customer_id' => $user->id,
+                                'created_by' => $request->user()->id,
+                                'activities' => 'Farm located at ' . $farmDetails->farm_address . ' from wellington office by ' . $request->user()->first_name,
                             ]);
+                            if ($customerActivity->save()) {
+                                foreach ($request->manager_details as $manager) {
+                                    $newPassword = Str::random();
+                                    $saveManger = new User([
+                                        'prefix' => (isset($manager['manager_prefix']) && $manager['manager_prefix'] != '' && $manager['manager_prefix'] != null) ? $manager['manager_prefix'] : null,
+                                        'first_name' => $manager['manager_first_name'],
+                                        'last_name' => $manager['manager_last_name'],
+                                        'email' => $manager['email'],
+                                        'phone' => $manager['manager_phone'],
+                                        'address' => $manager['manager_address'],
+                                        'city' => $manager['manager_city'],
+                                        'state' => $manager['manager_province'],
+                                        'zip_code' => $manager['manager_zipcode'],
+                                        'user_image' => (isset($manager['manager_image']) && $manager['manager_image'] != '' && $manager['manager_image'] != null) ? $manager['manager_image'] : null,
+                                        'role_id' => config('constant.roles.Customer_Manager'),
+                                        'created_from_id' => $request->user()->id,
+                                        'is_confirmed' => 1,
+                                        'is_active' => 1,
+                                        'created_by' => $user->id,
+                                        'farm_id' => $farmDetails->id,
+                                        'password' => bcrypt($newPassword)
+                                    ]);
 
-                            if ($saveManger->save()) {
-//                                $mangerDetails = new ManagerDetail([
-//                                    'user_id' => $saveManger->id,
-//                                    'identification_number' => $manager['manager_id_card'],
-//                                    'document' => $manager['manager_card_image'],
-////                                'salary' => $manager['salary'],
-//                                    'joining_date' => date('Y/m/d'),
-//                                ]);
-                                if ($mangerDetails->save()) {
-                                    $this->_confirmPassword($saveManger, $newPassword);
+                                    if ($saveManger->save()) {
+                                        $this->_confirmPassword($saveManger, $newPassword);
+                                        $customerActivity = new CustomerActivity([
+                                            'customer_id' => $user->id,
+                                            'created_by' => $request->user()->id,
+                                            'activities' => $saveManger->first_name . ' is added as manager for farm at ' . $farmDetails->farm_address . ' from wellington office by ' . $request->user()->first_name,
+                                        ]);
+                                        $customerActivity->save();
+                                    }
                                 }
                             }
+                            DB::commit();
+                            return response()->json([
+                                        'status' => true,
+                                        'message' => 'Customer created successfully.',
+                                        'data' => $user
+                                            ], 200);
                         }
-                        DB::commit();
-                        return response()->json([
-                                    'status' => true,
-                                    'message' => 'Customer created successfully.',
-                                    'data' => $user
-                                        ], 200);
                     }
                 }
             } catch (\Exception $e) {
@@ -297,38 +309,43 @@ class CustomerController extends Controller {
                     'distance_dumping_area' => $this->getDistance($request->latitude, $request->longitude, null, null, 'M', 'dumping')
                 ]);
                 if ($farmDetails->save()) {
-                    foreach ($request->manager_details as $manager) {
-                        $newPassword = Str::random();
-                        $saveManger = new User([
-                            'prefix' => (isset($manager['manager_prefix']) && $manager['manager_prefix'] != '' && $manager['manager_prefix'] != null) ? $manager['manager_prefix'] : null,
-                            'first_name' => $manager['manager_first_name'],
-                            'last_name' => $manager['manager_last_name'],
-                            'email' => $manager['email'],
-                            'phone' => $manager['manager_phone'],
-                            'address' => $manager['manager_address'],
-                            'city' => $manager['manager_city'],
-                            'state' => $manager['manager_province'],
-                            'zip_code' => $manager['manager_zipcode'],
-                            'user_image' => (isset($manager['manager_image']) && $manager['manager_image'] != '' && $manager['manager_image'] != null) ? $manager['manager_image'] : null,
-                            'role_id' => config('constant.roles.Customer_Manager'),
-                            'created_from_id' => $request->user()->id,
-                            'is_confirmed' => 1,
-                            'is_active' => 1,
-                            'created_by' => $request->customer_id,
-                            'farm_id' => $farmDetails->id,
-                            'password' => bcrypt($newPassword)
-                        ]);
-
-                        if ($saveManger->save()) {
-                            $mangerDetails = new ManagerDetail([
-                                'user_id' => $saveManger->id,
-                                'identification_number' => $manager['manager_id_card'],
-                                'document' => $manager['manager_card_image'],
-//                            'salary' => $manager['salary'],
-                                'joining_date' => date('Y/m/d'),
+                    $customerActivity = new CustomerActivity([
+                                'customer_id' => $request->customer_id,
+                                'created_by' => $request->user()->id,
+                                'activities' => 'Farm located at ' . $farmDetails->farm_address . ' from wellington office by ' . $request->user()->first_name,
                             ]);
-                            if ($mangerDetails->save()) {
+                    
+                    if ($customerActivity->save()) {
+                        foreach ($request->manager_details as $manager) {
+                            $newPassword = Str::random();
+                            $saveManger = new User([
+                                'prefix' => (isset($manager['manager_prefix']) && $manager['manager_prefix'] != '' && $manager['manager_prefix'] != null) ? $manager['manager_prefix'] : null,
+                                'first_name' => $manager['manager_first_name'],
+                                'last_name' => $manager['manager_last_name'],
+                                'email' => $manager['email'],
+                                'phone' => $manager['manager_phone'],
+                                'address' => $manager['manager_address'],
+                                'city' => $manager['manager_city'],
+                                'state' => $manager['manager_province'],
+                                'zip_code' => $manager['manager_zipcode'],
+                                'user_image' => (isset($manager['manager_image']) && $manager['manager_image'] != '' && $manager['manager_image'] != null) ? $manager['manager_image'] : null,
+                                'role_id' => config('constant.roles.Customer_Manager'),
+                                'created_from_id' => $request->user()->id,
+                                'is_confirmed' => 1,
+                                'is_active' => 1,
+                                'created_by' => $request->customer_id,
+                                'farm_id' => $farmDetails->id,
+                                'password' => bcrypt($newPassword)
+                            ]);
+
+                            if ($saveManger->save()) {
                                 $this->_confirmPassword($saveManger, $newPassword);
+                                $customerActivity = new CustomerActivity([
+                                    'customer_id' => $request->customer_id,
+                                    'created_by' => $request->user()->id,
+                                    'activities' => $saveManger->first_name . ' is added as manager for farm at ' . $farmDetails->farm_address . ' from wellington office by ' . $request->user()->first_name,
+                                ]);
+                                $customerActivity->save();
                             }
                         }
                     }
@@ -371,8 +388,8 @@ class CustomerController extends Controller {
                     'manager_city' => 'required',
                     'manager_province' => 'required',
                     'manager_zipcode' => 'required',
-                    'manager_card_image' => 'required',
-                    'manager_id_card' => 'required',
+//                    'manager_card_image' => 'required',
+//                    'manager_id_card' => 'required',
 //                    'salary' => 'required',
         ]);
 
@@ -409,15 +426,14 @@ class CustomerController extends Controller {
                 ]);
 
                 if ($saveManager->save()) {
-                    $managerDetails = new ManagerDetail([
-                        'user_id' => $saveManager->id,
-                        'identification_number' => $request->manager_id_card,
-                        'document' => $request->manager_card_image,
-//                    'salary' => $request->salary,
-                        'joining_date' => date('Y/m/d'),
+                    $this->_confirmPassword($saveManager, $newPassword);
+                    $farmDetails = CustomerFarm::where('id', $request->farm_id)->first();
+                    $customerActivity = new CustomerActivity([
+                        'customer_id' => $request->customer_id,
+                        'created_by' => $request->user()->id,
+                        'activities' => $saveManager->first_name . ' is added as manager for farm at ' . $farmDetails->farm_address . ' from wellington office by ' . $request->user()->first_name,
                     ]);
-                    if ($managerDetails->save()) {
-                        $this->_confirmPassword($saveManager, $newPassword);
+                    if($customerActivity->save()) {
                         DB::commit();
                         return response()->json([
                                     'status' => true,
@@ -673,6 +689,7 @@ class CustomerController extends Controller {
                                     ], 422);
                 }
 
+                DB::beginTransaction();
                 CustomerFarm::whereId($request->farm_id)->update([
                     'farm_address' => $request->farm_address,
                     'farm_unit' => (isset($request->farm_unit) && $request->farm_unit != '' && $request->farm_unit != null) ? ($request->farm_unit) : null,
@@ -719,10 +736,10 @@ class CustomerController extends Controller {
                     'manager_province' => 'required',
                     'manager_zipcode' => 'required',
                     'manager_is_active' => 'required',
-                    'manager_card_image' => 'required',
-                    'manager_id_card' => 'required',
-                    'salary' => 'required',
-                    'joining_date' => 'required',
+//                    'manager_card_image' => 'required',
+//                    'manager_id_card' => 'required',
+//                    'salary' => 'required',
+//                    'joining_date' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -770,13 +787,6 @@ class CustomerController extends Controller {
                     $manager->is_confirmed = $confirmed;
                 }
                 if ($manager->save()) {
-                    $managerDetail = ManagerDetail::where('user_id', $request->manager_id)->first();
-                    $managerDetail->salary = $request->salary;
-                    $managerDetail->identification_number = $request->manager_id_card;
-                    $managerDetail->joining_date = $request->joining_date;
-                    $managerDetail->releaving_date = isset($request->releaving_date) ? $request->releaving_date : null;
-                    $managerDetail->document = $request->manager_card_image;
-                    if ($managerDetail->save()) {
                         DB::commit();
                         if ($confirmed == 0) {
                             $this->_updateEmail($manager, $request->email);
@@ -786,7 +796,6 @@ class CustomerController extends Controller {
                                     'message' => 'Manager updated successfully.',
                                     'data' => []
                                         ], 200);
-                    }
                 }
             } catch (\Exception $e) {
                 DB::rollBack();
@@ -894,10 +903,10 @@ class CustomerController extends Controller {
                 
                 if ($managerObj->save()) {
                     array_push($updatedManagerIds, $managerObj->id);
-                    $managerDetailObj->user_id = $managerObj->id;
-                    $managerDetailObj->identification_number = $manager['manager_id_card'];
-                    $managerDetailObj->document = $manager['manager_card_image'] ?? null;
-                    $managerDetailObj->save();
+//                    $managerDetailObj->user_id = $managerObj->id;
+//                    $managerDetailObj->identification_number = $manager['manager_id_card'];
+//                    $managerDetailObj->document = $manager['manager_card_image'] ?? null;
+//                    $managerDetailObj->save();
                 }
             }
             
@@ -969,6 +978,14 @@ class CustomerController extends Controller {
 
             if ($user->payment_mode != $request->payment_mode) {
                 if (User::where('id', $request->customer_id)->update(['payment_mode' => $request->payment_mode])) {
+                    $customerActivity = new CustomerActivity([
+                        'customer_id' => $request->customer_id,
+                        'created_by' => $request->user()->id,
+                        'activities' => 'Payment mode is changed to '.config('constant.payment_mode_inverse.'.$request->payment_mode).' from wellington office by ' . $request->user()->first_name,
+                    ]);
+                    if ($customerActivity->save()) {
+                        DB::commit();
+                    }
                     return response()->json([
                                 'status' => true,
                                 'message' => 'Payment mode update sucessfully.',
