@@ -142,6 +142,7 @@ class CustomerController extends Controller {
                         'activities' => 'Customer is created from wellington office by ' . $request->user()->first_name,
                     ]);
                     if ($customerActivity->save()) {
+                        // Notification is required.
                         $farmDetails = new CustomerFarm([
                             'customer_id' => $user->id,
                             'farm_address' => $request->farm_address,
@@ -164,6 +165,7 @@ class CustomerController extends Controller {
                                 'activities' => 'Farm located at ' . $farmDetails->farm_address . ' from wellington office by ' . $request->user()->first_name,
                             ]);
                             if ($customerActivity->save()) {
+                                // Notification is required.
                                 foreach ($request->manager_details as $manager) {
                                     $newPassword = Str::random();
                                     $saveManger = new User([
@@ -346,6 +348,7 @@ class CustomerController extends Controller {
                                     'activities' => $saveManger->first_name . ' is added as manager for farm at ' . $farmDetails->farm_address . ' from wellington office by ' . $request->user()->first_name,
                                 ]);
                                 $customerActivity->save();
+                                // Notification is required.
                             }
                         }
                     }
@@ -434,6 +437,7 @@ class CustomerController extends Controller {
                         'activities' => $saveManager->first_name . ' is added as manager for farm at ' . $farmDetails->farm_address . ' from wellington office by ' . $request->user()->first_name,
                     ]);
                     if($customerActivity->save()) {
+                        // Notification is required.
                         DB::commit();
                         return response()->json([
                                     'status' => true,
@@ -984,6 +988,7 @@ class CustomerController extends Controller {
                         'activities' => 'Payment mode is changed to '.config('constant.payment_mode_inverse.'.$request->payment_mode).' from wellington office by ' . $request->user()->first_name,
                     ]);
                     if ($customerActivity->save()) {
+                        // Notification is required.
                         DB::commit();
                     }
                     return response()->json([

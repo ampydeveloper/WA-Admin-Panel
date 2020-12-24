@@ -183,6 +183,18 @@ class JobsController extends Controller {
                         'manager_id' => isset($request->manager_id) ? $request->manager_id : null
                     ];
                     $this->_sendPaymentEmail($mailData);
+                    
+                    $customerActivity = new CustomerActivity([
+                        'customer_id' => $request->customer_id,
+                        'job_id' => $job->id,
+                        'created_by' => $request->user()->id,
+                        'activities' => 'Pick is created with pickup id '.$job->id.' from wellington office by '. $request->user()->first_name,
+                    ]);
+                    if ($customerActivity->save()) {
+                        DB::commit();
+                    }
+
+
                     return response()->json([
                                 'status' => true,
                                 'message' => 'Job created successfully.',
@@ -399,6 +411,14 @@ class JobsController extends Controller {
                         'manager_id' => isset($request->manager_id) ? $request->manager_id : null
                     ];
                     $this->_sendPaymentEmail($mailData);
+                    $customerActivity = new CustomerActivity([
+                        'customer_id' => $request->customer_id,
+                        'created_by' => $request->user()->id,
+                        'activities' => 'Pick is created with pickup id '.$job->id.' from wellington office by '. $request->user()->first_name,
+                    ]);
+                    
+                    
+                    
                     return response()->json([
                                 'status' => true,
                                 'message' => 'Job created successfully.',

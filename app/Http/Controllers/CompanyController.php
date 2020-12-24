@@ -98,12 +98,20 @@ class CompanyController extends Controller {
                 ]);
                 if ($user->save()) {
                     $this->_confirmPassword($user, $newPassword);
-                    DB::commit();
-                    return response()->json([
-                                'status' => true,
-                                'message' => 'Successfully created hauler.',
-                                'data' => []
-                                    ], 200);
+                    $customerActivity = new CustomerActivity([
+                        'customer_id' => $user->id,
+                        'created_by' => $request->user()->id,
+                        'activities' => 'Customer is created from wellington office by ' . $request->user()->first_name,
+                    ]);
+                    if ($customerActivity->save()) {
+                        // Notification is required.
+                        DB::commit();
+                        return response()->json([
+                                    'status' => true,
+                                    'message' => 'Successfully created hauler.',
+                                    'data' => []
+                                        ], 200);
+                    }
                 }
             } catch (\Exception $e) {
                 DB::rollBack();
@@ -223,12 +231,23 @@ class CompanyController extends Controller {
     public function deleteHauler(Request $request) {
         if ($request->user()->role_id == config('constant.roles.Admin') || $request->user()->role_id == config('constant.roles.Admin_Manager')) {
             try {
-                User::whereId($request->customer_id)->delete();
-                return response()->json([
-                            'status' => true,
-                            'message' => 'Hauler deleted successfully.',
-                            'data' => []
-                                ], 200);
+                DB::beginTransaction();
+                if(User::whereId($request->customer_id)->delete()) {
+                    $customerActivity = new CustomerActivity([
+                        'customer_id' => $request->customer_id,
+                        'created_by' => $request->user()->id,
+                        'activities' => 'Customer is deleted from wellington office by ' . $request->user()->first_name,
+                    ]);
+                    if ($customerActivity->save()) {
+                        // Notification is required.
+                        DB::commit();
+                        return response()->json([
+                                    'status' => true,
+                                    'message' => 'Hauler deleted successfully.',
+                                    'data' => []
+                                        ], 200);
+                    }
+                }
             } catch (\Exception $e) {
                 Log::error(json_encode($e->getMessage()));
                 return response()->json([
@@ -351,11 +370,20 @@ class CompanyController extends Controller {
                 ]);
                 if ($user->save()) {
                     $this->_confirmPassword($user, $newPassword);
-                    return response()->json([
-                                'status' => true,
-                                'message' => 'Driver created successfully.',
-                                'data' => []
-                                    ], 200);
+                    $customerActivity = new CustomerActivity([
+                        'customer_id' => $user->id,
+                        'created_by' => $request->user()->id,
+                        'activities' => $user->first_name . ' is added as driver by wellington office by ' . $request->user()->first_name,
+                    ]);
+                    if ($customerActivity->save()) {
+                        // Notification is required.
+                        DB::commit();
+                        return response()->json([
+                                    'status' => true,
+                                    'message' => 'Driver created successfully.',
+                                    'data' => []
+                                        ], 200);
+                    }
                 }
             } catch (\Exception $e) {
                 DB::rollBack();
@@ -490,13 +518,28 @@ class CompanyController extends Controller {
     public function deleteHaulerDriver(Request $request) {
         if ($request->user()->role_id == config('constant.roles.Admin') || $request->user()->role_id == config('constant.roles.Admin_Manager')) {
             try {
-                User::whereId($request->hauler_driver_id)->delete();
-                return response()->json([
-                            'status' => true,
-                            'message' => 'Hauler driver deleted successfully.',
-                            'data' => []
-                                ], 200);
+                DB::beginTransaction();
+                $user = User::whereId($request->hauler_driver_id)->first();
+                if(User::whereId($request->hauler_driver_id)->delete()) {
+                    $customerActivity = new CustomerActivity([
+                        'customer_id' => $user->created_from_id,
+                        'created_by' => $request->user()->id,
+                        'activities' => $user->first_name . ' is deleted by wellington office by ' . $request->user()->first_name,
+                    ]);
+                    if ($customerActivity->save()) {
+                        
+                        // Notification is required.
+                        
+                        DB::commit();
+                        return response()->json([
+                                    'status' => true,
+                                    'message' => 'Hauler driver deleted successfully.',
+                                    'data' => []
+                                        ], 200);
+                    }
+                }
             } catch (\Exception $e) {
+                DB::rollBack();
                 Log::error(json_encode($e->getMessage()));
                 return response()->json([
                             'status' => false,
