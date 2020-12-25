@@ -51,17 +51,10 @@
             </div>
             <div class="clearfix">
               <span class="basic-grey-label-half">Techs</span>
-              <span class="det-half"
-                >{{
-                  job.skidsteer_driver.first_name +
-                  " " +
-                  job.skidsteer_driver.last_name +
-                  ", "
-                }}
-                {{
-                  job.truck_driver.first_name + " " + job.truck_driver.last_name
-                }}</span
-              >
+              <span class="det-half">
+                <span v-if='job.skidsteer_driver'>{{ job.skidsteer_driver.first_name + " " + job.skidsteer_driver.last_name + ", " }} </span>
+                <span v-if='job.skidsteer_driver'> {{ job.truck_driver.first_name + " " + job.truck_driver.last_name }} </span>
+              </span>
             </div>
             <div class="clearfix">
               <span class="basic-grey-label-half">Note</span>
@@ -112,12 +105,12 @@
                 :value="JSON.stringify(chatUsers)"
               />
 
-              <form id="upload-images-form" enctype="multipart/form-data">
-                <input type="file" id="image-file" name="chat-image" />
-                <span class="upload-images-out">
+              <!-- <form id="upload-images-form" enctype="multipart/form-data"> -->
+                <input type="file" id="image-file" style="display:none;" name="chat-image" />
+                <label class="upload-images-out" for='image-file'>
                   <image-icon size="1.5x" class="custom-class"></image-icon>
-                </span>
-              </form>
+                </label>
+              <!-- </form> -->
 
               <form id="send-container" autocomplete="off">
                 <input
@@ -153,6 +146,7 @@ export default {
   },
   data() {
     return {
+      imageUploadFired: false,
       job: "",
       service: "",
       manager: "",
@@ -516,6 +510,7 @@ export default {
     },
   },
   updated() {
+    const self = this;
     var messageContainerScroll;
     setTimeout(function () {
       messageContainerScroll = OverlayScrollbars(
@@ -607,20 +602,21 @@ export default {
         $("#message-container .empty-message").remove();
       }
 
-      $(document).on("click", ".upload-images-out", function () {
-        $("#image-file").click();
-      });
-      $("#image-file").on("click", function (e) {
-        e.stopPropagation();
-      });
-      $("#image-file").on("change", function (e) {
+      // $(document).on("click", ".upload-images-out", function () {
+        // $("#image-file").click();
+        // fired = true;
+      // });
+      // $("#image-file").on("click", function (e) {
+      //   e.stopPropagation();
+      // });
+      $(document).on("change", "#image-file", function (e) {
         var $this = $(this);
-        if ($this.val() != "") {
+        if ($this.val() != "" && !self.fired) {
+          self.fired = true;
           const currentUser = authenticationService.currentUserValue || {};
 
           var imageData = new FormData();
           imageData.append("uploadImage", $("#image-file").prop("files")[0]);
-
           $.ajax({
             url: environment.apiUrl + `uploadImage`,
             headers: {
@@ -630,14 +626,12 @@ export default {
             cache: false,
             contentType: false,
             processData: false,
-            dataType: "multipart/form-data",
-            type: "post",
+            type: "POST",
             success: function (result) {
-              clicked = false;
               const messageElement = document.createElement("div");
-              messageElement.className = className; //"chat-receiver"
+              messageElement.className = "chat-receiver"; //"chat-receiver"
               messageElement.innerHTML =
-                '<div class="chat-msg"><img class="chat-image-in" src="' +
+                '<div class="chat-msg"><img width=50 class="chat-image-in" src="' +
                 `${environment.baseUrl + result}` +
                 '"></div><div class="chat-img"><img src="' +
                 `${userImage}` +
@@ -649,9 +643,13 @@ export default {
 
               console.log(result);
             },
+            complete: function(){
+              $('#image-file').val('');
+              self.fired = false;
+            }
           });
         }
-        e.stopPropagation();
+        // e.stopPropagation();
       });
     }, 1000);
   },

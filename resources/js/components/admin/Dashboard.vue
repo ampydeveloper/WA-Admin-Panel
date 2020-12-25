@@ -954,7 +954,7 @@ export default {
         .then((response) => {
           if (response.status) {
             [...response.data].forEach((job) => {
-              if (job.farm_id != null) {
+              if (job.farm_id != null && job.farm != null) {
                 let marker = new google.maps.Marker({
                   position: {
                     lat: Number.parseFloat(job.farm.latitude),
