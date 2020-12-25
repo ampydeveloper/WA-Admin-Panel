@@ -13,12 +13,6 @@
               <span class="det-half">{{ service.service_name }}</span>
             </div>
             <div class="clearfix">
-              <span class="basic-grey-label-half">Price</span>
-              <span class="det-half">
-                ${{ job.job_amount ? job.job_amount : "0" }}</span
-              >
-            </div>
-            <div class="clearfix">
               <span class="basic-grey-label-half">Service Date</span>
               <span class="det-half"
                 >{{ job.start_date | formatDateLic }}
@@ -34,6 +28,14 @@
               >
             </div>
             <div class="clearfix">
+              <span class="basic-grey-label-half">Images</span>
+              <span class="det-half">
+                <template v-for="(image, index) in jobImages">
+                  <img :src="'http://wa.customer.leagueofclicks.com/' + image" />
+                </template>
+              </span>
+            </div>
+            <div class="clearfix">
               <span class="basic-grey-label-half">Manager Contact</span>
               <span class="det-half"
                 >{{ manager.email }} / {{ manager.phone }}</span
@@ -47,6 +49,28 @@
                 {{ farm.farm_zipcode }}</span
               >
             </div>
+            <div class="clearfix">
+              <span class="basic-grey-label-half">Techs</span>
+              <span class="det-half"
+                >{{
+                  job.skidsteer_driver.first_name +
+                  " " +
+                  job.skidsteer_driver.last_name +
+                  ", "
+                }}
+                {{
+                  job.truck_driver.first_name + " " + job.truck_driver.last_name
+                }}</span
+              >
+            </div>
+            <div class="clearfix">
+              <span class="basic-grey-label-half">Note</span>
+              <span class="det-half">{{ job.notes }}</span>
+            </div>
+            <div class="clearfix">
+              <span class="basic-grey-label-half">Total</span>
+              <span class="det-half">${{ job.amount ? job.amount : "0" }}</span>
+            </div>
           </div>
         </v-col>
 
@@ -56,10 +80,6 @@
 
         <v-col cols="12" md="12" class="main_box chat-area-outer">
           <div class="chat-area" id="message-container">
-            <!-- <div class="chat-receiver mb-6">
-              <div class="chat-msg">Lorem ipsum dolor sit amet</div>
-              <div class="chat-img"></div>
-            </div> -->
             <div class="empty-message">
               <p>
                 Lets start conversing <br />
@@ -76,32 +96,25 @@
 
         <v-col cols="12" md="12" class="main_box chat-form-outer">
           <div class="type_msg">
-            
-              <div class="input_msg_write">
-                <input
-                  type="hidden"
-                  id="user-details-id"
-                  :value="userdata.id"
-                />
-                <input type="hidden" id="job-id" :value="job.id" />
-                <input type="hidden" id="job-lat" :value="farm.latitude" />
-                <input type="hidden" id="job-long" :value="farm.longitude" />
-                <input
-                  type="hidden"
-                  id="current-user-image"
-                  :value="baseUrl + userdata.user_image"
-                />
-                <input type="hidden" id="all-user-data" :value="JSON.stringify(chatUsers)" />
+            <div class="input_msg_write">
+              <input type="hidden" id="user-details-id" :value="userdata.id" />
+              <input type="hidden" id="job-id" :value="job.id" />
+              <input type="hidden" id="job-lat" :value="farm.latitude" />
+              <input type="hidden" id="job-long" :value="farm.longitude" />
+              <input
+                type="hidden"
+                id="current-user-image"
+                :value="baseUrl + userdata.user_image"
+              />
+              <input
+                type="hidden"
+                id="all-user-data"
+                :value="JSON.stringify(chatUsers)"
+              />
 
               <form id="upload-images-form" enctype="multipart/form-data">
                 <input type="file" id="image-file" name="chat-image" />
                 <span class="upload-images-out">
-                  <!-- <v-file-input
-                    accept="image/png,image/jpg,image/jpeg"
-                    v-model="chatUploadImage"
-                    @click.stop="chatImageUpload"
-                  >
-                  </v-file-input> -->
                   <image-icon size="1.5x" class="custom-class"></image-icon>
                 </span>
               </form>
@@ -116,9 +129,8 @@
                 <button class="msg_send_btn" id="send-button" type="submit">
                   <send-icon size="1.5x" class="custom-class"></send-icon>
                 </button>
-</form>
-              </div>
-            
+              </form>
+            </div>
           </div>
         </v-col>
       </v-row>
@@ -132,15 +144,12 @@ import { jobService } from "../../../_services/job.service";
 import { environment } from "../../../config/test.env";
 import { SendIcon, ImageIcon, LoaderIcon } from "vue-feather-icons";
 import { authenticationService } from "../../../_services/authentication.service";
-// import Mapbox from "mapbox-gl-vue";
-// import mapboxgl from "mapbox-gl";
 
 export default {
   components: {
     SendIcon,
     ImageIcon,
     LoaderIcon,
-    // Mapbox,
   },
   data() {
     return {
@@ -148,9 +157,9 @@ export default {
       service: "",
       manager: "",
       farm: "",
+      jobImages: "",
       userdata: "",
       chatUsers: "",
-      chatUploadImage: "",
       baseUrl: environment.baseUrl,
     };
   },
@@ -193,17 +202,13 @@ export default {
       start: new google.maps.MarkerImage(
         "http://wa.customer.leagueofclicks.com/img/car-marker2.png",
         new google.maps.Size(72, 100),
-        // The origin point (x,y)
         new google.maps.Point(0, 0),
-        // The anchor point (x,y)
         new google.maps.Point(22, 32)
       ),
       end: new google.maps.MarkerImage(
         "http://wa.customer.leagueofclicks.com/img/map-icon2.png",
         new google.maps.Size(55, 55),
-        // The origin point (x,y)
         new google.maps.Point(0, 0),
-        // The anchor point (x,y)
         new google.maps.Point(22, 32)
       ),
     };
@@ -217,7 +222,6 @@ export default {
         zoom: 7,
         center: { lat: 41.85, lng: -87.65 },
         mapTypeControl: false,
-        // draggable: false,
         scaleControl: false,
         scrollwheel: false,
         navigationControl: false,
@@ -410,7 +414,7 @@ export default {
             query: wellOffice,
           },
           destination: {
-            query: jobLat + "," + joblong, // //"st louis, mo"
+            query: jobLat + "," + joblong,
           },
           travelMode: google.maps.TravelMode.DRIVING,
         },
@@ -420,8 +424,6 @@ export default {
             var leg = response.routes[0].legs[0];
             makeMarker(leg.start_location, icons.start, "Wellington Office");
             makeMarker(leg.end_location, icons.end, "Farm");
-          } else {
-            window.alert("Directions request failed due to " + status);
           }
         }
       );
@@ -447,6 +449,7 @@ export default {
           this.service = response.data.service;
           this.manager = response.data.manager;
           this.farm = response.data.farm;
+          this.jobImages = JSON.parse(response.data.images);
         } else {
           this.$toast.open({
             message: response.message,
@@ -458,47 +461,37 @@ export default {
     },
     getChatMembers() {
       jobService.chatUsers(this.$route.params.id).then((response) => {
-        //handle response
         if (response.status) {
-          // this.job = response.data;
-          // console.log(response.data);
           var users = [];
           users[response.data.customer_id] = response.data.customer;
           users[response.data.manager_id] = response.data.manager;
           users[response.data.skidsteer_driver_id] =
             response.data.skidsteer_driver;
           users[response.data.truck_driver_id] = response.data.truck_driver;
-          // console.log(users);
 
           response.data.admin.forEach(function (val, index) {
             users[val.id] = val;
           });
 
           this.chatUsers = users;
-
         }
       });
     },
     getChatMessages() {
-      // console.log(this.chatUsers);
       const chatUsersList = this.chatUsers;
       const currentUserDetails = this.userdata;
-      //  console.log(chatUsersList);
       jobService
         .getJobChatMessages({ jobId: this.$route.params.id })
         .then((response) => {
           if (response) {
             response.data.forEach(function (val, index) {
               if (typeof val.username != "undefined") {
-                // console.log(val.username);
-                // console.log(chatUsersList[val.username]);
                 if (typeof chatUsersList[val.username] != "undefined") {
                   var userImageLink = chatUsersList[val.username].user_image;
                 } else {
                   var userImageLink =
                     environment.baseUrl + "/images/avatar.png";
                 }
-                // console.log(userImageLink);
                 const messageElement = document.createElement("div");
                 if (currentUserDetails.id == val.username) {
                   messageElement.className = "chat-receiver";
@@ -521,26 +514,6 @@ export default {
           }
         });
     },
-    chatImageUpload(e) {
-      jobService
-        .chatImageUpload({ uploadImage: this.chatUploadImage })
-        .then((response) => {
-          if (response.status) {
-            this.$toast.open({
-              message: response.message,
-              type: "success",
-              position: "top-right",
-            });
-          } else {
-            this.$toast.open({
-              message: response.message,
-              type: "error",
-              position: "top-right",
-            });
-          }
-        });
-      // e.stopPropagation();
-    },
   },
   updated() {
     var messageContainerScroll;
@@ -559,7 +532,7 @@ export default {
       const name = document.getElementById("user-details-id");
       const jobId = document.getElementById("job-id");
       const allUserData = document.getElementById("all-user-data");
-      
+
       socket.emit("new-user", name._value);
       messageContainerScroll.scroll([0, "100%"], 50, { x: "", y: "linear" });
 
@@ -579,11 +552,10 @@ export default {
             );
           } else {
             if (typeof chatUsersList[data.name] != "undefined") {
-                  var userImageLink = chatUsersList[data.name].user_image;
-                } else {
-                  var userImageLink =
-                    environment.baseUrl + "/images/avatar.png";
-                }
+              var userImageLink = chatUsersList[data.name].user_image;
+            } else {
+              var userImageLink = environment.baseUrl + "/images/avatar.png";
+            }
             appendMessage(
               '<div class="chat-msg">' +
                 `${data.message.message}` +
@@ -636,7 +608,7 @@ export default {
       }
 
       $(document).on("click", ".upload-images-out", function () {
-          $("#image-file").trigger('click');
+        $("#image-file").click();
       });
       $("#image-file").on("click", function (e) {
         e.stopPropagation();
@@ -646,7 +618,6 @@ export default {
         if ($this.val() != "") {
           const currentUser = authenticationService.currentUserValue || {};
 
-        var form = $("#upload-images-form")[0];
           var imageData = new FormData();
           imageData.append("uploadImage", $("#image-file").prop("files")[0]);
 
@@ -654,9 +625,6 @@ export default {
             url: environment.apiUrl + `uploadImage`,
             headers: {
               Authorization: "Bearer " + currentUser.data.access_token,
-              // "Content-Type": "multipart/form-data",
-              // "X-Requested-With": "XMLHttpRequest",
-              // "X-CSRF-TOKEN": Laravel.csrfToken,
             },
             data: imageData,
             cache: false,
@@ -666,6 +634,19 @@ export default {
             type: "post",
             success: function (result) {
               clicked = false;
+              const messageElement = document.createElement("div");
+              messageElement.className = className; //"chat-receiver"
+              messageElement.innerHTML =
+                '<div class="chat-msg"><img class="chat-image-in" src="' +
+                `${environment.baseUrl + result}` +
+                '"></div><div class="chat-img"><img src="' +
+                `${userImage}` +
+                '"></div>';
+              $(document)
+                .find("#message-container")
+                .find(".os-content")
+                .prepend(messageElement);
+
               console.log(result);
             },
           });
