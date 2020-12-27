@@ -1247,7 +1247,7 @@ h6,
         .input_msg_write {
             input {
                 border-radius: 7px;
-                width: calc(100% - 115px);
+                width: calc(100% - 109px);
                 padding: 10px 15px 10px 15px;
                 border: 1px solid #181819;
                 background: #000;
@@ -3530,6 +3530,7 @@ div#example_info {
     margin-right: 8px;
     cursor: pointer;
     display: inline-block;
+    float: left;
 }
 #image-file{
     display: none;
@@ -3633,4 +3634,7 @@ div#example_info {
     text-transform: uppercase;
     font-weight: 700;
     border-bottom: 2px solid #c2c6dc;
+}
+.chat-image-in{
+    width: 100%;
 }

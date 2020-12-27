@@ -22,18 +22,20 @@
 
           <div class="">
             <div class="clearfix">
+              <span class="basic-grey-label-half">Images</span>
+              <span class="det-half">
+                <template v-for="(image, index) in jobImages">
+                  <img
+                    :src="'http://wa.customer.leagueofclicks.com/' + image"
+                  />
+                </template>
+              </span>
+            </div>
+            <div class="clearfix">
               <span class="basic-grey-label-half">Primary Manager</span>
               <span class="det-half"
                 >{{ manager.first_name }} {{ manager.last_name }}</span
               >
-            </div>
-            <div class="clearfix">
-              <span class="basic-grey-label-half">Images</span>
-              <span class="det-half">
-                <template v-for="(image, index) in jobImages">
-                  <img :src="'http://wa.customer.leagueofclicks.com/' + image" />
-                </template>
-              </span>
             </div>
             <div class="clearfix">
               <span class="basic-grey-label-half">Manager Contact</span>
@@ -52,8 +54,21 @@
             <div class="clearfix">
               <span class="basic-grey-label-half">Techs</span>
               <span class="det-half">
-                <span v-if='job.skidsteer_driver'>{{ job.skidsteer_driver.first_name + " " + job.skidsteer_driver.last_name + ", " }} </span>
-                <span v-if='job.skidsteer_driver'> {{ job.truck_driver.first_name + " " + job.truck_driver.last_name }} </span>
+                <span v-if="job.skidsteer_driver"
+                  >{{
+                    job.skidsteer_driver.first_name +
+                    " " +
+                    job.skidsteer_driver.last_name +
+                    ", "
+                  }}
+                </span>
+                <span v-if="job.skidsteer_driver">
+                  {{
+                    job.truck_driver.first_name +
+                    " " +
+                    job.truck_driver.last_name
+                  }}
+                </span>
               </span>
             </div>
             <div class="clearfix">
@@ -105,13 +120,15 @@
                 :value="JSON.stringify(chatUsers)"
               />
 
-              <!-- <form id="upload-images-form" enctype="multipart/form-data"> -->
-                <input type="file" id="image-file" style="display:none;" name="chat-image" />
-                <label class="upload-images-out" for='image-file'>
-                  <image-icon size="1.5x" class="custom-class"></image-icon>
-                </label>
-              <!-- </form> -->
-
+              <input
+                type="file"
+                id="image-file"
+                style="display: none"
+                name="chat-image"
+              />
+              <label class="upload-images-out" for="image-file">
+                <image-icon size="1.5x" class="custom-class"></image-icon>
+              </label>
               <form id="send-container" autocomplete="off">
                 <input
                   type="text"
@@ -486,6 +503,14 @@ export default {
                   var userImageLink =
                     environment.baseUrl + "/images/avatar.png";
                 }
+                if (val.message.indexOf("uploads") > -1) {
+                  var messageText =
+                    '<img class="chat-image-in" src="' +
+                    `${val.message}` +
+                    '">';
+                } else {
+                  var messageText = val.message;
+                }
                 const messageElement = document.createElement("div");
                 if (currentUserDetails.id == val.username) {
                   messageElement.className = "chat-receiver";
@@ -494,7 +519,7 @@ export default {
                 }
                 messageElement.innerHTML =
                   '<div class="chat-msg">' +
-                  `${val.message}` +
+                  `${messageText}` +
                   '</div><div class="chat-img"><img src="' +
                   `${userImageLink}` +
                   '"></div>';
@@ -535,11 +560,19 @@ export default {
       const emitChannel = "chat-message"; //"chatmessage"+jobId
       socket.on(emitChannel, (data) => {
         const userImage = $("#current-user-image").val();
+        if (data.message.message.indexOf("uploads") > -1) {
+          const messageText =
+            '<img class="chat-image-in" src="' +
+            `${environment.baseUrl + data.message.message}` +
+            '">';
+        } else {
+          const messageText = data.message.message;
+        }
         if (data.job_id == jobId._value) {
           if (data.name == name._value) {
             appendMessage(
               '<div class="chat-msg">' +
-                `${data.message.message}` +
+                `${messageText}` +
                 '</div><div class="chat-img"><img src="' +
                 `${userImage}` +
                 '"></div>',
@@ -553,7 +586,7 @@ export default {
             }
             appendMessage(
               '<div class="chat-msg">' +
-                `${data.message.message}` +
+                `${messageText}` +
                 '</div><div class="chat-img"><img src="' +
                 `${userImageLink}` +
                 '"></div>',
@@ -581,6 +614,7 @@ export default {
           socket.emit("send-chat-message", {
             message: message,
             job_id: jobId._value,
+            username: name._value,
           });
           messageInput.value = "";
           $("#send-button").attr("disabled", false);
@@ -602,13 +636,6 @@ export default {
         $("#message-container .empty-message").remove();
       }
 
-      // $(document).on("click", ".upload-images-out", function () {
-        // $("#image-file").click();
-        // fired = true;
-      // });
-      // $("#image-file").on("click", function (e) {
-      //   e.stopPropagation();
-      // });
       $(document).on("change", "#image-file", function (e) {
         var $this = $(this);
         if ($this.val() != "" && !self.fired) {
@@ -631,7 +658,7 @@ export default {
               const messageElement = document.createElement("div");
               messageElement.className = "chat-receiver"; //"chat-receiver"
               messageElement.innerHTML =
-                '<div class="chat-msg"><img width=50 class="chat-image-in" src="' +
+                '<div class="chat-msg"><img class="chat-image-in" src="' +
                 `${environment.baseUrl + result}` +
                 '"></div><div class="chat-img"><img src="' +
                 `${userImage}` +
@@ -640,18 +667,24 @@ export default {
                 .find("#message-container")
                 .find(".os-content")
                 .prepend(messageElement);
-
-              console.log(result);
+              socket.emit("send-chat-message", {
+                message: environment.baseUrl + result,
+                job_id: jobId._value,
+                username: name._value,
+              });
+              messageContainerScroll.scroll([0, "100%"], 50, {
+            x: "",
+            y: "linear",
+          });
             },
-            complete: function(){
-              $('#image-file').val('');
+            complete: function () {
+              $("#image-file").val("");
               self.fired = false;
-            }
+            },
           });
         }
-        // e.stopPropagation();
       });
-    }, 1000);
+    }, 5000);
   },
 };
 </script>

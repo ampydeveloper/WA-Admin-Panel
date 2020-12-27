@@ -16,13 +16,10 @@ class ChatController extends Controller {
     }
 
     public function jobChat(Request $request) {
-//        print_r($request->jobId);
         $data = array(
             'jobId' => $request->jobId,
-//            'jobId' => 100,
         );
         $postData = json_encode($data);
-//die('re');
         $ch = curl_init();
 //        curl_setopt($ch, CURLOPT_URL, "https://wa.customer.leagueofclicks.com/:" . env('SOCKET_SERVER_PORT') . "/job-chat");
         curl_setopt($ch, CURLOPT_URL, "https://wa.customer.leagueofclicks.com:3100/job-chat");
@@ -33,10 +30,6 @@ class ChatController extends Controller {
         curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
         $output = curl_exec($ch);
 
-//        if ($errno = curl_errno($ch)) {
-//            $error_message = curl_strerror($errno);
-//            echo "cURL error ({$errno}):\n {$error_message}";
-//        }
         curl_close($ch);
 //        print_r($output);
 //        die('re');
@@ -45,6 +38,9 @@ class ChatController extends Controller {
             $messages = array_reverse($messages);
         } else {
             $messages = [];
+        }
+        foreach($messages as $key=>$message){
+            $messages[$key]->job_id = (int)$message->job_id;
         }
         return response()->json([
                     'status' => true,
