@@ -41,6 +41,9 @@ class ChatController extends Controller {
         }
         foreach($messages as $key=>$message){
             $messages[$key]->job_id = (int)$message->job_id;
+            if(isset($message->username)){
+            $messages[$key]->username = (int)$message->username;
+            }
         }
         return response()->json([
                     'status' => true,
