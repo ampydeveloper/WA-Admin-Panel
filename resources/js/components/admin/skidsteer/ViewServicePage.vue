@@ -9,7 +9,7 @@
           </h4>
         </li>
         <li>
-          <router-link to="/admin/dashboard" class="home_svg">
+          <router-link :to="isMechanic ? '/mechanic/skidsteers/': '/admin/dashboard'" class="home_svg">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24px"
@@ -62,7 +62,14 @@
               <v-btn color="success" class="mr-4 custom-save-btn ml-4 mt-4">Add Service</v-btn>
             </router-link>
             <router-link
-              v-if="!isAdmin"
+              v-else-if="isMechanic"
+              :to="'/mechanic/skidsteer/addservice/' +vehicle_id"
+              class="nav-item nav-link"
+            >
+              <v-btn color="success" class="mr-4 custom-save-btn ml-4 mt-4">Add Service</v-btn>
+            </router-link>
+            <router-link
+              v-else
               :to="'/manager/skidsteer/addservice/' +vehicle_id"
               class="nav-item nav-link"
             >
@@ -77,7 +84,14 @@
               <v-btn color="success" class="mr-4 custom-save-btn ml-4 mt-4">Add Insurance</v-btn>
             </router-link>
             <router-link
-              v-if="!isAdmin"
+              v-else-if="isMechanic"
+              :to="'/mechanic/skidsteer/addinsurance/' +vehicle_id"
+              class="nav-item nav-link"
+            >
+              <v-btn color="success" class="mr-4 custom-save-btn ml-4 mt-4">Add Insurance</v-btn>
+            </router-link>
+            <router-link
+              v-else
               :to="'/manager/skidsteer/addinsurance/' +vehicle_id"
               class="nav-item nav-link"
             >
@@ -129,7 +143,14 @@
                           <edit-3-icon size="1.2x" class="custom-class"></edit-3-icon>
                         </router-link>
                         <router-link
-                          v-if="!isAdmin"
+                          v-else-if="isMechanic"
+                          :to="'/mechanic/skidsteer/editservice/' + item.id"
+                          class="nav-item nav-link"
+                        >
+                          <edit-3-icon size="1.2x" class="custom-class"></edit-3-icon>
+                        </router-link>
+                        <router-link
+                          v-else
                           :to="'/manager/skidsteer/editservice/' + item.id"
                           class="nav-item nav-link"
                         >
@@ -177,7 +198,14 @@
                           <edit-3-icon size="1.2x" class="custom-class"></edit-3-icon>
                         </router-link>
                         <router-link
-                          v-if="!isAdmin"
+                          v-else-if="isMechanic"
+                          :to="'/mechanic/skidsteer/editinsurance/' + item.id"
+                          class="nav-item nav-link"
+                        >
+                          <edit-3-icon size="1.2x" class="custom-class"></edit-3-icon>
+                        </router-link>
+                        <router-link
+                          v-else
                           :to="'/manager/skidsteer/editinsurance/' + item.id"
                           class="nav-item nav-link"
                         >
@@ -240,7 +268,8 @@ export default {
       truck: [],
       insurance: [],
       vehicle_id: "",
-      isAdmin: true,
+      isAdmin: false,
+      isMechanic: false
     };
   },
 
@@ -248,6 +277,8 @@ export default {
     const currentUser = authenticationService.currentUserValue;
     if (currentUser.data.user.role_id == 1) {
       this.isAdmin = true;
+    } else if (currentUser.data.user.role_id == 8) {
+      this.isMechanic = true;
     } else {
       this.isAdmin = false;
     }
@@ -264,6 +295,8 @@ export default {
           const currentUser = authenticationService.currentUserValue;
           if (currentUser.data.user.role_id == 1) {
             router.push("/admin/trucks");
+          } else if (currentUser.data.user.role_id == 8) {
+            router.push("/mechanic/trucks");
           } else {
             router.push("/manager/trucks");
           }
@@ -283,6 +316,8 @@ export default {
           const currentUser = authenticationService.currentUserValue;
           if (currentUser.data.user.role_id == 1) {
             router.push("/admin/trucks");
+          } else if (currentUser.data.user.role_id == 8) {
+            router.push("/mechanic/trucks");
           } else {
             router.push("/manager/trucks");
           }

@@ -74,7 +74,7 @@
       <v-container fluid>
         <v-row>
           <div class="add-icon">
-            <router-link to="/admin/mechanic/add" class="nav-item nav-link">
+            <router-link :to="(currentUser.role_id == 2 ? '/manager/' : '/admin/', 'mechanic/add')" class="nav-item nav-link">
               <v-btn color="success" class="btn-outline-green-top">
                 <plus-icon size="1.5x" class="custom-class"></plus-icon>Add New
               </v-btn>
@@ -104,7 +104,7 @@
                     </td>
                     <td>{{ item.email }}</td>
                     <td class="action-col">
-                      <router-link :to="'/admin/mechanic/edit/' + item.id" class="nav-item nav-link">
+                      <router-link :to="(currentUser.role_id == 2 ? '/manager/' : '/admin/', 'mechanic/edit/' + item.id)" class="nav-item nav-link">
                         <edit-3-icon size="1.2x" class="custom-class"></edit-3-icon>
                       </router-link>
                       <a href="javascript:void(0);" text @click="Delete(item.id)">

@@ -9,7 +9,7 @@
           </h4>
         </li>
         <li>
-          <router-link to="/admin/dashboard" class="home_svg">
+          <router-link :to="routeType == 'mechanic' ? '/mechanic/trucks/' : routeType+'/dashboard'" class="home_svg">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24px"
@@ -45,7 +45,7 @@
           </router-link>
         </li>
         <li>
-          <router-link to="/admin/trucks">
+          <router-link :to="'/'+routeType+'/trucks'">
             List
             <span>
               <svg
@@ -239,7 +239,7 @@
                       id="submit_btn"
                     >Update</v-btn>
 
-                    <router-link to="/admin/trucks" class="btn-custom-danger mt-4">Cancel</router-link>
+                    <router-link :to="'/'+routeType+'/trucks'" class="btn-custom-danger mt-4">Cancel</router-link>
                   </v-col>
                 </v-row>
               </v-col>
@@ -290,6 +290,7 @@ export default {
         (v) => /^\d*$/.test(v) || "Enter valid number.",
       ],
       myFiles: [],
+      routeType: 'admin'
     };
   },
   computed: {
@@ -345,6 +346,15 @@ export default {
           }
         }
       });
+    
+    const currentUser = authenticationService.currentUserValue;
+    if (currentUser.data.user.role_id == 1) {
+      this.routeType = 'admin';
+    } else if (currentUser.data.user.role_id == 8) {
+      this.routeType = 'mechanic';
+    }else {
+      this.routeType = 'manager';
+    }
   },
   methods: {
     documentRemove() {
@@ -424,6 +434,9 @@ export default {
             const currentUser = authenticationService.currentUserValue;
             if (currentUser.data.user.role_id == 1) {
               const url = "/admin/truck/service/" + this.addForm.vehicle_id;
+              router.push(url);
+            } else if (currentUser.data.user.role_id == 8) {
+              const url = "/mechanic/truck/service/" + this.addForm.vehicle_id;
               router.push(url);
             } else {
               const url = "/manager/truck/service/" + this.addForm.vehicle_id;

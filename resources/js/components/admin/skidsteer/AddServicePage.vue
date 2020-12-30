@@ -9,7 +9,7 @@
           </h4>
         </li>
         <li>
-          <router-link to="/admin/dashboard" class="home_svg">
+          <router-link :to="routeType == 'mechanic' ? '/mechanic/skidsteers/' : routeType+'/dashboard'" class="home_svg">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24px"
@@ -45,7 +45,7 @@
           </router-link>
         </li>
         <li>
-          <router-link to="/admin/skidsteers">
+          <router-link :to="'/'+routeType+'/skidsteers'">
             List
             <span>
               <svg
@@ -206,7 +206,7 @@
                       id="submit_btn"
                     >Save</v-btn>
 
-                    <router-link to="/admin/skidsteers" class="btn-custom-danger mt-4">Cancel</router-link>
+                    <router-link :to="'/'+routeType+'/skidsteers'" class="btn-custom-danger mt-4">Cancel</router-link>
                   </v-col>
                 </v-row>
               </v-col>
@@ -252,6 +252,7 @@ export default {
         (v) => /^\d*$/.test(v) || "Enter valid number.",
       ],
       myFiles: [],
+      routeType: 'admin'
     };
   },
   computed: {
@@ -282,6 +283,16 @@ export default {
         return null;
       }
     },
+  },
+  mounted() {
+    const currentUser = authenticationService.currentUserValue;
+    if (currentUser.data.user.role_id == 1) {
+      this.routeType = 'admin';
+    } else if (currentUser.data.user.role_id == 8) {
+      this.routeType = 'mechanic';
+    }else {
+      this.routeType = 'manager';
+    }
   },
   methods: {
     setUploadIndex() {

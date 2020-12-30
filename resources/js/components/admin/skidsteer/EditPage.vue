@@ -11,7 +11,7 @@
               </h4>
             </li>
             <li>
-              <router-link to="/admin/dashboard" class="home_svg">
+              <router-link :to="routeType == 'mechanic' ? '/mechanic/skidsteers/' : routeType+'/dashboard'" class="home_svg">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24px"
@@ -47,7 +47,7 @@
               </router-link>
             </li>
             <li>
-              <router-link to="/admin/trucks">
+              <router-link :to="'/'+routeType+'/skidsteer'">
                 List
                 <span>
                   <svg
@@ -261,6 +261,7 @@ export default {
         (v) => /^\d*$/.test(v) || "Enter valid number.",
       ],
       myFiles: [],
+      routeType: 'admin'
     };
   },
   computed: {
@@ -292,6 +293,12 @@ export default {
       }
     },
   },
+  created() {
+    const currentUser = authenticationService.currentUserValue;
+    if (currentUser.data.user.role_id == 1) { this.routeType = 'admin' }
+    else if (currentUser.data.user.role_id == 8) { this.routeType = 'mechanic' }
+    else{ this.routeType = 'manager' }
+  },
   mounted: function () {
     truckService.getTruck(this.$route.params.id).then((response) => {
       //handle response
@@ -315,7 +322,7 @@ export default {
             this.imgUrl + response.data.vehicle_insurance.document;
         }
       } else {
-        router.push("/admin/trucks");
+        router.push(`/${routeType}/trucks`);
         this.$toast.open({
           message: response.message,
           type: "error",
@@ -370,6 +377,8 @@ export default {
             const currentUser = authenticationService.currentUserValue;
             if (currentUser.data.user.role_id == 1) {
               router.push("/admin/skidsteers");
+            } else if (currentUser.data.user.role_id == 8) {
+              router.push("/mechanic/skidsteers");
             } else {
               router.push("/manager/skidsteers");
             }

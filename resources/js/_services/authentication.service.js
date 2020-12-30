@@ -80,6 +80,9 @@ function login(email, password, requestType) {
       if(user.data.user.role_id === 5){
         this.currentUrl = "Home"; 
       }
+      if(user.data.user.role_id === 8){
+        this.currentUrl = "/mechanic/trucks"; 
+      }
       return this.currentUrl;
     });
 }

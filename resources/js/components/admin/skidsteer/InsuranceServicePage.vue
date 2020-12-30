@@ -9,7 +9,7 @@
           </h4>
         </li>
         <li>
-          <router-link to="/admin/dashboard" class="home_svg">
+          <router-link :to="routeType == 'mechanic' ? '/mechanic/skidsteers/' : routeType+'/dashboard'" class="home_svg">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24px"
@@ -45,7 +45,7 @@
           </router-link>
         </li>
         <li>
-          <router-link to="/admin/skidsteers">
+          <router-link :to="'/'+routeType+'/skidsteers'">
             List
             <span>
               <svg
@@ -220,7 +220,7 @@
                       id="submit_btn"
                     >Save</v-btn>
 
-                    <router-link to="/admin/skidsteers" class="btn-custom-danger mt-4">Cancel</router-link>
+                    <router-link :to="'/'+routeType+'/skidsteers'" class="btn-custom-danger mt-4">Cancel</router-link>
                   </v-col>
                 </v-row>
               </v-col>
@@ -262,6 +262,7 @@ export default {
         notes: "",
       },
       myFiles: [],
+      routeType: 'admin'
     };
   },
   computed: {
@@ -294,6 +295,14 @@ export default {
     },
   },
   mounted() {
+    const currentUser = authenticationService.currentUserValue;
+    if (currentUser.data.user.role_id == 1) {
+      this.routeType = 'admin';
+    } else if (currentUser.data.user.role_id == 8) {
+      this.routeType = 'mechanic';
+    }else {
+      this.routeType = 'manager';
+    }
     this.getResults();
   },
   methods: {
@@ -362,6 +371,9 @@ export default {
             const currentUser = authenticationService.currentUserValue;
             if (currentUser.data.user.role_id == 1) {
               const url = "/admin/skidsteer/service/" + this.$route.params.id;
+              router.push(url);
+            } else if (currentUser.data.user.role_id == 8) {
+              const url = "/mechanic/skidsteer/service/" + this.$route.params.id;
               router.push(url);
             } else {
               const url = "/manager/skidsteer/service/" + this.$route.params.id;

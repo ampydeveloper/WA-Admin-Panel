@@ -35,14 +35,13 @@ Profile</router-link>
                   <router-link
                     to="/manager/changepassword"
                     class="nav-item nav-link"
-                  >Change Password</router-link>
+                  ><edit-3-icon size="1.5x" class="custom-class"></edit-3-icon>Change Password</router-link>
                 </v-list-item-title>
                 <v-list-item-title v-if="isDriver">
                   <router-link to="/driver/profile" class="nav-item nav-link"><user-icon size="1.5x" class="custom-class"></user-icon>Profile</router-link>
                 </v-list-item-title>
                 <v-list-item-title v-if="isDriver">
-                  <router-link to="/driver/changepassword" class="nav-item nav-link">  <edit-3-icon size="1.5x" class="custom-class"></edit-3-icon>
-Change Password</router-link>
+                  <router-link to="/driver/changepassword" class="nav-item nav-link">  <edit-3-icon size="1.5x" class="custom-class"></edit-3-icon>Change Password</router-link>
                 </v-list-item-title>
                 <v-list-item-title>
                   <button type="button" @click="logout" class="nav-item nav-link">  <log-out-icon size="1.5x" class="custom-class"></log-out-icon>

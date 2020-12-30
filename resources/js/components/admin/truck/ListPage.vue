@@ -9,7 +9,7 @@
           </h4>
         </li>
         <li>
-          <router-link to="/admin/dashboard" class="home_svg">
+          <router-link :to="isMechanic ? '/mechanic/trucks/': '/admin/dashboard'" class="home_svg">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24px"
@@ -77,7 +77,12 @@
                 <plus-icon size="1.5x" class="custom-class"></plus-icon>Add New
               </v-btn>
             </router-link>
-            <router-link v-if="!isAdmin" to="/manager/truck/add" class="nav-item nav-link">
+            <router-link v-else-if="isMechanic" to="/mechanic/truck/add" class="nav-item nav-link">
+              <v-btn color="success" class="btn-outline-green-top">
+                <plus-icon size="1.5x" class="custom-class"></plus-icon>Add New
+              </v-btn>
+            </router-link>
+            <router-link v-else to="/manager/truck/add" class="nav-item nav-link">
               <v-btn color="success" class="btn-outline-green-top">
                 <plus-icon size="1.5x" class="custom-class"></plus-icon>Add New
               </v-btn>
@@ -135,7 +140,12 @@
                       class="btn-outline-green-top"
                     >View Service Details</router-link>
                     <router-link
-                      v-if="!isAdmin"
+                      v-else-if="isMechanic"
+                      :to="'/mechanic/truck/service/' + item.id"
+                      class="btn-outline-green-top"
+                    >View Service Details</router-link>
+                    <router-link
+                      v-else
                       :to="'/manager/truck/service/' + item.id"
                       class="btn-outline-green-top"
                     >View Service Details</router-link>
@@ -143,7 +153,10 @@
                     <router-link v-if="isAdmin" :to="'/admin/truck/edit/' + item.id">
                       <edit-3-icon size="1.2x" class="custom-class"></edit-3-icon>
                     </router-link>
-                    <router-link v-if="!isAdmin" :to="'/manager/truck/edit/' + item.id">
+                    <router-link v-else-if="isMechanic" :to="'/mechanic/truck/edit/' + item.id">
+                      <edit-3-icon size="1.2x" class="custom-class"></edit-3-icon>
+                    </router-link>
+                    <router-link v-else :to="'/manager/truck/edit/' + item.id">
                       <edit-3-icon size="1.2x" class="custom-class"></edit-3-icon>
                     </router-link>
                     <a href="javascript:void(0);" text @click="Delete(item.id)">
@@ -204,14 +217,17 @@ export default {
       isActive: null,
       on: false,
       trucks: [],
-      isAdmin: true,
+      isAdmin: false,
+      isMechanic: false,
     };
   },
   mounted() {
     const currentUser = authenticationService.currentUserValue;
     if (currentUser.data.user.role_id == 1) {
       this.isAdmin = true;
-    } else {
+    } else if (currentUser.data.user.role_id == 8) {
+      this.isMechanic = true;
+    } else{
       this.isAdmin = false;
     }
     this.getResults();
