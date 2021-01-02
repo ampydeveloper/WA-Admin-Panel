@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Validator;
 use App\User;
+use App\CustomerActivity;
 
 class CompanyController extends Controller {
     
@@ -424,10 +425,10 @@ class CompanyController extends Controller {
                     'driver_last_name' => 'required',
                     'email' => 'required',
                     'driver_phone' => 'required',
-                    'driver_address' => 'required',
-                    'driver_city' => 'required',
-                    'driver_province' => 'required',
-                    'driver_zipcode' => 'required',
+//                    'driver_address' => 'required',
+//                    'driver_city' => 'required',
+//                    'driver_province' => 'required',
+//                    'driver_zipcode' => 'required',
 //                    'driver_type' => 'required',
 //                    'driver_licence' => 'required',
 //                    'driver_licence_image' => 'required',
@@ -477,10 +478,10 @@ class CompanyController extends Controller {
                 $driver->last_name = $request->driver_last_name;
                 $driver->email = $request->email;
                 $driver->phone = $request->driver_phone;
-                $driver->address = $request->driver_address;
-                $driver->city = $request->driver_city;
-                $driver->state = $request->driver_province;
-                $driver->zip_code = $request->driver_zipcode;
+//                $driver->address = $request->driver_address;
+//                $driver->city = $request->driver_city;
+//                $driver->state = $request->driver_province;
+//                $driver->zip_code = $request->driver_zipcode;
                 $driver->user_image = (isset($request->user_image) && $request->user_image != '' && $request->user_image != null) ? $request->user_image : null;
 //                $driver->hauler_driver_licence = $request->driver_licence;
 //                $driver->hauler_driver_licence_image = $request->driver_licence_image;

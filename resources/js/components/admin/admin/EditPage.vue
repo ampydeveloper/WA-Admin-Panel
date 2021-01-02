@@ -101,6 +101,19 @@
                         v-on:processfile="handleProcessFile"
                         v-on:processfilerevert="handleRemoveFile"
                       />
+                      <v-col sm="12" class="p-0">
+                            <div class="service-image-outer" v-if="avatar">
+                              <button
+                                type="button"
+                                class="close"
+                                v-if="cross"
+                                @click="Remove()"
+                              >
+                                <span>&times;</span>
+                              </button>
+                              <img :src="avatar" alt />
+                            </div>
+                          </v-col>
                     </v-col>
                   </v-col>
                   <v-col cols="12" md="12" class="pt-0 pb-0">

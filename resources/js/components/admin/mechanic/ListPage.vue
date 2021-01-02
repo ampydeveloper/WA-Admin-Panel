@@ -271,6 +271,12 @@ export default {
       $(document).ready(function () {
         if (!$.fn.dataTable.isDataTable("#admin-table")) {
           $("#admin-table").DataTable({
+            aoColumnDefs: [
+              {
+                bSortable: false,
+                aTargets: [-1, -2, -3],
+              },
+            ],
             oLanguage: {
               sSearch: "",
               sEmptyTable: "No mechanic till now.",
