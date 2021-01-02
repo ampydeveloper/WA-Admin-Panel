@@ -319,7 +319,6 @@
                     label="Enter Gate Number"
                     v-model="addForm.gate_no"
                     required
-                    :rules="[v => !!v || 'Gate number is required.']"
                     placeholder
                   ></v-text-field>
                 </v-col>
@@ -355,7 +354,6 @@
                     rows="3"
                     auto-grow
                     v-model="addForm.notes"
-                    :rules="[v => !!v || 'Notes is required.']"
                     required
                   ></v-textarea>
                 </v-col>
@@ -415,7 +413,7 @@
               <v-col sm="2"></v-col>
               <v-col sm="9" class="pt-0 pb-0">
                 <v-btn
-                  type="submit"
+                  type="button"
                   :loading="loading"
                   :disabled="loading"
                   color="success"
@@ -678,6 +676,8 @@ export default {
       
       // this.addForm.amount = 10;
       if (this.$refs.form.validate()) {
+        // console.log('true');
+        // return false;
         this.loading = true;
         jobService.createJob(this.addForm).then((response) => {
           //stop loading
@@ -697,6 +697,7 @@ export default {
               router.push("/manager/jobs");
             }
           } else {
+            this.loading = false;
             this.$toast.open({
               message: response.message,
               type: "error",
@@ -705,10 +706,7 @@ export default {
           }
         });
       }
-    },
-    showTiming() {
-      console.log("abcd");
-    },
+    }
   },
 };
 </script>

@@ -10,6 +10,7 @@ use App\Service;
 use App\CustomerFarm;
 use App\Vehicle;
 use App\JobAssignmentHistory;
+use App\CustomerActivity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 //use Illuminate\Support\Str;
@@ -150,7 +151,7 @@ class JobsController extends Controller {
                             'status' => false,
                             'message' => 'No slots left for selected service in selected date and service time, please try selecting different options',
                             'data' => []
-                                ], 422);
+                                ], 200);
                 }
             }
             if ($checkService->service_type == config('constant.service_type.by_weight')) {
@@ -532,10 +533,11 @@ class JobsController extends Controller {
 
     private function __checkAvailability($service=null, $date=null, $timeSlot=null, $weight=false){
         // Assume Available Minutes per slot 180
-        // $service = 20; //test
-        // $date = '2020-11-25'; //test
-        // $timeSlot = 3; //test
+        // $service = 18; //test
+        // $date = '2021-01-12'; //test
+        // $timeSlot = 1; //test
 
+        $average_speed = config('constant.average_truck_speed');
         // // Job by weight //Discussion Pending
         // // Get weight from job
         
@@ -560,11 +562,10 @@ class JobsController extends Controller {
         
         $bookedMinutes = 0;
         foreach($bookedJobs as $job){
-            // add distance from warehouse and dumoign area in total, get from farm associated with job, to-do, community
-            $bookedMinutes += (int) $ttc_mapping[$job->service->time_taken_to_complete_service] + $job->farm->distance_warehouse + $job->farm->distance_dumping_area; //ttc + commute distance from warehouse and dumping_area
+            // add distance from warehouse and dumping area in total, get from farm associated with job, to-do, community
+            $bookedMinutes += (int) $ttc_mapping[$job->service->time_taken_to_complete_service] + ($job->farm->distance_warehouse/$average_speed) + ($job->farm->distance_dumping_area/$average_speed); //ttc + commute distance from warehouse and dumping_area
         }
         $availableMinutes = $totalMinutes - $bookedMinutes;
-
         return $service_ttc <= $availableMinutes ? True : False;
     }
 

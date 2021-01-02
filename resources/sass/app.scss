@@ -3086,6 +3086,7 @@ div#example_info {
     font-weight: 500 !important;
 
     .toast-text {
+        word-break: break-word!important;
         padding: 0 !important;
     }
 }

@@ -343,6 +343,11 @@ export default {
   methods: {
     getResults(data) {
       this.alljobs = [];
+      console.log($("#all-jobs-table"));
+      if ($.fn.dataTable.isDataTable("#all-jobs-table")) {
+        console.log('in');
+        // $("#all-jobs-table").DataTable().destroy();
+      }
       jobService.joblist({ status: data }).then((response) => {
         //handle response
         if (response.status) {
@@ -410,45 +415,48 @@ export default {
       }
     },
     tableAdd(){
-      if (!$.fn.dataTable.isDataTable("#all-jobs-table")) {
-      $("#all-jobs-table").DataTable({
-            aoColumnDefs: [
-              {
-                bSortable: false,
-                aTargets: [-1, -2, -3, -4, -5],
-              },
-            ],
-            oLanguage: {
-              sSearch: "",
-              sEmptyTable: "No pickups till now.",
-              infoEmpty: "No pickups found.",
-            },
-            drawCallback: function (settings) {
+      setTimeout(function(){
+        $(function(){
+          if (!$.fn.dataTable.isDataTable("#all-jobs-table")) {
+              $("#all-jobs-table").DataTable({
+                aoColumnDefs: [
+                  {
+                    bSortable: false,
+                    aTargets: [-1, -2, -3, -4, -5],
+                  },
+                ],
+                oLanguage: {
+                  sSearch: "",
+                  sEmptyTable: "No pickups till now.",
+                  infoEmpty: "No pickups found.",
+                },
+                drawCallback: function (settings) {
+                  $("#all-jobs-table_paginate .paginate_button.previous").html(
+                    $("#table-chevron-left").html()
+                  );
+                  $("#all-jobs-table_paginate .paginate_button.next").html(
+                    $("#table-chevron-right").html()
+                  );
+                },
+              });
+
+              $("#all-jobs-table_filter").append($("#search-input-icon").html());
+              $("#all-jobs-table_filter input").attr(
+                "placeholder",
+                "Search Pickups by Pickup ID / Customer / Service"
+              );
               $("#all-jobs-table_paginate .paginate_button.previous").html(
                 $("#table-chevron-left").html()
               );
               $("#all-jobs-table_paginate .paginate_button.next").html(
                 $("#table-chevron-right").html()
               );
-            },
-          });
-
-          $("#all-jobs-table_filter").append($("#search-input-icon").html());
-          $("#all-jobs-table_filter input").attr(
-            "placeholder",
-            "Search Pickups by Pickup ID / Customer / Service"
-          );
-          $("#all-jobs-table_paginate .paginate_button.previous").html(
-            $("#table-chevron-left").html()
-          );
-          $("#all-jobs-table_paginate .paginate_button.next").html(
-            $("#table-chevron-right").html()
-          );
-      }
+          }
           $("#all-jobs-table").css({ opacity: 1 });
-    }
+        });
+      }, 2000);
   },
-  updated() {
+  // updated() {
     // setTimeout(function () {
     //   $(document).ready(function () {
     //     if (!$.fn.dataTable.isDataTable("#all-jobs-table")) {
@@ -489,6 +497,6 @@ export default {
     //     $("#all-jobs-table").css({ opacity: 1 });
     //   });
     // }, 100);
-  },
-};
+  }
+}
 </script>
