@@ -131,10 +131,18 @@ class ChatController extends Controller {
                         $q->select('id', 'first_name', 'user_image');
                     }])->first();
 
+        if(isset($chatMembers->customer->user_image)){
         $chatMembers->customer->user_image = env('CUSTOMER_URL') . '/storage/user_images/' . $chatMembers->customer->id . '/' . $chatMembers->customer->user_image;
+        }
+        if(isset($chatMembers->manager->user_image)){
         $chatMembers->manager->user_image = env('CUSTOMER_URL') . '/storage/user_images/' . $chatMembers->manager->id . '/' . $chatMembers->manager->user_image;
+        }
+        if(isset($chatMembers->skidsteer_driver->user_image)){
         $chatMembers->skidsteer_driver->user_image = env('APP_URL') . '/' . $chatMembers->skidsteer_driver->user_image;
+        }
+        if(isset($chatMembers->truck_driver->user_image)){
         $chatMembers->truck_driver->user_image = env('APP_URL') . '/' . $chatMembers->truck_driver->user_image;
+        }
 
         $all_admin = User::where('role_id', config('constant.roles.Admin'))->select('id', 'first_name', 'user_image')->get();
         foreach ($all_admin as $key => $admin) {

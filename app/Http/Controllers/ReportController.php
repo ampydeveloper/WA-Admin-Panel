@@ -84,7 +84,7 @@ class ReportController extends Controller
         $data = User::whereHas('jobs', function($q) use($firstDay, $lastDay) {
             $q->whereBetween('created_at', [$firstDay, $lastDay]);
             })->select('id', 'first_name', 'last_name','created_at')->with(['jobs' => function($q) {
-                $q->select('id', 'customer_id', 'service_id', 'job_providing_date', 'job_providing_time', 'amount', 'job_status', 'payment_status', 'quick_book', 'truck_driver_id', 'skidsteer_driver_id','created_at')->with(['truck_driver' => function($q) {
+                $q->select('id', 'customer_id', 'service_id', 'job_providing_date', 'job_providing_time', 'amount', 'job_status', 'payment_status', 'quick_book', 'truck_driver_id', 'skidsteer_driver_id', 'notes','created_at')->with(['truck_driver' => function($q) {
                         $q->select('id', 'first_name', 'last_name');
                     }, 'skidsteer_driver' => function($q) {
                         $q->select('id', 'first_name', 'last_name');
@@ -173,13 +173,13 @@ class ReportController extends Controller
                 })->orWhereHas('skidsteerDriverJobs', function($q) use($firstDay, $lastDay) {
                     $q->whereBetween('created_at', [$firstDay, $lastDay]);
                 })->where('id', 103)->select('id', 'first_name', 'last_name', 'created_at')->with(['truckDriverJobs' => function($q) {
-                        $q->select('id', 'customer_id', 'service_id', 'job_providing_date', 'job_providing_time', 'amount', 'job_status', 'payment_status', 'quick_book', 'truck_driver_id', 'skidsteer_driver_id', 'created_at')->with(['customer' => function($q) {
+                        $q->select('id', 'customer_id', 'service_id', 'job_providing_date', 'job_providing_time', 'notes', 'amount', 'job_status', 'payment_status', 'quick_book', 'truck_driver_id', 'skidsteer_driver_id', 'created_at')->with(['customer' => function($q) {
                                 $q->select('id', 'first_name', 'last_name');
                             }, 'service' => function($query) {
                                 $query->select('id', 'service_name');
                             }]);
                     }, 'skidsteerDriverJobs' => function($q) {
-                        $q->select('id', 'customer_id', 'service_id', 'job_providing_date', 'job_providing_time', 'amount', 'job_status', 'payment_status', 'quick_book', 'truck_driver_id', 'skidsteer_driver_id', 'created_at')->with(['customer' => function($q) {
+                        $q->select('id', 'customer_id', 'service_id', 'job_providing_date', 'job_providing_time', 'notes', 'amount', 'job_status', 'payment_status', 'quick_book', 'truck_driver_id', 'skidsteer_driver_id', 'created_at')->with(['customer' => function($q) {
                                 $q->select('id', 'first_name', 'last_name');
                             }, 'service' => function($query) {
                                 $query->select('id', 'service_name');
@@ -269,7 +269,7 @@ class ReportController extends Controller
             $q->whereBetween('created_at', [$firstDay, $lastDay]);
         })->select('id', 'first_name', 'last_name', 'created_at')
         ->with(['jobs' => function($query) {
-            $query->select('id', 'customer_id', 'job_providing_date', 'job_providing_time', 'amount', 'job_status', 'payment_status', 'payment_mode', 'card_id', 'created_at')->with(['cardDetail' => function($q) {
+            $query->select('id', 'customer_id', 'job_providing_date', 'job_providing_time', 'notes', 'amount', 'job_status', 'payment_status', 'payment_mode', 'card_id', 'created_at')->with(['cardDetail' => function($q) {
                     $q->select('id', 'card_number', 'card_brand');
                 }]);
             }])
@@ -350,7 +350,7 @@ class ReportController extends Controller
     {
         $jobTransactions = Job::whereBetween('created_at', [$firstDay, $lastDay])
         ->whereHas('customer')
-        ->select('id', 'customer_id', 'job_providing_date', 'job_providing_time', 'amount', 'job_status', 'payment_status', 'payment_mode', 'card_id', 'created_at')
+        ->select('id', 'customer_id', 'job_providing_date', 'job_providing_time', 'notes', 'amount', 'job_status', 'payment_status', 'payment_mode', 'card_id', 'created_at')
         ->with(['customer' => function($query) {
                 $query->select('id', 'first_name', 'last_name');
             }, 'cardDetail' => function($q) {

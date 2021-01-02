@@ -24,7 +24,7 @@
               <thead>
                 <tr>
                   <th class="text-left">
-                    Job# <br />
+                    Pickup# <br />
                     Date
                   </th>
                   <th class="text-left">Time <br />Labor</th>
@@ -46,40 +46,43 @@
                       {{ report.first_name + " " + report.last_name }}
                     </td>
                   </tr> -->
-
-                  <tr v-for="(job, index2) in report.jobs">
-                    <td>
-                      #JOB100{{ job.id }} <br />{{
-                        job.job_providing_date | formatDateLic
-                      }}
-                    </td>
-                    <td></td>
-                    <td>InProgress <br />$0.00</td>
-                    <td>${{ job.amount }}</td>
-                    <td>{{ job.service ? job.service.service_name : "" }}</td>
-                    <td v-if="reportType == 2">
-                      {{ job.truck_driver ? job.truck_driver.first_name : "" }}
-                      {{
-                        job.truck_driver
-                          ? job.truck_driver.last_name + ", "
-                          : ""
-                      }}
-                      {{
-                        job.skidsteer_driver
-                          ? job.skidsteer_driver.first_name
-                          : ""
-                      }}
-                      {{
-                        job.skidsteer_driver
-                          ? job.skidsteer_driver.last_name
-                          : ""
-                      }}
-                    </td>
-                    <td v-if="reportType == 1">
-                      {{ report.first_name + " " + report.last_name }}
-                    </td>
-                    <td></td>
-                  </tr>
+                  <template v-if="report.jobs">
+                    <tr v-for="(job, index2) in report.jobs">
+                      <td>
+                        #PICKUP100{{ job.id }} <br />{{
+                          job.job_providing_date | formatDateLic
+                        }}
+                      </td>
+                      <td></td>
+                      <td>InProgress <br />$0.00</td>
+                      <td>${{ job.amount }}</td>
+                      <td>{{ job.service ? job.service.service_name : "" }}</td>
+                      <td v-if="reportType == 2">
+                        {{
+                          job.truck_driver ? job.truck_driver.first_name : ""
+                        }}
+                        {{
+                          job.truck_driver
+                            ? job.truck_driver.last_name + ", "
+                            : ""
+                        }}
+                        {{
+                          job.skidsteer_driver
+                            ? job.skidsteer_driver.first_name
+                            : ""
+                        }}
+                        {{
+                          job.skidsteer_driver
+                            ? job.skidsteer_driver.last_name
+                            : ""
+                        }}
+                      </td>
+                      <td v-if="reportType == 1">
+                        {{ report.first_name + " " + report.last_name }}
+                      </td>
+                      <td>{{ job.notes }}</td>
+                    </tr>
+                  </template>
                 </template>
               </tbody>
             </table>
@@ -162,6 +165,11 @@ export default {
           //handle response
           if (response.status) {
             this.reportData = response.data;
+            if ($.fn.dataTable.isDataTable("#hauler-table")) {
+        console.log('in');
+        $("#hauler-table").DataTable().destroy();
+        this.tableAdd();
+      }
           } else {
             this.$toast.open({
               message: response.message,
@@ -171,12 +179,48 @@ export default {
           }
         });
     },
+    tableAdd(){
+      $(document).ready(function () {
+        if (!$.fn.dataTable.isDataTable("#hauler-table")) {
+          $("#hauler-table").DataTable({
+            aoColumnDefs: [
+              {
+                bSortable: false,
+                aTargets: [-1, -2, -3, -4],
+              },
+            ],
+            oLanguage: {
+              sSearch: "",
+              sEmptyTable: "No reports till now.",
+              infoEmpty: "No reports found.",
+            },
+            drawCallback: function (settings) {
+              $(".dataTables_paginate .paginate_button.previous").html(
+                $("#table-chevron-left").html()
+              );
+              $(".dataTables_paginate .paginate_button.next").html(
+                $("#table-chevron-right").html()
+              );
+            },
+          });
+          $(".dataTables_filter").append($("#search-input-icon").html());
+          $(".dataTables_filter input").attr("placeholder", "Search Customers");
+          $(".dataTables_paginate .paginate_button.previous").html(
+            $("#table-chevron-left").html()
+          );
+          $(".dataTables_paginate .paginate_button.next").html(
+            $("#table-chevron-right").html()
+          );
+        }
+        $(".table-main").css({ opacity: 1 });
+      });
+    }
   },
   updated() {
     setTimeout(function () {
       $(document).ready(function () {
-        if (!$.fn.dataTable.isDataTable(".table-main")) {
-          $(".table-main").DataTable({
+        if (!$.fn.dataTable.isDataTable("#hauler-table")) {
+          $("#hauler-table").DataTable({
             aoColumnDefs: [
               {
                 bSortable: false,

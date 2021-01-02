@@ -24,7 +24,7 @@
               <thead>
                 <tr>
                   <th class="text-left">Date & Time</th>
-                  <th class="text-left">Job#</th>
+                  <th class="text-left">Pickup#</th>
                   <th class="text-left">Customer</th>
                   <th class="text-left">Transaction Type</th>
                   <th class="text-left">Card <br />Total</th>
@@ -38,16 +38,19 @@
                       {{ report.first_name + " " + report.last_name }}
                     </td>
                   </tr> -->
-
-                    <tr v-for="(job, index2) in report.jobs">
-                      <td>
-                        {{ job.job_providing_date | formatDateLic }}
-                      </td>
-                      <td>#JOB100{{ job.id }}</td>
-                      <td>{{ report.first_name + " " + report.last_name }}</td>
-                      <td>ONLINE</td>
-                      <td>${{ job.amount }}</td>
-                    </tr>
+                    <template v-if="report.jobs">
+                      <tr v-for="(job, index2) in report.jobs">
+                        <td>
+                          {{ job.job_providing_date | formatDateLic }}
+                        </td>
+                        <td>#PICKUP100{{ job.id }}</td>
+                        <td>
+                          {{ report.first_name + " " + report.last_name }}
+                        </td>
+                        <td>ONLINE</td>
+                        <td>${{ job.amount }}</td>
+                      </tr>
+                    </template>
                   </template>
                 </template>
 
@@ -58,12 +61,11 @@
                       {{ report.first_name + " " + report.last_name }}
                     </td>
                   </tr> -->
-
                     <tr>
                       <td>
                         {{ report.job_providing_date | formatDateLic }}
                       </td>
-                      <td>#JOB100{{ report.id }}</td>
+                      <td>#PICKUP100{{ report.id }}</td>
                       <td>
                         {{
                           report.customer.first_name +

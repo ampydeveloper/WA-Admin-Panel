@@ -171,7 +171,7 @@
         </div>
       </div>
 
-      <div class="col-sm-6 reports-list">
+      <!-- <div class="col-sm-6 reports-list">
         <div class="reports-list-in">
           <h4>Payroll</h4>
           <div class="report-each">
@@ -214,9 +214,9 @@
             </ul>
           </div>
         </div>
-      </div>
+      </div> -->
 
-      <div class="col-sm-6 reports-list">
+      <!-- <div class="col-sm-6 reports-list">
         <div class="reports-list-in">
           <h4>Mechanic Reports</h4>
           <div class="report-each">
@@ -239,9 +239,9 @@
             </ul>
           </div>
         </div>
-      </div>
+      </div> -->
 
-      <div class="col-sm-6 reports-list">
+      <!-- <div class="col-sm-6 reports-list">
         <div class="reports-list-in">
           <h4>Tax</h4>
           <div class="report-each">
@@ -265,7 +265,7 @@
             </ul>
           </div>
         </div>
-      </div>
+      </div> -->
 
       <div class="col-sm-6 reports-list">
         <div class="reports-list-in">
@@ -412,7 +412,7 @@
         </div>
       </div>
 
-      <div class="col-sm-6 reports-list">
+      <!-- <div class="col-sm-6 reports-list">
         <div class="reports-list-in">
           <h4>List Reports</h4>
           <div class="report-each">
@@ -449,9 +449,9 @@
             </ul>
           </div>
         </div>
-      </div>
+      </div> -->
 
-      <div class="col-sm-6 reports-list">
+      <!-- <div class="col-sm-6 reports-list">
         <div class="reports-list-in">
           <h4>Day Sheet</h4>
           <div class="report-each">
@@ -494,7 +494,7 @@
             </ul>
           </div>
         </div>
-      </div>
+      </div> -->
     </v-row>
 
     <v-dialog v-model="dialog" width="620">
