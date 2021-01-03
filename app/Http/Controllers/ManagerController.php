@@ -485,7 +485,7 @@ class ManagerController extends Controller {
                         DB::commit();
                         return response()->json([
                                     'status' => true,
-                                    'message' => 'Successfully created manager.',
+                                    'message' => 'Dispatch created successfully.',
                                     'data' => []
                                         ], 200);
                     }
@@ -592,7 +592,7 @@ class ManagerController extends Controller {
                         }
                         return response()->json([
                                     'status' => true,
-                                    'message' => 'Manager details updated successfully.',
+                                    'message' => 'Dispatch details updated successfully.',
                                     'data' => []
                                         ], 200);
                     }
@@ -660,7 +660,7 @@ class ManagerController extends Controller {
                 User::whereId($request->manager_id)->delete();
                 return response()->json([
                             'status' => true,
-                            'message' => 'Manager deleted successfully.',
+                            'message' => 'Dispatch deleted successfully.',
                             'data' => []
                                 ], 200);
             } catch (\Exception $e) {

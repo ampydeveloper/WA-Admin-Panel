@@ -26,7 +26,7 @@
               <span class="det-half">
                 <template v-for="(image, index) in jobImages">
                   <img
-                    :src="'http://wa.customer.leagueofclicks.com/' + image"
+                    :src="image" class="dis-chat-img"
                   />
                 </template>
               </span>

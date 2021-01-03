@@ -18,7 +18,7 @@
             >
               <thead>
                 <tr>
-                  <th class="text-left">Job#</th>
+                  <th class="text-left">Pickup#</th>
                   <th class="text-left">Job Date</th>
                   <th class="text-left">Customer</th>
                   <th class="text-left">Activity</th>
@@ -28,7 +28,7 @@
               </thead>
               <tbody>
                 <tr v-for="(report, index) in reportData">
-                  <td>#JOB100{{ report.id }}</td>
+                  <td>#PICKUP100{{ report.id }}</td>
                   <td>
                     {{ report.job_providing_date | formatDateLic }}
                   </td>
