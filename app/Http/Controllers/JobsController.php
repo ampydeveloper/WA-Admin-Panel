@@ -491,12 +491,13 @@ class JobsController extends Controller {
         }
     }
 
-    public function dispatches(Request $request) {
+    public function dispatches(Request $request, $dt=null) {
         if ($request->user()->role_id == config('constant.roles.Admin') || $request->user()->role_id == config('constant.roles.Admin_Manager')) {
+            if($dt == null){ $dt = date("Y-m-d"); }
             return response()->json([
                         'status' => true,
                         'message' => 'Dispatches',
-                        'data' => Job::where('job_status', config('constant.job_status.assigned'))->where('job_providing_date', date("Y-m-d"))->with("customer", "manager", "farm", "service", "truck", "skidsteer", "truck_driver", "skidsteer_driver")->get()
+                        'data' => Job::where('job_status', config('constant.job_status.assigned'))->where('job_providing_date', $dt)->with("customer", "manager", "farm", "service", "truck", "skidsteer", "truck_driver", "skidsteer_driver")->get()
                             ], 200);
         } else {
             return response()->json([

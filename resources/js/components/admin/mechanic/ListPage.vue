@@ -195,6 +195,7 @@ export default {
           }
 
           this.managers = managersData;
+          this.initDt();
         } else {
           this.$toast.open({
             message: response.message,
@@ -265,41 +266,41 @@ export default {
     selectTr: function () {
       this.isActive = !this.isActive;
     },
-  },
-  updated() {
-    setTimeout(function () {
-      $(document).ready(function () {
-        if (!$.fn.dataTable.isDataTable("#admin-table")) {
-          $("#admin-table").DataTable({
-            oLanguage: {
-              sSearch: "",
-              sEmptyTable: "No mechanic till now.",
-              sInfoEmpty: "No mechanic found.",
-            },
-            drawCallback: function (settings) {
-              $(".dataTables_paginate .paginate_button.previous").html(
-                $("#table-chevron-left").html()
-              );
-              $(".dataTables_paginate .paginate_button.next").html(
-                $("#table-chevron-right").html()
-              );
-            },
-          });
-        }
-        $(".dataTables_filter").append($("#search-input-icon").html());
-        $(".dataTables_filter input").attr(
-          "placeholder",
-          "Search Mechanic by Name / Email"
-        );
-        $(".dataTables_paginate .paginate_button.previous").html(
-          $("#table-chevron-left").html()
-        );
-        $(".dataTables_paginate .paginate_button.next").html(
-          $("#table-chevron-right").html()
-        );
-        $("#admin-table").css({ opacity: 1 });
-      });
-    }, 1000);
-  },
+    initDt: () => {
+      setTimeout(function () {
+        $(document).ready(function () {
+          if (!$.fn.dataTable.isDataTable("#admin-table")) {
+            $("#admin-table").DataTable({
+              oLanguage: {
+                sSearch: "",
+                sEmptyTable: "No mechanic till now.",
+                sInfoEmpty: "No mechanic found.",
+              },
+              drawCallback: function (settings) {
+                $(".dataTables_paginate .paginate_button.previous").html(
+                  $("#table-chevron-left").html()
+                );
+                $(".dataTables_paginate .paginate_button.next").html(
+                  $("#table-chevron-right").html()
+                );
+              },
+            });
+          }
+          $(".dataTables_filter").append($("#search-input-icon").html());
+          $(".dataTables_filter input").attr(
+            "placeholder",
+            "Search Mechanic by Name / Email"
+          );
+          $(".dataTables_paginate .paginate_button.previous").html(
+            $("#table-chevron-left").html()
+          );
+          $(".dataTables_paginate .paginate_button.next").html(
+            $("#table-chevron-right").html()
+          );
+          $("#admin-table").css({ opacity: 1 });
+        });
+      }, 1000);
+    }
+  }
 };
 </script>

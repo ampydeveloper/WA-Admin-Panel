@@ -59,8 +59,33 @@
           <v-col cols="12" md="12">
             <div class="dispatch-top">
               <div class="form-group">
-                <label>Date</label>
-                <span>21/06/2020</span>
+            
+                  <v-menu
+                        v-model="menu2"
+                        :close-on-content-click="false"
+                        :nudge-right="40"
+                        transition="scale-transition"
+                        offset-y
+                        min-width="290px"
+                      >
+                        <template v-slot:activator="{ on }">
+                          <v-text-field
+                            v-model="date"
+                            prepend-icon="event"
+                            readonly
+                            v-on="on"
+                            required
+                            label="Select Date"
+                            placeholder
+                          ></v-text-field>
+                        </template>
+                        <v-date-picker
+                          v-model="date"
+                          @input="menu2 = false"
+                          @change='getResults'
+                        ></v-date-picker>
+                      </v-menu>
+              
               </div>
             </div>
 
@@ -78,11 +103,11 @@
                   <th>Actions</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr v-for="(job, index) in alljobs">
+              <tbody class="tbody-main">
+                <tr v-for="(job, index) in alljobs" :key='`disp${index}${job.id}`'>
                   <td>
                     <span class="basic-info">{{
-                      job.start_date | formatDateLic
+                      job.job_providing_date | formatDateLic
                     }}</span>
                     <span class="basic-big">#JOB100{{ job.id }}</span>
                    
@@ -91,90 +116,69 @@
                     }}</span>
                   </td>
                   <td>
-                    <span class="basic-big">{{ job.customer.first_name }}</span>
+                    <span class="basic-big">{{ job.customer != null ? job.customer.first_name : '' }}</span>
                     <span class="basic-grey"
-                      >{{ job.manager.first_name }} ({{
-                        job.manager.email
+                      >{{ job.manager != null ? job.manager.first_name : '' }} ({{
+                        job.manager != null ? job.manager.email : ''
                       }})</span
                     >
-                    <span class="basic-grey"
+                    <span class="basic-grey" v-if='job.manager!=null'
                       >{{ job.manager.address }} {{ job.manager.city }}
                       {{ job.manager.state }} {{ job.manager.country }}
                       {{ job.manager.zip_code }}</span
                     >
                   </td>
                   <td class="job-col-body">
-                    <span class="basic-grey-label-half">Truck Driver</span>
+                    <span class="basic-grey-label-half dispatch-g-span">Truck Driver</span>
                     <v-select
                       :items="truck.drivers"
                       v-model="job.truck_driver_id"
-                      class="graph-select-sl"
+                      class="graph-select-sl dispatch-select"
                       item-text="first_name"
                       item-value="id"
                       outlined
                       dense
                       @change="update($event, 'truckDriver', job.id)"
                     ></v-select>
-                    <!-- <span class="basic-info-half" v-if="job.truck_driver">{{
-                      job.truck_driver.first_name
-                    }}</span> -->
-                    <!-- <span class="basic-info-half" v-if="!job.truck_driver"
-                      >Not Assigned</span
-                    > -->
                     <div class="clearfix"></div>
-                    <span class="basic-grey-label-half">Truck</span>
+                    <span class="basic-grey-label-half dispatch-g-span">Truck</span>
                     <v-select
                       :items="truck.vehicles"
                       v-model="job.truck_id"
-                      class="graph-select-sl"
+                      class="graph-select-sl dispatch-select"
                       item-text="truck_number"
                       item-value="id"
                       outlined
                       dense
                       @change="update($event, 'truck', job.id)"
                     ></v-select>
-                    <!-- <span class="basic-info-half" v-if="job.truck">{{
-                      job.truck.truck_number
-                    }}</span>
-                    <span class="basic-info-half" v-if="!job.truck"
-                      >Not Assigned</span
-                    > -->
+                    
                     <div class="clearfix"></div>
-                    <span class="basic-grey-label-half">Skidsteer Driver</span>
+                    <span class="basic-grey-label-half dispatch-g-span">Skidsteer Driver</span>
                     <v-select
                       :items="skidsteer.drivers"
                       v-model="job.skidsteer_driver_id"
-                      class="graph-select-sl"
+                      class="graph-select-sl dispatch-select"
                       item-text="first_name"
                       item-value="id"
                       outlined
                       dense
                       @change="update($event, 'skidsteerDriver', job.id)"
                     ></v-select>
-                    <!-- <span class="basic-info-half" v-if="job.skidsteer_driver">{{
-                      job.skidsteer_driver.first_name
-                    }}</span>
-                    <span class="basic-info-half" v-if="!job.skidsteer_driver"
-                      >Not Assigned</span
-                    > -->
+                  
                     <div class="clearfix"></div>
-                    <span class="basic-grey-label-half">Skidsteer</span>
+                    <span class="basic-grey-label-half dispatch-g-span">Skidsteer</span>
                     <v-select
                       :items="skidsteer.vehicles"
                       v-model="job.skidsteer_id"
-                      class="graph-select-sl"
+                      class="graph-select-sl dispatch-select"
                       item-text="truck_number"
                       item-value="id"
                       outlined
                       dense
                       @change="update($event, 'skidsteer', job.id)"
                     ></v-select>
-                    <!-- <span class="basic-info-half" v-if="job.skidsteer">{{
-                      job.skidsteer.truck_number
-                    }}</span>
-                    <span class="basic-info-half" v-if="!job.skidsteer"
-                      >Not Assigned</span
-                    > -->
+                   
                   </td>
                   <td class="job-col-body">
                     <span class="basic-grey-label-full">{{timeSlotsMapping[job.time_slots_id]}}</span>
@@ -253,6 +257,8 @@ export default {
       },
       alljobs: [],
       alldispatch: [],
+      menu2: false,
+      date: new Date().toISOString().substr(0, 10),
       selected:{
         driver:{
           truck: {},
@@ -497,11 +503,16 @@ export default {
     },
     getResults() {
       this.alljobs = [];
-      jobService.dispatchAllJoblist().then((response) => {
+      jobService.dispatchAllJoblist(this.date).then((response) => {
         //handle response
         if (response.status) {
+          if ($.fn.dataTable.isDataTable(".table-main")) {
+            $(".table-main").DataTable().destroy();
+            $(".tbody-main").html('');
+          }
           // console.log(response.data);
           this.alljobs = response.data;
+          this.initDt();
           // [...response.data].forEach((job) => {
           //   let did = 0;
           //   if(job.truck_driver.driver_type == 1){ //Truck Driver
@@ -554,44 +565,44 @@ export default {
           });
         }
       });
-    }
-  },
-  updated() {
-    setTimeout(function () {
-      $(document).ready(function () {
-        if (!$.fn.dataTable.isDataTable(".table-main")) {
-        $(".table-main").DataTable({
-          aoColumnDefs: [
-            {
-              bSortable: false,
-              aTargets: [-1],
-            },
-          ],
-          oLanguage: { sSearch: "" },
-          drawCallback: function (settings) {
+    },
+    initDt() {
+      setTimeout(function () {
+        $(document).ready(function () {
+          if (!$.fn.dataTable.isDataTable(".table-main")) {
+            $(".table-main").DataTable({
+              aoColumnDefs: [
+                {
+                  bSortable: false,
+                  aTargets: [-1],
+                },
+              ],
+              oLanguage: { sSearch: "" },
+              drawCallback: function (settings) {
+                $(".dataTables_paginate .paginate_button.previous").html(
+                  $("#table-chevron-left").html()
+                );
+                $(".dataTables_paginate .paginate_button.next").html(
+                  $("#table-chevron-right").html()
+                );
+              },
+            });
+              $(".dataTables_filter").append($("#search-input-icon").html());
+            $(".dataTables_filter input").attr(
+              "placeholder",
+              "Search Jobs by Job ID / Customer / Service"
+            );
             $(".dataTables_paginate .paginate_button.previous").html(
               $("#table-chevron-left").html()
             );
             $(".dataTables_paginate .paginate_button.next").html(
               $("#table-chevron-right").html()
             );
-          },
+            $(".table-main").css({ opacity: 1 });
+          }
         });
-          $(".dataTables_filter").append($("#search-input-icon").html());
-        $(".dataTables_filter input").attr(
-          "placeholder",
-          "Search Jobs by Job ID / Customer / Service"
-        );
-        $(".dataTables_paginate .paginate_button.previous").html(
-          $("#table-chevron-left").html()
-        );
-        $(".dataTables_paginate .paginate_button.next").html(
-          $("#table-chevron-right").html()
-        );
-        $(".table-main").css({ opacity: 1 });
-              }
-      });
-    }, 1000);
+      }, 500);
+    },
   },
 };
 </script>
