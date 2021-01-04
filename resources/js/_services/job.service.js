@@ -180,9 +180,9 @@ function deleteJob(data) {
       });
 
 }
-function dispatchAllJoblist() {
+function dispatchAllJoblist(dt) {
     return fetch(
-            this.apiUrl + `admin/dispatches`,
+            this.apiUrl + `admin/dispatches/${dt}`,
             requestOptions.get()
         )
         .then(handleResponse)

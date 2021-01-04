@@ -82,6 +82,7 @@
                         <v-date-picker
                           v-model="date"
                           @input="menu2 = false"
+                          @change='getResults'
                         ></v-date-picker>
                       </v-menu>
               
@@ -102,11 +103,11 @@
                   <th>Actions</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr v-for="(job, index) in alljobs">
+              <tbody class="tbody-main">
+                <tr v-for="(job, index) in alljobs" :key='`disp${index}${job.id}`'>
                   <td>
                     <span class="basic-info">{{
-                      job.start_date | formatDateLic
+                      job.job_providing_date | formatDateLic
                     }}</span>
                     <span class="basic-big">#JOB100{{ job.id }}</span>
                    
@@ -115,13 +116,13 @@
                     }}</span>
                   </td>
                   <td>
-                    <span class="basic-big">{{ job.customer.first_name }}</span>
+                    <span class="basic-big">{{ job.customer != null ? job.customer.first_name : '' }}</span>
                     <span class="basic-grey"
-                      >{{ job.manager.first_name }} ({{
-                        job.manager.email
+                      >{{ job.manager != null ? job.manager.first_name : '' }} ({{
+                        job.manager != null ? job.manager.email : ''
                       }})</span
                     >
-                    <span class="basic-grey"
+                    <span class="basic-grey" v-if='job.manager!=null'
                       >{{ job.manager.address }} {{ job.manager.city }}
                       {{ job.manager.state }} {{ job.manager.country }}
                       {{ job.manager.zip_code }}</span
@@ -256,8 +257,8 @@ export default {
       },
       alljobs: [],
       alldispatch: [],
-       menu2: false,
-         date: "",
+      menu2: false,
+      date: new Date().toISOString().substr(0, 10),
       selected:{
         driver:{
           truck: {},
@@ -502,11 +503,16 @@ export default {
     },
     getResults() {
       this.alljobs = [];
-      jobService.dispatchAllJoblist().then((response) => {
+      jobService.dispatchAllJoblist(this.date).then((response) => {
         //handle response
         if (response.status) {
+          if ($.fn.dataTable.isDataTable(".table-main")) {
+            $(".table-main").DataTable().destroy();
+            $(".tbody-main").html('');
+          }
           // console.log(response.data);
           this.alljobs = response.data;
+          this.initDt();
           // [...response.data].forEach((job) => {
           //   let did = 0;
           //   if(job.truck_driver.driver_type == 1){ //Truck Driver
@@ -559,44 +565,44 @@ export default {
           });
         }
       });
-    }
-  },
-  updated() {
-    setTimeout(function () {
-      $(document).ready(function () {
-        if (!$.fn.dataTable.isDataTable(".table-main")) {
-        $(".table-main").DataTable({
-          aoColumnDefs: [
-            {
-              bSortable: false,
-              aTargets: [-1],
-            },
-          ],
-          oLanguage: { sSearch: "" },
-          drawCallback: function (settings) {
+    },
+    initDt() {
+      setTimeout(function () {
+        $(document).ready(function () {
+          if (!$.fn.dataTable.isDataTable(".table-main")) {
+            $(".table-main").DataTable({
+              aoColumnDefs: [
+                {
+                  bSortable: false,
+                  aTargets: [-1],
+                },
+              ],
+              oLanguage: { sSearch: "" },
+              drawCallback: function (settings) {
+                $(".dataTables_paginate .paginate_button.previous").html(
+                  $("#table-chevron-left").html()
+                );
+                $(".dataTables_paginate .paginate_button.next").html(
+                  $("#table-chevron-right").html()
+                );
+              },
+            });
+              $(".dataTables_filter").append($("#search-input-icon").html());
+            $(".dataTables_filter input").attr(
+              "placeholder",
+              "Search Jobs by Job ID / Customer / Service"
+            );
             $(".dataTables_paginate .paginate_button.previous").html(
               $("#table-chevron-left").html()
             );
             $(".dataTables_paginate .paginate_button.next").html(
               $("#table-chevron-right").html()
             );
-          },
+            $(".table-main").css({ opacity: 1 });
+          }
         });
-          $(".dataTables_filter").append($("#search-input-icon").html());
-        $(".dataTables_filter input").attr(
-          "placeholder",
-          "Search Jobs by Job ID / Customer / Service"
-        );
-        $(".dataTables_paginate .paginate_button.previous").html(
-          $("#table-chevron-left").html()
-        );
-        $(".dataTables_paginate .paginate_button.next").html(
-          $("#table-chevron-right").html()
-        );
-        $(".table-main").css({ opacity: 1 });
-              }
-      });
-    }, 1000);
+      }, 500);
+    },
   },
 };
 </script>

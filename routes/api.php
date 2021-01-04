@@ -61,7 +61,7 @@ Route::group(['prefix' => 'auth'], function () {
             Route::post('edit-profile', 'ManagerController@editProfile');
 
             //Dispatch
-            Route::get('dispatches', 'JobsController@dispatches');
+            Route::get('dispatches/{dt?}', 'JobsController@dispatches');
             Route::post('job-by-map', 'JobsController@jobByMap');
             Route::patch('update-driver-vehicle/{job_id}/{type}/{id}', 'JobsController@updateDriverVehicle');
 
