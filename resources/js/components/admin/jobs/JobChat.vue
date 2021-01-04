@@ -548,11 +548,18 @@ export default {
   updated() {
     const self = this;
     var messageContainerScroll;
-    setTimeout(function () {
+    $(function(){
+      console.log(document.getElementById("message-container"));
       messageContainerScroll = OverlayScrollbars(
-        document.querySelectorAll("#message-container"),
+        document.getElementById("message-container"),
         {}
       );
+    });
+    setTimeout(function () {
+      // messageContainerScroll = OverlayScrollbars(
+      //   document.getElementById("#message-container"),
+      //   {}
+      // );
 
       const socket = io.connect("https://wa.customer.leagueofclicks.com:3100", {
         secure: true,
@@ -617,14 +624,14 @@ export default {
         const message = messageInput.value;
         const userImage = $("#current-user-image").val();
         if (message != "") {
-          appendMessage(
-            '<div class="chat-msg">' +
-              `${message}` +
-              '</div><div class="chat-img"><img src="' +
-              `${userImage}` +
-              '"></div>',
-            "chat-receiver"
-          );
+          // appendMessage(
+          //   '<div class="chat-msg">' +
+          //     `${message}` +
+          //     '</div><div class="chat-img"><img src="' +
+          //     `${userImage}` +
+          //     '"></div>',
+          //   "chat-receiver"
+          // );
           socket.emit("send-chat-message", {
             message: message,
             job_id: jobId._value,
@@ -687,9 +694,9 @@ export default {
                 username: name._value,
               });
               messageContainerScroll.scroll([0, "100%"], 50, {
-            x: "",
-            y: "linear",
-          });
+                x: "",
+                y: "linear",
+              });
             },
             complete: function () {
               $("#image-file").val("");
@@ -698,7 +705,7 @@ export default {
           });
         }
       });
-    }, 5000);
+    }, 6000);
   },
 };
 </script>
