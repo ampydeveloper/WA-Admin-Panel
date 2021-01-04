@@ -230,7 +230,7 @@ export default {
 
 .slide-right label {
   font-size: 15px;
-  color: #c2c6dc;
+  /* color: #c2c6dc; */
   font-weight: 300;
 }
 
@@ -275,14 +275,14 @@ export default {
   height: 100vh;
 } */
 .login_txt h2 {
-  color: #ebeefd;
+  /* color: #ebeefd; */
   font-size: 18.48px;
   font-weight: 500;
   line-height: 1.2;
   margin-bottom: 15px;
 }
 .login_txt p {
-  color: #c2c6dc !important;
+  /* color: #c2c6dc !important; */
   font-size: 15px !important;
   font-weight: 300 !important;
   margin-bottom: 25px !important;
@@ -320,32 +320,35 @@ export default {
   top: 48%;
 }
 .v-text-field {
-  padding-top: 0px;
-  margin-top: 0px;
+  padding-top: 0px !important;
+  margin-top: 0px !important;
 }
 .v-input input {
   max-height: 38px;
-  border: 1px solid rgba(0, 0, 0, 0.2) !important;
+  /* border: 1px solid rgba(0, 0, 0, 0.2) !important; */
   border-radius: 5px;
   padding-left: 40px !important;
   font-size: 14px;
   font-weight: 300;
-  background: #19191a;
-  color: #c2c6dc !important;
+  /* background: #19191a; */
+  /* color: #c2c6dc !important; */
 }
 .v-input input::-webkit-input-placeholder {
-  color: #c2c6dc !important;
+  /* color: #c2c6dc !important; */
+  color: rgba(0, 0, 0, 0.4) !important;
 }
 
 .v-input input:-ms-input-placeholder {
-  color: #c2c6dc !important;
+  /* color: #c2c6dc !important; */
+  color: rgba(0, 0, 0, 0.4) !important;
 }
 
 .v-input input::placeholder {
-  color: #c2c6dc !important;
+  /* color: #c2c6dc !important; */
+  color: rgba(0, 0, 0, 0.4) !important;
 }
-.v-icon.v-icon{
-   color: #c2c6dc !important;
+.v-icon.v-icon {
+  color: #626262 !important;
 }
 .v-application .error--text {
   border: none;
@@ -381,14 +384,6 @@ export default {
 .custom_input {
   position: relative;
 }
-.custom_input .icons_custom {
-  position: absolute;
-  top: 11px;
-  left: 13px;
-  /* color: rgba(0, 0, 0, 0.4); */
-  color: #c2c6dc !important;
-  font-size: 10px;
-}
 .login_form .remember-me-div {
   padding: 0px;
 }
@@ -400,7 +395,7 @@ export default {
   letter-spacing: 0.01rem;
   font-family: Montserrat, Helvetica, Arial, sans-serif;
   padding-left: 0px;
-  color:#c2c6dc;
+  /* color: #c2c6dc; */
   font-size: 15px;
   font-weight: 300;
 }
@@ -428,10 +423,10 @@ export default {
 .forget .login-btn-div .btn_grp {
   padding: 0;
 }
-.login_form .login_box-outer {
+/* .login_form .login_box-outer {
   background: #000;
   color: #c2c6dc;
-}
+} */
 @media only screen and (max-width: 992px) {
   .img_bg_outside {
     display: none;

@@ -3397,7 +3397,7 @@ div#example_info {
 #app .chat-area {
     border-top: 0px solid #ebebeb;
     padding: 20px 20px 0px 20px;
-    height: 50vh;
+    // height: 50vh;
     min-height: 450px;
     background: #181819;
 
@@ -3433,6 +3433,13 @@ div#example_info {
     color: #fff;
     font-weight: 300;
     margin-right: 15px;
+}
+.chat-image-in {
+    max-width: 100%;
+}
+#app .chat-area .chat-msg.inc-img{
+    width: auto;
+    max-width: 60%;
 }
 
 #app .chat-area .chat-receiver .chat-msg:before {
@@ -3553,6 +3560,11 @@ div#example_info {
             color: #c2c6dc;
             font-size: 13px;
         }
+        input{
+            color: #c2c6dc !important;
+            padding-left: 15px !important;
+            background: #19191a;
+        }
     }
 }
 
@@ -3649,10 +3661,6 @@ div#example_info {
     text-transform: uppercase;
     font-weight: 700;
     border-bottom: 2px solid #c2c6dc;
-}
-
-.chat-image-in {
-    width: 100%;
 }
 
 .dispatch-select {

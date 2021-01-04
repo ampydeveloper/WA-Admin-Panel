@@ -176,9 +176,9 @@ export default {
 }
 .login_txt p {
   color: #2c2c2c;
-  font-size: 16px;
+  /* font-size: 16px;
   font-weight: 400;
-  margin-bottom: 10px;
+  margin-bottom: 10px; */
 }
 .sign_up {
   color: #2c2c2c;

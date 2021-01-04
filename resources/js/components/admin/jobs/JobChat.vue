@@ -79,6 +79,10 @@
               <span class="basic-grey-label-half">Total</span>
               <span class="det-half">${{ job.amount ? job.amount : "0" }}</span>
             </div>
+            <div class="clearfix">
+              <span class="basic-grey-label-half">Overhead Cost</span>
+              <span class="det-half">${{ job.overhead_cost ? job.overhead_cost : "0" }}</span>
+            </div>
           </div>
         </v-col>
 
@@ -183,7 +187,7 @@ export default {
 
     setTimeout(() => {
       this.getChatMessages();
-    }, 6000);
+    }, 10000);
     setTimeout(() => {
       this.getChatMembers();
     }, 1000);
@@ -484,6 +488,10 @@ export default {
             users[val.id] = val;
           });
 
+          response.data.admin_manager.forEach(function (val, index) {
+            users[val.id] = val;
+          });
+
           this.chatUsers = users;
         }
       });
@@ -503,13 +511,16 @@ export default {
                   var userImageLink =
                     environment.baseUrl + "/images/avatar.png";
                 }
+                var messageText;
                 if (val.message.indexOf("uploads") > -1) {
-                  var messageText =
+                  messageText =
                     '<img class="chat-image-in" src="' +
                     `${val.message}` +
                     '">';
+                    var imageClass = 'inc-img';
                 } else {
-                  var messageText = val.message;
+                  messageText = val.message;
+                  var imageClass = '';
                 }
                 const messageElement = document.createElement("div");
                 if (currentUserDetails.id == val.username) {
@@ -518,7 +529,7 @@ export default {
                   messageElement.className = "chat-sender";
                 }
                 messageElement.innerHTML =
-                  '<div class="chat-msg">' +
+                  '<div class="chat-msg '+imageClass+'">' +
                   `${messageText}` +
                   '</div><div class="chat-img"><img src="' +
                   `${userImageLink}` +
@@ -560,18 +571,21 @@ export default {
       const emitChannel = "chat-message"; //"chatmessage"+jobId
       socket.on(emitChannel, (data) => {
         const userImage = $("#current-user-image").val();
+         var messageText;
         if (data.message.message.indexOf("uploads") > -1) {
-          const messageText =
+           messageText =
             '<img class="chat-image-in" src="' +
-            `${environment.baseUrl + data.message.message}` +
+            `${data.message.message}` +
             '">';
+            var imageClass = 'inc-img';
         } else {
-          const messageText = data.message.message;
+           messageText = data.message.message;
+           var imageClass = '';
         }
         if (data.job_id == jobId._value) {
           if (data.name == name._value) {
             appendMessage(
-              '<div class="chat-msg">' +
+              '<div class="chat-msg '+imageClass+'">' +
                 `${messageText}` +
                 '</div><div class="chat-img"><img src="' +
                 `${userImage}` +
@@ -658,7 +672,7 @@ export default {
               const messageElement = document.createElement("div");
               messageElement.className = "chat-receiver"; //"chat-receiver"
               messageElement.innerHTML =
-                '<div class="chat-msg"><img class="chat-image-in" src="' +
+                '<div class="chat-msg inc-img"><img class="chat-image-in" src="' +
                 `${environment.baseUrl + result}` +
                 '"></div><div class="chat-img"><img src="' +
                 `${userImage}` +

@@ -152,10 +152,19 @@ class ChatController extends Controller {
         $all_admin2 = collect(array('admin' => $all_admin));
         $allChatMembers = $chatMembers2->merge($all_admin2);
 
+         $all_manager = User::where('role_id', config('constant.roles.Admin_Manager'))->select('id', 'first_name', 'user_image')->get();
+        foreach ($all_manager as $key => $manager) {
+            $all_manager[$key]->user_image = env('APP_URL') . '/' . $manager->user_image;
+        }
+        $allChatMembers2 = collect($allChatMembers);
+        $all_manager2 = collect(array('admin_manager' => $all_manager));
+        $allChatMembersTotal = $allChatMembers2->merge($all_manager2);
+
+        
         return response()->json([
                     'status' => true,
                     'message' => 'Chat members',
-                    'data' => $allChatMembers
+                    'data' => $allChatMembersTotal
                         ], 200);
     }
 
