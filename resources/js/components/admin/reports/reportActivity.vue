@@ -68,7 +68,7 @@
         </v-row>
       </v-container>
     </div>
-    <span id="table-chevron-left" class="d-none">
+    <!-- <span id="table-chevron-left" class="d-none">
       <chevron-left-icon size="1.5x" class="custom-class"></chevron-left-icon>
     </span>
     <span id="table-chevron-right" class="d-none">
@@ -78,7 +78,7 @@
       <span class="search-input-outer">
         <search-icon size="1.5x" class="custom-class"></search-icon>
       </span>
-    </span>
+    </span> -->
   </v-app>
 </template>
 
@@ -140,40 +140,41 @@ export default {
   },
   updated() {
     setTimeout(function () {
-      $(document).ready(function () {
-        if (!$.fn.dataTable.isDataTable(".table-main")) {
-          $(".table-main").DataTable({
-            aoColumnDefs: [
-              {
-                bSortable: false,
-                aTargets: [-1, -2, -3, -4],
-              },
-            ],
-            oLanguage: {
-              sSearch: "",
-              sEmptyTable: "No reports till now.",
-              infoEmpty: "No reports found.",
-            },
-            drawCallback: function (settings) {
-              $(".dataTables_paginate .paginate_button.previous").html(
-                $("#table-chevron-left").html()
-              );
-              $(".dataTables_paginate .paginate_button.next").html(
-                $("#table-chevron-right").html()
-              );
-            },
-          });
-          $(".dataTables_filter").append($("#search-input-icon").html());
-          $(".dataTables_filter input").attr("placeholder", "Search Activity");
-          $(".dataTables_paginate .paginate_button.previous").html(
-            $("#table-chevron-left").html()
-          );
-          $(".dataTables_paginate .paginate_button.next").html(
-            $("#table-chevron-right").html()
-          );
-        }
-        $(".table-main").css({ opacity: 1 });
-      });
+       $(".table-main").css({ opacity: 1 });
+  //     $(document).ready(function () {
+  //       if (!$.fn.dataTable.isDataTable(".table-main")) {
+  //         $(".table-main").DataTable({
+  //           aoColumnDefs: [
+  //             {
+  //               bSortable: false,
+  //               aTargets: [-1, -2, -3, -4],
+  //             },
+  //           ],
+  //           oLanguage: {
+  //             sSearch: "",
+  //             sEmptyTable: "No reports till now.",
+  //             infoEmpty: "No reports found.",
+  //           },
+  //           drawCallback: function (settings) {
+  //             $(".dataTables_paginate .paginate_button.previous").html(
+  //               $("#table-chevron-left").html()
+  //             );
+  //             $(".dataTables_paginate .paginate_button.next").html(
+  //               $("#table-chevron-right").html()
+  //             );
+  //           },
+  //         });
+  //         $(".dataTables_filter").append($("#search-input-icon").html());
+  //         $(".dataTables_filter input").attr("placeholder", "Search Activity");
+  //         $(".dataTables_paginate .paginate_button.previous").html(
+  //           $("#table-chevron-left").html()
+  //         );
+  //         $(".dataTables_paginate .paginate_button.next").html(
+  //           $("#table-chevron-right").html()
+  //         );
+  //       }
+  //       $(".table-main").css({ opacity: 1 });
+  //     });
     }, 1000);
   },
 };

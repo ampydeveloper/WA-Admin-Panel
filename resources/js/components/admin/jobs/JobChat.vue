@@ -25,9 +25,7 @@
               <span class="basic-grey-label-half">Images</span>
               <span class="det-half">
                 <template v-for="(image, index) in jobImages">
-                  <img
-                    :src="image" class="dis-chat-img"
-                  />
+                  <img :src="image" class="dis-chat-img" />
                 </template>
               </span>
             </div>
@@ -76,13 +74,16 @@
               <span class="det-half">{{ job.notes }}</span>
             </div>
             <div class="clearfix">
+              <span class="basic-grey-label-half">Overhead Cost</span>
+              <span class="det-half"
+                >${{ job.overhead_cost ? job.overhead_cost : "0" }}</span
+              >
+            </div>
+            <div class="clearfix">
               <span class="basic-grey-label-half">Total</span>
               <span class="det-half">${{ job.amount ? job.amount : "0" }}</span>
             </div>
-            <div class="clearfix">
-              <span class="basic-grey-label-half">Overhead Cost</span>
-              <span class="det-half">${{ job.overhead_cost ? job.overhead_cost : "0" }}</span>
-            </div>
+            
           </div>
         </v-col>
 
@@ -517,10 +518,10 @@ export default {
                     '<img class="chat-image-in" src="' +
                     `${val.message}` +
                     '">';
-                    var imageClass = 'inc-img';
+                  var imageClass = "inc-img";
                 } else {
                   messageText = val.message;
-                  var imageClass = '';
+                  var imageClass = "";
                 }
                 const messageElement = document.createElement("div");
                 if (currentUserDetails.id == val.username) {
@@ -529,7 +530,9 @@ export default {
                   messageElement.className = "chat-sender";
                 }
                 messageElement.innerHTML =
-                  '<div class="chat-msg '+imageClass+'">' +
+                  '<div class="chat-msg ' +
+                  imageClass +
+                  '">' +
                   `${messageText}` +
                   '</div><div class="chat-img"><img src="' +
                   `${userImageLink}` +
@@ -571,41 +574,51 @@ export default {
       const emitChannel = "chat-message"; //"chatmessage"+jobId
       socket.on(emitChannel, (data) => {
         const userImage = $("#current-user-image").val();
-         var messageText;
+        var messageText;
         if (data.message.message.indexOf("uploads") > -1) {
-           messageText =
+          messageText =
             '<img class="chat-image-in" src="' +
             `${data.message.message}` +
             '">';
-            var imageClass = 'inc-img';
+          var imageClass = "inc-img";
         } else {
-           messageText = data.message.message;
-           var imageClass = '';
+          messageText = data.message.message;
+          var imageClass = "";
         }
         if (data.job_id == jobId._value) {
           if (data.name == name._value) {
-            appendMessage(
-              '<div class="chat-msg '+imageClass+'">' +
-                `${messageText}` +
-                '</div><div class="chat-img"><img src="' +
-                `${userImage}` +
-                '"></div>',
-              "chat-receiver"
-            );
+            if ($("." + data.message_id).length == 0 && $("." + data.message.check_string).length == 0) {
+              appendMessage(
+                '<div class="chat-msg ' +
+                  data.message_id + 
+                  " " +
+                  imageClass +
+                  '">' +
+                  `${messageText}` +
+                  '</div><div class="chat-img"><img src="' +
+                  `${userImage}` +
+                  '"></div>',
+                "chat-receiver"
+              );
+            }
           } else {
             if (typeof chatUsersList[data.name] != "undefined") {
               var userImageLink = chatUsersList[data.name].user_image;
             } else {
               var userImageLink = environment.baseUrl + "/images/avatar.png";
             }
-            appendMessage(
-              '<div class="chat-msg">' +
-                `${messageText}` +
-                '</div><div class="chat-img"><img src="' +
-                `${userImageLink}` +
-                '"></div>',
-              "chat-sender"
-            );
+            if ($("." + data.message_id).length == 0) {
+              appendMessage(
+                '<div class="chat-msg ' +
+                  data.message_id + " " + imageClass +
+                  '">' +
+                  `${messageText}` +
+                  '</div><div class="chat-img"><img src="' +
+                  `${userImageLink}` +
+                  '"></div>',
+                "chat-sender"
+              );
+            }
           }
           messageContainerScroll.scroll([0, "100%"], 50, {
             x: "",
@@ -616,9 +629,10 @@ export default {
       $(document).on("submit", "#send-container", function (e) {
         const message = messageInput.value;
         const userImage = $("#current-user-image").val();
+        const check_string = Math.random().toString(36).substring(3);
         if (message != "") {
           appendMessage(
-            '<div class="chat-msg">' +
+            '<div class="chat-msg '+check_string+'">' +
               `${message}` +
               '</div><div class="chat-img"><img src="' +
               `${userImage}` +
@@ -629,6 +643,7 @@ export default {
             message: message,
             job_id: jobId._value,
             username: name._value,
+            check_string: check_string,
           });
           messageInput.value = "";
           $("#send-button").attr("disabled", false);
@@ -655,7 +670,7 @@ export default {
         if ($this.val() != "" && !self.fired) {
           self.fired = true;
           const currentUser = authenticationService.currentUserValue || {};
-
+const userImage = $("#current-user-image").val();
           var imageData = new FormData();
           imageData.append("uploadImage", $("#image-file").prop("files")[0]);
           $.ajax({
@@ -669,10 +684,11 @@ export default {
             processData: false,
             type: "POST",
             success: function (result) {
+              var check_string = Math.random().toString(36).substring(3);
               const messageElement = document.createElement("div");
               messageElement.className = "chat-receiver"; //"chat-receiver"
               messageElement.innerHTML =
-                '<div class="chat-msg inc-img"><img class="chat-image-in" src="' +
+                '<div class="chat-msg inc-img '+check_string+'"><img class="chat-image-in" src="' +
                 `${environment.baseUrl + result}` +
                 '"></div><div class="chat-img"><img src="' +
                 `${userImage}` +
@@ -681,15 +697,17 @@ export default {
                 .find("#message-container")
                 .find(".os-content")
                 .prepend(messageElement);
+                
               socket.emit("send-chat-message", {
                 message: environment.baseUrl + result,
                 job_id: jobId._value,
                 username: name._value,
+                check_string: check_string,
               });
               messageContainerScroll.scroll([0, "100%"], 50, {
-            x: "",
-            y: "linear",
-          });
+                x: "",
+                y: "linear",
+              });
             },
             complete: function () {
               $("#image-file").val("");

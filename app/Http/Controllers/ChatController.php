@@ -18,7 +18,9 @@ class ChatController extends Controller {
     public function jobChat(Request $request) {
         $data = array(
             'jobId' => $request->jobId,
+            'skip' => isset($request->skip)?$request->skip:0,
         );
+      
         $postData = json_encode($data);
         $ch = curl_init();
 //        curl_setopt($ch, CURLOPT_URL, "https://wa.customer.leagueofclicks.com/:" . env('SOCKET_SERVER_PORT') . "/job-chat");
