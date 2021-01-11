@@ -10,50 +10,42 @@ use Illuminate\Support\Facades\File;
 class ImageController extends Controller {
 
     public function uploadImage(Request $request) {
+//        
         //set path blank initially
-        $file = "";
+        $imageName = "";
         if ($request->uploadImage != null && $request->uploadImage != '') {
-            //check if directory exist if not create one
-            $path = public_path() . '/uploads';
-            if (!file_exists($path)) {
-                mkdir($path, 0777, true);
-            }
+
             $cover = $request->file('uploadImage');
             $extension = $cover->getClientOriginalExtension();
             $file = $cover->getFilename() . '.' . $extension;
 
-            if (!Storage::disk('public')->put($cover->getFilename() . '.' . $extension, File::get($cover))) {
-                $file = "";
-            } else {
-                $file = 'uploads/' . $file;
+            if (Storage::disk('public')->put($file, file_get_contents($cover))) {
+                $imageName = config('constant.base_url') . '/'. $file;
             }
         }
-        return $file;
+        return $imageName;
+        
+        
+        
     }
 
     public function uploadImageFile(Request $request) {
         //set path blank initially
-        $file = "";
+        $imageName = "";
         if ($request->uploadImage != null && $request->uploadImage != '') {
-            //check if directory exist if not create one
-            $path = public_path() . '/uploads';
-            if (!file_exists($path)) {
-                mkdir($path, 0777, true);
-            }
+
             $cover = $request->file('uploadImage');
             $extension = $cover->getClientOriginalExtension();
             $file = $cover->getFilename() . '.' . $extension;
-
-            if (!Storage::disk('public')->put($cover->getFilename() . '.' . $extension, File::get($cover))) {
-                $file = "";
-            } else {
-                $file = 'uploads/' . $file;
+            
+            if(Storage::disk('public')->put($file, file_get_contents($cover))) {
+                $imageName = config('constant.base_url').'/'.$file;
             }
         }
         return response()->json([
                     'status' => true,
                     'message' => 'Image Upload',
-                    'data' => $file
+                    'data' => $imageName
                         ], 200);
     }
 

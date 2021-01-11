@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'base_url' => 'http://wellington.leagueofclicks.com/uploads',
     'roles' => [
         'Admin' => 1,
         'Admin_Manager' => 2,
