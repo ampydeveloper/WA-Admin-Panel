@@ -18,9 +18,9 @@ class ChatController extends Controller {
     public function jobChat(Request $request) {
         $data = array(
             'jobId' => $request->jobId,
-            'skip' => isset($request->skip)?$request->skip:0,
+            'skip' => isset($request->skip) ? $request->skip : 0,
         );
-      
+
         $postData = json_encode($data);
         $ch = curl_init();
 //        curl_setopt($ch, CURLOPT_URL, "https://wa.customer.leagueofclicks.com/:" . env('SOCKET_SERVER_PORT') . "/job-chat");
@@ -41,10 +41,10 @@ class ChatController extends Controller {
         } else {
             $messages = [];
         }
-        foreach($messages as $key=>$message){
-            $messages[$key]->job_id = (int)$message->job_id;
-            if(isset($message->username)){
-            $messages[$key]->username = (int)$message->username;
+        foreach ($messages as $key => $message) {
+            $messages[$key]->job_id = (int) $message->job_id;
+            if (isset($message->username)) {
+                $messages[$key]->username = (int) $message->username;
             }
         }
         return response()->json([
@@ -133,17 +133,17 @@ class ChatController extends Controller {
                         $q->select('id', 'first_name', 'user_image');
                     }])->first();
 
-        if(isset($chatMembers->customer->user_image)){
-        $chatMembers->customer->user_image = env('CUSTOMER_URL') . '/storage/user_images/' . $chatMembers->customer->id . '/' . $chatMembers->customer->user_image;
+        if (isset($chatMembers->customer->user_image)) {
+            $chatMembers->customer->user_image = env('CUSTOMER_URL') . '/storage/user_images/' . $chatMembers->customer->id . '/' . $chatMembers->customer->user_image;
         }
-        if(isset($chatMembers->manager->user_image)){
-        $chatMembers->manager->user_image = env('CUSTOMER_URL') . '/storage/user_images/' . $chatMembers->manager->id . '/' . $chatMembers->manager->user_image;
+        if (isset($chatMembers->manager->user_image)) {
+            $chatMembers->manager->user_image = env('CUSTOMER_URL') . '/storage/user_images/' . $chatMembers->manager->id . '/' . $chatMembers->manager->user_image;
         }
-        if(isset($chatMembers->skidsteer_driver->user_image)){
-        $chatMembers->skidsteer_driver->user_image = env('APP_URL') . '/' . $chatMembers->skidsteer_driver->user_image;
+        if (isset($chatMembers->skidsteer_driver->user_image)) {
+            $chatMembers->skidsteer_driver->user_image = env('APP_URL') . '/' . $chatMembers->skidsteer_driver->user_image;
         }
-        if(isset($chatMembers->truck_driver->user_image)){
-        $chatMembers->truck_driver->user_image = env('APP_URL') . '/' . $chatMembers->truck_driver->user_image;
+        if (isset($chatMembers->truck_driver->user_image)) {
+            $chatMembers->truck_driver->user_image = env('APP_URL') . '/' . $chatMembers->truck_driver->user_image;
         }
 
         $all_admin = User::where('role_id', config('constant.roles.Admin'))->select('id', 'first_name', 'user_image')->get();
@@ -154,7 +154,7 @@ class ChatController extends Controller {
         $all_admin2 = collect(array('admin' => $all_admin));
         $allChatMembers = $chatMembers2->merge($all_admin2);
 
-         $all_manager = User::where('role_id', config('constant.roles.Admin_Manager'))->select('id', 'first_name', 'user_image')->get();
+        $all_manager = User::where('role_id', config('constant.roles.Admin_Manager'))->select('id', 'first_name', 'user_image')->get();
         foreach ($all_manager as $key => $manager) {
             $all_manager[$key]->user_image = env('APP_URL') . '/' . $manager->user_image;
         }
@@ -162,11 +162,83 @@ class ChatController extends Controller {
         $all_manager2 = collect(array('admin_manager' => $all_manager));
         $allChatMembersTotal = $allChatMembers2->merge($all_manager2);
 
-        
+
         return response()->json([
                     'status' => true,
                     'message' => 'Chat members',
                     'data' => $allChatMembersTotal
+                        ], 200);
+    }
+
+    public function chatMembersAnd(Request $request) {
+        $chatMembers = Job::whereId($request->job_id)->select('id', 'customer_id', 'manager_id', 'truck_driver_id', 'skidsteer_driver_id')->with(['customer' => function($q) {
+                        $q->select('id', 'first_name', 'user_image');
+                    }])->with(['manager' => function($q) {
+
+                        $q->select('id', 'first_name', 'user_image');
+                    }])->with(['truck_driver' => function($q) {
+
+                        $q->select('id', 'first_name', 'user_image');
+                    }])->with(['skidsteer_driver' => function($q) {
+
+                        $q->select('id', 'first_name', 'user_image');
+                    }])->first();
+
+        if (isset($chatMembers->customer->user_image)) {
+            $chatMembers->customer->user_image = env('CUSTOMER_URL') . '/storage/user_images/' . $chatMembers->customer->id . '/' . $chatMembers->customer->user_image;
+        }
+        if (isset($chatMembers->manager->user_image)) {
+            $chatMembers->manager->user_image = env('CUSTOMER_URL') . '/storage/user_images/' . $chatMembers->manager->id . '/' . $chatMembers->manager->user_image;
+        }
+        if (isset($chatMembers->skidsteer_driver->user_image)) {
+            $chatMembers->skidsteer_driver->user_image = env('APP_URL') . '/' . $chatMembers->skidsteer_driver->user_image;
+        }
+        if (isset($chatMembers->truck_driver->user_image)) {
+            $chatMembers->truck_driver->user_image = env('APP_URL') . '/' . $chatMembers->truck_driver->user_image;
+        }
+
+        $all_admin = User::where('role_id', config('constant.roles.Admin'))->select('id', 'first_name', 'user_image')->get();
+        foreach ($all_admin as $key => $admin) {
+            $all_admin[$key]->user_image = env('APP_URL') . '/' . $admin->user_image;
+        }
+        $chatMembers2 = collect($chatMembers);
+        $all_admin2 = collect(array('admin' => $all_admin));
+        $allChatMembers = $chatMembers2->merge($all_admin2);
+
+        $all_manager = User::where('role_id', config('constant.roles.Admin_Manager'))->select('id', 'first_name', 'user_image')->get();
+        foreach ($all_manager as $key => $manager) {
+            $all_manager[$key]->user_image = env('APP_URL') . '/' . $manager->user_image;
+        }
+        $allChatMembers2 = collect($allChatMembers);
+        $all_manager2 = collect(array('admin_manager' => $all_manager));
+        $allChatMembersTotal = $allChatMembers2->merge($all_manager2);
+
+        foreach ($allChatMembersTotal['admin'] as $users) {
+            $all_users[$users->id] = $users;
+        }
+        foreach ($allChatMembersTotal['admin_manager'] as $users) {
+            $all_users[$users->id] = $users;
+        }
+        if (isset($chatMembers->customer)) {
+            $all_users[$chatMembers->customer->id] = $chatMembers->customer;
+        }
+        if (isset($chatMembers->manager)) {
+            $all_users[$chatMembers->manager->id] = $chatMembers->manager;
+        }
+        if (isset($chatMembers->skidsteer_driver)) {
+            $all_users[$chatMembers->skidsteer_driver->id] = $chatMembers->skidsteer_driver;
+        }
+        if (isset($chatMembers->truck_driver)) {
+            $all_users[$chatMembers->truck_driver->id] = $chatMembers->truck_driver;
+        }
+        foreach($all_users as $key=>$user){
+            $all_users[$key]['id'] = (int) $user['id'];
+        }
+//dd($all_users);
+        return response()->json([
+                    'status' => true,
+                    'message' => 'Chat members',
+                    'data' => $all_users
                         ], 200);
     }
 

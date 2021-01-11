@@ -43,6 +43,7 @@ Route::group(['prefix' => 'auth'], function () {
 
     Route::post('job-chat', 'ChatController@jobChat');
     Route::get('chat-members/{job_id}', 'ChatController@chatMembers');
+    Route::get('chat-members-and/{job_id}', 'ChatController@chatMembersAnd');
 
     //Auth full routes
     Route::group(['middleware' => 'auth:api'], function () {
@@ -53,6 +54,7 @@ Route::group(['prefix' => 'auth'], function () {
 
         //upload image
         Route::post('uploadImage', 'ImageController@uploadImage');
+        Route::post('uploadImageFile', 'ImageController@uploadImageFile');
         Route::delete('deleteImage', 'ImageController@deleteImage');
 
         Route::group(['prefix' => 'admin'], function () {
