@@ -836,7 +836,7 @@ class CustomerController extends Controller {
             'managers.*.manager_city' => 'required',
             'managers.*.manager_province' => 'required',
             'managers.*.manager_zipcode' => 'required',
-            'managers.*.manager_id_card' => 'required',
+            // 'managers.*.manager_id_card' => 'required',
         ]);
 
         if ($validator->fails()) {

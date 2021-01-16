@@ -83,6 +83,7 @@
               <span class="basic-grey-label-half">Total</span>
               <span class="det-half">${{ job.amount ? job.amount : "0" }}</span>
             </div>
+            
           </div>
         </v-col>
 
@@ -176,6 +177,7 @@ export default {
       userdata: "",
       chatUsers: "",
       baseUrl: environment.baseUrl,
+      skip:0,
     };
   },
   created() {
@@ -185,12 +187,12 @@ export default {
   mounted() {
     this.getResults();
 
-    setTimeout(() => {
-      this.getChatMessages();
-    }, 10000);
-    setTimeout(() => {
-      this.getChatMembers();
-    }, 1000);
+    // setTimeout(() => {
+    //   this.getChatMessages();
+    // }, 10000);
+    // setTimeout(() => {
+    //   this.getChatMembers();
+    // }, 1000);
 
     let socketScript = document.createElement("script");
     socketScript.setAttribute(
@@ -465,6 +467,7 @@ export default {
           this.manager = response.data.manager;
           this.farm = response.data.farm;
           this.jobImages = JSON.parse(response.data.images);
+          this.getChatMembers();
         } else {
           this.$toast.open({
             message: response.message,
@@ -493,6 +496,7 @@ export default {
           });
 
           this.chatUsers = users;
+          this.getChatMessages();
         }
       });
     },
@@ -500,7 +504,7 @@ export default {
       const chatUsersList = this.chatUsers;
       const currentUserDetails = this.userdata;
       jobService
-        .getJobChatMessages({ jobId: this.$route.params.id })
+        .getJobChatMessages({ jobId: this.$route.params.id, skip: this.skip })
         .then((response) => {
           if (response) {
             response.data.forEach(function (val, index) {
@@ -553,7 +557,16 @@ export default {
     setTimeout(function () {
       messageContainerScroll = OverlayScrollbars(
         document.querySelectorAll("#message-container"),
-        {}
+        {
+          callbacks: {
+            onScrollStop: (e) =>{
+              if(e.target.scrollTop < 10){
+                self.skip += 10;
+                self.getChatMessages();
+              }
+            }
+          }
+        }
       );
 
       const socket = io.connect("https://wa.customer.leagueofclicks.com:3100", {
@@ -612,9 +625,7 @@ export default {
             if ($("." + data.message_id).length == 0) {
               appendMessage(
                 '<div class="chat-msg ' +
-                  data.message_id +
-                  " " +
-                  imageClass +
+                  data.message_id + " " + imageClass +
                   '">' +
                   `${messageText}` +
                   '</div><div class="chat-img"><img src="' +
@@ -639,9 +650,7 @@ export default {
         const check_string = Math.random().toString(36).substring(3);
         if (message != "") {
           appendMessage(
-            '<div class="chat-msg ' +
-              check_string +
-              '">' +
+            '<div class="chat-msg '+check_string+'">' +
               `${message}` +
               '</div><div class="chat-img"><img src="' +
               `${userImage}` +
@@ -697,9 +706,7 @@ export default {
               const messageElement = document.createElement("div");
               messageElement.className = "chat-receiver"; //"chat-receiver"
               messageElement.innerHTML =
-                '<div class="chat-msg inc-img ' +
-                check_string +
-                '"><img class="chat-image-in" src="' +
+                '<div class="chat-msg inc-img '+check_string+'"><img class="chat-image-in" src="' +
                 `${environment.baseUrl + result}` +
                 '"></div><div class="chat-img"><img src="' +
                 `${userImage}` +
@@ -708,7 +715,7 @@ export default {
                 .find("#message-container")
                 .find(".os-content")
                 .prepend(messageElement);
-
+                
               socket.emit("send-chat-message", {
                 message: environment.baseUrl + result,
                 job_id: jobId._value,

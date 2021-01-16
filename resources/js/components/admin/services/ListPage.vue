@@ -132,7 +132,7 @@
                   <td v-if="item.time_taken_to_complete_service == 4">60 mins</td>
                   <td v-if="item.time_taken_to_complete_service == 5">75 mins</td>
                   <td v-if="item.time_taken_to_complete_service == 6">90 mins</td>
-                  <td v-if="item.time_taken_to_complete_service == null"></td>
+                  <td v-if="item.time_taken_to_complete_service == null || item.time_taken_to_complete_service == 0"></td>
                   <td class="action-col">
                     <router-link
                       v-if="isAdmin"

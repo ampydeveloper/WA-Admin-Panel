@@ -255,7 +255,8 @@ export default {
         };
         if (response.data.user_image) {
           this.cross = true;
-          this.avatar = this.imgUrl + response.data.user_image;
+          this.avatar = response.data.user_image;
+          if(!response.data.user_image.includes('http')) this.avatar = this.imgUrl + response.data.user_image
         } else {
           this.avatar = "";
         }

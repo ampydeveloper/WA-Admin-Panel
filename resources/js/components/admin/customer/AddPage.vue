@@ -430,7 +430,7 @@
                             required
                           ></v-text-field>
                         </div>
-                        <div class="col-xs-12 col-sm-6 col-md-4">
+                        <!-- <div class="col-xs-12 col-sm-6 col-md-4">
                           <v-text-field
                             v-model="input.manager_id_card"
                             :rules="[
@@ -454,7 +454,7 @@
                             v-on:processfile="handleProcessFile3"
                             v-on:processfilerevert="handleRemoveFile3(index)"
                           />
-                        </div>
+                        </div> -->
                       </v-row>
                     </div>
                   </template>
@@ -533,7 +533,7 @@ export default {
         customer_address: "",
         customer_city: "",
         customer_province: "",
-        user_image: null,
+        customer_image: null,
         customer_zipcode: "",
         customer_is_active: true,
         farm_images: [],
@@ -614,8 +614,8 @@ export default {
       return new Promise((resolve, reject) => {
         setTimeout(() => {
           if (
-            this.addForm.user_image == "" ||
-            this.addForm.user_image == null
+            this.addForm.customer_image == "" ||
+            this.addForm.customer_image == null
           ) {
             this.profileImgError = false;
           }
@@ -661,8 +661,8 @@ export default {
         manager_city: "",
         manager_province: "",
         manager_zipcode: "",
-        manager_id_card: "",
-        manager_card_image: "",
+        // manager_id_card: "",
+        // manager_card_image: "",
         manager_role: 5,
       });
     },
@@ -691,6 +691,7 @@ export default {
         });
     },
     setResult(result) {
+      console.log(result);
       this.search = result.text;
       this.addForm.latitude = result.center[1];
       this.addForm.longitude = result.center[0];
@@ -699,13 +700,13 @@ export default {
     },
     handleProcessFile: function (error, file) {
       this.customer_img = this.imgUrl + file.serverId;
-      this.addForm.user_image = file.serverId;
+      this.addForm.customer_image = file.serverId;
       this.profileImgError = false;
       this.uploadInProgress = false;
     },
     handleRemoveFile: function (file) {
       this.customer_img = "";
-      this.addForm.user_image = "";
+      this.addForm.customer_image = "";
     },
     //farm images process
     handleProcessFile1: function (error, file) {
@@ -774,18 +775,18 @@ export default {
       //validate if image uploading is in-progress
 
       //validate manager id card image
-      var managerInfo = this.addForm.manager_details;
-      for (var i = 0; i < managerInfo.length; i++) {
-        if (managerInfo[i].manager_card_image == "") {
-          this.$toast.open({
-            message: "Manager ID card image is required.",
-            type: "error",
-            position: "top-right",
-          });
+      // var managerInfo = this.addForm.manager_details;
+      // for (var i = 0; i < managerInfo.length; i++) {
+      //   if (managerInfo[i].manager_card_image == "") {
+      //     this.$toast.open({
+      //       message: "Manager ID card image is required.",
+      //       type: "error",
+      //       position: "top-right",
+      //     });
 
-          return false;
-        }
-      }
+      //     return false;
+      //   }
+      // }
       //validate manager id card image
 
       if (this.$refs.managerForm.validate()) {

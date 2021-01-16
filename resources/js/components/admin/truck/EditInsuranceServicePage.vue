@@ -120,7 +120,7 @@
                         :rules="[v => !!v || 'Insurance Date is required.']"
                       ></v-text-field>
                     </template>
-                    <v-date-picker v-model="date" @input="menu1 = false"></v-date-picker>
+                    <v-date-picker v-model="date" @change="setDate = date" :max='date1' @input="menu1 = false"></v-date-picker>
                   </v-menu>
                 </v-col>
               </v-col>

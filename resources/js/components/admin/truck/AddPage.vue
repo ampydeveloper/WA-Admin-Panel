@@ -170,6 +170,8 @@
                         </template>
                         <v-date-picker
                           v-model="date"
+                          :max="date1"
+                          @change="setDate=date"
                           @input="menu2 = false"
                         ></v-date-picker>
                       </v-menu>

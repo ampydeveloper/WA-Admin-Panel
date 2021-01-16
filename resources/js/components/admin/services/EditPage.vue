@@ -480,7 +480,7 @@ export default {
         service_image: "",
         service_type: "",
         slot_type: [],
-        time_taken_to_complete_service: [],
+        time_taken_to_complete_service: 0,
       },
       checkedSlot: {
         slot_type: "",

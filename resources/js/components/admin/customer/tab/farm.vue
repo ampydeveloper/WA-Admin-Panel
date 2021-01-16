@@ -478,6 +478,7 @@ export default {
         });
     },
     setResult(result, index) {
+      console.log(result, index)
       this.search = result.text;
 
       this.totalForm[index].latitude = result.center[1];
