@@ -260,7 +260,9 @@ class DriverController extends Controller {
         $jobDetails['manager_name'] = $data->manager->first_name;
         $jobDetails['manager_email'] = $data->manager->email;
         $jobDetails['manager_phone_no'] = $data->manager->phone;
-        $jobDetails['farm_location'] = $data->farm->farm_unit." ".$data->farm->farm_address." ".$data->farm->farm_city." ".$data->farm->farm_province." ".$data->farm->farm_zipcode;
+        if($data->farm != null) {
+            $jobDetails['farm_location'] = $data->farm->farm_unit." ".$data->farm->farm_address." ".$data->farm->farm_city." ".$data->farm->farm_province." ".$data->farm->farm_zipcode;
+        }
         $jobDetails['start_time'] = $data->start_time;
         $jobDetails['end_time'] = $data->end_time;
         $jobDetails['truck_no'] = $data->truck->truck_number;
