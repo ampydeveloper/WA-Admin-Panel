@@ -550,7 +550,6 @@
                   <v-date-picker
                     v-model="date"
                     @input="menu1 = false"
-                    :min="setDate"
                   ></v-date-picker>
                 </v-menu>
               </v-col>
@@ -579,7 +578,6 @@
                   <v-date-picker
                     v-model="date1"
                     @input="menu2 = false"
-                    :min="setDate"
                   ></v-date-picker>
                 </v-menu>
               </v-col>

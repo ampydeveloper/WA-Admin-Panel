@@ -117,7 +117,7 @@
               <input
                 type="hidden"
                 id="current-user-image"
-                :value="baseUrl + userdata.user_image"
+                :value="userdata.user_image"
               />
               <input
                 type="hidden"

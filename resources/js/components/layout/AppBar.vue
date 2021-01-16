@@ -179,7 +179,7 @@ export default {
     loadProfileImage() {
       const currentUser = JSON.parse(localStorage.getItem("currentUser"));
       if (currentUser.data.user.user_image) {
-        this.profileImage = this.imgUrl + currentUser.data.user.user_image;
+        this.profileImage = currentUser.data.user.user_image;
       } else {
         this.profileImage = this.imgUrl + "/images/avatar.png";
       }
