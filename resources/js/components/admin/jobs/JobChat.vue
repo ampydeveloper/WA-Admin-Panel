@@ -83,7 +83,6 @@
               <span class="basic-grey-label-half">Total</span>
               <span class="det-half">${{ job.amount ? job.amount : "0" }}</span>
             </div>
-            
           </div>
         </v-col>
 
@@ -587,10 +586,13 @@ export default {
         }
         if (data.job_id == jobId._value) {
           if (data.name == name._value) {
-            if ($("." + data.message_id).length == 0 && $("." + data.message.check_string).length == 0) {
+            if (
+              $("." + data.message_id).length == 0 &&
+              $("." + data.message.check_string).length == 0
+            ) {
               appendMessage(
                 '<div class="chat-msg ' +
-                  data.message_id + 
+                  data.message_id +
                   " " +
                   imageClass +
                   '">' +
@@ -610,7 +612,9 @@ export default {
             if ($("." + data.message_id).length == 0) {
               appendMessage(
                 '<div class="chat-msg ' +
-                  data.message_id + " " + imageClass +
+                  data.message_id +
+                  " " +
+                  imageClass +
                   '">' +
                   `${messageText}` +
                   '</div><div class="chat-img"><img src="' +
@@ -626,13 +630,18 @@ export default {
           });
         }
       });
+      socket.on("receive-driver-coordinates", (data) => {
+        console.log(data);
+      });
       $(document).on("submit", "#send-container", function (e) {
         const message = messageInput.value;
         const userImage = $("#current-user-image").val();
         const check_string = Math.random().toString(36).substring(3);
         if (message != "") {
           appendMessage(
-            '<div class="chat-msg '+check_string+'">' +
+            '<div class="chat-msg ' +
+              check_string +
+              '">' +
               `${message}` +
               '</div><div class="chat-img"><img src="' +
               `${userImage}` +
@@ -670,7 +679,7 @@ export default {
         if ($this.val() != "" && !self.fired) {
           self.fired = true;
           const currentUser = authenticationService.currentUserValue || {};
-const userImage = $("#current-user-image").val();
+          const userImage = $("#current-user-image").val();
           var imageData = new FormData();
           imageData.append("uploadImage", $("#image-file").prop("files")[0]);
           $.ajax({
@@ -688,7 +697,9 @@ const userImage = $("#current-user-image").val();
               const messageElement = document.createElement("div");
               messageElement.className = "chat-receiver"; //"chat-receiver"
               messageElement.innerHTML =
-                '<div class="chat-msg inc-img '+check_string+'"><img class="chat-image-in" src="' +
+                '<div class="chat-msg inc-img ' +
+                check_string +
+                '"><img class="chat-image-in" src="' +
                 `${environment.baseUrl + result}` +
                 '"></div><div class="chat-img"><img src="' +
                 `${userImage}` +
@@ -697,7 +708,7 @@ const userImage = $("#current-user-image").val();
                 .find("#message-container")
                 .find(".os-content")
                 .prepend(messageElement);
-                
+
               socket.emit("send-chat-message", {
                 message: environment.baseUrl + result,
                 job_id: jobId._value,

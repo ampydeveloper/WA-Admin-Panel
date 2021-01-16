@@ -104,7 +104,7 @@
                   <td>{{ index + 1 }}</td>
                   <td>
                     <div class="small-img-outer">
-                      <img class="small-img" :src="imgUrl+ customer.image" />
+                      <img class="small-img" :src="customer.image" />
                     </div>
                   </td>
                   <td>{{ customer.heading }}</td>

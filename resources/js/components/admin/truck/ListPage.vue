@@ -97,7 +97,6 @@
                   <th class="text-left">Truck Name</th>
                   <th class="text-left">Chassis Number</th>
                   <th class="text-left">Distance</th>
-                  <!-- <th class="text-left">Service Details</th> -->
                   <th class="text-left">Status</th>
                   <th class="text-left">Actions</th>
                 </tr>
@@ -114,19 +113,6 @@
                   <td>{{item.truck_number}}</td>
                   <td>{{item.chaase_number}}</td>
                   <td>{{item.killometer}}</td>
-                  <!-- <td>
-                    <router-link
-                      v-if="isAdmin"
-                      :to="'/admin/truck/service/' + item.id"
-                      class="custom-save-btn btn-table"
-                    >View</router-link>
-                    <router-link
-                      v-if="!isAdmin"
-                      :to="'/manager/truck/service/' + item.id"
-                      class="custom-save-btn btn-table"
-                    >View</router-link>
-                  </td>-->
-
                   <td v-if="item.status == 1">
                     <span class="badges-item">Available</span>
                   </td>

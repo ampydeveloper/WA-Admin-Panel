@@ -314,12 +314,12 @@ export default {
 
         if (response.data.document) {
           this.rc_cross = true;
-          this.rc = this.imgUrl + response.data.document;
+          this.rc = response.data.document;
         }
         if (response.data.vehicle_insurance.document) {
           this.ins_cross = true;
           this.insurancedocument =
-            this.imgUrl + response.data.vehicle_insurance.document;
+             response.data.vehicle_insurance.document;
         }
       } else {
         router.push(`/${routeType}/trucks`);
@@ -339,7 +339,7 @@ export default {
     },
     handleProcessFile1: function (error, file) {
       this.addForm.document = file.serverId;
-      this.rc = this.imgUrl + file.serverId;
+      this.rc = file.serverId;
       this.docError = false;
     },
     handleRemoveFile1: function (file) {

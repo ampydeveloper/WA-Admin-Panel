@@ -229,7 +229,7 @@ export default {
       this.uploadInProgress = true;
     },
     handleProcessFile: function (error, file) {
-      this.customer_img = this.imgUrl + file.serverId;
+      this.customer_img = file.serverId;
       this.addForm.image = file.serverId;
       this.uploadInProgress = false;
     },

@@ -87,7 +87,6 @@
                   <th class="text-left">#</th>
                   <th class="text-left">Admin Name</th>
                   <th class="text-left">Email</th>
-                  <!-- <th class="text-left">Active</th> -->
                   <th class="text-left">Actions</th>
                 </tr>
               </thead>
@@ -102,26 +101,12 @@
                     <td>{{index+1}}</td>
                     <td>
                       <div class="v-avatar v-list-item__avatar">
-                        <img v-if="item.user_image" :src="imgUrl+item.user_image" class="small-img" />
-                        <img v-if="!item.user_image" :src="imgUrl+'images/avatar.png'" class="small-img" />
+                        <img v-if="item.user_image" :src="item.user_image" class="small-img" />
+                        <img v-if="!item.user_image" :src="'images/avatar.png'" class="small-img" />
                       </div>
                       {{ item.first_name }} {{ item.last_name }}
                     </td>
                     <td>{{ item.email }}</td>
-                    <!-- <td>
-                    <v-chip
-                      v-if="!item.is_active"
-                      class="ma-2"
-                      color="red"
-                      text-color="white"
-                    >Deactivate</v-chip>
-                    <v-chip
-                      v-if="item.is_active"
-                      class="ma-2"
-                      color="green"
-                      text-color="white"
-                    >Activate</v-chip>
-                    </td>-->
                     <td class="action-col">
                       <router-link :to="'/admin/admin/edit/' + item.id" class="nav-item nav-link">
                         <edit-3-icon size="1.2x" class="custom-class"></edit-3-icon>

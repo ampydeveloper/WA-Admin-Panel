@@ -372,7 +372,7 @@
                       >
                         <span>&times;</span>
                       </button>
-                      <img :src="baseUrl + editForm.service_image" alt />
+                      <img :src="editForm.service_image" alt />
                     </div>
                   </v-col>
                 </v-col>

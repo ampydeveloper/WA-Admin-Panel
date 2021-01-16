@@ -520,15 +520,15 @@ export default {
         if (response.data.user_image) {
           this.addForm.user_image = response.data.user_image;
           this.cross = true;
-          this.avatar = environment.imgUrl + response.data.user_image;
+          this.avatar = response.data.user_image;
         } else {
-          this.avatar = environment.imgUrl + "";
+          this.avatar =  "/images/avatar.png";
         }
         if (response.data.driver.document) {
           this.cross = true;
           this.addForm.driver_licence_image = response.data.driver.document;
           this.document_img =
-            environment.imgUrl + response.data.driver.document;
+             response.data.driver.document;
         }
         this.addForm.driver_first_name = response.data.first_name;
         this.addForm.driver_last_name = response.data.last_name;

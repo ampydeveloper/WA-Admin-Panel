@@ -263,7 +263,7 @@ export default {
         if (response.data.user_image) {
           this.cross = true;
           this.addForm.user_image = response.data.user_image;
-          this.avatar = this.imgUrl + response.data.user_image;
+          this.avatar = response.data.user_image;
         } else {
           this.avatar = "";
         }
@@ -288,7 +288,7 @@ export default {
     },
     handleProcessFile: function (error, file) {
       this.addForm.user_image = file.serverId;
-      this.avatar = this.imgUrl + file.serverId;
+      this.avatar = file.serverId;
       this.uploadInProgress = false;
       this.cross = false;
     },

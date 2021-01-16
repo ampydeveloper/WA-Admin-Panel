@@ -559,12 +559,12 @@ export default {
         };
         if (response.data.user.user_image) {
           this.cross = true;
-          this.avatar = this.imgUrl + response.data.user.user_image;
+          this.avatar = response.data.user.user_image;
         } else {
           this.avatar = "";
         }
         if (response.data.document) {
-          this.documentImg = this.imgUrl + response.data.document;
+          this.documentImg = response.data.document;
         }
         this.date = response.data.joining_date;
         this.date1 = response.data.releaving_date;
@@ -590,7 +590,7 @@ export default {
       this.cross = false;
       this.addForm.user_image = file.serverId;
       this.uploadInProgress = false;
-      this.avatar = this.imgUrl + file.serverId;
+      this.avatar = file.serverId;
     },
     handleRemoveFile: function (file) {
       this.addForm.user_image = "";
@@ -600,7 +600,7 @@ export default {
     handleProcessFile1: function (error, file) {
       this.docError = false;
       this.addForm.id_photo = file.serverId;
-      this.documentImg = this.imgUrl + file.serverId;
+      this.documentImg = file.serverId;
       this.uploadInProgress = false;
     },
     handleRemoveFile1: function (file) {

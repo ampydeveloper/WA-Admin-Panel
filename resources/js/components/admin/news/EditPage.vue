@@ -252,7 +252,7 @@ export default {
         };
         if (response.data.image) {
           this.cross = true;
-          this.avatar = this.imgUrl + response.data.image;
+          this.avatar = response.data.image;
         } else {
           this.avatar = "";
         }
@@ -275,7 +275,7 @@ export default {
       this.uploadInProgress = true;
     },
     handleProcessFile: function (error, file) {
-      this.avatar = this.imgUrl + file.serverId;
+      this.avatar = file.serverId;
       this.addForm.image = file.serverId;
       this.uploadInProgress = false;
     },

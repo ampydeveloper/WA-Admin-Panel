@@ -105,7 +105,7 @@
                     <div
                       class="v-avatar v-list-item__avatar"
                     >
-                      <img v-if="customer.user_image" class="small-img" :src="imgUrl+customer.user_image" />
+                      <img v-if="customer.user_image" class="small-img" :src="customer.user_image" />
                       <img v-if="!customer.user_image" class="small-img" :src="imgUrl+'images/avatar.png'" />
                     </div>
 
