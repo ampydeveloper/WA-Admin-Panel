@@ -904,6 +904,8 @@ class CustomerController extends Controller {
                 $managerObj->zip_code = $manager['manager_zipcode'];
                 $managerObj->user_image = (isset($manager['manager_image']) && $manager['manager_image'] != '' && $manager['manager_image'] != null) ? $manager['manager_image'] : null;
                 $managerObj->farm_id = $request->farm['farm_id'];
+                $managerObj->is_confirmed = 1;
+                $managerObj->is_active = 1;
                 
                 if ($managerObj->save()) {
                     array_push($updatedManagerIds, $managerObj->id);

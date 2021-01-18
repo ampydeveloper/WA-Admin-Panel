@@ -160,6 +160,11 @@ import { environment } from "../../../config/test.env";
 import { SendIcon, ImageIcon, LoaderIcon } from "vue-feather-icons";
 import { authenticationService } from "../../../_services/authentication.service";
 
+const directionsService = new google.maps.DirectionsService();
+const directionsRenderer = new google.maps.DirectionsRenderer({
+  suppressMarkers: true,
+});
+
 export default {
   components: {
     SendIcon,
@@ -178,6 +183,28 @@ export default {
       chatUsers: "",
       baseUrl: environment.baseUrl,
       skip:0,
+      icons: {
+        start: new google.maps.MarkerImage(
+          "http://wa.customer.leagueofclicks.com/img/car-marker2.png",
+          new google.maps.Size(72, 100),
+          new google.maps.Point(0, 0),
+          new google.maps.Point(22, 32)
+        ),
+        stopover: new google.maps.MarkerImage(
+          "http://wa.customer.leagueofclicks.com/img/driver-icon.png",
+          new google.maps.Size(55, 55),
+          new google.maps.Point(0, 0),
+          new google.maps.Point(22, 32)
+        ),
+        end: new google.maps.MarkerImage(
+          "http://wa.customer.leagueofclicks.com/img/map-icon2.png",
+          new google.maps.Size(55, 55),
+          new google.maps.Point(0, 0),
+          new google.maps.Point(22, 32)
+        ),
+      },
+      wellOffice: "26.695145,-80.244859",
+      map: null
     };
   },
   created() {
@@ -194,6 +221,7 @@ export default {
     //   this.getChatMembers();
     // }, 1000);
 
+    const self = this;
     let socketScript = document.createElement("script");
     socketScript.setAttribute(
       "src",
@@ -214,28 +242,8 @@ export default {
     scrollScript2.setAttribute("rel", "stylesheet");
     document.head.appendChild(scrollScript2);
 
-    var wellOffice = "26.695145,-80.244859";
-    var icons = {
-      start: new google.maps.MarkerImage(
-        "http://wa.customer.leagueofclicks.com/img/car-marker2.png",
-        new google.maps.Size(72, 100),
-        new google.maps.Point(0, 0),
-        new google.maps.Point(22, 32)
-      ),
-      end: new google.maps.MarkerImage(
-        "http://wa.customer.leagueofclicks.com/img/map-icon2.png",
-        new google.maps.Size(55, 55),
-        new google.maps.Point(0, 0),
-        new google.maps.Point(22, 32)
-      ),
-    };
-    var map;
     function initMap() {
-      const directionsService = new google.maps.DirectionsService();
-      const directionsRenderer = new google.maps.DirectionsRenderer({
-        suppressMarkers: true,
-      });
-      map = new google.maps.Map(document.getElementById("map"), {
+      let map = new google.maps.Map(document.getElementById("map"), {
         zoom: 7,
         center: { lat: 41.85, lng: -87.65 },
         mapTypeControl: false,
@@ -418,41 +426,11 @@ export default {
         ],
       });
       directionsRenderer.setMap(map);
-
-      calculateAndDisplayRoute(directionsService, directionsRenderer);
+      self.map = map;
+      self.calculateAndDisplayRoute();
     }
 
-    function calculateAndDisplayRoute(directionsService, directionsRenderer) {
-      const jobLat = document.getElementById("job-lat")._value;
-      const joblong = document.getElementById("job-long")._value;
-      directionsService.route(
-        {
-          origin: {
-            query: wellOffice,
-          },
-          destination: {
-            query: jobLat + "," + joblong,
-          },
-          travelMode: google.maps.TravelMode.DRIVING,
-        },
-        (response, status) => {
-          if (status === "OK") {
-            directionsRenderer.setDirections(response);
-            var leg = response.routes[0].legs[0];
-            makeMarker(leg.start_location, icons.start, "Wellington Office");
-            makeMarker(leg.end_location, icons.end, "Farm");
-          }
-        }
-      );
-    }
-    function makeMarker(position, icon, title) {
-      new google.maps.Marker({
-        position: position,
-        map: map,
-        icon: icon,
-        title: title,
-      });
-    }
+    // function 
     setTimeout(function () {
       initMap();
     }, 6000);
@@ -550,6 +528,48 @@ export default {
           }
         });
     },
+    makeMarker(position, icon, title) {
+      new google.maps.Marker({
+        position: position,
+        map: this.map,
+        icon: icon,
+        title: title,
+      });
+    },
+    calculateAndDisplayRoute(waypoint=null) {
+      const self = this;
+      const jobLat = document.getElementById("job-lat")._value;
+      const joblong = document.getElementById("job-long")._value;
+      let route = {
+        origin: {
+          query: self.wellOffice,
+        },
+        destination: {
+          query: jobLat + "," + joblong,
+        },
+        travelMode: google.maps.TravelMode.DRIVING,
+      };
+      let endicon = self.icons.end
+      if(waypoint != null){
+        route['waypoints'] = [{
+          location: waypoint,
+          stopover: true
+        }]
+        endicon = self.icons.stopover
+      }
+      directionsService.route(
+        route,
+        (response, status) => {
+          if (status === "OK") {
+            directionsRenderer.setDirections(response);
+            var leg = response.routes[0].legs[0];
+            console.log(leg);
+            self.makeMarker(leg.start_location, self.icons.start, "Wellington Office");
+            self.makeMarker(leg.end_location, endicon, "Farm");
+          }
+        }
+      );
+    }
   },
   updated() {
     const self = this;
@@ -642,7 +662,8 @@ export default {
         }
       });
       socket.on("receive-driver-coordinates", (data) => {
-        console.log(data);
+        // console.log(data);
+        if(data.job_id == self.job.id) self.calculateAndDisplayRoute(data.lat+','+data.lng)
       });
       $(document).on("submit", "#send-container", function (e) {
         const message = messageInput.value;
