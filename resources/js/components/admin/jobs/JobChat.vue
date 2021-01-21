@@ -662,7 +662,7 @@ export default {
         }
       });
       socket.on("receive-driver-coordinates", (data) => {
-        // console.log(data);
+        console.log(data);
         if(data.job_id == self.job.id) self.calculateAndDisplayRoute(data.lat+','+data.lng)
       });
       $(document).on("submit", "#send-container", function (e) {
@@ -728,7 +728,7 @@ export default {
               messageElement.className = "chat-receiver"; //"chat-receiver"
               messageElement.innerHTML =
                 '<div class="chat-msg inc-img '+check_string+'"><img class="chat-image-in" src="' +
-                `${environment.baseUrl + result}` +
+                `${result}` +
                 '"></div><div class="chat-img"><img src="' +
                 `${userImage}` +
                 '"></div>';
@@ -738,7 +738,7 @@ export default {
                 .prepend(messageElement);
                 
               socket.emit("send-chat-message", {
-                message: environment.baseUrl + result,
+                message: result,
                 job_id: jobId._value,
                 username: name._value,
                 check_string: check_string,

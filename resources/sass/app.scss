@@ -3420,6 +3420,7 @@ div#example_info {
     color: #fff;
     display: inline-block;
     margin-left: 15px;
+    word-break: break-word;
 }
 
 #app .chat-area .chat-sender .chat-msg:before {
@@ -3434,6 +3435,7 @@ div#example_info {
     color: #fff;
     font-weight: 300;
     margin-right: 15px;
+    word-break: break-word;
 }
 .chat-image-in {
     max-width: 100%;
