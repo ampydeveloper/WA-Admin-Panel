@@ -22,7 +22,7 @@ Route::post('sociallogin/{provider}', 'AuthController@SocialSignup');
 Route::get('auth/{provider}/callback', 'OutController@index')->where('provider', '.*');
 
 Route::get('/send/email', 'AuthController@_welcomeEmail');
-
+Route::get('assignJobs', 'JobsController@assignJob');
 // Route::get('/', function () {
 //     return view('welcome');
 // });

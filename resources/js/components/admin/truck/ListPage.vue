@@ -225,6 +225,7 @@ export default {
         //handle response
         if (response.status) {
           this.trucks = response.data;
+          this.initDT();
         } else {
           this.$toast.open({
             message: response.message,
@@ -273,40 +274,40 @@ export default {
     selectTr: function (rowIndex) {
       this.isActive = rowIndex;
     },
-  },
-  updated() {
-    setTimeout(function () {
-      $(document).ready(function () {
-        if (!$.fn.dataTable.isDataTable(".table-main")) {
-          $(".table-main").DataTable({
-            aoColumnDefs: [
-              {
-                bSortable: false,
-                aTargets: [-1, -2, -3, -4, -5, -6],
+    initDT() {
+      setTimeout(function () {
+        $(document).ready(function () {
+          if (!$.fn.dataTable.isDataTable(".table-main")) {
+            $(".table-main").DataTable({
+              aoColumnDefs: [
+                {
+                  bSortable: false,
+                  aTargets: [-1, -2, -3, -4, -5, -6],
+                },
+              ],
+              oLanguage: { sSearch: "", "sEmptyTable": "No truck till now.", "infoEmpty": "No truck found.", },
+              drawCallback: function (settings) {
+                $(".dataTables_paginate .paginate_button.previous").html(
+                  $("#table-chevron-left").html()
+                );
+                $(".dataTables_paginate .paginate_button.next").html(
+                  $("#table-chevron-right").html()
+                );
               },
-            ],
-            oLanguage: { sSearch: "", "sEmptyTable": "No truck till now.", "infoEmpty": "No truck found.", },
-            drawCallback: function (settings) {
-              $(".dataTables_paginate .paginate_button.previous").html(
-                $("#table-chevron-left").html()
-              );
-              $(".dataTables_paginate .paginate_button.next").html(
-                $("#table-chevron-right").html()
-              );
-            },
-          });
-        }
-        $(".dataTables_filter").append($("#search-input-icon").html());
-        $(".dataTables_filter input").attr("placeholder", "Search Trucks by Company / Truck / Chassis");
-        $(".dataTables_paginate .paginate_button.previous").html(
-          $("#table-chevron-left").html()
-        );
-        $(".dataTables_paginate .paginate_button.next").html(
-          $("#table-chevron-right").html()
-        );
-        $(".table-main").css({ opacity: 1 });
-      });
-    }, 1000);
+            });
+          }
+          $(".dataTables_filter").append($("#search-input-icon").html());
+          $(".dataTables_filter input").attr("placeholder", "Search Trucks by Company / Truck / Chassis");
+          $(".dataTables_paginate .paginate_button.previous").html(
+            $("#table-chevron-left").html()
+          );
+          $(".dataTables_paginate .paginate_button.next").html(
+            $("#table-chevron-right").html()
+          );
+          $(".table-main").css({ opacity: 1 });
+        });
+      }, 1000);
+    },
   },
 };
 </script>
